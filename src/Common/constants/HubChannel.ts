@@ -1,8 +1,8 @@
 export enum HubChannel {
-  Error = "Error",
-  State = "State",
-  Message = "Message",
-  PlayersLeft = "PlayersLeft",
-  Iterations = "Iterations",
-  Game = "Game",
+  Error = "error",
+  State = "state",
+  Message = "message",
+  PlayersLeft = "players_left",
+  Iterations = "iterations",
+  Game = "game",
 }

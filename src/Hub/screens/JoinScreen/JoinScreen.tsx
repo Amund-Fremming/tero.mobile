@@ -14,17 +14,17 @@ import { GameEntryMode } from "@/src/Common/constants/Types";
 export const JoinScreen = ({ navigation }: any) => {
   const [userInput, setUserInput] = useState<string>("");
 
-  const { pseudoId: guestId } = useAuthProvider();
+  const { pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
-  const {  setGameEntryMode } = useGlobalGameProvider();
+  const { setGameEntryMode } = useGlobalGameProvider();
 
   useEffect(() => {
     setGameEntryMode(GameEntryMode.Participant);
-  }, [])
+  }, []);
 
   const handleJoinGame = () => {
     //
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +39,7 @@ export const JoinScreen = ({ navigation }: any) => {
             style={styles.input}
             placeholder="SLEM POTET"
             value={userInput}
-            onChangeText={(input) => setUserInput(input)}
+            onChangeText={(input) => setUserInput(input.toLowerCase())}
           />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleJoinGame}>

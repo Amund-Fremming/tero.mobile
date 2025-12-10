@@ -12,8 +12,7 @@ import Screen from "@/src/Common/constants/Screen";
 import { HubChannel } from "@/src/Common/constants/HubChannel";
 import { GameEntryMode } from "@/src/Common/constants/Types";
 import { useQuizGameProvider } from "../../context/QuizGameProvider";
-import { SpinGameState } from "@/src/SpinGame/constants/SpinTypes";
-import { QuizSession } from "../../constants/spinTypes";
+import { QuizSession } from "../../constants/quizTypes";
 
 export const LobbyScreen = ({ navigation }: any) => {
   const [question, setQuestion] = useState<string>("");
@@ -36,6 +35,13 @@ export const LobbyScreen = ({ navigation }: any) => {
       return;
     }
 
+    const connectResult = await invokeFunction("ConnectToGroup", gameKey);
+    if (connectResult.isError()) {
+      displayErrorModal("En feil har skjedd, forsøk å gå ut og inn av spillet");
+      await disconnect();
+      return;
+    }
+
     setListener(HubChannel.Iterations, (iterations: number) => {
       console.log(`Received: ${iterations}`);
       setIterations(iterations);
@@ -55,7 +61,10 @@ export const LobbyScreen = ({ navigation }: any) => {
   };
 
   const handleAddQuestion = async () => {
-    //
+    const result = await invokeFunction("AddQuestion", gameKey, question);
+    if (result.isError()) {
+      displayErrorModal("Klarte ikke legge til spørsmål");
+    }
   };
 
   const handleStartGame = async () => {
