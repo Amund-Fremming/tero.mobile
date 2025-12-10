@@ -16,11 +16,18 @@ export const GameTypeListScreen = () => {
   const navigation: any = useNavigation();
   const { setGameType, gameEntryMode } = useGlobalGameProvider();
 
-  const handlePress = (screen: GameType) => {
+  const handlePress = (screen: string) => {
     console.log("SCREEN: ", screen);
+
+    const screenEnum = screen as GameType;
+    console.log("from as: ", screenEnum);
+
     const creating = gameEntryMode === GameEntryMode.Creator;
-    setGameType(screen);
-    navigation.navigate(creating ? screen : Screen.GameList);
+    setGameType(screenEnum);
+
+    const navTarget = creating ? screenEnum : Screen.GameList;
+    console.log("Navigating to:", navTarget, "creating:", creating);
+    navigation.navigate(navTarget);
   };
 
   return (
@@ -59,7 +66,7 @@ export const GameTypeListScreen = () => {
         </View>
         {data &&
           data.map((item, index) => (
-            <Pressable key={index} style={styles.card} onPress={() => handlePress(item.screen as GameType)}>
+            <Pressable key={index} style={styles.card} onPress={() => handlePress(item.screen)}>
               <View style={styles.imagePlaceholder}></View>
               <Text style={styles.cardHeader}>{item.name}</Text>
             </Pressable>

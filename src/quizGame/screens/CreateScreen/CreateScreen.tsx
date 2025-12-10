@@ -12,13 +12,17 @@ import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import QuizGame from "../../QuizGame";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import Screen from "@/src/Common/constants/Screen";
+import { useNavigation } from "expo-router";
+import { QuizGameScreen } from "../../constants/quizTypes";
+import { useQuizGameProvider } from "../../context/QuizGameProvider";
 
-export const CreateScreen = ({ navigation }: any) => {
+export const CreateScreen = () => {
+  const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
   const { gameService } = useServiceProvider();
-  const { accessToken } = useAuthProvider();
   const { setGameKey, setGameEntryMode, setHubAddress } = useGlobalGameProvider();
+  const { setScreen } = useQuizGameProvider();
   const {} = useHubConnectionProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,7 +45,7 @@ export const CreateScreen = ({ navigation }: any) => {
     }
 
     setLoading(true);
-    const result = await gameService().createInteractiveGame(pseudoId, accessToken, GameType.Quiz, createRequest);
+    const result = await gameService().createInteractiveGame(pseudoId, GameType.Quiz, createRequest);
 
     if (result.isError()) {
       displayErrorModal(result.error);
@@ -49,10 +53,11 @@ export const CreateScreen = ({ navigation }: any) => {
       return;
     }
 
-    setGameKey(result.value.key_word);
+    console.info("Game initiated!", result.value);
+    setGameKey(result.value.game_key);
     setHubAddress(result.value.hub_address);
     setGameEntryMode(GameEntryMode.Creator);
-    navigation.navigate(Screen.SpinGame);
+    setScreen(QuizGameScreen.Lobby);
     setLoading(false);
   };
 
@@ -64,7 +69,7 @@ export const CreateScreen = ({ navigation }: any) => {
         style={styles.input}
         placeholder="Spillnavn"
         value={createRequest.name}
-        onChangeText={(val) => setCreateRequest((prev) => ({ ...prev, gameName: val }))}
+        onChangeText={(val) => setCreateRequest((prev) => ({ ...prev, name: val }))}
       />
       <TextInput
         style={styles.input}

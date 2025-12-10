@@ -8,7 +8,6 @@ import {
   GameType,
   InteractiveGameResponse,
   PagedResponse,
-  SavedGamesPageQuery,
 } from "../constants/Types";
 
 export class GameService {
@@ -20,22 +19,17 @@ export class GameService {
 
   async createInteractiveGame(
     pseudoId: string,
-    token: string | null,
     type: GameType,
     request: CreateGameRequest
   ): Promise<Result<InteractiveGameResponse>> {
     try {
-      const url = `${this.urlBase}/games/${type}/create`;
-      const payload = JSON.stringify(request);
-
-      console.debug("url:", url);
-      console.debug("payload:", payload);
-
-      const response = await axios.post<InteractiveGameResponse>(`${this.urlBase}/games/${type}/create`, request, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post<InteractiveGameResponse>(
+        `${this.urlBase}/games/general/${type}/create`,
+        request,
+        {
+          headers: getHeaders(pseudoId, null),
+        }
+      );
 
       let result: InteractiveGameResponse = response.data;
       return ok(result);

@@ -3,8 +3,8 @@ export enum Screen {
   Hub = "Hub",
   Join = "Join",
   Games = "Games",
-  SpinGame = "Spin",
-  QuizGame = "Quiz",
+  Spin = "Spin",
+  Quiz = "Quiz",
   GameTypeList = "GameTypeList",
   GameList = "GameList",
   Admin = "Admin",
@@ -15,7 +15,7 @@ export enum Screen {
   SavedGames = "SavedGames",
   TipsUs = "TipsUs",
   Error = "Error",
-  Problem = "Problem"
+  Problem = "Problem",
 }
 
 export default Screen;

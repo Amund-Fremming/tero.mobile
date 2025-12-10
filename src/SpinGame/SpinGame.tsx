@@ -14,30 +14,28 @@ import Screen from "../Common/constants/Screen";
 
 export const SpinGame = () => {
   const { connect, setListener } = useHubConnectionProvider();
-  const {gameKey, hubAddress} = useGlobalGameProvider();
+  const { gameKey, hubAddress } = useGlobalGameProvider();
   const { gameEntryMode } = useGlobalGameProvider();
-  const {displayErrorModal, displayInfoModal } = useModalProvider(); 
+  const { displayErrorModal, displayInfoModal } = useModalProvider();
   const navigation: any = useNavigation();
-
-  const [screen, setScreen] = useState<SpinGameScreen>(SpinGameScreen.Lobby);
 
   useEffect(() => {
     const initScreen = getInitialScreen();
-    setScreen(initScreen); 
+    setScreen(initScreen);
     createHubConnection();
   }, []);
 
   const createHubConnection = async () => {
     const result = await connect(hubAddress);
-    if(result.isError()) {
-      displayErrorModal("Klarte ikke koble deg til spillet"); 
+    if (result.isError()) {
+      displayErrorModal("Klarte ikke koble deg til spillet");
       return;
     }
 
     setListener("disconnect", (message: string) => {
       displayInfoModal(message, "Heisann", () => navigation.navigate(Screen.Home));
-    })
-  }
+    });
+  };
 
   const getInitialScreen = (): SpinGameScreen => {
     switch (gameEntryMode) {
@@ -51,7 +49,6 @@ export const SpinGame = () => {
         return SpinGameScreen.Lobby;
     }
   };
-
 
   switch (screen) {
     case SpinGameScreen.Create:

@@ -39,8 +39,8 @@ export const Hub = () => {
       <Stack.Screen name={Screen.ChangePassword} component={ChangePasswordScreen} />
       <Stack.Screen name={Screen.Hub} component={HubScreen} />
       <Stack.Screen name={Screen.Join} component={JoinScreen} />
-      <Stack.Screen name={Screen.SpinGame} component={SpinGame} />
-      <Stack.Screen name={Screen.QuizGame} component={QuizGame} />
+      <Stack.Screen name={Screen.Spin} component={SpinGame} />
+      <Stack.Screen name={Screen.Quiz} component={QuizGame} />
       <Stack.Screen name={Screen.GameList} component={GameListScreen} />
       <Stack.Screen name={Screen.GameTypeList} component={GameTypeListScreen} />
       <Stack.Screen name={Screen.Admin} component={AdminScreen} />
@@ -49,7 +49,7 @@ export const Hub = () => {
       <Stack.Screen name={Screen.TipsUs} component={TipsUsScreen} />
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
-    </Stack.Navigator >
+    </Stack.Navigator>
   );
 };
 

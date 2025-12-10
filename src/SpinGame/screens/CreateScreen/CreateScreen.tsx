@@ -39,13 +39,13 @@ export const CreateScreen = ({ navigation }: any) => {
       return;
     }
 
-    let result = await gameService().createInteractiveGame(pseudoId, accessToken, GameType.Spin, request);
+    let result = await gameService().createInteractiveGame(pseudoId, GameType.Spin, request);
     if (result.isError()) {
       displayErrorModal(result.error);
       return;
     }
 
-    const gameKey = result.value.key_word;
+    const gameKey = result.value.game_key;
     const hubAddress = result.value.hub_address;
 
     // DEBUG
@@ -56,7 +56,7 @@ export const CreateScreen = ({ navigation }: any) => {
     setGameKey(gameKey);
     setGameEntryMode(GameEntryMode.Creator);
 
-    navigation.navigate(Screen.SpinGame);
+    navigation.navigate(Screen.Spin);
   };
 
   return (
