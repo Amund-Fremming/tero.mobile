@@ -138,6 +138,12 @@ export interface InteractiveGameResponse {
   hub_address: string;
 }
 
+export interface JoinGameResponse {
+  game_key: string;
+  hub_address: string;
+  game_type: GameType;
+}
+
 export enum GameEntryMode {
   Creator,
   Host,

@@ -7,6 +7,7 @@ import {
   GamePageQuery,
   GameType,
   InteractiveGameResponse,
+  JoinGameResponse,
   PagedResponse,
 } from "../constants/Types";
 
@@ -151,6 +152,7 @@ export class GameService {
     }
         */
 
+  // Remove?
   async initiateInteractiveGame(
     guest_id: string,
     token: string | null,
@@ -174,22 +176,17 @@ export class GameService {
     }
   }
 
-  async joinInteractiveGame(
-    guest_id: string,
-    token: string | null,
-    game_type: string,
-    game_id: string
-  ): Promise<Result<InteractiveGameResponse>> {
+  async joinInteractiveGame(pseudo_id: string, game_key: string): Promise<Result<JoinGameResponse>> {
     try {
-      const response = await axios.post(
-        `${this.urlBase}/games/interactive/${game_type}/join/${game_id}`,
+      const response = await axios.post<JoinGameResponse>(
+        `${this.urlBase}/games/session/join/${game_key}`,
         {},
         {
-          headers: getHeaders(guest_id, token),
+          headers: getHeaders(pseudo_id, null),
         }
       );
 
-      const result: InteractiveGameResponse = response.data;
+      const result: JoinGameResponse = response.data;
       return ok(result);
     } catch (error) {
       console.error("joinInteractiveGame:", error);

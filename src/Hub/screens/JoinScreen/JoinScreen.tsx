@@ -8,22 +8,45 @@ import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { useGlobalGameProvider } from "../../../Common/context/GlobalGameProvider";
 import { Feather } from "@expo/vector-icons";
 import Color from "@/src/Common/constants/Color";
-import BigButton from "@/src/Common/components/BigButton/BigButton";
 import { GameEntryMode } from "@/src/Common/constants/Types";
+import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
+import { useNavigation } from "expo-router";
+import Screen from "@/src/Common/constants/Screen";
 
-export const JoinScreen = ({ navigation }: any) => {
-  const [userInput, setUserInput] = useState<string>("");
-
+export const JoinScreen = () => {
+  const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
-  const { setGameEntryMode } = useGlobalGameProvider();
+  const { setGameEntryMode, setGameKey, setHubAddress } = useGlobalGameProvider();
+  const { gameService } = useServiceProvider();
+
+  const [userInput, setUserInput] = useState<string>("");
 
   useEffect(() => {
     setGameEntryMode(GameEntryMode.Participant);
   }, []);
 
-  const handleJoinGame = () => {
-    //
+  const handleJoinGame = async () => {
+    if (!pseudoId) {
+      // TODO -handle
+      console.error("Missing pseudo id");
+      return;
+    }
+
+    const gameKey = userInput.toLocaleLowerCase();
+    console.debug("Trying to join:", gameKey);
+    const result = await gameService().joinInteractiveGame(pseudoId, gameKey);
+    if (result.isError()) {
+      displayErrorModal(result.error);
+      return;
+    }
+
+    const response = result.value;
+    console.debug(response);
+    setGameEntryMode(GameEntryMode.Participant);
+    setHubAddress(response.hub_address);
+    setGameKey(response.game_key);
+    navigation.navigate(response.game_type);
   };
 
   return (
@@ -39,7 +62,7 @@ export const JoinScreen = ({ navigation }: any) => {
             style={styles.input}
             placeholder="SLEM POTET"
             value={userInput}
-            onChangeText={(input) => setUserInput(input.toLowerCase())}
+            onChangeText={(input) => setUserInput(input.toUpperCase())}
           />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleJoinGame}>

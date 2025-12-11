@@ -12,7 +12,7 @@ import Screen from "@/src/Common/constants/Screen";
 import { HubChannel } from "@/src/Common/constants/HubChannel";
 import { GameEntryMode } from "@/src/Common/constants/Types";
 import { useQuizGameProvider } from "../../context/QuizGameProvider";
-import { QuizSession } from "../../constants/quizTypes";
+import { QuizGameScreen, QuizSession } from "../../constants/quizTypes";
 
 export const LobbyScreen = ({ navigation }: any) => {
   const [question, setQuestion] = useState<string>("");
@@ -20,7 +20,7 @@ export const LobbyScreen = ({ navigation }: any) => {
   const { gameEntryMode, gameKey, hubAddress } = useGlobalGameProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal } = useModalProvider();
-  const { setQuizSession, setIterations, iterations } = useQuizGameProvider();
+  const { setQuizSession, setIterations, iterations, setScreen } = useQuizGameProvider();
 
   useEffect(() => {
     if (gameKey) {
@@ -55,7 +55,8 @@ export const LobbyScreen = ({ navigation }: any) => {
 
     setListener(HubChannel.Game, async (game: QuizSession) => {
       setQuizSession(game);
-      // TODO - set scrfeen in quiz context provider
+      console.debug(game);
+      setScreen(QuizGameScreen.Game);
       await disconnect();
     });
   };
@@ -68,7 +69,11 @@ export const LobbyScreen = ({ navigation }: any) => {
   };
 
   const handleStartGame = async () => {
-    //
+    const result = await invokeFunction("StartGame", gameKey);
+    if (result.isError()) {
+      displayErrorModal(result.error);
+      return;
+    }
   };
 
   return (
