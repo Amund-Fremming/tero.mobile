@@ -4,34 +4,28 @@ import { version } from "react";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
+   container: {
     width: "100%",
     height: "100%",
-    gap: verticalScale(15),
-  },
-
-  participantsWrapper: {
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
-    gap: moderateScale(60),
+    gap: 10,
   },
 
-  participantsButton: {
-    borderColor: Color.Black,
+  header: {
+    fontSize: moderateScale(20),
+    fontWeight: 600,
+  },
+
+  paragraph: {
+    fontSize: moderateScale(16),
+  },
+
+  input: {
     borderWidth: 2,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: moderateScale(8),
-  },
-
-  selectedWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: verticalScale(40),
+    borderColor: "gray",
+    height: 50,
+    width: 240,
   },
 });
 

@@ -1,5 +1,5 @@
 import { Text, TextInput, View, TouchableOpacity, ScrollView } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Color from "@/src/Common/constants/Color";
 import { Feather } from "@expo/vector-icons";
 import { CreateGameRequest, GameCategory, GameEntryMode, GameType } from "@/src/Common/constants/Types";
@@ -11,6 +11,9 @@ import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/Absol
 import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import Screen from "@/src/Common/constants/Screen";
+import { useNavigation } from "expo-router";
+import { SpinSessionScreen } from "../../constants/SpinTypes";
+import { useSpinGameProvider } from "../../context/SpinGameProvider";
 
 const CATEGORY_OPTIONS = [
   { label: "Standard", value: GameCategory.Default },
@@ -20,43 +23,53 @@ const CATEGORY_OPTIONS = [
   { label: "Gutter", value: GameCategory.Boys },
 ];
 
-export const CreateScreen = ({ navigation }: any) => {
+export const CreateScreen = () => {
+  const navigation: any = useNavigation();
   const { displayErrorModal } = useModalProvider();
-  const { pseudoId, accessToken } = useAuthProvider();
+  const { pseudoId } = useAuthProvider();
   const { gameService } = useServiceProvider();
-  const { setGameKey, setGameEntryMode } = useGlobalGameProvider();
-  const {} = useHubConnectionProvider();
+  const { setGameKey, setGameEntryMode, setHubAddress } = useGlobalGameProvider();
+  const { setScreen } = useSpinGameProvider();
 
-  const [request, setRequest] = useState<CreateGameRequest>({
+  const [loading, setLoading] = useState<boolean>(false);
+  const [createRequest, setCreateRequest] = useState<CreateGameRequest>({
     name: "",
-    category: GameCategory.Default,
+    description: "",
+    category: GameCategory.Random,
   });
 
+  useEffect(() => {
+    console.log("Create screen yes");
+  }, []);
+
   const handleCreate = async () => {
+    if (loading) return;
+
     if (!pseudoId) {
       console.error("No pseudo id present");
       // TODO - handle
       return;
     }
 
-    let result = await gameService().createInteractiveGame(pseudoId, GameType.Spin, request);
+    setLoading(true);
+    let result = await gameService().createInteractiveGame(pseudoId, GameType.Spin, createRequest);
     if (result.isError()) {
       displayErrorModal(result.error);
+      setLoading(false);
       return;
     }
 
     const gameKey = result.value.game_key;
     const hubAddress = result.value.hub_address;
 
-    // DEBUG
     console.debug("key:", gameKey);
     console.debug("hubAdress:", hubAddress);
 
-    // HER
     setGameKey(gameKey);
+    setHubAddress(hubAddress);
     setGameEntryMode(GameEntryMode.Creator);
-
-    navigation.navigate(Screen.Spin);
+    setScreen(SpinSessionScreen.Lobby);
+    setLoading(false);
   };
 
   return (
@@ -70,8 +83,8 @@ export const CreateScreen = ({ navigation }: any) => {
             style={styles.input}
             placeholder="Skriv spillnavn her"
             placeholderTextColor={Color.Gray}
-            value={request.name}
-            onChangeText={(input) => setRequest((prev) => ({ ...prev, name: input }))}
+            value={createRequest.name}
+            onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, name: input }))}
           />
         </View>
 
@@ -81,10 +94,10 @@ export const CreateScreen = ({ navigation }: any) => {
             style={[styles.input, styles.textArea]}
             placeholder="Skriv en beskrivelse"
             placeholderTextColor={Color.Gray}
-            value={request.description}
+            value={createRequest.description}
             multiline
             numberOfLines={3}
-            onChangeText={(input) => setRequest((prev) => ({ ...prev, description: input }))}
+            onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, description: input }))}
           />
         </View>
 
@@ -94,13 +107,16 @@ export const CreateScreen = ({ navigation }: any) => {
             {CATEGORY_OPTIONS.map((category) => (
               <TouchableOpacity
                 key={category.value}
-                style={[styles.categoryButton, request.category === category.value && styles.categoryButtonSelected]}
-                onPress={() => setRequest((prev) => ({ ...prev, category: category.value }))}
+                style={[
+                  styles.categoryButton,
+                  createRequest.category === category.value && styles.categoryButtonSelected,
+                ]}
+                onPress={() => setCreateRequest((prev) => ({ ...prev, category: category.value }))}
               >
                 <Text
                   style={[
                     styles.categoryButtonText,
-                    request.category === category.value && styles.categoryButtonTextSelected,
+                    createRequest.category === category.value && styles.categoryButtonTextSelected,
                   ]}
                 >
                   {category.label}

@@ -1,21 +1,23 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import SpinGame from "../constants/SpinTypes";
+import SpinSession, { SpinSessionScreen } from "../constants/SpinTypes";
 
-interface ISpinGameContext {
-  spinGame: SpinGame | undefined;
-  setSpinGame: React.Dispatch<React.SetStateAction<SpinGame | undefined>>;
-  iterations: number;
-  setIterations: React.Dispatch<React.SetStateAction<number>>;
+interface ISpinSessionContext {
+  clearSpinSessionValues: () => void;
+  spinSession: SpinSession | undefined;
+  setSpinSession: React.Dispatch<React.SetStateAction<SpinSession | undefined>>;
+  screen: SpinSessionScreen;
+  setScreen: React.Dispatch<React.SetStateAction<SpinSessionScreen>>;
 }
 
-const defaultContextValue: ISpinGameContext = {
-  spinGame: undefined,
-  setSpinGame: () => { },
-  iterations: 0,
-  setIterations: () => { },
+const defaultContextValue: ISpinSessionContext = {
+  clearSpinSessionValues: () => {},
+  spinSession: undefined,
+  setSpinSession: () => {},
+  screen: SpinSessionScreen.Create,
+  setScreen: () => {},
 };
 
-const SpinGameContext = createContext<ISpinGameContext>(defaultContextValue);
+const SpinGameContext = createContext<ISpinSessionContext>(defaultContextValue);
 
 export const useSpinGameProvider = () => useContext(SpinGameContext);
 
@@ -24,14 +26,19 @@ interface SpinGameProviderProps {
 }
 
 export const SpinGameProvider = ({ children }: SpinGameProviderProps) => {
-  const [spinGame, setSpinGame] = useState<SpinGame | undefined>();
-  const [iterations, setIterations] = useState<number>(0);
+  const [spinSession, setSpinSession] = useState<SpinSession | undefined>(undefined);
+  const [screen, setScreen] = useState<SpinSessionScreen>(SpinSessionScreen.Create);
+
+  const clearSpinSessionValues = () => {
+    setSpinSession(undefined);
+  };
 
   const value = {
-    spinGame,
-    setSpinGame,
-    iterations,
-    setIterations,
+    clearSpinSessionValues,
+    spinSession,
+    setSpinSession,
+    screen,
+    setScreen,
   };
 
   return <SpinGameContext.Provider value={value}>{children}</SpinGameContext.Provider>;

@@ -1,6 +1,6 @@
 import { BaseUser, GameBase, GameCategory } from "@/src/Common/constants/Types";
 
-export const enum SpinGameScreen {
+export const enum SpinSessionScreen {
   Lobby = "Lobby",
   Started = "Started",
   Finished = "Finished",
@@ -9,7 +9,7 @@ export const enum SpinGameScreen {
   Game = "Game",
 }
 
-export interface SpinGame extends GameBase {
+export interface SpinSession extends GameBase {
   category: GameCategory;
   state: SpinGameState;
   hubGroupName: string;
@@ -24,7 +24,7 @@ export interface SpinPlayer {
   gameId: number;
   userId: number;
   active: boolean;
-  spinGame: SpinGame;
+  spinGame: SpinSession;
   user: BaseUser;
 }
 
@@ -51,4 +51,4 @@ export enum SpinGameState {
   Finished,
 }
 
-export default SpinGame;
+export default SpinSession;

@@ -1,19 +1,19 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { QuizGameScreen, QuizSession } from "../constants/quizTypes";
+import { QuizGameScreen as QuizSessionScreen, QuizSession } from "../constants/quizTypes";
 
 interface IQuizGameContext {
   clearQuizGameValues: () => void;
   quizSession: QuizSession | undefined;
   setQuizSession: React.Dispatch<React.SetStateAction<QuizSession | undefined>>;
-  screen: QuizGameScreen;
-  setScreen: React.Dispatch<React.SetStateAction<QuizGameScreen>>;
+  screen: QuizSessionScreen;
+  setScreen: React.Dispatch<React.SetStateAction<QuizSessionScreen>>;
 }
 
 const defaultContextValue: IQuizGameContext = {
   clearQuizGameValues: () => {},
   quizSession: undefined,
   setQuizSession: () => {},
-  screen: QuizGameScreen.Create,
+  screen: QuizSessionScreen.Create,
   setScreen: () => {},
 };
 
@@ -25,16 +25,16 @@ interface QuizGameProviderProps {
   children: ReactNode;
 }
 
-export const QuizGameProvider = ({ children }: QuizGameProviderProps) => {
+export const QuizSessionProvider = ({ children }: QuizGameProviderProps) => {
   const [quizSession, setQuizSession] = useState<QuizSession | undefined>(undefined);
-  const [screen, setScreen] = useState<QuizGameScreen>(QuizGameScreen.Create);
+  const [screen, setScreen] = useState<QuizSessionScreen>(QuizSessionScreen.Create);
 
-  const clearQuizGameValues = () => {
+  const clearQuizSessionValues = () => {
     setQuizSession(undefined);
   };
 
   const value = {
-    clearQuizGameValues,
+    clearQuizGameValues: clearQuizSessionValues,
     quizSession,
     setQuizSession,
     screen,
@@ -44,4 +44,4 @@ export const QuizGameProvider = ({ children }: QuizGameProviderProps) => {
   return <QuizGameContext.Provider value={value}>{children}</QuizGameContext.Provider>;
 };
 
-export default QuizGameProvider;
+export default QuizSessionProvider;

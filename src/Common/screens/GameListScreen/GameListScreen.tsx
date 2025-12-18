@@ -13,6 +13,7 @@ import { GameBase, GameCategory, GameEntryMode, GamePageQuery, GameType, PagedRe
 import Screen from "../../constants/Screen";
 import { Feather } from "@expo/vector-icons";
 import Color from "../../constants/Color";
+import { QuizSession } from "@/src/quizGame/constants/quizTypes";
 
 const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.Default]: "Standard",
@@ -115,15 +116,25 @@ export const GameListScreen = () => {
     }
   };
 
-  const handleGamePressed = (gameType: GameType) => {
+  const handleGamePressed = async (gameId: string, gameType: GameType) => {
+    if (!pseudoId) {
+      // TODO handle
+      console.error("Pseudo id was not present");
+      return;
+    }
+
     switch (gameType) {
       case GameType.Quiz:
-        //const game = gameService().initiateStandaloneGame();
-        // fetch the quiz
-        // set the quiz
-        // setQuizSession();
+        const qResult = await gameService().initiateStandaloneGame<QuizSession>(gameType, gameId, pseudoId);
+        if (qResult.isError()) {
+          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          return;
+        }
+
+        console.debug(qResult.value);
+        setQuizSession(qResult.value);
         setGameEntryMode(GameEntryMode.Host);
-        navigation.navigate(Screen.Spin);
+        navigation.navigate(Screen.Quiz);
         break;
       case GameType.Spin:
         // TODO HANDLE
@@ -141,7 +152,11 @@ export const GameListScreen = () => {
         {games.length === 0 && <Text>Det finnes ingen spill av denne typen enda</Text>}
 
         {games.map((game) => (
-          <TouchableOpacity onPress={() => handleGamePressed(game.game_type)} key={game.id} style={styles.card}>
+          <TouchableOpacity
+            onPress={() => handleGamePressed(game.id, game.game_type)}
+            key={game.id}
+            style={styles.card}
+          >
             <View style={styles.innerCard}>
               <View style={styles.iconCardOuter}>
                 <View style={styles.iconCardInner}>

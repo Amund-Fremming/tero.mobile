@@ -11,7 +11,7 @@ import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/Absol
 import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import { useNavigation } from "expo-router";
-import { QuizGameScreen } from "../../constants/quizTypes";
+import { QuizGameScreen as QuizSessionScreen } from "../../constants/quizTypes";
 import { useQuizGameProvider } from "../../context/QuizGameProvider";
 
 export const CreateScreen = () => {
@@ -31,9 +31,7 @@ export const CreateScreen = () => {
   });
 
   const handleCreateGame = async () => {
-    if (loading) {
-      return;
-    }
+    if (loading) return;
 
     if (!pseudoId) {
       // TODO - handle
@@ -55,7 +53,7 @@ export const CreateScreen = () => {
     setGameKey(result.value.game_key);
     setHubAddress(result.value.hub_address);
     setGameEntryMode(GameEntryMode.Creator);
-    setScreen(QuizGameScreen.Lobby);
+    setScreen(QuizSessionScreen.Lobby);
     setLoading(false);
   };
 

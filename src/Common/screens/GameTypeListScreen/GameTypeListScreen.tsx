@@ -18,10 +18,7 @@ export const GameTypeListScreen = () => {
 
   const handlePress = (screen: string) => {
     console.log("SCREEN: ", screen);
-
     const screenEnum = screen as GameType;
-    console.log("from as: ", screenEnum);
-
     const creating = gameEntryMode === GameEntryMode.Creator;
     setGameType(screenEnum);
 

@@ -8,7 +8,8 @@ import ServiceProvider from "@/src/Common/context/ServiceProvider";
 import { View, StatusBar, Dimensions } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
-import QuizGameProvider from "@/src/quizGame/context/QuizGameProvider";
+import QuizSessionProvider from "@/src/quizGame/context/QuizGameProvider";
+import SpinGameProvider from "@/src/SpinGame/context/SpinGameProvider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,9 +23,11 @@ export default () => (
         <AuthProvider>
           <GlobalGameProvider>
             <HubConnectionProvider>
-              <QuizGameProvider>
-                <Hub />
-              </QuizGameProvider>
+              <QuizSessionProvider>
+                <SpinGameProvider>
+                  <Hub />
+                </SpinGameProvider>
+              </QuizSessionProvider>
             </HubConnectionProvider>
           </GlobalGameProvider>
         </AuthProvider>

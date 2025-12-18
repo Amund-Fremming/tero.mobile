@@ -138,19 +138,18 @@ export class GameService {
     }
   }
 
-  /*
-    async initiateStandaloneGame(game_type: string, game_id: string, guest_id: string, token: string | null): Promise<Result<StandaloneGameResponse>> {
+    async initiateStandaloneGame<T>(game_type: string, game_id: string, pseudo_id: string): Promise<Result<T>> {
         try {
-            const response = await axios.get(`/games/standalone/${game_type}/initiate/${game_id}`, {
-                headers: getHeaders(guest_id, token)
+            const response = await axios.get(`${this.urlBase}/games/static/${game_type}/initiate/${game_id}`, {
+                headers: getHeaders(pseudo_id, null)
             });
-            return ok(response.data);
+            const data: T = response.data;
+            return ok(data);
         } catch (error) {
             console.error("", error);
             return err("Failed to initiate standalone game");
         }
     }
-        */
 
   // Remove?
   async initiateInteractiveGame(

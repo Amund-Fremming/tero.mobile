@@ -71,6 +71,7 @@ export const LobbyScreen = ({ navigation }: any) => {
   const handleAddQuestion = async () => {
     const result = await invokeFunction("AddQuestion", gameKey, question);
     if (result.isError()) {
+      console.error(result.error);
       displayErrorModal("Klarte ikke legge til spørsmål");
       return;
     }
