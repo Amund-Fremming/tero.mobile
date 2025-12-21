@@ -6,6 +6,7 @@
 - on every failure log the error from the result
 - make all services return technical error
 - remove all let keywords
+- Add possibility to log system log from fe
 
 # Bugs
 
