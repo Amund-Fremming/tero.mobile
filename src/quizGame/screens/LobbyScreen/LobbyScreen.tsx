@@ -56,15 +56,8 @@ export const LobbyScreen = ({ navigation }: any) => {
     });
 
     setListener(HubChannel.Game, (game: QuizSession) => {
-      console.log("Received game session, navigating to game screen");
+      console.log("Received game session");
       setQuizSession(game);
-      console.debug(game);
-      setScreen(QuizGameScreen.Game);
-    });
-
-    setListener(HubChannel.State, (message: string) => {
-      console.log(message);
-      setScreen(QuizGameScreen.Started);
     });
   };
 
@@ -94,7 +87,8 @@ export const LobbyScreen = ({ navigation }: any) => {
       return;
     }
 
-    disconnect();
+    await disconnect();
+    setScreen(QuizGameScreen.Game);
   };
 
   return (

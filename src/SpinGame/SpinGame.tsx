@@ -4,7 +4,6 @@ import { GameEntryMode } from "../Common/constants/Types";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
-import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import { SpinSessionScreen } from "./constants/SpinTypes";
 import { useSpinGameProvider } from "./context/SpinGameProvider";
 
@@ -38,8 +37,6 @@ export const SpinGame = () => {
       return <GameScreen />;
     case SpinSessionScreen.Lobby:
       return <LobbyScreen />;
-    case SpinSessionScreen.Started:
-      return <StartedScreen />;
     default:
       return <LobbyScreen />;
   }

@@ -6,15 +6,18 @@ import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProv
 import { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
 import { QuizSession } from "../../constants/quizTypes";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import Screen from "@/src/Common/constants/Screen";
 
 export const GameScreen = () => {
   const navigation: any = useNavigation();
   const { quizSession } = useQuizGameProvider();
+  const { displayErrorModal } = useModalProvider();
 
   const [quiz, setQuiz] = useState<QuizSession | undefined>(quizSession);
 
   useEffect(() => {
-    console.debug(quizSession);
+    //
   }, []);
 
   useEffect(() => {

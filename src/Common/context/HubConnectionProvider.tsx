@@ -84,7 +84,6 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
       await hubConnection.start();
       hubConnection.onclose(async () => {
         clearValues();
-        await hubConnection.stop();
       });
 
       setConnection(hubConnection);
@@ -92,6 +91,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
       setConnectedState(true);
       connectedStateRef.current = true;
 
+      console.info("Created hub connection");
       console.info(`Established connection: ${hubAddress}`);
       return ok(hubConnection);
     } catch (error) {
@@ -101,21 +101,22 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
   }
 
   async function disconnect(): Promise<Result> {
-    console.info("Manual disconnect triggered.");
     try {
       if (!connectionRef.current) {
         clearValues();
         return ok();
       }
 
-      await connection?.stop();
       await connectionRef.current.stop();
+      await connection?.stop();
       clearValues();
 
+      console.info("Manually disconnected user");
       return ok();
     } catch (error) {
       clearValues();
       setConnectedState(false);
+      console.error("Failed to close down websocket");
       return err("Failed to close down websocket");
     }
   }
@@ -126,7 +127,10 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
         return err("Ingen tilkobling opprettet. (HubConnectionProvider)");
       }
 
+      // Overwrite old listeners
+      connectionRef.current.off(channel);
       connectionRef.current.on(channel, fn);
+
       return ok();
     } catch (error) {
       console.error("setListener");

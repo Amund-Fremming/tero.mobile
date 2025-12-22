@@ -40,6 +40,7 @@ export const GameListScreen = () => {
   const [games, setGames] = useState<GameBase[]>([]);
 
   useEffect(() => {
+    console.log("TRIGGERED");
     getPage(0);
   }, []);
 

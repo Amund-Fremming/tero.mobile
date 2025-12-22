@@ -49,7 +49,7 @@ export const CreateScreen = () => {
       return;
     }
 
-    console.info("Game initiated!", result.value);
+    console.info("Game initiated");
     setGameKey(result.value.game_key);
     setHubAddress(result.value.hub_address);
     setGameEntryMode(GameEntryMode.Creator);
