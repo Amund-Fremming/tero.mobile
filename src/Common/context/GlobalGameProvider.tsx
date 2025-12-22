@@ -10,6 +10,7 @@ interface IGlobalGameContext {
   setGameKey: React.Dispatch<React.SetStateAction<string>>;
   hubAddress: string;
   setHubAddress: React.Dispatch<React.SetStateAction<string>>;
+  clearValues: () => void;
 }
 
 const defaultContextValue: IGlobalGameContext = {
@@ -21,6 +22,7 @@ const defaultContextValue: IGlobalGameContext = {
   setGameKey: () => {},
   hubAddress: "",
   setHubAddress: () => {},
+  clearValues: () => {},
 };
 
 const GlobalGameContext = createContext<IGlobalGameContext>(defaultContextValue);
@@ -37,7 +39,15 @@ export const GlobalGameProvider = ({ children }: GlobalGameProviderProps) => {
   const [gameKey, setGameKey] = useState<string>("");
   const [hubAddress, setHubAddress] = useState<string>("");
 
+  const clearValues = () => {
+    setGameEntryMode(GameEntryMode.Host);
+    setGameType(GameType.Spin);
+    setGameKey("");
+    setHubAddress("");
+  };
+
   const value = {
+    clearValues,
     gameEntryMode,
     setGameEntryMode,
     gameType,

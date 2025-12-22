@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import styles from "./createScreenStyles";
 import Color from "@/src/Common/constants/Color";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateGameRequest, GameCategory, GameEntryMode, GameType } from "@/src/Common/constants/Types";
 import { Pressable, TextInput } from "react-native-gesture-handler";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
@@ -49,7 +49,7 @@ export const CreateScreen = () => {
       return;
     }
 
-    console.info("Game initiated");
+    console.info("Game initiated with key:", result.value.game_key);
     setGameKey(result.value.game_key);
     setHubAddress(result.value.hub_address);
     setGameEntryMode(GameEntryMode.Creator);

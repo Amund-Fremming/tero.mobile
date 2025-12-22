@@ -1,7 +1,7 @@
 import { Pressable, Text } from "react-native";
 import styles from "./absoluteHomeButtonStyles";
 import Screen from "../../constants/Screen";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import { useGlobalGameProvider } from "../../context/GlobalGameProvider";
 import { useQuizGameProvider } from "@/src/quizGame/context/QuizGameProvider";
@@ -17,11 +17,18 @@ export const AbsoluteHomeButton = ({ primary = Color.Black, secondary = Color.Wh
 
   const { disconnect } = useHubConnectionProvider();
   const { clearQuizGameValues } = useQuizGameProvider();
+  const { clearValues } = useGlobalGameProvider();
 
   const handlePress = async () => {
     clearQuizGameValues();
+    clearValues();
     await disconnect();
-    navigation.navigate(Screen.Home);
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: Screen.Home }],
+      })
+    );
   };
 
   return (
