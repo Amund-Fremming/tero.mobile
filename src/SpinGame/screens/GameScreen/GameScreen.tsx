@@ -26,12 +26,7 @@ export const GameScreen = ({ navigation }: any) => {
   const isHost = gameEntryMode === GameEntryMode.Creator || gameEntryMode === GameEntryMode.Host;
 
   useEffect(() => {
-    setupListeners();
-    handleStartGame();
-
-    return () => {
-      disconnect();
-    };
+    setupListeners().then(() => handleStartGame());
   }, []);
 
   const setupListeners = async () => {
@@ -61,6 +56,12 @@ export const GameScreen = ({ navigation }: any) => {
   };
 
   const handleStartGame = async () => {
+    if (!gameKey || gameKey == "") {
+      displayErrorModal("Mangler spill nøkkel");
+      return;
+    }
+    console.debug("Game key:", gameKey);
+
     const result = await invokeFunction("StartGame", gameKey);
     if (result.isError()) {
       console.error(result.error);
@@ -69,7 +70,7 @@ export const GameScreen = ({ navigation }: any) => {
     }
   };
 
-  const handleStartSpin = async () => {
+  const handleStartRound = async () => {
     console.debug("Starting spin");
     const result = await invokeFunction("StartRound", gameKey);
     if (result.isError()) {
@@ -85,7 +86,7 @@ export const GameScreen = ({ navigation }: any) => {
         <View>
           <Text>{roundText}</Text>
 
-          <Pressable onPress={handleStartSpin}>
+          <Pressable onPress={handleStartRound}>
             <Text>Start spin</Text>
           </Pressable>
         </View>

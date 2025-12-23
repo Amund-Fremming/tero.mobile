@@ -62,9 +62,6 @@ export const CreateScreen = () => {
     const gameKey = result.value.game_key;
     const hubAddress = result.value.hub_address;
 
-    console.debug("key:", gameKey);
-    console.debug("hubAdress:", hubAddress);
-
     setGameKey(gameKey);
     setHubAddress(hubAddress);
     setGameEntryMode(GameEntryMode.Creator);

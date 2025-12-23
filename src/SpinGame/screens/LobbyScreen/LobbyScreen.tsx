@@ -11,8 +11,9 @@ import { GameEntryMode } from "@/src/Common/constants/Types";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import MediumButton from "@/src/Common/components/MediumButton/MediumButton";
 import Color from "@/src/Common/constants/Color";
-import { SpinSessionScreen } from "../../constants/SpinTypes";
+import { SpinGameState, SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinGameProvider } from "../../context/SpinGameProvider";
+import Screen from "@/src/Common/constants/Screen";
 
 export const LobbyScreen = () => {
   const { pseudoId } = useAuthProvider();
@@ -32,25 +33,24 @@ export const LobbyScreen = () => {
     const result = await connect(hubAddress);
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("En fail har skjedd, forsøk å gå ut og inn av spillet");
-      return;
-    }
-
-    const connectResult = await invokeFunction("ConnectToGroup", gameKey, pseudoId);
-    if (connectResult.isError()) {
-      console.error(connectResult.error);
-      displayErrorModal("Klarte ikke koble til, forsøk å lukke appen og start på nytt");
+      displayErrorModal("En feil har skjedd, forsøk å gå ut og inn av spillet");
       return;
     }
 
     setListener(HubChannel.Iterations, (iterations: number) => {
+      console.info("Received iterations:", iterations);
       setIterations(iterations);
     });
 
+    setListener("signal_start", (_value: boolean) => {
+      console.info("Received start signal");
+      setScreen(SpinSessionScreen.Game);
+    });
+
     const groupResult = await invokeFunction("ConnectToGroup", gameKey, pseudoId);
-    if (result.isError()) {
+    if (groupResult.isError()) {
       console.error(groupResult.error);
-      displayErrorModal("Klarte ikke koble til spillet, prøv igjen senere");
+      displayErrorModal("Klarte ikke koble til, forsøk å lukke appen og start på nytt");
       return;
     }
   };
