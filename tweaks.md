@@ -1,5 +1,7 @@
 # Tweaks
 
+- input validation
+- stop users creating games if not enough players
 - profile data is not updated when save it hit: just create a profile data provider and set new data with updated data returned from patch
 - saved games on game list screen does not switch icon when game is saved, should also show saved games when navigate to the list screen
 - go over all error messages in display error modal

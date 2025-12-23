@@ -9,7 +9,6 @@ import Color from "@/src/Common/constants/Color";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { HubChannel } from "@/src/Common/constants/HubChannel";
-import Screen from "@/src/Common/constants/Screen";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { useSpinGameProvider } from "../../context/SpinGameProvider";
 
@@ -17,7 +16,9 @@ export const GameScreen = ({ navigation }: any) => {
   const [bgColor, setBgColor] = useState<string>(Color.Gray);
   const [state, setState] = useState<SpinGameState>(SpinGameState.RoundStarted);
   const [roundText, setRoundText] = useState<string>("");
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
 
+  const { clearSpinSessionValues } = useSpinGameProvider();
   const { disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { gameEntryMode, gameKey } = useGlobalGameProvider();
   const { displayErrorModal } = useModalProvider();
@@ -27,6 +28,10 @@ export const GameScreen = ({ navigation }: any) => {
 
   useEffect(() => {
     setupListeners().then(() => handleStartGame());
+
+    return () => {
+      clearSpinSessionValues();
+    };
   }, []);
 
   const setupListeners = async () => {
@@ -35,7 +40,7 @@ export const GameScreen = ({ navigation }: any) => {
       displayErrorModal(message);
     });
 
-    setListener("round_text", (roundText: string) => {
+    setListener("round", (roundText: string) => {
       console.info("Received round text:", roundText);
       setRoundText(roundText);
     });
@@ -43,11 +48,14 @@ export const GameScreen = ({ navigation }: any) => {
     setListener(HubChannel.State, (state: SpinGameState) => {
       console.info("Received state:", state);
       setState(state);
+      if (state == SpinGameState.RoundStarted || state == SpinGameState.Finished) {
+        setBgColor(Color.Gray);
+      }
     });
 
-    setListener("selected", (selectedId: string) => {
-      console.info("Received selected user:", selectedId);
-      if (selectedId === pseudoId) {
+    setListener("selected", (batch: string[]) => {
+      console.info("Received selected users:", batch);
+      if (pseudoId && batch.includes(pseudoId)) {
         setBgColor(Color.Green);
       } else {
         setBgColor(Color.Red);
@@ -70,9 +78,21 @@ export const GameScreen = ({ navigation }: any) => {
     }
   };
 
+  const handleNextRound = async () => {
+    const result = await invokeFunction("NextRound", gameKey);
+    if (result.isError()) {
+      console.error(result.error);
+      displayErrorModal("En feil har skjedd med forbindelsen");
+      return;
+    }
+  };
+
   const handleStartRound = async () => {
+    const channel = gameStarted ? "NextRound" : "StartRound";
+    setGameStarted(false);
+
     console.debug("Starting spin");
-    const result = await invokeFunction("StartRound", gameKey);
+    const result = await invokeFunction(channel, gameKey);
     if (result.isError()) {
       console.error(result.error);
       displayErrorModal("En feil har skjedd med forbindelsen");
@@ -92,23 +112,16 @@ export const GameScreen = ({ navigation }: any) => {
         </View>
       )}
 
-      {state === SpinGameState.RoundStarted && (
+      {state === SpinGameState.RoundStarted && !isHost && (
         <View>
           <Text>Gjør deg klar!</Text>
         </View>
       )}
 
-      {state === SpinGameState.RoundInProgress && (
-        <View>
-          <Text>Spinner..</Text>
-          {/* TODO? */}
-        </View>
-      )}
-
       {state === SpinGameState.RoundFinished && isHost && (
-        <View>
-          <Text>Venter på ny runde</Text>
-        </View>
+        <Pressable onPress={handleNextRound}>
+          <Text>Ny runde</Text>
+        </Pressable>
       )}
 
       {state === SpinGameState.RoundFinished && (

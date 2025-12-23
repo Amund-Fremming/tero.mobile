@@ -31,6 +31,7 @@ export const SpinGameProvider = ({ children }: SpinGameProviderProps) => {
 
   const clearSpinSessionValues = () => {
     setSpinSession(undefined);
+    setScreen(SpinSessionScreen.Create);
   };
 
   const value = {

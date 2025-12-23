@@ -37,6 +37,11 @@ export const LobbyScreen = () => {
       return;
     }
 
+    setListener(HubChannel.Error, (message: string) => {
+      console.info("Received error:", message);
+      displayErrorModal(message);
+    });
+
     setListener(HubChannel.Iterations, (iterations: number) => {
       console.info("Received iterations:", iterations);
       setIterations(iterations);
@@ -79,7 +84,7 @@ export const LobbyScreen = () => {
   return (
     <View style={styles.container}>
       <Text>Spin game</Text>
-      <Text>Universal game id: {gameKey}</Text>
+      <Text style={styles.gameKey}>ID: {gameKey.toUpperCase()}</Text>
       <Text style={styles.header}>Legg til spørsmål</Text>
       <Text style={styles.paragraph}>Antall spørsmål: {iterations}</Text>
       <TextInput style={styles.input} value={round} onChangeText={(input) => setRound(input)} />

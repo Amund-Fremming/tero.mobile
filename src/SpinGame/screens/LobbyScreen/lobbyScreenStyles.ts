@@ -1,4 +1,5 @@
 import Color from "@/src/Common/constants/Color";
+import Font from "@/src/Common/constants/Font";
 import { moderateScale, verticalScale } from "@/src/Common/utils/dimensions";
 import { version } from "react";
 import { StyleSheet } from "react-native";
@@ -11,6 +12,12 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
+
+ gameKey: {
+  fontFamily: Font.PassionOneBold,
+  color: Color.BuzzifyLavender,
+  fontSize: moderateScale(40)
+ }, 
 
   header: {
     fontSize: moderateScale(20),
