@@ -3,7 +3,7 @@ import styles from "./absoluteHomeButtonStyles";
 import Screen from "../../constants/Screen";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
-import { useGlobalGameProvider } from "../../context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import { useQuizGameProvider } from "@/src/quizGame/context/QuizGameProvider";
 import Color from "../../constants/Color";
 
@@ -17,7 +17,7 @@ export const AbsoluteHomeButton = ({ primary = Color.Black, secondary = Color.Wh
 
   const { disconnect } = useHubConnectionProvider();
   const { clearQuizGameValues } = useQuizGameProvider();
-  const { clearValues } = useGlobalGameProvider();
+  const { clearGlobalSessionValues: clearValues } = useGlobalSessionProvider();
 
   const handlePress = async () => {
     clearQuizGameValues();

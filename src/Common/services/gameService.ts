@@ -175,19 +175,6 @@ export class GameService {
     }
   }
 
-  async sessionPlayersCount(pseudo_id: string, game_type: GameType, game_key: string): Promise<Result<number>> {
-    try {
-      const response = await axios.get(`${this.urlBase}/games/session/count/${game_type}/${game_key}`, {
-        headers: getHeaders(pseudo_id, null),
-      });
-      const count: number = response.data;
-      return ok(count);
-    } catch (error) {
-      console.error("sessionPlayersCount:", error);
-      return err("Failed to get session players count");
-    }
-  }
-
   async joinInteractiveGame(pseudo_id: string, game_key: string): Promise<Result<JoinGameResponse>> {
     try {
       const response = await axios.post<JoinGameResponse>(

@@ -1,7 +1,7 @@
 import { View, Text, Pressable, Button } from "react-native";
 import Screen from "../../../Common/constants/Screen";
 import styles from "./homeScreenStyles";
-import { useGlobalGameProvider } from "../../../Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "../../../Common/context/GlobalSessionProvider";
 import { useEffect, useState } from "react";
 import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
@@ -21,7 +21,7 @@ const subHeaderList = [
 ];
 
 export const HomeScreen = ({ navigation }: any) => {
-  const { setGameEntryMode } = useGlobalGameProvider();
+  const { setGameEntryMode } = useGlobalSessionProvider();
   const { commonService, userService } = useServiceProvider();
   const { displayInfoModal } = useModalProvider();
 

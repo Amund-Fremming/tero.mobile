@@ -6,7 +6,7 @@ import { CreateGameRequest, GameCategory, GameEntryMode, GameType } from "@/src/
 import { Pressable, TextInput } from "react-native-gesture-handler";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/AbsoluteHomeButton";
 import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
@@ -19,7 +19,7 @@ export const CreateScreen = () => {
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
   const { gameService } = useServiceProvider();
-  const { setGameKey, setGameEntryMode, setHubAddress } = useGlobalGameProvider();
+  const { setGameKey, setGameEntryMode, setHubAddress } = useGlobalSessionProvider();
   const { setScreen } = useQuizGameProvider();
   const {} = useHubConnectionProvider();
 
@@ -49,8 +49,8 @@ export const CreateScreen = () => {
       return;
     }
 
-    console.info("Game initiated with key:", result.value.game_key);
-    setGameKey(result.value.game_key);
+    console.info("Game initiated with key:", result.value.key);
+    setGameKey(result.value.key);
     setHubAddress(result.value.hub_address);
     setGameEntryMode(GameEntryMode.Creator);
     setScreen(QuizSessionScreen.Lobby);

@@ -4,7 +4,7 @@ import styles from "./addChallengeStyles";
 import { useState } from "react";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 
 export const AddChallenge = () => {
   const [readBeforeSpin, setReadBeforeSpin] = useState<boolean>(true);
@@ -13,7 +13,7 @@ export const AddChallenge = () => {
 
   const { displayErrorModal } = useModalProvider();
   const { invokeFunction } = useHubConnectionProvider();
-  const { universalGameValues } = useGlobalGameProvider();
+  const { universalGameValues } = useGlobalSessionProvider();
 
   const handleAddChallenge = async () => {
     if (!universalGameValues) {

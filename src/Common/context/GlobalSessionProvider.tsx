@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { GameEntryMode, GameType } from "../constants/Types";
 
-interface IGlobalGameContext {
+interface IGlobalSessionContext {
   gameEntryMode: GameEntryMode;
   setGameEntryMode: React.Dispatch<React.SetStateAction<GameEntryMode>>;
   gameType: GameType;
@@ -10,10 +10,12 @@ interface IGlobalGameContext {
   setGameKey: React.Dispatch<React.SetStateAction<string>>;
   hubAddress: string;
   setHubAddress: React.Dispatch<React.SetStateAction<string>>;
-  clearValues: () => void;
+  isHost: boolean;
+  setIsHost: React.Dispatch<React.SetStateAction<boolean>>;
+  clearGlobalSessionValues: () => void;
 }
 
-const defaultContextValue: IGlobalGameContext = {
+const defaultContextValue: IGlobalSessionContext = {
   gameEntryMode: GameEntryMode.Host,
   setGameEntryMode: () => {},
   gameType: GameType.Spin,
@@ -22,32 +24,36 @@ const defaultContextValue: IGlobalGameContext = {
   setGameKey: () => {},
   hubAddress: "",
   setHubAddress: () => {},
-  clearValues: () => {},
+  isHost: false,
+  setIsHost: () => {},
+  clearGlobalSessionValues: () => {},
 };
 
-const GlobalGameContext = createContext<IGlobalGameContext>(defaultContextValue);
+const GlobalSessionContext = createContext<IGlobalSessionContext>(defaultContextValue);
 
-export const useGlobalGameProvider = () => useContext(GlobalGameContext);
+export const useGlobalSessionProvider = () => useContext(GlobalSessionContext);
 
-interface GlobalGameProviderProps {
+interface GlobalSessionProviderProps {
   children: ReactNode;
 }
 
-export const GlobalGameProvider = ({ children }: GlobalGameProviderProps) => {
+export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => {
   const [gameEntryMode, setGameEntryMode] = useState<GameEntryMode>(GameEntryMode.Host);
   const [gameType, setGameType] = useState<GameType>(GameType.Spin);
   const [gameKey, setGameKey] = useState<string>("");
   const [hubAddress, setHubAddress] = useState<string>("");
+  const [isHost, setIsHost] = useState<boolean>(false);
 
-  const clearValues = () => {
+  const clearGlobalSessionValues = () => {
     setGameEntryMode(GameEntryMode.Host);
     setGameType(GameType.Spin);
     setGameKey("");
     setHubAddress("");
+    setIsHost(false);
   };
 
   const value = {
-    clearValues,
+    clearGlobalSessionValues,
     gameEntryMode,
     setGameEntryMode,
     gameType,
@@ -56,9 +62,11 @@ export const GlobalGameProvider = ({ children }: GlobalGameProviderProps) => {
     setGameKey,
     hubAddress,
     setHubAddress,
+    isHost,
+    setIsHost,
   };
 
-  return <GlobalGameContext.Provider value={value}>{children}</GlobalGameContext.Provider>;
+  return <GlobalSessionContext.Provider value={value}>{children}</GlobalSessionContext.Provider>;
 };
 
 export default GlobalGameProvider;

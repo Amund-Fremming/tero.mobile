@@ -134,7 +134,7 @@ export enum GameCategory {
 }
 
 export interface InteractiveGameResponse {
-  game_key: string;
+  key: string;
   hub_address: string;
 }
 

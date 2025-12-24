@@ -3,7 +3,7 @@ import styles from "./gameScreenStyles";
 import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/AbsoluteHomeButton";
 import { useEffect, useState } from "react";
 import { SpinGameState } from "../../constants/SpinTypes";
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { GameEntryMode } from "@/src/Common/constants/Types";
 import Color from "@/src/Common/constants/Color";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
@@ -18,19 +18,20 @@ export const GameScreen = ({ navigation }: any) => {
   const [roundText, setRoundText] = useState<string>("");
   const [gameStarted, setGameStarted] = useState<boolean>(false);
 
+  const { isHost, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { clearSpinSessionValues } = useSpinGameProvider();
   const { disconnect, setListener, invokeFunction } = useHubConnectionProvider();
-  const { gameEntryMode, gameKey } = useGlobalGameProvider();
+  const { gameKey } = useGlobalSessionProvider();
   const { displayErrorModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
-
-  const isHost = gameEntryMode === GameEntryMode.Creator || gameEntryMode === GameEntryMode.Host;
 
   useEffect(() => {
     setupListeners().then(() => handleStartGame());
 
     return () => {
       clearSpinSessionValues();
+      clearGlobalSessionValues();
+      disconnect();
     };
   }, []);
 

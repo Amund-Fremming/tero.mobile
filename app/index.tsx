@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import HubConnectionProvider from "@/src/Common/context/HubConnectionProvider";
-import GlobalGameProvider from "../src/Common/context/GlobalGameProvider";
+import GlobalGameProvider from "../src/Common/context/GlobalSessionProvider";
 import ModalProvider from "@/src/Common/context/ModalProvider";
 import Hub from "@/src/Hub/Hub";
 import AuthProvider from "../src/Common/context/AuthProvider";

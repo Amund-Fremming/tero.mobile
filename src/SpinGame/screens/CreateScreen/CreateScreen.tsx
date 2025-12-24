@@ -8,7 +8,7 @@ import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { styles } from "./createScreenStyles";
 import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/AbsoluteHomeButton";
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useNavigation } from "expo-router";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinGameProvider } from "../../context/SpinGameProvider";
@@ -26,7 +26,7 @@ export const CreateScreen = () => {
   const { displayErrorModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
   const { gameService } = useServiceProvider();
-  const { setGameKey, setGameEntryMode, setHubAddress } = useGlobalGameProvider();
+  const { setGameKey, setGameEntryMode, setHubAddress } = useGlobalSessionProvider();
   const { setScreen } = useSpinGameProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -57,7 +57,7 @@ export const CreateScreen = () => {
       return;
     }
 
-    const gameKey = result.value.game_key;
+    const gameKey = result.value.key;
     const hubAddress = result.value.hub_address;
 
     setGameKey(gameKey);

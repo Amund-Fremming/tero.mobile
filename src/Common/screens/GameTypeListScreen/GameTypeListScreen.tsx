@@ -3,7 +3,7 @@ import data from "./data.json";
 import { View, Text, Pressable, ScrollView, Dimensions, Image } from "react-native";
 import React from "react";
 import { useNavigation } from "expo-router";
-import { useGlobalGameProvider } from "../../context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import Screen from "../../constants/Screen";
 import { verticalScale } from "../../utils/dimensions";
 import { Feather } from "@expo/vector-icons";
@@ -14,7 +14,7 @@ const { height } = Dimensions.get("window");
 
 export const GameTypeListScreen = () => {
   const navigation: any = useNavigation();
-  const { setGameType, gameEntryMode } = useGlobalGameProvider();
+  const { setGameType, gameEntryMode } = useGlobalSessionProvider();
 
   const handlePress = (screen: string) => {
     const screenEnum = screen as GameType;

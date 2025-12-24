@@ -6,7 +6,7 @@ import { View, Text, Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import styles from "./lobbyScreenStyles";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/AbsoluteHomeButton";
 import Screen from "@/src/Common/constants/Screen";
 import { HubChannel } from "@/src/Common/constants/HubChannel";
@@ -22,7 +22,7 @@ export const LobbyScreen = () => {
   const [started, setStarted] = useState<boolean>(false);
   const [iterations, setIterations] = useState<number>(0);
 
-  const { gameEntryMode, gameKey, hubAddress } = useGlobalGameProvider();
+  const { gameEntryMode, gameKey, hubAddress } = useGlobalSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal } = useModalProvider();
   const { setQuizSession, setScreen } = useQuizGameProvider();

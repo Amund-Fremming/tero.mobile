@@ -90,7 +90,6 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
       setConnectedState(true);
       connectedStateRef.current = true;
 
-      console.info("Created hub connection");
       console.info(`Established connection: ${hubAddress}`);
       return ok(hubConnection);
     } catch (error) {

@@ -3,7 +3,7 @@ import VerticalScroll from "../../wrappers/VerticalScroll";
 import AbsoluteHomeButton from "../../components/AbsoluteHomeButton/AbsoluteHomeButton";
 import { useEffect, useState } from "react";
 import { useModalProvider } from "../../context/ModalProvider";
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useAuthProvider } from "../../context/AuthProvider";
 import { useNavigation } from "@react-navigation/native";
 import { useQuizGameProvider } from "@/src/quizGame/context/QuizGameProvider";
@@ -27,10 +27,10 @@ export const GameListScreen = () => {
   const navigation: any = useNavigation();
 
   const { setQuizSession } = useQuizGameProvider();
-  const { setGameEntryMode } = useGlobalGameProvider();
+  const { setGameEntryMode } = useGlobalSessionProvider();
   const { displayErrorModal, displayActionModal } = useModalProvider();
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
-  const { gameType } = useGlobalGameProvider();
+  const { gameType } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const [hasPrev, setHasPrev] = useState<boolean>(false);

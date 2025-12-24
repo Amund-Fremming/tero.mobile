@@ -1,4 +1,4 @@
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
 import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
@@ -9,7 +9,7 @@ import { CreateScreen } from "./screens/CreateScreen/CreateScreen";
 import { useQuizGameProvider } from "./context/QuizGameProvider";
 
 export const QuizGame = () => {
-  const { gameEntryMode } = useGlobalGameProvider();
+  const { gameEntryMode } = useGlobalSessionProvider();
   const { screen, setScreen } = useQuizGameProvider();
 
   useEffect(() => {

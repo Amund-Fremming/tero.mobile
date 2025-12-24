@@ -5,19 +5,18 @@ import { Pressable, TextInput } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
-import { useGlobalGameProvider } from "../../../Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "../../../Common/context/GlobalSessionProvider";
 import { Feather } from "@expo/vector-icons";
 import Color from "@/src/Common/constants/Color";
 import { GameEntryMode } from "@/src/Common/constants/Types";
 import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useNavigation } from "expo-router";
-import Screen from "@/src/Common/constants/Screen";
 
 export const JoinScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
-  const { displayErrorModal } = useModalProvider();
-  const { setGameEntryMode, setGameKey, setHubAddress } = useGlobalGameProvider();
+  const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const { setGameEntryMode, setGameKey, setHubAddress } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const [userInput, setUserInput] = useState<string>("");
@@ -38,7 +37,7 @@ export const JoinScreen = () => {
     const result = await gameService().joinInteractiveGame(pseudoId, gameKey);
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Spillet finnes ikke");
+      displayInfoModal("Spillet har startet eller finnes ikke");
       return;
     }
 

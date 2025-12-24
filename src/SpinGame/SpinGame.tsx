@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useGlobalGameProvider } from "@/src/Common/context/GlobalGameProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { GameEntryMode } from "../Common/constants/Types";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
@@ -8,7 +8,7 @@ import { SpinSessionScreen } from "./constants/SpinTypes";
 import { useSpinGameProvider } from "./context/SpinGameProvider";
 
 export const SpinGame = () => {
-  const { gameEntryMode } = useGlobalGameProvider();
+  const { gameEntryMode } = useGlobalSessionProvider();
   const { screen, setScreen } = useSpinGameProvider();
 
   useEffect(() => {
