@@ -72,6 +72,11 @@ export const LobbyScreen = () => {
   };
 
   const handleAddRound = async () => {
+    if (round === "") {
+      displayInfoModal("Du har glemt å skrive inn tekst i tekstboksen", "Oisann");
+      return;
+    }
+
     const result = await invokeFunction("AddRound", gameKey, round);
     if (result.isError()) {
       console.error(result.error);

@@ -12,15 +12,13 @@ import { horizontalScale } from "@/src/Common/utils/dimensions";
 
 export const ProfileScreen = () => {
   const navigation: any = useNavigation();
-
-  const { pseudoId, triggerLogout, accessToken, setPseudoId } = useAuthProvider();
+  const { pseudoId, triggerLogout, accessToken, setPseudoId, userData, setUserData } = useAuthProvider();
   const { userService } = useServiceProvider();
 
   const isLoggedIn = accessToken != null;
 
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string>("");
-  const [userData, setUserData] = useState<BaseUser | undefined>(undefined);
 
   const crown = require("../../../Common/assets/images/crown.png");
 
@@ -65,7 +63,7 @@ export const ProfileScreen = () => {
   const handleLogout = async () => {
     const success = await triggerLogout();
     if (success) {
-      setUserData(undefined);
+      setUserData(null);
       setIsAdmin(false);
       setAvatar("");
     }

@@ -8,11 +8,12 @@ import { useServiceProvider } from "./ServiceProvider";
 import { useNavigation } from "expo-router";
 import Screen from "../constants/Screen";
 import { err, ok, Result } from "../utils/result";
+import { BaseUser } from "../constants/Types";
 
 const REFRESH_TOKEN_KEY = "refresh_token";
 
 interface IAuthContext {
-  redirectUri: string,
+  redirectUri: string;
   pseudoId: string | null;
   setPseudoId: React.Dispatch<React.SetStateAction<string | null>>;
   accessToken: string | null;
@@ -20,27 +21,33 @@ interface IAuthContext {
   triggerLogin: () => void;
   triggerLogout: () => Promise<boolean>;
   rotateTokens: () => Promise<void>;
+  userData: BaseUser | null;
+  setUserData: React.Dispatch<React.SetStateAction<BaseUser | null>>;
 
   // TODO - remove
   logValues: () => void;
   resetPseudoId: () => void;
-  invalidateAccessToken: () => void,
+  invalidateAccessToken: () => void;
 }
 
 const defaultContextValue: IAuthContext = {
   redirectUri: "[NOT_SET]",
   pseudoId: null,
-  setPseudoId: () => { },
+  setPseudoId: () => {},
   accessToken: null,
-  callUpdateUserActivity: async () => { },
-  triggerLogin: () => { },
-  triggerLogout: async () => { return false },
-  rotateTokens: async () => { },
+  callUpdateUserActivity: async () => {},
+  triggerLogin: () => {},
+  triggerLogout: async () => {
+    return false;
+  },
+  rotateTokens: async () => {},
+  userData: null,
+  setUserData: () => {},
 
   // TODO - remove
-  logValues: () => { },
-  resetPseudoId: () => { },
-  invalidateAccessToken: () => { },
+  logValues: () => {},
+  resetPseudoId: () => {},
+  invalidateAccessToken: () => {},
 };
 
 const AuthContext = createContext<IAuthContext>(defaultContextValue);
@@ -55,8 +62,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [redirectUri, setRedirectUri] = useState<string>("[NOT_SET]");
   const [pseudoId, setPseudoId] = useState<string | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [userData, setUserData] = useState<BaseUser | null>(null);
 
-  const navigation:any = useNavigation();
+  const navigation: any = useNavigation();
   const { displayErrorModal } = useModalProvider();
   const { userService } = useServiceProvider();
 
@@ -69,7 +77,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     handleAuth();
-    setRedirectUri(Auth0Config.redirectUri)
+    setRedirectUri(Auth0Config.redirectUri);
   }, []);
 
   const handleAuth = async (): Promise<Result<string>> => {
@@ -84,7 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     let result = await userService().ensurePseudoId(storedPseudoId);
     if (result.isError()) {
-      console.error(result.error); 
+      console.error(result.error);
       return err("Failed to get pseudo id");
     }
 
@@ -96,7 +104,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const callUpdateUserActivity = async () => {
-
     if (!pseudoId) {
       console.error("No pseudo id!");
       navigation.navigate(Screen.Problem);
@@ -118,7 +125,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       usePKCE: true,
       extraParams: {
         audience: Auth0Config.audience,
-        pseudo_id: pseudoId ?? "unknown"
+        pseudo_id: pseudoId ?? "unknown",
       },
     },
     Auth0Config.discovery
@@ -198,7 +205,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       const logoutUrl = `https://${Auth0Config.domain}/v2/logout?${params.toString()}`;
       let response = await WebBrowser.openAuthSessionAsync(logoutUrl, returnTo);
-      if (response.type === 'cancel' || response.type === 'dismiss') {
+      if (response.type === "cancel" || response.type === "dismiss") {
         console.warn("Logout was cancelled by user");
         return false;
       }
@@ -259,7 +266,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         await SecureStore.deleteItemAsync("access_token");
         await SecureStore.deleteItemAsync("refresh_token");
         await SecureStore.deleteItemAsync("id_token");
-        setAccessToken(null)
+        setAccessToken(null);
         return;
       }
 
@@ -285,12 +292,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const resetPseudoId = async () => {
     setPseudoId("");
     await SecureStore.deleteItemAsync("pseudo_id");
-  }
+  };
 
   // TODO - remove
   const invalidateAccessToken = () => {
-    setAccessToken("eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAahERJawntho0my942XheVLmGwLMBkQ");
-  }
+    setAccessToken(
+      "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAahERJawntho0my942XheVLmGwLMBkQ"
+    );
+  };
 
   const value = {
     callUpdateUserActivity,
@@ -301,11 +310,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     triggerLogout,
     rotateTokens,
     redirectUri,
+    userData,
+    setUserData,
 
     // TODO - remove
     logValues,
     resetPseudoId,
-    invalidateAccessToken
+    invalidateAccessToken,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -15,7 +15,7 @@ import { useNavigation } from "expo-router";
 export const JoinScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
-  const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const { displayInfoModal } = useModalProvider();
   const { setGameEntryMode, setGameKey, setHubAddress } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
@@ -29,6 +29,11 @@ export const JoinScreen = () => {
     if (!pseudoId) {
       // TODO -handle
       console.error("Missing pseudo id");
+      return;
+    }
+
+    if (userInput === "") {
+      displayInfoModal("Du har glemt å skrive inn en spill id i tekstfeltet", "Oisann");
       return;
     }
 
@@ -62,7 +67,7 @@ export const JoinScreen = () => {
             style={styles.input}
             placeholder="SLEM POTET"
             value={userInput}
-            onChangeText={(input) => setUserInput(input.toUpperCase())}
+            onChangeText={(input) => setUserInput(input?.toUpperCase())}
           />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleJoinGame}>

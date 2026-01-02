@@ -13,22 +13,17 @@ import { useModalProvider } from "@/src/Common/context/ModalProvider";
 export const EditProfileScreen = () => {
   const navigation: any = useNavigation();
 
-  const { accessToken } = useAuthProvider();
+  const { accessToken, userData, setUserData } = useAuthProvider();
   const { userService } = useServiceProvider();
   const { displayErrorModal } = useModalProvider();
 
-  const [userData, setUserData] = useState<BaseUser | undefined>(undefined);
   const [patchRequest, setPatchRequest] = useState<PatchUserRequest>({});
   const [birthDateDisplay, setBirthDateDisplay] = useState<string>("");
 
   const handleBirthDateChangeIso = (text: string) => {
-    // Remove all non-numeric characters
     const cleaned = text.replace(/[^0-9]/g, "");
-
-    // Limit to 8 digits max (YYYYMMDD)
     const limited = cleaned.slice(0, 8);
 
-    // Format for display: YYYY-MM-DD
     let formatted = limited;
     if (limited.length >= 5) {
       formatted = limited.slice(0, 4) + "-" + limited.slice(4);
@@ -37,20 +32,15 @@ export const EditProfileScreen = () => {
       formatted = limited.slice(0, 4) + "-" + limited.slice(4, 6) + "-" + limited.slice(6);
     }
 
-    // Update display value
     setBirthDateDisplay(formatted);
-
-    // Only update ISO date if we have complete date (8 digits)
     if (limited.length === 8) {
       const year = parseInt(limited.slice(0, 4), 10);
       const month = parseInt(limited.slice(4, 6), 10);
       const day = parseInt(limited.slice(6, 8), 10);
 
-      // Validate the date
       if (year >= 1900 && year <= new Date().getFullYear() && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
         const date = new Date(year, month - 1, day);
 
-        // Check if date is valid (handles invalid dates like Feb 30)
         if (date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day) {
           const isoDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
           setPatchRequest((prev) => ({
@@ -62,7 +52,6 @@ export const EditProfileScreen = () => {
       }
     }
 
-    // Clear ISO date if incomplete or invalid
     setPatchRequest((prev) => ({
       ...prev,
       birth_date: undefined,
@@ -82,7 +71,6 @@ export const EditProfileScreen = () => {
       birth_date: userData?.birth_date,
     });
 
-    // Set display value from existing birth_date
     if (userData?.birth_date) {
       setBirthDateDisplay(userData.birth_date);
     }
@@ -121,6 +109,8 @@ export const EditProfileScreen = () => {
       return;
     }
 
+    const user = result.value;
+    setUserData(user);
     navigation.goBack();
   };
 

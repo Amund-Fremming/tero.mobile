@@ -25,7 +25,7 @@ export const GameScreen = () => {
   const { clearSpinSessionValues } = useSpinGameProvider();
   const { disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { gameKey } = useGlobalSessionProvider();
-  const { displayErrorModal } = useModalProvider();
+  const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
 
   useEffect(() => {
@@ -60,6 +60,10 @@ export const GameScreen = () => {
     setListener("host", (hostId: string) => {
       console.info("Received new host:", hostId);
       setIsHost(hostId == pseudoId);
+    });
+
+    setListener("cancelled", (message: string) => {
+      displayInfoModal(message, "Spillet ble avsluttet", handleLeaveGame);
     });
 
     setListener("selected", (batch: string[]) => {
@@ -109,7 +113,7 @@ export const GameScreen = () => {
     }
   };
 
-  const handleBackPressed = async () => {
+  const handleLeaveGame = async () => {
     await disconnect();
     navigation.goBack();
     clearGlobalSessionValues();
@@ -118,7 +122,7 @@ export const GameScreen = () => {
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
       <View>
-        <Pressable onPress={handleBackPressed}>
+        <Pressable onPress={handleLeaveGame}>
           <Feather name="chevron-left" size={45} />
         </Pressable>
       </View>
