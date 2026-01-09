@@ -1,36 +1,9 @@
-import { BaseUser, GameBase, GameCategory } from "@/src/Common/constants/Types";
+import { GameCategory } from "@/src/Common/constants/Types";
 
 export const enum SpinSessionScreen {
   Lobby = "Lobby",
   Create = "Create",
   Game = "Game",
-}
-
-export interface SpinSession extends GameBase {
-  category: GameCategory;
-  state: SpinGameState;
-  hubGroupName: string;
-  hostId: number;
-  Host: BaseUser | undefined;
-  players: SpinPlayer[];
-  challenges: Challenge[];
-}
-
-export interface SpinPlayer {
-  id: number;
-  gameId: number;
-  userId: number;
-  active: boolean;
-  spinGame: SpinSession;
-  user: BaseUser;
-}
-
-export interface Challenge {
-  id: number;
-  gameId: number;
-  participants: number;
-  text: string;
-  readBeforeSpin: boolean;
 }
 
 export interface CreateSpinGameRequest {
@@ -46,5 +19,3 @@ export enum SpinGameState {
   RoundFinished = "RoundFinished",
   Finished = "Finished",
 }
-
-export default SpinSession;
