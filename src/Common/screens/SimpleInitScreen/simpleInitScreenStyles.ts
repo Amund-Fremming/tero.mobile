@@ -12,6 +12,16 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
 
+  headerInline: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  toastHeader: {
+    fontSize: moderateScale(25),
+    fontFamily: Font.PassionOneRegular,
+  },
+
   iconWrapper: {
     backgroundColor: Color.DarkerGray,
     justifyContent: "center",
@@ -24,6 +34,13 @@ export const styles = StyleSheet.create({
   header: {
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(55),
+    fontWeight: 600,
+    opacity: 0.8,
+  },
+
+  headerSecondScreen: {
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(45),
     fontWeight: 600,
     opacity: 0.8,
   },

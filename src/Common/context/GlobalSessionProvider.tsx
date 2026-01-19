@@ -16,7 +16,7 @@ interface IGlobalSessionContext {
 }
 
 const defaultContextValue: IGlobalSessionContext = {
-  gameEntryMode: GameEntryMode.Host,
+  gameEntryMode: GameEntryMode.Creator,
   setGameEntryMode: () => {},
   gameType: GameType.Quiz,
   setGameType: () => {},
@@ -45,7 +45,7 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
   const [isHost, setIsHost] = useState<boolean>(false);
 
   const clearGlobalSessionValues = () => {
-    setGameEntryMode(GameEntryMode.Host);
+    setGameEntryMode(GameEntryMode.Creator);
     setGameType(GameType.Quiz);
     setGameKey("");
     setHubAddress("");

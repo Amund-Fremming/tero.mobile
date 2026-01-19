@@ -21,7 +21,6 @@ export const GameScreen = () => {
   const [state, setState] = useState<SpinGameState>(SpinGameState.RoundStarted);
   const [roundText, setRoundText] = useState<string>("");
   const [gameStarted, setGameStarted] = useState<boolean>(false);
-  const [gameFinished, setGameFinished] = useState<boolean>(false);
 
   const exitTriggeredRef = useRef<boolean>(false);
   const hasStartedGameRef = useRef<boolean>(false);

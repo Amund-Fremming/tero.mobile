@@ -1,8 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import createStyles from "../CreateScreen/createScreenStyles";
-import styles from "./lobbyScreenStyles";
 import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
-import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import { HubChannel } from "@/src/Common/constants/HubChannel";
@@ -10,11 +6,9 @@ import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinGameProvider } from "../../context/SpinGameProvider";
-import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 import { GameType } from "@/src/Common/constants/Types";
-import { moderateScale } from "@/src/Common/utils/dimensions";
-import Color from "@/src/Common/constants/Color";
+import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
 
 export const LobbyScreen = () => {
   const navigation: any = useNavigation();
@@ -22,7 +16,7 @@ export const LobbyScreen = () => {
   const { connect, setListener, invokeFunction, disconnect } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameKey, gameType, hubAddress, setIsHost, isHost, clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { setScreen, themeColor, secondaryThemeColor, featherIcon } = useSpinGameProvider();
+  const { setScreen, themeColor, secondaryThemeColor, featherIcon, clearSpinSessionValues } = useSpinGameProvider();
 
   const [round, setRound] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
@@ -33,6 +27,10 @@ export const LobbyScreen = () => {
     console.log("GameType=" + gameType);
     createHubConnecion();
   }, []);
+
+  const handleSetRound = (value: string) => {
+    setRound(value);
+  };
 
   const createHubConnecion = async () => {
     console.log("Hub address:", hubAddress);
@@ -128,46 +126,32 @@ export const LobbyScreen = () => {
     await disconnect();
     navigation.goBack();
     clearGlobalSessionValues();
+    clearSpinSessionValues();
+  };
+
+  const handleInfoPressed = () => {
+    console.log("Info pressed");
   };
 
   return (
-    <View style={{ ...createStyles.container, backgroundColor: themeColor }}>
-      <View style={createStyles.headerWrapper}>
-        <TouchableOpacity onPress={handleBackPressed} style={createStyles.iconWrapper}>
-          <Feather name="chevron-left" size={moderateScale(45)} />
-        </TouchableOpacity>
-        <View style={styles.headerInline}>
-          <Text style={styles.toastHeader}>Rom:</Text>
-          <Text style={styles.header}>{gameKey?.toUpperCase()}</Text>
-        </View>
-        <View style={createStyles.iconWrapper}>
-          <Text style={createStyles.textIcon}>?</Text>
-        </View>
-      </View>
-      <View style={createStyles.midSection}>
-        <Text style={{ ...createStyles.iterations, opacity: 0.4 }}>{iterations}</Text>
-        <Feather name={featherIcon} size={moderateScale(200)} style={{ opacity: 0.4 }} />
-      </View>
-      <View style={createStyles.bottomSection}>
-        <TextInput
-          multiline
-          style={createStyles.input}
-          placeholder="Runde..."
-          value={round}
-          onChangeText={(input) => setRound(input)}
-        />
-        <View style={createStyles.inputBorder} />
-        <TouchableOpacity
-          onPress={handleAddRound}
-          style={{ ...createStyles.categoryButton, backgroundColor: secondaryThemeColor }}
-        >
-          <Text style={createStyles.bottomText}>Legg til</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleStartGame} style={createStyles.createButton}>
-          <Text style={createStyles.bottomText}>Start spill</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <SimpleInitScreen
+      isFirstPage={false}
+      themeColor={themeColor}
+      secondaryThemeColor={secondaryThemeColor}
+      onBackPressed={handleBackPressed}
+      onInfoPressed={handleInfoPressed}
+      headerText="Opprett"
+      topButtonText="Velg kategori"
+      topButtonOnChange={() => {}}
+      topButtonOnPress={handleAddRound}
+      bottomButtonText="Opprett"
+      bottomButtonCallback={handleStartGame}
+      featherIcon={featherIcon}
+      iterations={iterations}
+      inputPlaceholder="Spillnavn..."
+      inputValue={round}
+      setInput={handleSetRound}
+    />
   );
 };
 

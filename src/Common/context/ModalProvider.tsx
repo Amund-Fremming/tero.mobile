@@ -17,9 +17,9 @@ interface IModalContext {
 }
 
 const defaultContextValue: IModalContext = {
-  displayActionModal: () => { },
-  displayErrorModal: () => { },
-  displayInfoModal: () => { },
+  displayActionModal: () => {},
+  displayErrorModal: () => {},
+  displayInfoModal: () => {},
 };
 
 const ModalContext = createContext<IModalContext>(defaultContextValue);
@@ -31,9 +31,9 @@ interface ModalProviderProps {
 }
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
-  const [onCloseFunc, setOnCloseFunc] = useState<() => void>(() => { });
-  const [onLeftCloseFunc, setOnLeftCloseFunc] = useState<() => void>(() => { });
-  const [onRightCloseFunc, setOnRightCloseFunc] = useState<() => void>(() => { });
+  const [onCloseFunc, setOnCloseFunc] = useState<() => void>(() => {});
+  const [onLeftCloseFunc, setOnLeftCloseFunc] = useState<() => void>(() => {});
+  const [onRightCloseFunc, setOnRightCloseFunc] = useState<() => void>(() => {});
   const [displayOption, setDisplayOption] = useState<DisplayOption>(DisplayOption.None);
   const [message, setMessage] = useState<string>("");
   const [header, setHeader] = useState<string>("");
@@ -47,7 +47,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     setOnCloseFunc(() => fn);
     setDisplayOption(DisplayOption.Error);
     setMessage(message);
-    setHeader("Oops")
+    setHeader("Oops");
   };
 
   const displayInfoModal = (message: string, header?: string, onCloseAction?: () => void) => {
@@ -59,7 +59,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     setOnCloseFunc(() => fn);
     setDisplayOption(DisplayOption.Info);
     setMessage(message);
-    setHeader(header ? header : "Hey")
+    setHeader(header ? header : "Heisann");
   };
 
   const displayActionModal = (message: string, onLeftCloseAction: () => void, onRightCloseAction: () => void) => {
@@ -90,7 +90,12 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
       {children}
       <Modal visible={displayOption !== DisplayOption.None} animationType="fade" transparent={true}>
         {(displayOption === DisplayOption.Info || displayOption === DisplayOption.Error) && (
-          <InfoModal message={message} header={header} isError={displayOption === DisplayOption.Error} onCloseFunc={onCloseFunc} />
+          <InfoModal
+            message={message}
+            header={header}
+            isError={displayOption === DisplayOption.Error}
+            onCloseFunc={onCloseFunc}
+          />
         )}
 
         {displayOption === DisplayOption.Action && (

@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
   },
+
   genericContainer: {
     justifyContent: "center",
     alignItems: "center",
@@ -22,35 +23,44 @@ export const styles = StyleSheet.create({
     gap: verticalScale(15),
     paddingHorizontal: horizontalScale(20),
   },
+
   messageContainer: {
     backgroundColor: Color.White,
-    borderColor: Color.Green,
+    borderColor: Color.Gray,
+    borderWidth: moderateScale(5),
   },
+
   errorContainer: {
     backgroundColor: Color.White,
     borderColor: Color.Red,
   },
+
   header: {
     fontFamily: Font.PassionOneBold,
-    fontSize: moderateScale(34),
-    color: Color.Black,
+    fontSize: moderateScale(45),
+    opacity: 0.8,
   },
+
   message: {
-    fontFamily: Font.SpaceMonoRegular,
-    fontSize: moderateScale(16),
+    fontFamily: Font.SintonyBold,
+    fontSize: moderateScale(24),
     textAlign: "center",
     color: Color.Black,
   },
+
   button: {
-    backgroundColor: Color.Purple,
-    paddingVertical: verticalScale(10),
-    paddingHorizontal: horizontalScale(40),
-    borderRadius: moderateScale(8),
-    marginTop: verticalScale(5),
+    backgroundColor: Color.BuzzifyLavender,
+    borderRadius: moderateScale(10),
+    marginTop: verticalScale(12),
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
+    height: verticalScale(50),
   },
+
   buttonText: {
-    fontFamily: Font.SpaceMonoRegular,
-    fontSize: moderateScale(16),
+    fontFamily: Font.PassionOneRegular,
+    fontSize: moderateScale(30),
     color: Color.White,
     fontWeight: "600",
   },
