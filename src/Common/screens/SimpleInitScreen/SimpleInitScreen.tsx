@@ -6,6 +6,11 @@ import { moderateScale } from "@/src/Common/utils/dimensions";
 import { useNavigation } from "expo-router";
 import { useMemo } from "react";
 
+const STATIC_STYLES = {
+  iterationsOpacity: { opacity: 0.4 },
+  iconOpacity: { opacity: 0.4 },
+};
+
 interface SimpleInitScreenProps {
   topButtonCallback: () => void;
   bottomButtonCallback: () => void;
@@ -47,7 +52,7 @@ export const SimpleInitScreen = ({
   );
 
   const iterationsStyle = useMemo(
-    () => StyleSheet.compose(styles.iterations, { opacity: 0.4 }),
+    () => StyleSheet.compose(styles.iterations, STATIC_STYLES.iterationsOpacity),
     []
   );
 
@@ -55,8 +60,6 @@ export const SimpleInitScreen = ({
     () => StyleSheet.compose(styles.categoryButton, { backgroundColor: secondaryThemeColor }),
     [secondaryThemeColor]
   );
-
-  const iconOpacityStyle = useMemo(() => ({ opacity: 0.4 }), []);
 
   const handleBackPressed = () => {
     if (onBackPressed) {
@@ -88,7 +91,7 @@ export const SimpleInitScreen = ({
         <Feather
           name={featherIcon as any}
           size={moderateScale(200)}
-          style={iconOpacityStyle}
+          style={STATIC_STYLES.iconOpacity}
         />
       </View>
       <View style={styles.bottomSection}>
