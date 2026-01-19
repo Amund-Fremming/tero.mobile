@@ -5,6 +5,9 @@ import { Feather } from "@expo/vector-icons";
 import { moderateScale } from "@/src/Common/utils/dimensions";
 import { useNavigation } from "expo-router";
 import { useMemo } from "react";
+import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
+import { GameCategory } from "../../constants/Types";
+import Color from "../../constants/Color";
 
 const STATIC_STYLES = {
   iterationsOpacity: { opacity: 0.4 },
@@ -12,26 +15,26 @@ const STATIC_STYLES = {
 };
 
 interface SimpleInitScreenProps {
-  topButtonCallback: () => void;
-  bottomButtonCallback: () => void;
-  topButtonText: string;
-  bottomButtonText: string;
-  secondaryThemeColor: string;
-  featherIcon: string;
   themeColor: string;
-  iterations: number | string;
-  setInput: (value: string) => void;
-  inputPlaceholder: string;
-  inputValue: string;
-  headerText: string;
+  secondaryThemeColor: string;
   onBackPressed?: () => void;
   onInfoPressed?: () => void;
+  headerText: string;
+  topButtonText: string;
+  topButtonCallback: (value: any) => void;
+  bottomButtonText: string;
+  bottomButtonCallback: () => void;
+  featherIcon: string;
+  iterations: number | string;
+  inputPlaceholder: string;
+  inputValue: string;
+  setInput: (input: string) => void;
 }
 
 export const SimpleInitScreen = ({
   topButtonCallback,
   bottomButtonCallback,
-  topButtonText,
+  topButtonText: categoryButtonText,
   bottomButtonText,
   secondaryThemeColor,
   featherIcon,
@@ -46,20 +49,12 @@ export const SimpleInitScreen = ({
 }: SimpleInitScreenProps) => {
   const navigation: any = useNavigation();
 
-  const containerStyle = useMemo(
-    () => StyleSheet.compose(styles.container, { backgroundColor: themeColor }),
-    [themeColor]
-  );
-
-  const iterationsStyle = useMemo(
-    () => StyleSheet.compose(styles.iterations, STATIC_STYLES.iterationsOpacity),
-    []
-  );
-
-  const categoryButtonStyle = useMemo(
-    () => StyleSheet.compose(styles.categoryButton, { backgroundColor: secondaryThemeColor }),
-    [secondaryThemeColor]
-  );
+  const categoryData = [
+    { label: "Alle", value: GameCategory.All },
+    { label: "Vors", value: GameCategory.Vors },
+    { label: "Jenter", value: GameCategory.Ladies },
+    { label: "Gutter", value: GameCategory.Boys },
+  ];
 
   const handleBackPressed = () => {
     if (onBackPressed) {
@@ -76,7 +71,7 @@ export const SimpleInitScreen = ({
   };
 
   return (
-    <View style={containerStyle}>
+    <View style={{ ...styles.container, backgroundColor: themeColor }}>
       <View style={styles.headerWrapper}>
         <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
           <Feather name="chevron-left" size={moderateScale(45)} />
@@ -87,12 +82,8 @@ export const SimpleInitScreen = ({
         </TouchableOpacity>
       </View>
       <View style={styles.midSection}>
-        <Text style={iterationsStyle}>{iterations}</Text>
-        <Feather
-          name={featherIcon as any}
-          size={moderateScale(200)}
-          style={STATIC_STYLES.iconOpacity}
-        />
+        <Text style={styles.iterations}>{iterations}</Text>
+        <Feather name={featherIcon as any} size={moderateScale(200)} style={STATIC_STYLES.iconOpacity} />
       </View>
       <View style={styles.bottomSection}>
         <TextInput
@@ -103,12 +94,14 @@ export const SimpleInitScreen = ({
           onChangeText={setInput}
         />
         <View style={styles.inputBorder} />
-        <TouchableOpacity
-          onPress={topButtonCallback}
-          style={categoryButtonStyle}
-        >
-          <Text style={styles.bottomText}>{topButtonText}</Text>
-        </TouchableOpacity>
+        <CategoryDropdown
+          data={categoryData}
+          value={categoryButtonText}
+          onChange={(value) => topButtonCallback(value)}
+          placeholder="Velg categori"
+          buttonBackgroundColor={secondaryThemeColor}
+          buttonTextColor={Color.White}
+        />
         <TouchableOpacity onPress={bottomButtonCallback} style={styles.createButton}>
           <Text style={styles.bottomText}>{bottomButtonText}</Text>
         </TouchableOpacity>

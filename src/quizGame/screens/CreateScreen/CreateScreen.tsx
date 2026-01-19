@@ -14,6 +14,8 @@ import { Feather } from "@expo/vector-icons";
 import { moderateScale } from "@/src/Common/utils/dimensions";
 import Color from "@/src/Common/constants/Color";
 import CategoryDropdown from "@/src/Common/components/CategoryDropdown/CategoryDropdown";
+import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
+import { ConsoleLogger } from "@microsoft/signalr/dist/esm/Utils";
 
 export const CreateScreen = () => {
   const navigation: any = useNavigation();
@@ -30,12 +32,13 @@ export const CreateScreen = () => {
     category: "" as any,
   });
 
-  const categoryData = [
-    { label: "Alle", value: GameCategory.All },
-    { label: "Vors", value: GameCategory.Vors },
-    { label: "Jenter", value: GameCategory.Ladies },
-    { label: "Gutter", value: GameCategory.Boys },
-  ];
+  const handleSetCategory = (value: any) => {
+    setCreateRequest((prev) => ({ ...prev, category: value as GameCategory }));
+  };
+
+  const handleSetName = (value: string) => {
+    setCreateRequest((prev) => ({ ...prev, name: value }));
+  };
 
   const handleCreateGame = async () => {
     if (loading) return;
@@ -79,46 +82,20 @@ export const CreateScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconWrapper}>
-          <Feather name="chevron-left" size={moderateScale(45)} />
-        </TouchableOpacity>
-        <Text style={styles.header}>Opprett</Text>
-        <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
-          <Text style={styles.textIcon}>?</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.midSection}>
-        <Text style={{ ...styles.iterations, opacity }}>?</Text>
-        <Feather
-          name="layers"
-          size={moderateScale(200)}
-          style={{
-            opacity,
-          }}
-        />
-      </View>
-      <View style={styles.bottomSection}>
-        <TextInput
-          style={styles.input}
-          placeholder="Spillnavn"
-          value={createRequest.name}
-          onChangeText={(val) => setCreateRequest((prev) => ({ ...prev, name: val }))}
-        />
-        <View style={styles.inputBorder} />
-        <CategoryDropdown
-          data={categoryData}
-          value={createRequest.category}
-          onChange={(value) => setCreateRequest((prev) => ({ ...prev, category: value as GameCategory }))}
-          placeholder="Velg categori"
-          buttonBackgroundColor={Color.BuzzifyLavenderLight}
-          buttonTextColor={Color.White}
-        />
-        <TouchableOpacity onPress={handleCreateGame} style={styles.createButton}>
-          <Text style={styles.bottomText}>Opprett</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <SimpleInitScreen
+      themeColor={Color.BuzzifyLavender}
+      secondaryThemeColor={Color.BuzzifyLavenderLight}
+      onBackPressed={() => navigation.goBack()}
+      headerText="Opprett"
+      topButtonText="Velg kategori"
+      topButtonCallback={handleSetCategory}
+      bottomButtonText="Opprett"
+      bottomButtonCallback={handleCreateGame}
+      featherIcon="layers"
+      iterations={"?"}
+      inputPlaceholder="Spillnavn..."
+      inputValue={createRequest.name}
+      setInput={handleSetName}
+    />
   );
 };

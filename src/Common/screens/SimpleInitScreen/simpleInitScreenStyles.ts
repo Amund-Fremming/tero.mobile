@@ -46,6 +46,7 @@ export const styles = StyleSheet.create({
   },
 
   iterations: {
+    opacity: 0.4,
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(160),
     marginBottom: verticalScale(-25),
