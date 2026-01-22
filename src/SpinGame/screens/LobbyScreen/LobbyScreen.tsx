@@ -54,7 +54,8 @@ export const LobbyScreen = () => {
       console.info("Strict comparison (===):", currentPseudoId === hostId);
       console.info("Loose comparison (==):", currentPseudoId == hostId);
       console.warn("=========================");
-      setIsHost(currentPseudoId === hostId);
+      // Use strict equality with type conversion to handle type mismatches
+      setIsHost(String(currentPseudoId) === String(hostId));
     });
 
     setListener("players_count", (players: number) => {

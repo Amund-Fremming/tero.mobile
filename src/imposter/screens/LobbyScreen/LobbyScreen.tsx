@@ -43,8 +43,11 @@ export const LobbyScreen = () => {
     }
 
     setListener("host", (hostId: string) => {
-      console.info("Received new host:", hostId);
-      setIsHost(pseudoId == hostId);
+      const currentPseudoId = pseudoId; // Capture pseudoId at call time to avoid stale closure
+      console.info("Imposter - Received new host:", hostId);
+      console.info("Imposter - My pseudoId:", currentPseudoId);
+      // Use strict equality with type conversion to handle type mismatches
+      setIsHost(String(currentPseudoId) === String(hostId));
     });
 
     setListener("players_count", (players: number) => {

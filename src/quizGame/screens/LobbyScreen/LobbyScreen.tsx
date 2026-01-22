@@ -9,6 +9,7 @@ import { QuizGameScreen, QuizSession } from "../../constants/quizTypes";
 import { useNavigation } from "expo-router";
 import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
 import Color from "@/src/Common/constants/Color";
+import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 
 export const LobbyScreen = () => {
   const navigation: any = useNavigation();
@@ -17,7 +18,8 @@ export const LobbyScreen = () => {
   const [iterations, setIterations] = useState<number>(0);
   const [isAddingQuestion, setIsAddingQuestion] = useState<boolean>(false);
 
-  const { gameKey, hubAddress, isHost } = useGlobalSessionProvider();
+  const { pseudoId } = useAuthProvider();
+  const { gameKey, hubAddress, isHost, setIsHost } = useGlobalSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { setQuizSession, setScreen } = useQuizGameProvider();
@@ -43,6 +45,15 @@ export const LobbyScreen = () => {
       return;
     }
 
+    // Set up host listener to receive host updates from backend
+    setListener("host", (hostId: string) => {
+      const currentPseudoId = pseudoId; // Capture pseudoId at call time to avoid stale closure
+      console.info("QuizGame - Received host:", hostId);
+      console.info("QuizGame - My pseudoId:", currentPseudoId);
+      // Use strict equality with type conversion to handle type mismatches
+      setIsHost(String(currentPseudoId) === String(hostId));
+    });
+
     setListener(HubChannel.Iterations, (iterations: number) => {
       console.log(`Received: ${iterations}`);
       setIterations(iterations);
@@ -67,7 +78,8 @@ export const LobbyScreen = () => {
     });
 
     console.debug("Connecting to group with key:", key);
-    const connectResult = await invokeFunction("ConnectToGroup", key);
+    // Add pseudoId parameter to match SpinGame/Imposter pattern
+    const connectResult = await invokeFunction("ConnectToGroup", key, pseudoId);
     if (connectResult.isError()) {
       displayErrorModal("En feil har skjedd, forsøk å gå ut og inn av spillet");
       await disconnect();
