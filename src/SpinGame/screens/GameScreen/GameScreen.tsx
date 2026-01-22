@@ -27,7 +27,7 @@ export const GameScreen = () => {
 
   const { isHost, setIsHost, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { clearSpinSessionValues } = useSpinGameProvider();
-  const { disconnect, setListener, invokeFunction } = useHubConnectionProvider();
+  const { disconnect, setListener, invokeFunction, debugDisconnect } = useHubConnectionProvider();
   const { gameKey } = useGlobalSessionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
@@ -145,6 +145,9 @@ export const GameScreen = () => {
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
       <View>
+        <Pressable onPress={debugDisconnect}>
+          <Text>MANUAL DISCONNECT</Text>
+        </Pressable>
         <Pressable onPress={handleLeaveGame}>
           <Feather name="chevron-left" size={45} />
         </Pressable>

@@ -17,6 +17,7 @@ interface IModalContext {
   displayErrorModal: (errorMessage: string, onCloseAction?: () => void) => void;
   displayInfoModal: (message: string, header?: string, onCloseAction?: () => void) => void;
   displayLoadingModal: (onCloseAction: () => void) => void;
+  closeLoadingModal: () => void;
 }
 
 const defaultContextValue: IModalContext = {
@@ -24,6 +25,7 @@ const defaultContextValue: IModalContext = {
   displayErrorModal: () => {},
   displayInfoModal: () => {},
   displayLoadingModal: () => {},
+  closeLoadingModal: () => {},
 };
 
 const ModalContext = createContext<IModalContext>(defaultContextValue);
@@ -84,24 +86,30 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     setDisplayOption(DisplayOption.None);
   };
 
+  const closeLoadingModal = () => setDisplayOption(DisplayOption.None);
+
   const value = {
     displayErrorModal,
     displayInfoModal,
     displayActionModal,
     displayLoadingModal,
+    closeLoadingModal,
   };
 
   const renderModal = () => {
     switch (displayOption) {
       case DisplayOption.Action:
         return <ActionModal message={message} onLeftClick={handleLeftClick} onRightClick={handleRightClick} />;
-      case DisplayOption.Error || DisplayOption.Info:
-        <InfoModal
-          message={message}
-          header={header}
-          isError={displayOption === DisplayOption.Error}
-          onCloseFunc={handleClose}
-        />;
+      case DisplayOption.Error:
+      case DisplayOption.Info:
+        return (
+          <InfoModal
+            message={message}
+            header={header}
+            isError={displayOption === DisplayOption.Error}
+            onCloseFunc={handleClose}
+          />
+        );
       case DisplayOption.Loading:
         return <LoadingModal onCloseFunc={onCloseActionRef.current} />;
       case DisplayOption.None:

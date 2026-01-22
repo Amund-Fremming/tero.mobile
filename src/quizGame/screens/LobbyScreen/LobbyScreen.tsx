@@ -15,8 +15,9 @@ export const LobbyScreen = () => {
   const [question, setQuestion] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
   const [iterations, setIterations] = useState<number>(0);
+  const [isAddingQuestion, setIsAddingQuestion] = useState<boolean>(false);
 
-  const { gameKey, hubAddress } = useGlobalSessionProvider();
+  const { gameKey, hubAddress, isHost } = useGlobalSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { setQuizSession, setScreen } = useQuizGameProvider();
@@ -75,19 +76,27 @@ export const LobbyScreen = () => {
   };
 
   const handleAddQuestion = async () => {
+    if (isAddingQuestion) {
+      return;
+    }
+
     if (question === "") {
       displayInfoModal("Du har glemt å skrive inn ett spørsmål");
       return;
     }
 
+    setIsAddingQuestion(true);
     const result = await invokeFunction("AddQuestion", gameKey, question);
+
     if (result.isError()) {
       console.error(result.error);
       displayErrorModal("Klarte ikke legge til spørsmål");
+      setTimeout(() => setIsAddingQuestion(false), 500);
       return;
     }
 
     setQuestion("");
+    setTimeout(() => setIsAddingQuestion(false), 500);
   };
 
   const handleStartGame = async () => {
@@ -115,6 +124,7 @@ export const LobbyScreen = () => {
 
   return (
     <SimpleInitScreen
+      isHost={isHost}
       createScreen={false}
       themeColor={Color.BuzzifyLavender}
       secondaryThemeColor={Color.BuzzifyLavenderLight}

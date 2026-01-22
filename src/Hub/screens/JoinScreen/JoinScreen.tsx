@@ -18,16 +18,18 @@ export const JoinScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { displayInfoModal } = useModalProvider();
-  const { setGameEntryMode, setGameKey, setHubAddress } = useGlobalSessionProvider();
+  const { setGameEntryMode, setGameKey, setHubAddress, setGameType, setIsHost } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const [userInput, setUserInput] = useState<string>("");
 
   useEffect(() => {
     setGameEntryMode(GameEntryMode.Participant);
+    setIsHost(false);
   }, []);
 
   const handleJoinGame = async () => {
+    setIsHost(false);
     if (!pseudoId) {
       // TODO -handle
       console.error("Missing pseudo id");
@@ -55,6 +57,7 @@ export const JoinScreen = () => {
     console.log("Received hub address:", response.hub_address);
     setHubAddress(response.hub_address);
     setGameKey(response.game_key);
+    setGameType(response.game_type);
 
     if ([GameType.Duel, GameType.Roulette].includes(response.game_type)) {
       navigation.navigate(Screen.Spin);

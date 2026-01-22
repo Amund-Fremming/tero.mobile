@@ -39,6 +39,7 @@ export const CategoryDropdown = <T extends string = string>({
       value={value}
       onChange={(item) => onChange(item.value as T)}
       dropdownPosition="top"
+      renderRightIcon={() => null}
       renderItem={(item) => (
         <View style={[styles.dropdownItem, buttonBackgroundColor && { backgroundColor: buttonBackgroundColor }]}>
           <Text style={[styles.bottomText, buttonTextColor && { color: buttonTextColor }]}>{item.label}</Text>

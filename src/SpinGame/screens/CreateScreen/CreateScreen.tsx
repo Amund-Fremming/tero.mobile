@@ -8,14 +8,13 @@ import { useNavigation } from "expo-router";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinGameProvider } from "../../context/SpinGameProvider";
 import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
-import { create } from "react-test-renderer";
 
 export const CreateScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
-  const { setGameKey, setGameEntryMode, setHubAddress, gameType } = useGlobalSessionProvider();
+  const { setGameKey, setGameEntryMode, setHubAddress, gameType, isHost, setIsHost } = useGlobalSessionProvider();
   const { setScreen, themeColor, secondaryThemeColor, featherIcon, setThemeColors } = useSpinGameProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,6 +22,10 @@ export const CreateScreen = () => {
     name: "",
     category: "" as any,
   });
+
+  useEffect(() => {
+    setIsHost(true);
+  }, []);
 
   useEffect(() => {
     console.log("GameType=" + gameType);
@@ -80,6 +83,7 @@ export const CreateScreen = () => {
 
   return (
     <SimpleInitScreen
+      isHost={isHost}
       createScreen={true}
       themeColor={themeColor}
       secondaryThemeColor={secondaryThemeColor}

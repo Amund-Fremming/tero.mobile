@@ -1,7 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { useModalProvider } from "./ModalProvider";
-import { HUB_URL_BASE } from "../constants/Endpoints";
 import { useNavigation } from "expo-router";
 import Screen from "../constants/Screen";
 import { ok, err, Result } from "../utils/result";
@@ -9,13 +8,15 @@ import { ok, err, Result } from "../utils/result";
 interface IHubConnectionContext {
   connect: (hubAddress: string) => Promise<Result<signalR.HubConnection>>;
   disconnect: () => Promise<Result>;
+  debugDisconnect: () => Promise<void>;
   setListener: <T>(channel: string, fn: (item: T) => void) => Result;
   invokeFunction: (functionName: string, ...params: any[]) => Promise<Result>;
 }
 
 const defaultContextValue: IHubConnectionContext = {
-  connect: async (_hubName: string) => err(""),
+  connect: async (_hubAddress: string) => err(""),
   disconnect: async () => err(""),
+  debugDisconnect: async () => {},
   setListener: (_channel: string, _fn: (item: any) => void) => err(""),
   invokeFunction: async (_functionName: string, ..._params: any[]) => err(""),
 };
@@ -31,27 +32,24 @@ interface HubConnectionProviderProps {
 export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) => {
   const [connection, setConnection] = useState<signalR.HubConnection | undefined>(undefined);
   const [connectedState, setConnectedState] = useState<boolean>(false);
+  const [hubAddress, setHubAddress] = useState<string>("");
 
   const connectionRef = useRef(connection);
   const connectedStateRef = useRef(connectedState);
+  const reconnectAttemptsRef = useRef(0);
+  const isReconnectingRef = useRef(false);
 
-  const { displayErrorModal } = useModalProvider();
+  const { displayErrorModal, displayLoadingModal, closeLoadingModal } = useModalProvider();
   const navigation: any = useNavigation();
 
   useEffect(() => {
     const interval = setInterval(() => {
+      // Only check if we think we should be connected
       if (!connectedStateRef.current) return;
-      if (!connectedStateRef.current && connectionRef.current) {
-        disconnect();
-        return;
-      }
 
-      if (!connectionRef.current) {
-        // TODO - For games with hub call invalidate user from the correct api.
-        clearValues();
-        displayErrorModal("Du mistet tilkoblingen, vennligst forsøk å koble til igjen.", () =>
-          navigation.navigate(Screen.Home)
-        );
+      // If we lost connection unexpectedly
+      if (connectedStateRef.current && !connectionRef.current && !isReconnectingRef.current) {
+        handleConnectionLost();
         return;
       }
     }, 750);
@@ -59,8 +57,60 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     return () => clearInterval(interval);
   }, []);
 
+  const handleConnectionLost = async () => {
+    if (isReconnectingRef.current || !hubAddress) return;
+
+    isReconnectingRef.current = true;
+    reconnectAttemptsRef.current = 0;
+
+    displayLoadingModal(() => {
+      navigation.navigate(Screen.Home); // This can cause nagivation stack mix up causing user to be reconnected to a game?
+      connectionRef.current = undefined;
+      reconnectAttemptsRef.current = 0;
+      isReconnectingRef.current = false;
+    });
+
+    const reconnected = await attemptReconnect();
+
+    if (reconnected) {
+      closeLoadingModal();
+      reconnectAttemptsRef.current = 0;
+      isReconnectingRef.current = false;
+    } else {
+      clearValues();
+      closeLoadingModal();
+      isReconnectingRef.current = false;
+    }
+  };
+
+  const attemptReconnect = async (): Promise<boolean> => {
+    const maxAttempts = 5;
+    const baseDelay = 1000; // 1 second
+    if (!isReconnectingRef.current) {
+      clearValues();
+    }
+    while (reconnectAttemptsRef.current < maxAttempts) {
+      const delay = baseDelay * Math.pow(2, reconnectAttemptsRef.current);
+      console.warn(`Reconnect attempt ${reconnectAttemptsRef.current + 1}/${maxAttempts} after ${delay}ms`);
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      const result = await connect(hubAddress);
+
+      if (result.isSuccess()) {
+        console.info("Reconnected successfully");
+        return true;
+      }
+
+      reconnectAttemptsRef.current++;
+    }
+
+    console.error("Failed to reconnect after max attempts");
+    return false;
+  };
+
   async function connect(hubAddress: string): Promise<Result<signalR.HubConnection>> {
     try {
+      setHubAddress(hubAddress);
       if (connectionRef.current) {
         const curHubName = (connectionRef.current as any)._hubName;
         const curHubId = (connectionRef.current as any)._hubId;
@@ -119,6 +169,21 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     }
   }
 
+  async function debugDisconnect(): Promise<void> {
+    try {
+      if (!connectionRef.current) {
+        console.warn("No connection to disconnect");
+        return;
+      }
+
+      console.info("DEBUG: Forcing disconnect to test reconnection");
+      await connectionRef.current.stop();
+      // Don't clear values - simulate unexpected disconnect
+    } catch (error) {
+      console.error("DEBUG: Failed to force disconnect", error);
+    }
+  }
+
   function setListener<T>(channel: string, fn: (item: T) => void): Result {
     try {
       if (!connectionRef.current) {
@@ -153,6 +218,8 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
   const clearValues = () => {
     setConnection(undefined);
     connectionRef.current = undefined;
+    reconnectAttemptsRef.current = 0;
+    isReconnectingRef.current = false;
     setConnectedState(false);
     connectedStateRef.current = false;
   };
@@ -162,6 +229,8 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     setListener,
     connect,
     disconnect,
+    debugDisconnect,
+    setHubAddress,
   };
 
   return <HubConnectionContext.Provider value={value}>{children}</HubConnectionContext.Provider>;

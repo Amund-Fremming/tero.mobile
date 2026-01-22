@@ -3,14 +3,11 @@ import { styles } from "./simpleInitScreenStyles";
 import { TextInput } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 import { moderateScale } from "@/src/Common/utils/dimensions";
-import { useGlobalSearchParams, useNavigation } from "expo-router";
-import { useMemo, useState } from "react";
 import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
 import { GameCategory } from "../../constants/Types";
 import Color from "../../constants/Color";
-import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
-import { create } from "react-test-renderer";
+import { useNavigation } from "expo-router";
 
 const STATIC_STYLES = {
   iterationsOpacity: { opacity: 0.4 },
@@ -18,6 +15,7 @@ const STATIC_STYLES = {
 };
 
 interface SimpleInitScreenProps {
+  isHost: boolean;
   createScreen: boolean;
   themeColor: string;
   secondaryThemeColor: string;
@@ -37,6 +35,7 @@ interface SimpleInitScreenProps {
 }
 
 export const SimpleInitScreen = ({
+  isHost,
   createScreen,
   topButtonOnChange,
   topButtonOnPress,
@@ -126,9 +125,11 @@ export const SimpleInitScreen = ({
             <Text style={styles.bottomText}>Legg til</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={bottomButtonCallback} style={styles.createButton}>
-          <Text style={styles.bottomText}>{bottomButtonText}</Text>
-        </TouchableOpacity>
+        {isHost && (
+          <TouchableOpacity onPress={bottomButtonCallback} style={styles.createButton}>
+            <Text style={styles.bottomText}>{bottomButtonText}</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

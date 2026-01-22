@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateGameRequest, GameCategory, GameEntryMode, GameType } from "@/src/Common/constants/Types";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
@@ -15,7 +15,7 @@ export const CreateScreen = () => {
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
-  const { setGameKey, setGameEntryMode, setHubAddress } = useGlobalSessionProvider();
+  const { setGameKey, setGameEntryMode, setHubAddress, isHost, setIsHost } = useGlobalSessionProvider();
   const { setScreen } = useQuizGameProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -23,6 +23,10 @@ export const CreateScreen = () => {
     name: "",
     category: "" as any,
   });
+
+  useEffect(() => {
+    setIsHost(true);
+  }, []);
 
   const handleSetCategory = (value: any) => {
     setCreateRequest((prev) => ({ ...prev, category: value as GameCategory }));
@@ -75,6 +79,7 @@ export const CreateScreen = () => {
 
   return (
     <SimpleInitScreen
+      isHost={isHost}
       createScreen={true}
       themeColor={Color.BuzzifyLavender}
       secondaryThemeColor={Color.BuzzifyLavenderLight}

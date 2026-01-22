@@ -22,9 +22,11 @@ export const LobbyScreen = () => {
   const [started, setStarted] = useState<boolean>(false);
   const [iterations, setIterations] = useState<number>(0);
   const [players, setPlayers] = useState<number>(0);
+  const [isAddingRound, setIsAddingRound] = useState<boolean>(false);
 
   useEffect(() => {
     console.log("GameType=" + gameType);
+    console.log("Is host: " + isHost);
     createHubConnecion();
   }, []);
 
@@ -41,9 +43,18 @@ export const LobbyScreen = () => {
       return;
     }
 
+    // TODO REMOVE DEBUG
     setListener("host", (hostId: string) => {
-      console.info("Received new host:", hostId);
-      setIsHost(pseudoId == hostId);
+      const currentPseudoId = pseudoId; // Capture at call time
+      console.warn("=== HOST MESSAGE DEBUG ===");
+      console.info("Received hostId from server:", hostId);
+      console.info("My current pseudoId:", currentPseudoId);
+      console.info("Type of hostId:", typeof hostId);
+      console.info("Type of pseudoId:", typeof currentPseudoId);
+      console.info("Strict comparison (===):", currentPseudoId === hostId);
+      console.info("Loose comparison (==):", currentPseudoId == hostId);
+      console.warn("=========================");
+      setIsHost(currentPseudoId === hostId);
     });
 
     setListener("players_count", (players: number) => {
@@ -75,19 +86,29 @@ export const LobbyScreen = () => {
   };
 
   const handleAddRound = async () => {
+    console.log("Is host: " + isHost);
+
+    if (isAddingRound) {
+      return;
+    }
+
     if (round === "") {
       displayInfoModal("Du har glemt å skrive inn en runde");
       return;
     }
 
+    setIsAddingRound(true);
     const result = await invokeFunction("AddRound", gameKey, round);
+
     if (result.isError()) {
       console.error(result.error);
       displayErrorModal("Klarte ikke legge til runde");
+      setTimeout(() => setIsAddingRound(false), 500);
       return;
     }
 
     setRound("");
+    setTimeout(() => setIsAddingRound(false), 1000);
   };
 
   const handleStartGame = async () => {
@@ -135,20 +156,21 @@ export const LobbyScreen = () => {
 
   return (
     <SimpleInitScreen
+      isHost={isHost}
       createScreen={false}
       themeColor={themeColor}
       secondaryThemeColor={secondaryThemeColor}
       onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"
-      topButtonText="Velg kategori"
+      topButtonText="Leggt til"
       topButtonOnChange={() => {}}
       topButtonOnPress={handleAddRound}
-      bottomButtonText="Opprett"
+      bottomButtonText="Start spill"
       bottomButtonCallback={handleStartGame}
       featherIcon={featherIcon}
       iterations={iterations}
-      inputPlaceholder="Spillnavn..."
+      inputPlaceholder="Taperen må..."
       inputValue={round}
       setInput={handleSetRound}
     />
