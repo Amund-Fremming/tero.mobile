@@ -29,7 +29,6 @@ export const JoinScreen = () => {
   }, []);
 
   const handleJoinGame = async () => {
-    setIsHost(false);
     if (!pseudoId) {
       // TODO -handle
       console.error("Missing pseudo id");

@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import styles from "./gameScreenStyles";
 import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/AbsoluteHomeButton";
 import { useEffect, useState, useRef } from "react";
@@ -14,6 +14,7 @@ import { useSpinGameProvider } from "../../context/SpinGameProvider";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 import Screen from "@/src/Common/constants/Screen";
+import { moderateScale } from "@/src/Common/utils/dimensions";
 
 export const GameScreen = () => {
   const navigation: any = useNavigation();
@@ -26,13 +27,14 @@ export const GameScreen = () => {
   const hasStartedGameRef = useRef<boolean>(false);
 
   const { isHost, setIsHost, clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearSpinSessionValues } = useSpinGameProvider();
+  const { clearSpinSessionValues, themeColor, secondaryThemeColor } = useSpinGameProvider();
   const { disconnect, setListener, invokeFunction, debugDisconnect } = useHubConnectionProvider();
   const { gameKey } = useGlobalSessionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
 
   useEffect(() => {
+    setBgColor(themeColor);
     setupListeners().then(() => {
       if (!hasStartedGameRef.current && isHost) {
         hasStartedGameRef.current = true;
@@ -58,17 +60,25 @@ export const GameScreen = () => {
       setRoundText(roundText);
     });
 
-    setListener(HubChannel.State, (state: SpinGameState) => {
+    setListener(HubChannel.State, async (state: SpinGameState) => {
       console.info("Received state:", state);
       setState(state);
+
       if (state == SpinGameState.RoundStarted || state == SpinGameState.Finished) {
         setBgColor(Color.Gray);
+      }
+
+      if (state === SpinGameState.Finished) {
+        await disconnect();
+        displayInfoModal("Spillet er ferdig", "Finito!", () => navigation.navigate(Screen.Home));
       }
     });
 
     setListener("host", (hostId: string) => {
-      console.info("Received new host:", hostId);
-      setIsHost(hostId == pseudoId);
+      if (hostId == pseudoId) {
+        console.info("Received new host:", hostId);
+        setIsHost(hostId == pseudoId);
+      }
     });
 
     setListener("cancelled", (message: string) => {
@@ -81,14 +91,6 @@ export const GameScreen = () => {
         setBgColor(Color.Green);
       } else {
         setBgColor(Color.Red);
-      }
-    });
-
-    setListener("state", async (state: SpinGameState) => {
-      console.info("Received state:");
-      if (state === SpinGameState.Finished) {
-        await disconnect();
-        displayInfoModal("Spillet er ferdig", "Finito!", () => navigation.navigate(Screen.Home));
       }
     });
   };
@@ -142,47 +144,49 @@ export const GameScreen = () => {
     navigation.goBack();
   };
 
+  const handleInfoPressed = () => {
+    console.log("Info pressed");
+    debugDisconnect();
+  };
+
+  const handleBackPressed = async () => {
+    await disconnect();
+    clearSpinSessionValues();
+    clearGlobalSessionValues();
+    navigation.goBack();
+  };
+
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
-      <View>
-        <Pressable onPress={debugDisconnect}>
-          <Text>MANUAL DISCONNECT</Text>
-        </Pressable>
-        <Pressable onPress={handleLeaveGame}>
-          <Feather name="chevron-left" size={45} />
-        </Pressable>
+      <View style={styles.headerWrapper}>
+        <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
+          <Feather name="chevron-left" size={moderateScale(45)} />
+        </TouchableOpacity>
+        {/* TODO - remove this ? not needed here */}
+        <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
+          <Text style={styles.textIcon}>?</Text>
+        </TouchableOpacity>
       </View>
-      {state === SpinGameState.RoundStarted && isHost && (
-        <View>
-          <Text>{roundText}</Text>
-
-          <Pressable onPress={handleStartRound}>
-            <Text>Start spin</Text>
-          </Pressable>
-        </View>
-      )}
-
-      {state === SpinGameState.RoundStarted && !isHost && (
-        <View>
-          <Text>Gjør deg klar!</Text>
-        </View>
-      )}
 
       {state === SpinGameState.RoundFinished && isHost && (
         <Pressable onPress={handleNextRound}>
           <Text>Ny runde</Text>
         </Pressable>
       )}
+      <Text style={{ ...styles.text, color: secondaryThemeColor }}>
+        {state === SpinGameState.RoundStarted && isHost && roundText}
+        {state === SpinGameState.RoundStarted && !isHost && "Gjør deg klar!"}
+        {state === SpinGameState.RoundFinished && "Venter på ny runde"}
+        {state === SpinGameState.Finished && "Spillet er ferdig!"}
+      </Text>
 
-      {state === SpinGameState.RoundFinished && (
-        <View>
-          <Text>Venter på ny runde</Text>
-        </View>
-      )}
+      {state === SpinGameState.RoundStarted && isHost && (
+        <View style={styles.buttonWrapper}>
+          <Text>{roundText}</Text>
 
-      {state === SpinGameState.Finished && (
-        <View>
-          <Text>Spillet er ferdig!</Text>
+          <Pressable onPress={handleStartRound} style={styles.button}>
+            <Text style={styles.buttonText}>Start spin</Text>
+          </Pressable>
         </View>
       )}
     </View>

@@ -1,5 +1,5 @@
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import Screen from "@/src/Common/constants/Screen";
@@ -16,6 +16,7 @@ export const LobbyScreen = () => {
   const [started, setStarted] = useState<boolean>(false);
   const [iterations, setIterations] = useState<number>(0);
   const [isAddingQuestion, setIsAddingQuestion] = useState<boolean>(false);
+  const isStartingRef = useRef<boolean>(false);
 
   const { gameKey, hubAddress, isHost } = useGlobalSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
@@ -91,29 +92,36 @@ export const LobbyScreen = () => {
     if (result.isError()) {
       console.error(result.error);
       displayErrorModal("Klarte ikke legge til spørsmål");
-      setTimeout(() => setIsAddingQuestion(false), 500);
+      setIsAddingQuestion(false);
       return;
     }
 
     setQuestion("");
-    setTimeout(() => setIsAddingQuestion(false), 500);
+    setIsAddingQuestion(false);
   };
 
   const handleStartGame = async () => {
-    if (started) {
+    if (started || isStartingRef.current) {
+      console.warn("Start game already in progress, ignoring duplicate call");
       return;
     }
 
+    console.log("🔒 LOCKING: Setting isStartingRef to true");
+    isStartingRef.current = true;
     setStarted(true);
+
+    console.log("🎮 STARTING GAME: Calling StartGame for key:", gameKey);
     const result = await invokeFunction("StartGame", gameKey);
 
     if (result.isError()) {
-      console.error(result.error);
+      console.error("❌ START GAME FAILED:", result.error);
       displayErrorModal("Klarte ikke starte spill");
       setStarted(false);
+      isStartingRef.current = false;
       return;
     }
 
+    console.log("✅ START GAME SUCCESS");
     await disconnect();
     setScreen(QuizGameScreen.Game);
   };

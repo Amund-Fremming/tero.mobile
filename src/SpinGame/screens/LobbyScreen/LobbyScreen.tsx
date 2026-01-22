@@ -19,7 +19,6 @@ export const LobbyScreen = () => {
   const { setScreen, themeColor, secondaryThemeColor, featherIcon, clearSpinSessionValues } = useSpinGameProvider();
 
   const [round, setRound] = useState<string>("");
-  const [started, setStarted] = useState<boolean>(false);
   const [iterations, setIterations] = useState<number>(0);
   const [players, setPlayers] = useState<number>(0);
   const [isAddingRound, setIsAddingRound] = useState<boolean>(false);
@@ -103,16 +102,17 @@ export const LobbyScreen = () => {
     if (result.isError()) {
       console.error(result.error);
       displayErrorModal("Klarte ikke legge til runde");
-      setTimeout(() => setIsAddingRound(false), 500);
+      setIsAddingRound(false);
       return;
     }
 
     setRound("");
-    setTimeout(() => setIsAddingRound(false), 1000);
+    setIsAddingRound(false);
   };
 
   const handleStartGame = async () => {
-    if (started) {
+    if (!isHost) {
+      console.error("Only hosts can start a game");
       return;
     }
 
@@ -129,17 +129,11 @@ export const LobbyScreen = () => {
       return;
     }
 
-    setStarted(true);
-    const result = await invokeFunction("StartGame", gameKey);
-
-    if (result.isError()) {
-      console.error(result.error);
-      displayErrorModal("Klarte ikke starte spill");
-      setStarted(false);
+    if (iterations < 10) {
+      displayInfoModal("Minimum 10 runder for å starte spillet");
       return;
     }
 
-    await disconnect();
     setScreen(SpinSessionScreen.Game);
   };
 

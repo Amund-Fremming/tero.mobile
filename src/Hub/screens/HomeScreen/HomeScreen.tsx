@@ -11,6 +11,9 @@ import ScatteredCircles from "../../../Common/components/BuzzifyShapes/Scattered
 import { GameEntryMode } from "@/src/Common/constants/Types";
 
 import redFigure from "../../../Common/assets/images/red-figure.png";
+import { useNavigation } from "expo-router";
+import { useSpinGameProvider } from "@/src/SpinGame/context/SpinGameProvider";
+import { SpinSessionScreen } from "@/src/SpinGame/constants/SpinTypes";
 
 const subHeaderList = [
   "klar for en runde?",
@@ -22,19 +25,28 @@ const subHeaderList = [
   "klart for neste?",
 ];
 
-export const HomeScreen = ({ navigation }: any) => {
+export const HomeScreen = () => {
+  const navigation: any = useNavigation();
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { commonService, userService } = useServiceProvider();
   const { displayInfoModal } = useModalProvider();
+  const { setScreen } = useSpinGameProvider();
 
   const [subHeader, setSubheader] = useState<string>("");
   const [popupCloseCount, setPopupCloseCount] = useState<number>(0);
 
   useEffect(() => {
+    navigation.navigate(Screen.Spin);
+    setScreen(SpinSessionScreen.Game);
+  });
+
+  /*
+  useEffect(() => {
     setSubHeader();
     systemHealth();
     getClientPopup();
   }, []);
+  */
 
   const getClientPopup = async () => {
     if (popupCloseCount >= 2) {
