@@ -11,6 +11,7 @@ import * as Font from "expo-font";
 import QuizSessionProvider from "@/src/quizGame/context/QuizGameProvider";
 import SpinGameProvider from "@/src/SpinGame/context/SpinGameProvider";
 import ImposterSessionProvider from "@/src/imposter/context/ImposterSessionProvider";
+import "@/src/Common/utils/logConfig"; // Configure logging
 
 SplashScreen.preventAutoHideAsync();
 

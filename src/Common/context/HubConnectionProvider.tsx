@@ -119,7 +119,6 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
           return err("Finnes allerede en åpen socket til feil hub. (HubConnectionProvider)");
         }
 
-        console.info(`Returning established connection: ${curHubName}:${curHubId}`);
         return ok(connectionRef.current);
       }
 

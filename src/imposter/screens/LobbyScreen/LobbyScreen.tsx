@@ -16,7 +16,7 @@ export const LobbyScreen = () => {
   const { pseudoId } = useAuthProvider();
   const { connect, setListener, invokeFunction, disconnect } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
-  const { gameKey, gameType, hubAddress, setIsHost, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { gameKey, gameType, hubAddress, setIsHost, isHost, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { clearImposterSessionValues, setScreen } = useImposterSessionProvider();
 
   const [round, setRound] = useState<string>("");
@@ -25,7 +25,6 @@ export const LobbyScreen = () => {
   const [players, setPlayers] = useState<number>(0);
 
   useEffect(() => {
-    console.log("GameType=" + gameType);
     createHubConnecion();
   }, []);
 
@@ -43,27 +42,22 @@ export const LobbyScreen = () => {
     }
 
     setListener("host", (hostId: string) => {
-      console.info("Received new host:", hostId);
       setIsHost(pseudoId == hostId);
     });
 
     setListener("players_count", (players: number) => {
-      console.info("Received players count:", players);
       setPlayers(players);
     });
 
     setListener(HubChannel.Error, (message: string) => {
-      console.info("Received error:", message);
       displayErrorModal(message);
     });
 
     setListener(HubChannel.Iterations, (iterations: number) => {
-      console.info("Received iterations:", iterations);
       setIterations(iterations);
     });
 
     setListener("signal_start", (_value: boolean) => {
-      console.info("Received start signal");
       setScreen(ImposterSessionScreen.Game);
     });
 
@@ -136,6 +130,7 @@ export const LobbyScreen = () => {
 
   return (
     <SimpleInitScreen
+      isHost={isHost}
       createScreen={false}
       themeColor={Color.LightGreen}
       secondaryThemeColor={Color.DarkGreen}

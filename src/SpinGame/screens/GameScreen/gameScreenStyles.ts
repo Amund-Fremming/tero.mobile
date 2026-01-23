@@ -6,7 +6,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     paddingTop: verticalScale(60),
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
     width: "100%",
     height: "100%",
@@ -36,25 +36,23 @@ export const styles = StyleSheet.create({
   },
 
   text: {
+    width: "90%",
+    color: Color.White,
     fontFamily: Font.PassionOneBold,
-    fontSize: moderateScale(35),
+    fontSize: moderateScale(40),
     textAlign: "center",
-  },
-
-  buttonWrapper: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    paddingTop: "50%",
   },
 
   button: {
+    position: "absolute",
+    bottom: verticalScale(60),
     justifyContent: "center",
     alignItems: "center",
     width: "86%",
     borderRadius: moderateScale(15),
     height: verticalScale(70),
     backgroundColor: Color.Black,
-    marginBottom: verticalScale(60),
   },
 
   buttonText: {

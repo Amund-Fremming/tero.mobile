@@ -30,27 +30,19 @@ export const HomeScreen = () => {
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { commonService, userService } = useServiceProvider();
   const { displayInfoModal } = useModalProvider();
-  const { setScreen } = useSpinGameProvider();
 
   const [subHeader, setSubheader] = useState<string>("");
   const [popupCloseCount, setPopupCloseCount] = useState<number>(0);
 
   useEffect(() => {
-    navigation.navigate(Screen.Spin);
-    setScreen(SpinSessionScreen.Game);
-  });
-
-  /*
-  useEffect(() => {
     setSubHeader();
     systemHealth();
     getClientPopup();
   }, []);
-  */
 
   const getClientPopup = async () => {
     if (popupCloseCount >= 2) {
-      console.error("Skipping modal");
+      console.debug("Skipping modal");
       return;
     }
 

@@ -1,10 +1,8 @@
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import styles from "./gameScreenStyles";
-import AbsoluteHomeButton from "@/src/Common/components/AbsoluteHomeButton/AbsoluteHomeButton";
 import { useEffect, useState, useRef } from "react";
 import { SpinGameState } from "../../constants/SpinTypes";
 import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
-import { GameEntryMode } from "@/src/Common/constants/Types";
 import Color from "@/src/Common/constants/Color";
 import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
@@ -18,16 +16,16 @@ import { moderateScale } from "@/src/Common/utils/dimensions";
 
 export const GameScreen = () => {
   const navigation: any = useNavigation();
-  const [bgColor, setBgColor] = useState<string>(Color.Gray);
   const [state, setState] = useState<SpinGameState>(SpinGameState.RoundStarted);
   const [roundText, setRoundText] = useState<string>("");
   const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [hasStartedGame, setHasStartedGame] = useState<boolean>(false);
+  const [bgColor, setBgColor] = useState<string>(Color.Gray);
 
   const exitTriggeredRef = useRef<boolean>(false);
-  const hasStartedGameRef = useRef<boolean>(false);
 
   const { isHost, setIsHost, clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearSpinSessionValues, themeColor, secondaryThemeColor } = useSpinGameProvider();
+  const { clearSpinSessionValues, themeColor } = useSpinGameProvider();
   const { disconnect, setListener, invokeFunction, debugDisconnect } = useHubConnectionProvider();
   const { gameKey } = useGlobalSessionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
@@ -36,8 +34,7 @@ export const GameScreen = () => {
   useEffect(() => {
     setBgColor(themeColor);
     setupListeners().then(() => {
-      if (!hasStartedGameRef.current && isHost) {
-        hasStartedGameRef.current = true;
+      if (!hasStartedGame && isHost) {
         handleStartGame();
       }
     });
@@ -48,6 +45,12 @@ export const GameScreen = () => {
       disconnect();
     };
   }, []);
+
+  const handleLeaveGame = async () => {
+    clearGlobalSessionValues();
+    clearSpinSessionValues();
+    await disconnect();
+  };
 
   const setupListeners = async () => {
     setListener(HubChannel.Error, (message: string) => {
@@ -65,12 +68,12 @@ export const GameScreen = () => {
       setState(state);
 
       if (state == SpinGameState.RoundStarted || state == SpinGameState.Finished) {
-        setBgColor(Color.Gray);
+        setBgColor(themeColor);
       }
 
       if (state === SpinGameState.Finished) {
         await disconnect();
-        displayInfoModal("Spillet er ferdig", "Finito!", () => navigation.navigate(Screen.Home));
+        displayInfoModal("Spillet er ferdig", "Finito!", handleLeaveGame);
       }
     });
 
@@ -108,6 +111,8 @@ export const GameScreen = () => {
       displayErrorModal("Klarte ikke starte spill, prøv igjen senere");
       return;
     }
+
+    setHasStartedGame(true);
   };
 
   const handleNextRound = async () => {
@@ -136,14 +141,6 @@ export const GameScreen = () => {
     }
   };
 
-  const handleLeaveGame = async () => {
-    exitTriggeredRef.current = true;
-    await disconnect();
-    clearGlobalSessionValues();
-    clearSpinSessionValues();
-    navigation.goBack();
-  };
-
   const handleInfoPressed = () => {
     console.log("Info pressed");
     debugDisconnect();
@@ -168,12 +165,7 @@ export const GameScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {state === SpinGameState.RoundFinished && isHost && (
-        <Pressable onPress={handleNextRound}>
-          <Text>Ny runde</Text>
-        </Pressable>
-      )}
-      <Text style={{ ...styles.text, color: secondaryThemeColor }}>
+      <Text style={{ ...styles.text }}>
         {state === SpinGameState.RoundStarted && isHost && roundText}
         {state === SpinGameState.RoundStarted && !isHost && "Gjør deg klar!"}
         {state === SpinGameState.RoundFinished && "Venter på ny runde"}
@@ -181,13 +173,15 @@ export const GameScreen = () => {
       </Text>
 
       {state === SpinGameState.RoundStarted && isHost && (
-        <View style={styles.buttonWrapper}>
-          <Text>{roundText}</Text>
+        <Pressable onPress={handleStartRound} style={styles.button}>
+          <Text style={styles.buttonText}>Start spin</Text>
+        </Pressable>
+      )}
 
-          <Pressable onPress={handleStartRound} style={styles.button}>
-            <Text style={styles.buttonText}>Start spin</Text>
-          </Pressable>
-        </View>
+      {state === SpinGameState.RoundFinished && isHost && (
+        <Pressable style={styles.button} onPress={handleNextRound}>
+          <Text style={styles.buttonText}>Ny runde</Text>
+        </Pressable>
       )}
     </View>
   );

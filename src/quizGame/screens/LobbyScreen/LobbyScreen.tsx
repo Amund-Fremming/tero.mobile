@@ -16,7 +16,6 @@ export const LobbyScreen = () => {
   const [started, setStarted] = useState<boolean>(false);
   const [iterations, setIterations] = useState<number>(0);
   const [isAddingQuestion, setIsAddingQuestion] = useState<boolean>(false);
-  const isStartingRef = useRef<boolean>(false);
 
   const { gameKey, hubAddress, isHost } = useGlobalSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
@@ -45,24 +44,19 @@ export const LobbyScreen = () => {
     }
 
     setListener(HubChannel.Iterations, (iterations: number) => {
-      console.log(`Received: ${iterations}`);
       setIterations(iterations);
     });
 
     setListener(HubChannel.Error, (message: string) => {
-      console.log(`Received: ${message}`);
       disconnect();
       displayErrorModal(message, () => navigation.navigate(Screen.Home));
     });
 
     setListener(HubChannel.Game, (game: QuizSession) => {
-      console.log(`Received game session`);
-      console.log("Questions: ", game.questions);
       setQuizSession(game);
     });
 
     setListener(HubChannel.State, (message: string) => {
-      console.log("Received state message:", message);
       setScreen(QuizGameScreen.Started);
       disconnect();
     });
@@ -101,27 +95,28 @@ export const LobbyScreen = () => {
   };
 
   const handleStartGame = async () => {
-    if (started || isStartingRef.current) {
+    if (started) {
       console.warn("Start game already in progress, ignoring duplicate call");
       return;
     }
 
-    console.log("🔒 LOCKING: Setting isStartingRef to true");
-    isStartingRef.current = true;
+    if (iterations < 1) {
+      // TODO set to 10!
+      displayInfoModal("Minimum 10 spørsmål for å starte spillet");
+      return;
+    }
+
     setStarted(true);
 
     console.log("🎮 STARTING GAME: Calling StartGame for key:", gameKey);
     const result = await invokeFunction("StartGame", gameKey);
 
     if (result.isError()) {
-      console.error("❌ START GAME FAILED:", result.error);
       displayErrorModal("Klarte ikke starte spill");
       setStarted(false);
-      isStartingRef.current = false;
       return;
     }
 
-    console.log("✅ START GAME SUCCESS");
     await disconnect();
     setScreen(QuizGameScreen.Game);
   };

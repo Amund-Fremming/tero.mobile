@@ -24,8 +24,6 @@ export const LobbyScreen = () => {
   const [isAddingRound, setIsAddingRound] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("GameType=" + gameType);
-    console.log("Is host: " + isHost);
     createHubConnecion();
   }, []);
 
@@ -34,7 +32,6 @@ export const LobbyScreen = () => {
   };
 
   const createHubConnecion = async () => {
-    console.log("Hub address:", hubAddress);
     const result = await connect(hubAddress);
     if (result.isError()) {
       console.error(result.error);
@@ -42,37 +39,26 @@ export const LobbyScreen = () => {
       return;
     }
 
-    // TODO REMOVE DEBUG
     setListener("host", (hostId: string) => {
-      const currentPseudoId = pseudoId; // Capture at call time
-      console.warn("=== HOST MESSAGE DEBUG ===");
-      console.info("Received hostId from server:", hostId);
-      console.info("My current pseudoId:", currentPseudoId);
-      console.info("Type of hostId:", typeof hostId);
-      console.info("Type of pseudoId:", typeof currentPseudoId);
-      console.info("Strict comparison (===):", currentPseudoId === hostId);
-      console.info("Loose comparison (==):", currentPseudoId == hostId);
-      console.warn("=========================");
-      setIsHost(currentPseudoId === hostId);
+      if (hostId == pseudoId) {
+        console.debug("New host elected:", hostId);
+        setIsHost(pseudoId === hostId);
+      }
     });
 
     setListener("players_count", (players: number) => {
-      console.info("Received players count:", players);
       setPlayers(players);
     });
 
     setListener(HubChannel.Error, (message: string) => {
-      console.info("Received error:", message);
       displayErrorModal(message);
     });
 
     setListener(HubChannel.Iterations, (iterations: number) => {
-      console.info("Received iterations:", iterations);
       setIterations(iterations);
     });
 
     setListener("signal_start", (_value: boolean) => {
-      console.info("Received start signal");
       setScreen(SpinSessionScreen.Game);
     });
 
@@ -85,8 +71,6 @@ export const LobbyScreen = () => {
   };
 
   const handleAddRound = async () => {
-    console.log("Is host: " + isHost);
-
     if (isAddingRound) {
       return;
     }
@@ -129,7 +113,8 @@ export const LobbyScreen = () => {
       return;
     }
 
-    if (iterations < 10) {
+    if (iterations < 1) {
+      // TODO set to 10!
       displayInfoModal("Minimum 10 runder for å starte spillet");
       return;
     }

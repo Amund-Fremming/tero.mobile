@@ -5,20 +5,19 @@ import { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
 import { QuizSession } from "../../constants/quizTypes";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
-import Screen from "@/src/Common/constants/Screen";
 import { Feather } from "@expo/vector-icons";
 import { moderateScale } from "@/src/Common/utils/dimensions";
+import Screen from "@/src/Common/constants/Screen";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 
 export const GameScreen = () => {
   const navigation: any = useNavigation();
   const { quizSession } = useQuizGameProvider();
   const { displayErrorModal } = useModalProvider();
+  const { clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { clearQuizGameValues } = useQuizGameProvider();
 
   const [quiz, setQuiz] = useState<QuizSession | undefined>(quizSession);
-
-  useEffect(() => {
-    //
-  }, []);
 
   useEffect(() => {
     setQuiz(quizSession);
@@ -54,10 +53,16 @@ export const GameScreen = () => {
     console.log("Info pressed");
   };
 
+  const handleLeaveGame = () => {
+    navigation.navigate(Screen.Home);
+    clearGlobalSessionValues();
+    clearQuizGameValues();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconWrapper}>
+        <TouchableOpacity onPress={handleLeaveGame} style={styles.iconWrapper}>
           <Feather name="chevron-left" size={moderateScale(45)} />
         </TouchableOpacity>
         <Text style={styles.header}>

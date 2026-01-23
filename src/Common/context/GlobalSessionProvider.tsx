@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { GameEntryMode, GameType } from "../constants/Types";
 
 interface IGlobalSessionContext {
@@ -43,6 +43,10 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
   const [gameKey, setGameKey] = useState<string>("");
   const [hubAddress, setHubAddress] = useState<string>("");
   const [isHost, setIsHost] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.debug("Is host changed value");
+  }, [isHost]);
 
   const clearGlobalSessionValues = () => {
     setGameEntryMode(GameEntryMode.Creator);

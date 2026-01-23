@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CreateGameRequest, GameCategory, GameEntryMode } from "@/src/Common/constants/Types";
 import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinGameProvider } from "../../context/SpinGameProvider";
 import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
@@ -23,12 +23,14 @@ export const CreateScreen = () => {
     category: "" as any,
   });
 
-  useEffect(() => {
-    setIsHost(true);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      console.debug("CreateScreen focused, setting isHost to true");
+      setIsHost(true);
+    }, []),
+  );
 
   useEffect(() => {
-    console.log("GameType=" + gameType);
     setThemeColors(gameType);
   }, [gameType]);
 

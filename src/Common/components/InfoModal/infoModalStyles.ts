@@ -14,10 +14,11 @@ export const styles = StyleSheet.create({
   },
 
   genericContainer: {
+    paddingVertical: verticalScale(30),
     justifyContent: "center",
     alignItems: "center",
     width: horizontalScale(350),
-    height: verticalScale(240),
+    height: "auto",
     borderWidth: moderateScale(2),
     borderRadius: moderateScale(35),
     gap: verticalScale(15),

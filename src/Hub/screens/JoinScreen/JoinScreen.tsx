@@ -10,23 +10,27 @@ import { Feather } from "@expo/vector-icons";
 import Color from "@/src/Common/constants/Color";
 import { GameEntryMode, GameType } from "@/src/Common/constants/Types";
 import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
-import { useNavigation } from "expo-router";
+import { useNavigation, useFocusEffect } from "expo-router";
 import Screen from "@/src/Common/constants/Screen";
 import { moderateScale } from "@/src/Common/utils/dimensions";
+import { useCallback } from "react";
 
 export const JoinScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { displayInfoModal } = useModalProvider();
-  const { setGameEntryMode, setGameKey, setHubAddress, setGameType, setIsHost } = useGlobalSessionProvider();
+  const { setGameEntryMode, setGameKey, setHubAddress, setGameType, setIsHost, isHost } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const [userInput, setUserInput] = useState<string>("");
 
-  useEffect(() => {
-    setGameEntryMode(GameEntryMode.Participant);
-    setIsHost(false);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      console.log("JoinScreen focused, setting isHost to false");
+      setGameEntryMode(GameEntryMode.Participant);
+      setIsHost(false);
+    }, []),
+  );
 
   const handleJoinGame = async () => {
     if (!pseudoId) {
@@ -53,11 +57,11 @@ export const JoinScreen = () => {
     console.debug(response);
     setGameEntryMode(GameEntryMode.Participant);
 
-    console.log("Received hub address:", response.hub_address);
     setHubAddress(response.hub_address);
     setGameKey(response.game_key);
     setGameType(response.game_type);
 
+    console.debug("JoinGameScreen, ishost:", isHost);
     if ([GameType.Duel, GameType.Roulette].includes(response.game_type)) {
       navigation.navigate(Screen.Spin);
       return;
