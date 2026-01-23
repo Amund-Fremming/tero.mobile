@@ -1,5 +1,5 @@
 import * as signalR from "@microsoft/signalr";
-import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 import { useModalProvider } from "./ModalProvider";
 import { useNavigation } from "expo-router";
 import Screen from "../constants/Screen";
@@ -30,12 +30,9 @@ interface HubConnectionProviderProps {
 }
 
 export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) => {
-  const [connection, setConnection] = useState<signalR.HubConnection | undefined>(undefined);
-  const [connectedState, setConnectedState] = useState<boolean>(false);
-  const [hubAddress, setHubAddress] = useState<string>("");
-
-  const connectionRef = useRef(connection);
-  const connectedStateRef = useRef(connectedState);
+  const connectionRef = useRef<signalR.HubConnection | undefined>(undefined);
+  const connectedStateRef = useRef<boolean>(false);
+  const hubAddressRef = useRef<string>("");
   const reconnectAttemptsRef = useRef(0);
   const isReconnectingRef = useRef(false);
 
@@ -57,8 +54,25 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     return () => clearInterval(interval);
   }, []);
 
+  // Cleanup on unmount - ensure connection is completely removed
+  useEffect(() => {
+    return () => {
+      const cleanup = async () => {
+        if (connectionRef.current) {
+          try {
+            await connectionRef.current.stop();
+          } catch (error) {
+            console.error("Error stopping connection on unmount:", error);
+          }
+        }
+        clearValues();
+      };
+      cleanup();
+    };
+  }, []);
+
   const handleConnectionLost = async () => {
-    if (isReconnectingRef.current || !hubAddress) return;
+    if (isReconnectingRef.current || !hubAddressRef.current) return;
 
     isReconnectingRef.current = true;
     reconnectAttemptsRef.current = 0;
@@ -94,7 +108,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
       console.warn(`Reconnect attempt ${reconnectAttemptsRef.current + 1}/${maxAttempts} after ${delay}ms`);
 
       await new Promise((resolve) => setTimeout(resolve, delay));
-      const result = await connect(hubAddress);
+      const result = await connect(hubAddressRef.current);
 
       if (result.isSuccess()) {
         console.info("Reconnected successfully");
@@ -110,7 +124,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
 
   async function connect(hubAddress: string): Promise<Result<signalR.HubConnection>> {
     try {
-      setHubAddress(hubAddress);
+      hubAddressRef.current = hubAddress;
       if (connectionRef.current) {
         const curHubName = (connectionRef.current as any)._hubName;
         const curHubId = (connectionRef.current as any)._hubId;
@@ -134,15 +148,13 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
         clearValues();
       });
 
-      setConnection(hubConnection);
       connectionRef.current = hubConnection;
-      setConnectedState(true);
       connectedStateRef.current = true;
 
       console.info(`Established connection: ${hubAddress}`);
       return ok(hubConnection);
     } catch (error) {
-      setConnectedState(false);
+      connectedStateRef.current = false;
       return err("En feil skjedde ved tilkoblingen. (HubConnectionProvider)");
     }
   }
@@ -155,14 +167,12 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
       }
 
       await connectionRef.current.stop();
-      await connection?.stop();
       clearValues();
 
       console.info("Manually disconnected user");
       return ok();
     } catch (error) {
       clearValues();
-      setConnectedState(false);
       console.error("Failed to close down websocket");
       return err("Failed to close down websocket");
     }
@@ -215,12 +225,11 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
   }
 
   const clearValues = () => {
-    setConnection(undefined);
     connectionRef.current = undefined;
     reconnectAttemptsRef.current = 0;
     isReconnectingRef.current = false;
-    setConnectedState(false);
     connectedStateRef.current = false;
+    hubAddressRef.current = "";
   };
 
   const value = {
@@ -229,7 +238,6 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     connect,
     disconnect,
     debugDisconnect,
-    setHubAddress,
   };
 
   return <HubConnectionContext.Provider value={value}>{children}</HubConnectionContext.Provider>;
