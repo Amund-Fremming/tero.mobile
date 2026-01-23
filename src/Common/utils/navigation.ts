@@ -1,4 +1,4 @@
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, NavigationProp } from "@react-navigation/native";
 import Screen from "../constants/Screen";
 
 /**
@@ -8,7 +8,7 @@ import Screen from "../constants/Screen";
  * 
  * @param navigation - The navigation object from useNavigation hook
  */
-export const resetToHomeScreen = (navigation: any) => {
+export const resetToHomeScreen = (navigation: NavigationProp<any>) => {
   navigation.dispatch(
     CommonActions.reset({
       index: 0,
