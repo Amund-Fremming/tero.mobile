@@ -159,6 +159,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
 
   async function disconnect(): Promise<Result> {
     try {
+      connectedStateRef.current = false;
       if (!connectionRef.current) {
         clearValues();
         return ok();

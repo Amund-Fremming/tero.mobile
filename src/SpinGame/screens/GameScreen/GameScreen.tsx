@@ -53,10 +53,19 @@ export const GameScreen = () => {
     resetToHomeScreen(navigation);
   };
 
+  const handleGameFinshed = async () => {
+    await disconnect();
+  };
+
+  const navigateHome = () => {
+    resetToHomeScreen(navigation);
+  };
+
   const setupListeners = async () => {
     setListener(HubChannel.Error, (message: string) => {
       console.info("Received error message:", roundText);
       displayErrorModal(message);
+      handleLeaveGame();
     });
 
     setListener("round", (roundText: string) => {
@@ -68,15 +77,13 @@ export const GameScreen = () => {
       console.info("Received state:", state);
       setState(state);
 
-      if (state == SpinGameState.RoundStarted || state == SpinGameState.Finished) {
-        setBgColor(themeColor);
+      if (state == SpinGameState.Finished) {
+        setBgColor(Color.Gray);
+        await handleGameFinshed();
       }
 
-      if (state === SpinGameState.Finished) {
-        await disconnect();
-        displayInfoModal("Spillet er ferdig", "Finito!", () => {
-          handleLeaveGame();
-        });
+      if (state == SpinGameState.RoundStarted) {
+        setBgColor(themeColor);
       }
     });
 
@@ -186,6 +193,12 @@ export const GameScreen = () => {
       {state === SpinGameState.RoundFinished && isHost && (
         <Pressable style={styles.button} onPress={handleNextRound}>
           <Text style={styles.buttonText}>Ny runde</Text>
+        </Pressable>
+      )}
+
+      {state === SpinGameState.Finished && (
+        <Pressable style={styles.button} onPress={navigateHome}>
+          <Text style={styles.buttonText}>Hjem</Text>
         </Pressable>
       )}
     </View>
