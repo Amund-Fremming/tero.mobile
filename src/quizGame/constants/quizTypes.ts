@@ -1,5 +1,3 @@
-import { GameCategory } from "@/src/common/constants/Types";
-
 export enum QuizGameScreen {
   Create,
   Game,

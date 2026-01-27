@@ -1,6 +1,6 @@
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import styles from "./gameScreenStyles";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { SpinGameState } from "../../constants/SpinTypes";
 import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
 import Color from "@/src/common/constants/Color";
@@ -10,7 +10,7 @@ import { HubChannel } from "@/src/common/constants/HubChannel";
 import { useAuthProvider } from "@/src/common/context/AuthProvider";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import { Feather } from "@expo/vector-icons";
-import { useNavigation } from "expo-router";
+import { useFocusEffect, useNavigation } from "expo-router";
 import { moderateScale } from "@/src/common/utils/dimensions";
 import { resetToHomeScreen } from "@/src/common/utils/navigation";
 
@@ -24,27 +24,30 @@ export const GameScreen = () => {
 
   const disconnectTriggeredRef = useRef<boolean>(false);
 
-  const { isHost, setIsHost, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { isHost, setIsHost, clearGlobalSessionValues, hubAddress } = useGlobalSessionProvider();
   const { clearSpinSessionValues, themeColor } = useSpinSessionProvider();
-  const { disconnect, setListener, invokeFunction, debugDisconnect } = useHubConnectionProvider();
+  const { disconnect, setListener, invokeFunction, debugDisconnect, connect } = useHubConnectionProvider();
   const { gameKey } = useGlobalSessionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
 
-  useEffect(() => {
-    setBgColor(themeColor);
-    setupListeners().then(() => {
-      if (!hasStartedGame && isHost) {
-        handleStartGame();
-      }
-    });
+  useFocusEffect(
+    useCallback(() => {
+      console.debug("YUPPPP TRIGGERED: ", hubAddress);
+      setBgColor(themeColor);
+      setupListeners().then(() => {
+        if (!hasStartedGame && isHost) {
+          handleStartGame();
+        }
+      });
 
-    return () => {
-      clearSpinSessionValues();
-      clearGlobalSessionValues();
-      disconnect();
-    };
-  }, []);
+      return () => {
+        clearSpinSessionValues();
+        clearGlobalSessionValues();
+        disconnect();
+      };
+    }, []),
+  );
 
   const handleLeaveGame = async () => {
     clearGlobalSessionValues();
@@ -67,19 +70,23 @@ export const GameScreen = () => {
   };
 
   const setupListeners = async () => {
+    let connectResult = await connect(hubAddress);
+    if (connectResult.isError()) {
+      displayErrorModal("Klarte ikke opprette tilkobling", () => {
+        handleBackPressed();
+      });
+    }
+
     setListener(HubChannel.Error, (message: string) => {
-      console.info("Received error message:", roundText);
       displayErrorModal(message);
       handleLeaveGame();
     });
 
     setListener("round_text", (roundText: string) => {
-      console.info("Received round text:", roundText);
       setRoundText(roundText);
     });
 
     setListener(HubChannel.State, async (state: SpinGameState) => {
-      console.info("Received state:", state);
       setState(state);
 
       if (state == SpinGameState.Finished) {
@@ -106,7 +113,6 @@ export const GameScreen = () => {
     });
 
     setListener("selected", (batch: string[]) => {
-      console.info("Received selected users:", batch);
       if (pseudoId && batch.includes(pseudoId)) {
         setBgColor(Color.Green);
       } else {

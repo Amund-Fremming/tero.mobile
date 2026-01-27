@@ -44,9 +44,7 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
   const [hubAddress, setHubAddress] = useState<string>("");
   const [isHost, setIsHost] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.debug("Is host changed value");
-  }, [isHost]);
+  useEffect(() => {}, [isHost]);
 
   const clearGlobalSessionValues = () => {
     setGameEntryMode(GameEntryMode.Creator);

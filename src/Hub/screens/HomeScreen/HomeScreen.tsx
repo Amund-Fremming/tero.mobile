@@ -10,7 +10,7 @@ import ArcWithCircles from "../../../common/components/Shapes/ArcWithCircles";
 import ScatteredCircles from "../../../common/components/Shapes/ScatteredCircles";
 import { GameEntryMode } from "@/src/common/constants/Types";
 
-import redFigure from "../../../Common/assets/images/red-figure.png";
+import redFigure from "../../../common/assets/images/red-figure.png";
 import { useNavigation } from "expo-router";
 
 const subHeaderList = [

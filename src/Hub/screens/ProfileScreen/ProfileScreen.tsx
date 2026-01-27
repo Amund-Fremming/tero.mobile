@@ -20,7 +20,7 @@ export const ProfileScreen = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string>("");
 
-  const crown = require("../../../Common/assets/images/crown.png");
+  const crown = require("../../../common/assets/images/crown.png");
 
   useEffect(() => {
     if (!pseudoId) {

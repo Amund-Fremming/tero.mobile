@@ -42,11 +42,11 @@ export default () => (
 
 const FontLoader = ({ children }: { children: React.ReactNode }) => {
   const [fontsLoaded] = Font.useFonts({
-    "PassionOne-Regular": require("../src/Common/assets/fonts/PassionOne-Regular.ttf"),
-    "PassionOne-Bold": require("../src/Common/assets/fonts/PassionOne-Bold.ttf"),
-    "SpaceMono-Regular": require("../src/Common/assets/fonts/SpaceMono-Regular.ttf"),
-    "Sintony-Regular": require("../src/Common/assets/fonts/Sintony-Regular.ttf"),
-    "Sintony-Bold": require("../src/Common/assets/fonts/Sintony-Bold.ttf"),
+    "PassionOne-Regular": require("../src/common/assets/fonts/PassionOne-Regular.ttf"),
+    "PassionOne-Bold": require("../src/common/assets/fonts/PassionOne-Bold.ttf"),
+    "SpaceMono-Regular": require("../src/common/assets/fonts/SpaceMono-Regular.ttf"),
+    "Sintony-Regular": require("../src/common/assets/fonts/Sintony-Regular.ttf"),
+    "Sintony-Bold": require("../src/common/assets/fonts/Sintony-Bold.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {

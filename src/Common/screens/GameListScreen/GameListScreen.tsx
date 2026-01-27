@@ -29,7 +29,7 @@ export const GameListScreen = () => {
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { displayErrorModal, displayActionModal } = useModalProvider();
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
-  const { gameType } = useGlobalSessionProvider();
+  const { gameType, setGameKey, setHubAddress, setIsHost } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const [hasPrev, setHasPrev] = useState<boolean>(false);
@@ -39,7 +39,6 @@ export const GameListScreen = () => {
   const [games, setGames] = useState<GameBase[]>([]);
 
   useEffect(() => {
-    console.log("TRIGGERED");
     getPage(0);
   }, []);
 
@@ -78,6 +77,7 @@ export const GameListScreen = () => {
 
   const getPage = async (pageNum: number) => {
     if (!pseudoId) {
+      // TODO handle
       console.error("No user id");
       return;
     }
@@ -125,19 +125,30 @@ export const GameListScreen = () => {
 
     switch (gameType) {
       case GameType.Quiz:
-        const qResult = await gameService().initiateStandaloneGame<QuizSession>(gameType, gameId, pseudoId);
+        const qResult = await gameService().initiateStaticGame<QuizSession>(gameType, gameId, pseudoId);
         if (qResult.isError()) {
           displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
           return;
         }
 
-        console.debug(qResult.value);
         setQuizSession(qResult.value);
         setGameEntryMode(GameEntryMode.Host);
         navigation.navigate(Screen.Quiz);
         break;
       case GameType.Roulette:
-      // TODO HANDLE
+        const rResult = await gameService().initiateSessionGame(pseudoId, gameType, gameId);
+        if (rResult.isError()) {
+          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          return;
+        }
+
+        setIsHost(true);
+        let roulette = rResult.value;
+        setGameKey(roulette.key);
+        setHubAddress(roulette.hub_address);
+        setGameEntryMode(GameEntryMode.Host);
+        navigation.navigate(Screen.Spin);
+        break;
       case GameType.Duel:
         // TODO HANDLE
         break;

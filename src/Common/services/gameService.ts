@@ -138,7 +138,7 @@ export class GameService {
     }
   }
 
-  async initiateStandaloneGame<T>(game_type: string, game_id: string, pseudo_id: string): Promise<Result<T>> {
+  async initiateStaticGame<T>(game_type: string, game_id: string, pseudo_id: string): Promise<Result<T>> {
     try {
       const response = await axios.get(`${this.urlBase}/games/static/${game_type}/initiate/${game_id}`, {
         headers: getHeaders(pseudo_id, null),
@@ -152,18 +152,17 @@ export class GameService {
   }
 
   // Remove?
-  async initiateInteractiveGame(
-    guest_id: string,
-    token: string | null,
+  async initiateSessionGame(
+    pseudo_id: string,
     game_type: string,
     game_id: string,
   ): Promise<Result<InteractiveGameResponse>> {
     try {
       const response = await axios.post(
-        `${this.urlBase}/games/interactive/${game_type}/initiate/${game_id}`,
+        `${this.urlBase}/games/session/${game_type}/initiate/${game_id}`,
         {},
         {
-          headers: getHeaders(guest_id, token),
+          headers: getHeaders(pseudo_id, null),
         },
       );
 
