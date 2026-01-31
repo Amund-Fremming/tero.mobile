@@ -1,5 +1,6 @@
 export const enum SpinSessionScreen {
-  Lobby = "Lobby",
+  ActiveLobby = "ActiveLobby",
+  PassiveLobby = "PassiveLobby",
   Create = "Create",
   Game = "Game",
 }

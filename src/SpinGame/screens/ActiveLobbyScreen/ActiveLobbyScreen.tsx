@@ -11,7 +11,7 @@ import { GameType } from "@/src/common/constants/Types";
 import SimpleInitScreen from "@/src/common/screens/SimpleInitScreen/SimpleInitScreen";
 import { resetToHomeScreen } from "@/src/common/utils/navigation";
 
-export const LobbyScreen = () => {
+export const ActiveLobbyScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { connect, setListener, invokeFunction, disconnect } = useHubConnectionProvider();
@@ -19,6 +19,7 @@ export const LobbyScreen = () => {
   const { gameKey, gameType, hubAddress, setIsHost, isHost, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { setScreen, themeColor, secondaryThemeColor, featherIcon, clearSpinSessionValues } = useSpinSessionProvider();
 
+  const [startGameTriggered, setStartGameTriggered] = useState<boolean>(false);
   const [round, setRound] = useState<string>("");
   const [iterations, setIterations] = useState<number>(0);
   const [players, setPlayers] = useState<number>(0);
@@ -96,14 +97,27 @@ export const LobbyScreen = () => {
   };
 
   const handleStartGame = async () => {
+    if (startGameTriggered) {
+      return;
+    }
+
+    setStartGameTriggered(true);
     if (!isHost) {
       console.error("Only hosts can start a game");
+      setStartGameTriggered(false);
       return;
     }
 
     if (!pseudoId) {
       console.error("No pseudo id present");
       displayErrorModal("En feil har skjedd");
+      setStartGameTriggered(false);
+      return;
+    }
+
+    if (!gameKey || gameKey == "") {
+      displayErrorModal("En feil har skjedd, fosøk å opprette spillet på nytt");
+      setStartGameTriggered(false);
       return;
     }
 
@@ -111,12 +125,29 @@ export const LobbyScreen = () => {
 
     if (players < minPlayers) {
       displayInfoModal(`Minimum ${minPlayers} spillere for å starte, du har: ${players}`);
+      setStartGameTriggered(false);
       return;
     }
 
     if (iterations < 1) {
       // TODO set to 10!
       displayInfoModal("Minimum 10 runder for å starte spillet");
+      setStartGameTriggered(false);
+      return;
+    }
+
+    const startResult = await invokeFunction("StartGame", gameKey);
+    if (startResult.isError()) {
+      console.log(startResult.error);
+      displayErrorModal("En feil skjedde når spillet skulle starte");
+      setStartGameTriggered(false);
+      return;
+    }
+
+    const gameReady = startResult.value;
+    if (!gameReady) {
+      console.log("Game not ready");
+      setStartGameTriggered(false);
       return;
     }
 
@@ -157,4 +188,4 @@ export const LobbyScreen = () => {
   );
 };
 
-export default LobbyScreen;
+export default ActiveLobbyScreen;

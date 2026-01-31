@@ -3,7 +3,8 @@ import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProv
 import { GameEntryMode } from "../common/constants/Types";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
-import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
+import ActiveLobbyScreen from "./screens/ActiveLobbyScreen/ActiveLobbyScreen";
+import PassiveLobbyScreen from "./screens/PassiveLobbyScreen/PassiveLobbyScreen";
 import { SpinSessionScreen } from "./constants/SpinTypes";
 import { useSpinSessionProvider } from "./context/SpinGameProvider";
 
@@ -23,9 +24,10 @@ export const SpinGame = () => {
       case GameEntryMode.Host:
         return SpinSessionScreen.Game;
       case GameEntryMode.Participant || GameEntryMode.Member:
-        return SpinSessionScreen.Lobby;
+        // TODO: Initially render PassiveLobbyScreen, then redirect to ActiveLobbyScreen
+        return SpinSessionScreen.ActiveLobby;
       default:
-        return SpinSessionScreen.Lobby;
+        return SpinSessionScreen.ActiveLobby;
     }
   };
 
@@ -34,10 +36,12 @@ export const SpinGame = () => {
       return <CreateScreen />;
     case SpinSessionScreen.Game:
       return <GameScreen />;
-    case SpinSessionScreen.Lobby:
-      return <LobbyScreen />;
+    case SpinSessionScreen.ActiveLobby:
+      return <ActiveLobbyScreen />;
+    case SpinSessionScreen.PassiveLobby:
+      return <PassiveLobbyScreen />;
     default:
-      return <LobbyScreen />;
+      return <ActiveLobbyScreen />;
   }
 };
 
