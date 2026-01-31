@@ -7,7 +7,6 @@ import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import Screen from "../../constants/Screen";
 import { moderateScale, verticalScale } from "../../utils/dimensions";
 import { Feather } from "@expo/vector-icons";
-import Color from "../../constants/Color";
 import { GameEntryMode, GameType } from "../../constants/Types";
 
 const { height } = Dimensions.get("window");

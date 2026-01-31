@@ -25,9 +25,9 @@ export const SpinGame = () => {
         return SpinSessionScreen.Game;
       case GameEntryMode.Participant || GameEntryMode.Member:
         // TODO: Initially render PassiveLobbyScreen, then redirect to ActiveLobbyScreen
-        return SpinSessionScreen.Lobby;
+        return SpinSessionScreen.ActiveLobby;
       default:
-        return SpinSessionScreen.Lobby;
+        return SpinSessionScreen.ActiveLobby;
     }
   };
 
@@ -36,7 +36,7 @@ export const SpinGame = () => {
       return <CreateScreen />;
     case SpinSessionScreen.Game:
       return <GameScreen />;
-    case SpinSessionScreen.Lobby:
+    case SpinSessionScreen.ActiveLobby:
       return <ActiveLobbyScreen />;
     case SpinSessionScreen.PassiveLobby:
       return <PassiveLobbyScreen />;

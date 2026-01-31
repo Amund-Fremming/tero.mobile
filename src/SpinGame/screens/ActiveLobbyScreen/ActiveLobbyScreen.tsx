@@ -120,7 +120,10 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    setScreen(SpinSessionScreen.Game);
+    const startResult = await invokeFunction("StartGame", gameKey);
+    if (startResult)
+      // HER
+      setScreen(SpinSessionScreen.Game);
   };
 
   const handleBackPressed = async () => {

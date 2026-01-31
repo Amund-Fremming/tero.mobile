@@ -33,7 +33,6 @@ export const GameScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.debug("YUPPPP TRIGGERED: ", hubAddress);
       setBgColor(themeColor);
       setupListeners().then(() => {
         if (!hasStartedGame && isHost) {

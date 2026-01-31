@@ -75,7 +75,7 @@ export const CreateScreen = () => {
     setGameKey(result.value.key);
     setHubAddress(result.value.hub_address);
     setGameEntryMode(GameEntryMode.Creator);
-    setScreen(SpinSessionScreen.Lobby);
+    setScreen(SpinSessionScreen.ActiveLobby);
     setLoading(false);
   };
 
