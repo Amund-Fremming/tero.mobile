@@ -37,6 +37,7 @@ export const styles = StyleSheet.create({
   },
 
   header: {
+    textAlign: "center",
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(45),
     opacity: 0.8,

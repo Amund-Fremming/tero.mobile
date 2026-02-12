@@ -39,11 +39,16 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
   const reconnectAttemptsRef = useRef(0);
   const isReconnectingRef = useRef(false);
   const listenersMapRef = useRef<Map<string, (item: any) => void>>(new Map());
+  const gameKeyRef = useRef<string>("");
 
   const { gameKey } = useGlobalSessionProvider();
   const { displayLoadingModal, closeLoadingModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
   const navigation: any = useNavigation();
+
+  useEffect(() => {
+    gameKeyRef.current = gameKey;
+  }, [gameKey]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -94,7 +99,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
 
     reattachListeners();
 
-    let invokeResult = await invokeFunction("ConnectToGroup", gameKey, pseudoId, true);
+    let invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId, true);
     if (invokeResult.isError()) {
       console.error("Failed to invoke reconnect function:", invokeResult.error);
       clearValues();
@@ -264,6 +269,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     hubAddressRef.current = undefined;
     listenersMapRef.current.clear();
     disconnectTriggeredRef.current = false;
+    gameKeyRef.current = "";
   };
 
   const value = {

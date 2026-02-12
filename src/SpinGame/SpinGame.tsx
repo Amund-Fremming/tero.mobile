@@ -12,13 +12,18 @@ import { useModalProvider } from "../common/context/ModalProvider";
 import { useAuthProvider } from "../common/context/AuthProvider";
 import { HubChannel } from "../common/constants/HubChannel";
 import { View, ActivityIndicator } from "react-native";
+import { resetToHomeScreen } from "../common/utils/navigation";
+import { useNavigation } from "expo-router";
 
 export const SpinGame = () => {
-  const { gameEntryMode, hubAddress, gameKey, setIsHost } = useGlobalSessionProvider();
-  const { screen, setScreen, setRoundText, setSelectedBatch, setGameState, setIterations, setPlayers } = useSpinSessionProvider();
+  const navigation: any = useNavigation();
+  const { gameEntryMode, hubAddress, gameKey, setIsHost, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { screen, setScreen, setRoundText, setSelectedBatch, setGameState, setIterations, setPlayers } =
+    useSpinSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
+  const { clearSpinSessionValues } = useSpinSessionProvider();
 
   const [hubReady, setHubReady] = useState<boolean>(false);
 
@@ -58,11 +63,8 @@ export const SpinGame = () => {
     setScreen(SpinSessionScreen.ActiveLobby);
   };
 
-  const setupListeners = () => {
+  const setupListeners = async () => {
     setListener("host", (hostId: string) => {
-      if (hostId == pseudoId) {
-        console.debug("New host elected:", hostId);
-      }
       setIsHost(pseudoId === hostId);
     });
 
@@ -83,7 +85,12 @@ export const SpinGame = () => {
     });
 
     setListener(HubChannel.Error, (message: string) => {
-      displayErrorModal(message);
+      displayErrorModal(message, async () => {
+        await disconnect();
+        clearSpinSessionValues();
+        clearGlobalSessionValues();
+        resetToHomeScreen(navigation);
+      });
     });
 
     setListener("players_count", (count: number) => {

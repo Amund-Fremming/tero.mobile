@@ -79,6 +79,11 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
 
   const clearSpinSessionValues = () => {
     setScreen(SpinSessionScreen.Create);
+    setIterations(0);
+    setGameState(SpinGameState.Initialized);
+    setPlayers(0);
+    setSelectedBatch([]);
+    setRoundText("");
   };
 
   const value = {
