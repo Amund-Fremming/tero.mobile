@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
   card: {
     borderWidth: moderateScale(6.3),
     borderColor: Color.OffBlack,
-    height: verticalScale(220),
+    height: verticalScale(200),
     width: "45%",
     borderRadius: moderateScale(20),
     justifyContent: "center",

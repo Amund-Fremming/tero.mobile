@@ -5,24 +5,58 @@ import { Font } from "../../../common/constants/Font";
 
 export const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
+    backgroundColor: Color.White,
+    width: "100%",
     height: "100%",
-    backgroundColor: Colors.LightGray,
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    flexDirection: "row",
+  },
+
+  headerWrapper: {
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  iconWrapper: {
+    backgroundColor: Color.DarkerGray,
+    justifyContent: "center",
+    alignItems: "center",
+    height: verticalScale(50),
+    width: horizontalScale(50),
+    borderRadius: moderateScale(10),
+  },
+
+  borderAndHeader: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+
+  borderWrapper: {
+    paddingTop: verticalScale(4),
+    flexDirection: "row",
+    width: "100%",
   },
 
   header: {
-    color: Color.Purple,
     fontFamily: Font.PassionOneBold,
-    fontSize: moderateScale(50),
+    fontSize: moderateScale(55),
+    fontWeight: 600,
+    opacity: 0.8,
   },
 
   topWrapper: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingTop: verticalScale(50),
-    width: "90%",
-    display: "flex",
     flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: Color.LightGray,
+    paddingTop: verticalScale(60),
+    paddingBottom: verticalScale(20),
   },
 
   debugHeader: {

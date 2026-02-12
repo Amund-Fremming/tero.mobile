@@ -1,4 +1,4 @@
-import { View, Text, Button, Pressable } from "react-native";
+import { View, Text, Button, Pressable, TouchableOpacity } from "react-native";
 import styles from "./hubScreenStyles";
 import Screen from "../../../common/constants/Screen";
 import { Feather } from "@expo/vector-icons";
@@ -6,6 +6,7 @@ import Color from "@/src/common/constants/Color";
 import { useNavigation } from "expo-router";
 import { useAuthProvider } from "@/src/common/context/AuthProvider";
 import { useEffect, useRef, useState } from "react";
+import { moderateScale } from "@/src/common/utils/dimensions";
 
 export const HubScreen = () => {
   const navigation: any = useNavigation();
@@ -49,12 +50,17 @@ export const HubScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topWrapper}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.header}>Hub</Text>
-        </Pressable>
-        <Pressable onPress={handleProfilePressed}>
-          <Feather name="user" size={30} color={Color.Black} />
-        </Pressable>
+        <View style={styles.headerWrapper}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconWrapper}>
+            <Feather name="chevron-left" size={moderateScale(45)} />
+          </TouchableOpacity>
+          <View style={styles.borderAndHeader}>
+            <Text style={styles.header}>Hub</Text>
+          </View>
+          <TouchableOpacity onPress={handleProfilePressed} style={styles.iconWrapper}>
+            <Feather name="user" size={35} color={Color.Black} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {displayDebugTools && (

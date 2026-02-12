@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 
 import styles from "./joinScreenStyles";
 import { Pressable, TextInput } from "react-native-gesture-handler";
@@ -80,31 +80,33 @@ export const JoinScreen = () => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconWrapper}>
           <Feather name="chevron-left" size={moderateScale(45)} />
         </TouchableOpacity>
-        <Text style={styles.header}></Text>
+        <Text style={styles.header}>Bli med</Text>
         <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
           <Text style={styles.textIcon}>?</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.card}>
-        <Text style={styles.header}>Rom navn:</Text>
-        <View style={styles.inputWrapper}>
-          <Feather
-            style={{ paddingLeft: moderateScale(20), paddingRight: moderateScale(10) }}
-            name="key"
-            size={45}
-            color={Color.OffBlack}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="SLEM POTET"
-            value={userInput}
-            onChangeText={(input) => setUserInput(input?.toUpperCase())}
-          />
+      <View style={styles.cardWrapper}>
+        <Image source={require("@/src/common/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
+        <View style={styles.card}>
+          <View style={styles.inputContainer}>
+            <Feather
+              style={{ paddingLeft: moderateScale(20), paddingRight: moderateScale(10) }}
+              name="key"
+              size={45}
+              color={Color.OffBlack}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="SLEM POTET"
+              placeholderTextColor={Color.DarkerGray}
+              value={userInput}
+              onChangeText={(input) => setUserInput(input?.toUpperCase())}
+            />
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleJoinGame}>
+            <Text style={styles.buttonText}>Bli med</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.inputBorder} />
-        <TouchableOpacity style={styles.button} onPress={handleJoinGame}>
-          <Text style={styles.buttonText}>Bli med</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );

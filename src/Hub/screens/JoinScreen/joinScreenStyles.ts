@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
     fontWeight: 600,
     opacity: 0.8,
     textAlign: "center",
+    flex: 1,
   },
 
   iconWrapper: {
@@ -44,6 +45,22 @@ export const styles = StyleSheet.create({
     height: verticalScale(50),
     width: horizontalScale(50),
     borderRadius: moderateScale(10),
+  },
+
+  cardWrapper: {
+    position: "relative",
+    marginTop: "50%",
+    width: "90%",
+  },
+
+  mascot: {
+    position: "absolute",
+    top: 0,
+    right: horizontalScale(5),
+    width: horizontalScale(100),
+    height: verticalScale(100),
+    zIndex: 10,
+    transform: [{ translateY: "-45%" }],
   },
 
   goBack: {
@@ -63,25 +80,26 @@ export const styles = StyleSheet.create({
   },
 
   input: {
-    width: "70%",
+    flex: 1,
     fontSize: moderateScale(35),
-    marginBottom: verticalScale(-10),
     fontFamily: Font.PassionOneRegular,
     color: Color.OffBlack,
+    paddingRight: moderateScale(20),
   },
 
-  inputBorder: {
-    backgroundColor: Color.Black,
-    opacity: 0.9,
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Color.LightGray,
+    borderRadius: moderateScale(15),
     width: "85%",
-    height: verticalScale(10),
-    borderRadius: moderateScale(10),
+    paddingVertical: verticalScale(10),
+    height: verticalScale(70),
   },
 
   card: {
-    paddingTop: verticalScale(20),
-    marginTop: verticalScale(100),
-    width: "90%",
+    paddingTop: verticalScale(35),
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: moderateScale(20),
@@ -90,18 +108,11 @@ export const styles = StyleSheet.create({
     paddingBottom: verticalScale(40),
   },
 
-  inputWrapper: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    marginBottom: verticalScale(-10),
-  },
-
   button: {
     justifyContent: "center",
     alignItems: "center",
     width: "86%",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(15),
     height: verticalScale(69),
     backgroundColor: Color.SoftPurple,
   },
