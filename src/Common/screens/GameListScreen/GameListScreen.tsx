@@ -1,6 +1,5 @@
 import { Pressable, Text, View, TouchableOpacity } from "react-native";
 import VerticalScroll from "../../wrappers/VerticalScroll";
-import AbsoluteHomeButton from "../../components/AbsoluteHomeButton/AbsoluteHomeButton";
 import { useEffect, useState } from "react";
 import { useModalProvider } from "../../context/ModalProvider";
 import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
@@ -11,15 +10,24 @@ import styles from "./gameListScreenStyles";
 import { useServiceProvider } from "../../context/ServiceProvider";
 import { GameBase, GameCategory, GameEntryMode, GamePageQuery, GameType, PagedResponse } from "../../constants/Types";
 import Screen from "../../constants/Screen";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import Color from "../../constants/Color";
 import { QuizSession } from "@/src/quizGame/constants/quizTypes";
+import { moderateScale } from "../../utils/dimensions";
+import Icon from 'react-native-ico-rpg-game';
 
 const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.All]: "All",
   [GameCategory.Ladies]: "Jenter",
   [GameCategory.Boys]: "Gutter",
   [GameCategory.Vors]: "Vors",
+};
+
+const CATEGORY_ICONS: Record<GameCategory, any> = {
+  [GameCategory.All]: "account-group",
+  [GameCategory.Ladies]: "flower",
+  [GameCategory.Boys]: "sword",
+  [GameCategory.Vors]: "glass-cocktail",
 };
 
 export const GameListScreen = () => {
@@ -105,7 +113,7 @@ export const GameListScreen = () => {
           // Small delay to ensure navigation completes
           setTimeout(() => triggerLogin(), 200);
         },
-        () => {},
+        () => { },
       );
       return;
     }
@@ -157,10 +165,30 @@ export const GameListScreen = () => {
     }
   };
 
+  const handleInfoPressed = () => {
+    console.log("Info pressed");
+  }
+
   return (
     <View style={styles.container}>
       <VerticalScroll>
-        <Text style={styles.header}>Velg ett spill</Text>
+        <View style={styles.topWrapper}>
+          <View style={styles.headerWrapper}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconWrapper}>
+              <Feather name="chevron-left" size={moderateScale(45)} />
+            </TouchableOpacity>
+            <View style={styles.borderAndHeader}>
+              <Text style={styles.header}>Velg spill</Text>
+              <View style={styles.borderWrapper}>
+                <View style={styles.borderLeft} />
+                <View style={styles.borderRight} />
+              </View>
+            </View>
+            <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
+              <Text style={styles.textIcon}>?</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {games.length === 0 && <Text>Det finnes ingen spill av denne typen enda</Text>}
 
@@ -171,11 +199,7 @@ export const GameListScreen = () => {
             style={styles.card}
           >
             <View style={styles.innerCard}>
-              <View style={styles.iconCardOuter}>
-                <View style={styles.iconCardInner}>
-                  <Text style={styles.iconCardText}>{game.game_type || "SPILL"}</Text>
-                </View>
-              </View>
+              <MaterialCommunityIcons name={CATEGORY_ICONS[game.category]} size={moderateScale(60)} color={Color.Black} />
 
               <View style={styles.textWrapper}>
                 <Text style={styles.cardHeader}>{game.name}</Text>
@@ -204,7 +228,6 @@ export const GameListScreen = () => {
         <Text style={styles.paragraph}>Side {pageNum}</Text>
       </VerticalScroll>
 
-      <AbsoluteHomeButton />
     </View>
   );
 };

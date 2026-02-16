@@ -14,6 +14,7 @@ import { HubChannel } from "../common/constants/HubChannel";
 import { View, ActivityIndicator } from "react-native";
 import { resetToHomeScreen } from "../common/utils/navigation";
 import { useNavigation } from "expo-router";
+import { useRef } from "react";
 
 export const SpinGame = () => {
   const navigation: any = useNavigation();
@@ -25,6 +26,7 @@ export const SpinGame = () => {
   const { pseudoId } = useAuthProvider();
   const { clearSpinSessionValues } = useSpinSessionProvider();
 
+  const isHandlingErrorRef = useRef(false);
   const [hubReady, setHubReady] = useState<boolean>(false);
 
   useEffect(() => {
@@ -84,8 +86,11 @@ export const SpinGame = () => {
       setRoundText(roundText);
     });
 
-    setListener(HubChannel.Error, (message: string) => {
-      displayErrorModal(message, async () => {
+    setListener(HubChannel.Error, (_message: string) => {
+      if (isHandlingErrorRef.current) return;
+      isHandlingErrorRef.current = true;
+
+      displayErrorModal("Tilkoblingen mistet", async () => {
         await disconnect();
         clearSpinSessionValues();
         clearGlobalSessionValues();

@@ -57,7 +57,7 @@ export const GameTypeListScreen = () => {
               <Feather name="chevron-left" size={moderateScale(45)} />
             </TouchableOpacity>
             <View style={styles.borderAndHeader}>
-              <Text style={styles.header}>{gameEntryMode === GameEntryMode.Creator ? "Lag spill" : "Velg spill"}</Text>
+              <Text style={styles.header}>{gameEntryMode === GameEntryMode.Creator ? "Lag spill" : "Velg type"}</Text>
               <View style={styles.borderWrapper}>
                 <View style={styles.borderLeft} />
                 <View style={styles.borderRight} />

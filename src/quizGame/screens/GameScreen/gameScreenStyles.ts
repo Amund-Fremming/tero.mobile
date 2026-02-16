@@ -44,6 +44,10 @@ export const styles = StyleSheet.create({
   },
 
   question: {
+    maxWidth: "90%",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(60),
     opacity: 0.5,

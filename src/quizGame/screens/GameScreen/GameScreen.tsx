@@ -76,11 +76,11 @@ export const GameScreen = () => {
       <Text style={styles.question}>{quiz?.rounds[quiz.current_iteration]}</Text>
 
       <View style={styles.buttonWrapper}>
-        <TouchableOpacity style={styles.nextButton} onPress={handleNextPressed}>
-          <Text style={styles.nextText}>Neste</Text>
+        <TouchableOpacity style={styles.nextButton} onPress={handlePrevPressed}>
+          <Text style={styles.nextText}>Forrige</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.prevButton} onPress={handlePrevPressed}>
-          <Text style={styles.prevText}>Forrige</Text>
+        <TouchableOpacity style={styles.prevButton} onPress={handleNextPressed}>
+          <Text style={styles.prevText}>Neste</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
   },
 
   borderLeft: {
-    backgroundColor: Color.Red,
+    backgroundColor: Color.HomeRed,
     borderTopLeftRadius: moderateScale(5),
     borderBottomLeftRadius: moderateScale(5),
     flex: 1,
@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
   borderRight: {
     borderTopRightRadius: moderateScale(5),
     borderBottomRightRadius: moderateScale(5),
-    backgroundColor: Color.Green,
+    backgroundColor: Color.BuzzifyLavender,
     flex: 1,
     height: verticalScale(7),
   },
@@ -94,7 +94,7 @@ export const styles = StyleSheet.create({
   card: {
     borderWidth: moderateScale(6.3),
     borderColor: Color.OffBlack,
-    height: verticalScale(200),
+    height: verticalScale(210),
     width: "45%",
     borderRadius: moderateScale(20),
     justifyContent: "center",

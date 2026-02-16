@@ -51,6 +51,11 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
   },
 
+  dropdownItemSelected: {
+    outlineWidth: moderateScale(5),
+    outlineColor: Color.White
+  },
+
   bottomText: {
     color: Color.White,
     fontFamily: Font.PassionOneBold,

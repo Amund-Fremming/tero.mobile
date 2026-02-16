@@ -33,15 +33,17 @@ export const CategoryDropdown = <T extends string = string>({
       selectedTextStyle={[styles.selectedText, buttonTextColor && { color: buttonTextColor }]}
       placeholderStyle={[styles.selectedText, buttonTextColor && { color: buttonTextColor }]}
       data={data}
+      maxHeight={10000}
       labelField="label"
       valueField="value"
       placeholder={placeholder}
       value={value}
       onChange={(item) => onChange(item.value as T)}
       dropdownPosition="top"
+      activeColor="transparent"
       renderRightIcon={() => null}
-      renderItem={(item) => (
-        <View style={[styles.dropdownItem, buttonBackgroundColor && { backgroundColor: buttonBackgroundColor }]}>
+      renderItem={(item, selected) => (
+        <View style={[styles.dropdownItem, buttonBackgroundColor && { backgroundColor: buttonBackgroundColor }, selected && styles.dropdownItemSelected]}>
           <Text style={[styles.bottomText, buttonTextColor && { color: buttonTextColor }]}>{item.label}</Text>
         </View>
       )}

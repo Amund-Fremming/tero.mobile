@@ -18,7 +18,7 @@ interface IHubConnectionContext {
 const defaultContextValue: IHubConnectionContext = {
   connect: async (_hubAddress: string) => err(""),
   disconnect: async () => err(""),
-  debugDisconnect: async () => {},
+  debugDisconnect: async () => { },
   setListener: (_channel: string, _fn: (item: any) => void) => err(""),
   invokeFunction: async (_functionName: string, ..._params: any[]) => err(""),
 };
@@ -88,6 +88,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     if (!reconnected) {
       clearValues();
       closeLoadingModal();
+      await new Promise((resolve) => setTimeout(resolve, 300));
       resetToHomeScreen(navigation);
       return;
     }
@@ -102,7 +103,12 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     let invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId, true);
     if (invokeResult.isError()) {
       console.error("Failed to invoke reconnect function:", invokeResult.error);
+      try {
+        await connectionRef.current?.stop();
+      } catch (_) { }
       clearValues();
+      closeLoadingModal();
+      await new Promise((resolve) => setTimeout(resolve, 300));
       resetToHomeScreen(navigation);
     }
   };
