@@ -8,6 +8,8 @@ import Screen from "../../constants/Screen";
 import { moderateScale, verticalScale } from "../../utils/dimensions";
 import { Feather } from "@expo/vector-icons";
 import { GameEntryMode, GameType } from "../../constants/Types";
+import Color from "../../constants/Color";
+import ScreenHeader from "../../components/ScreenHeader/ScreenHeader";
 
 const { height } = Dimensions.get("window");
 
@@ -51,23 +53,13 @@ export const GameTypeListScreen = () => {
           paddingBottom: verticalScale(200),
         }}
       >
-        <View style={styles.topWrapper}>
-          <View style={styles.headerWrapper}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconWrapper}>
-              <Feather name="chevron-left" size={moderateScale(45)} />
-            </TouchableOpacity>
-            <View style={styles.borderAndHeader}>
-              <Text style={styles.header}>{gameEntryMode === GameEntryMode.Creator ? "Lag spill" : "Velg type"}</Text>
-              <View style={styles.borderWrapper}>
-                <View style={styles.borderLeft} />
-                <View style={styles.borderRight} />
-              </View>
-            </View>
-            <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
-              <Text style={styles.textIcon}>?</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <ScreenHeader
+          title={gameEntryMode === GameEntryMode.Creator ? "Lag spill" : "Velg type"}
+          onBackPressed={() => navigation.goBack()}
+          onInfoPress={handleInfoPressed}
+          showBorder={true}
+          backgroundColor={Color.LightGray}
+        />
         {data &&
           data.map((item, index) => (
             <Pressable key={index} style={styles.card} onPress={() => handlePress(item.screen)}>

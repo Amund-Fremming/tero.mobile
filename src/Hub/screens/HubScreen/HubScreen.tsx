@@ -7,6 +7,7 @@ import { useNavigation } from "expo-router";
 import { useAuthProvider } from "@/src/common/context/AuthProvider";
 import { useEffect, useRef, useState } from "react";
 import { moderateScale } from "@/src/common/utils/dimensions";
+import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
 
 export const HubScreen = () => {
   const navigation: any = useNavigation();
@@ -49,19 +50,13 @@ export const HubScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topWrapper}>
-        <View style={styles.headerWrapper}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconWrapper}>
-            <Feather name="chevron-left" size={moderateScale(45)} />
-          </TouchableOpacity>
-          <View style={styles.borderAndHeader}>
-            <Text style={styles.header}>Hub</Text>
-          </View>
-          <TouchableOpacity onPress={handleProfilePressed} style={styles.iconWrapper}>
-            <Feather name="user" size={35} color={Color.Black} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <ScreenHeader
+        title="Hub"
+        onBackPressed={() => navigation.goBack()}
+        infoIconOverride="user"
+        onInfoPress={handleProfilePressed}
+        backgroundColor={Color.BuzzifyLavender}
+      />
 
       {displayDebugTools && (
         <View style={styles.debugBox}>

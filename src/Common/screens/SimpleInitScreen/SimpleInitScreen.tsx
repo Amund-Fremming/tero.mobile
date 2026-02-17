@@ -55,10 +55,10 @@ export const SimpleInitScreen = ({
   const { gameKey, isHost } = useGlobalSessionProvider();
 
   const categoryData = [
-    { label: "Alle", value: GameCategory.All },
-    { label: "Vors", value: GameCategory.Vors },
-    { label: "Jenter", value: GameCategory.Ladies },
-    { label: "Gutter", value: GameCategory.Boys },
+    { label: "Jentene", value: GameCategory.Girls },
+    { label: "Gutta", value: GameCategory.Boys },
+    { label: "Mixed", value: GameCategory.Mixed },
+    { label: "Indre krets", value: GameCategory.InnerCircle },
   ];
 
   const handleBackPressed = () => {

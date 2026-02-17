@@ -10,6 +10,7 @@ import { useNavigation } from "expo-router";
 import { screenHeight, verticalScale } from "@/src/common/utils/dimensions";
 import Color from "@/src/common/constants/Color";
 import { Feather } from "@expo/vector-icons";
+import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
 
 export const SavedGamesScreen = () => {
   const navigation: any = useNavigation();
@@ -56,6 +57,10 @@ export const SavedGamesScreen = () => {
     //
   };
 
+  const handleInfoPressed = () => {
+    //
+  };
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -71,11 +76,12 @@ export const SavedGamesScreen = () => {
         paddingBottom: verticalScale(200),
       }}
     >
-      <View style={styles.topWrapper}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.header}>Dine spill</Text>
-        </Pressable>
-      </View>
+      <ScreenHeader
+        title="Dine spill"
+        onBackPressed={() => navigation.goBack()}
+        onInfoPress={handleInfoPressed}
+        backgroundColor={Color.LightGray}
+      />
 
       {!games || (games.length == 0 && <Text>Du har ingen lagrede spill</Text>)}
 

@@ -127,10 +127,10 @@ export interface CreateGameRequest {
 }
 
 export enum GameCategory {
-  Vors = "Vors",
-  Ladies = "Ladies",
+  Girls = "Girls",
   Boys = "Boys",
-  All = "All",
+  Mixed = "Mixed",
+  InnerCircle = "InnerCircle",
 }
 
 export interface InteractiveGameResponse {
