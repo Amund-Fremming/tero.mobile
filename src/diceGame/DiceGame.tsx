@@ -95,12 +95,7 @@ export const DiceGame = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Trykk på terningen!</Text>
 
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={rollDice}
-          disabled={isRolling}
-          style={styles.diceContainer}
-        >
+        <TouchableOpacity activeOpacity={0.8} onPress={rollDice} disabled={isRolling} style={styles.diceContainer}>
           <Animated.View
             style={[
               styles.dice,
