@@ -29,6 +29,7 @@ export const Color = {
   BuzzifyYellow: "#FFEB99",
   SkyBlue: "#95B9D0",
   SkyBlueLight: "#6A899C",
+  LighterGreen: "#7d9286",
   DarkGreen: "#28353A",
   LightGreen: "#D3F0D2",
 };

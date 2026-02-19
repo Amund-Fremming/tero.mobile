@@ -153,11 +153,13 @@ export enum GameEntryMode {
 }
 
 export interface PagedResponse<T> {
+  page_num: number;
   items: T[];
   has_next: boolean;
+  has_prev: boolean;
 }
 
-export interface GamePageQuery {
+export interface PagedRequest {
   page_num: number;
   game_type: GameType;
   category: GameCategory | null;
@@ -169,11 +171,11 @@ export interface SavedGamesPageQuery {
 
 export interface GameBase {
   id: string;
-  name: string;
-  description?: string;
+  name: String;
   game_type: GameType;
   category: GameCategory;
   iterations: number;
   times_played: number;
   last_played: string;
+  synced: boolean;
 }

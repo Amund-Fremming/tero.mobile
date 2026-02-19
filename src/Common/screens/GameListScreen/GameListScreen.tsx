@@ -1,6 +1,6 @@
-import { Pressable, Text, View, TouchableOpacity } from "react-native";
+import { Pressable, Text, View, TouchableOpacity, ScrollView } from "react-native";
 import VerticalScroll from "../../wrappers/VerticalScroll";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useModalProvider } from "../../context/ModalProvider";
 import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
 import { useAuthProvider } from "../../context/AuthProvider";
@@ -8,13 +8,14 @@ import { useNavigation } from "@react-navigation/native";
 import { useQuizGameProvider } from "@/src/quizGame/context/QuizGameProvider";
 import styles from "./gameListScreenStyles";
 import { useServiceProvider } from "../../context/ServiceProvider";
-import { GameBase, GameCategory, GameEntryMode, GamePageQuery, GameType, PagedResponse } from "../../constants/Types";
+import { GameBase, GameCategory, GameEntryMode, PagedRequest, GameType, PagedResponse } from "../../constants/Types";
 import Screen from "../../constants/Screen";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import Color from "../../constants/Color";
 import { QuizSession } from "@/src/quizGame/constants/quizTypes";
 import { moderateScale } from "../../utils/dimensions";
 import ScreenHeader from "../../components/ScreenHeader/ScreenHeader";
+import React from "react";
 
 const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.Girls]: "Jentene",
@@ -45,10 +46,32 @@ export const GameListScreen = () => {
   const [pageNum, setPageNum] = useState<number>(0);
   const [category, setCategory] = useState<GameCategory | null>(null);
   const [games, setGames] = useState<GameBase[]>([]);
+  const [headerBg, setHeaderBg] = useState<string>("white");
+  const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
+    handleHeaderBg();
     getPage(0);
   }, []);
+
+  const handleHeaderBg = () => {
+    switch (gameType) {
+      case GameType.Imposter:
+        setHeaderBg(Color.LightGreen);
+        break;
+      case GameType.Duel:
+        setHeaderBg(Color.BeigeLight);
+        break;
+      case GameType.Roulette:
+        setHeaderBg(Color.SkyBlueLight);
+        break;
+      case GameType.Quiz:
+        setHeaderBg(Color.BuzzifyLavender);
+        break;
+      default:
+        setHeaderBg(Color.LightGray);
+    }
+  };
 
   const handleNextPage = async () => {
     if (!hasNext) {
@@ -59,6 +82,7 @@ export const GameListScreen = () => {
     setPageNum(page);
     setHasPrev(true);
     await getPage(page);
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
 
   const handlePrevPage = async () => {
@@ -73,9 +97,10 @@ export const GameListScreen = () => {
     const page = pageNum - 1;
     setPageNum(page);
     await getPage(page);
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
 
-  const createPageQuery = (pageNum: number): GamePageQuery => {
+  const createPageQuery = (pageNum: number): PagedRequest => {
     return {
       page_num: pageNum,
       game_type: gameType,
@@ -171,54 +196,59 @@ export const GameListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <VerticalScroll>
+      <VerticalScroll scrollRef={scrollRef}>
         <ScreenHeader
           title="Velg spill"
           onBackPressed={() => navigation.goBack()}
           onInfoPress={handleInfoPressed}
-          backgroundColor={Color.BuzzifyLavender}
+          backgroundColor={headerBg}
         />
 
-        {games.length === 0 && <Text>Det finnes ingen spill av denne typen enda</Text>}
+        {games.length === 0 && <Text style={styles.noGames}>Det finnes ingen spill av denne typen enda</Text>}
 
         {games.map((game) => (
-          <TouchableOpacity
-            onPress={() => handleGamePressed(game.id, game.game_type)}
-            key={game.id}
-            style={styles.card}
-          >
-            <View style={styles.innerCard}>
-              <MaterialCommunityIcons
-                name={CATEGORY_ICONS[game.category]}
-                size={moderateScale(60)}
-                color={Color.Black}
-              />
+          <>
+            <TouchableOpacity
+              onPress={() => handleGamePressed(game.id, game.game_type)}
+              key={game.id}
+              style={styles.card}
+            >
+              <View style={styles.innerCard}>
+                <MaterialCommunityIcons
+                  name={CATEGORY_ICONS[game.category]}
+                  size={moderateScale(60)}
+                  color={Color.Gray}
+                />
 
-              <View style={styles.textWrapper}>
-                <Text style={styles.cardHeader}>{game.name}</Text>
-                <Text style={styles.cardDescription}>{game.description || "Ingen beskrivelse"}</Text>
-                <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
+                <View style={styles.textWrapper}>
+                  <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
+                  <Text style={styles.cardHeader}>{game.name}</Text>
+                  <Text style={styles.cardDescription}>{game.iterations} runder</Text>
+                </View>
               </View>
-            </View>
-            <Pressable style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
-              <Feather name="bookmark" size={28} color={Color.Purple} />
-            </Pressable>
-          </TouchableOpacity>
+              <Pressable style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
+                <Feather name="bookmark" size={25} color={Color.Gray} />
+              </Pressable>
+            </TouchableOpacity>
+            <View style={styles.separator} />
+          </>
         ))}
 
-        <View style={styles.navButtons}>
-          {hasPrev && (
-            <Pressable style={styles.button} onPress={handlePrevPage}>
-              <Text style={styles.buttonLabel}>Forrige</Text>
-            </Pressable>
-          )}
-          {hasNext && (
-            <Pressable style={styles.button} onPress={handleNextPage}>
-              <Text style={styles.buttonLabel}>Neste</Text>
-            </Pressable>
-          )}
+        <View style={styles.pagination}>
+          <Text style={styles.paragraph}>Side {pageNum}</Text>
+          <View style={styles.navButtons}>
+            {hasPrev && (
+              <Pressable style={styles.button} onPress={handlePrevPage}>
+                <Text style={styles.buttonLabel}>Forrige</Text>
+              </Pressable>
+            )}
+            {hasNext && (
+              <Pressable style={styles.button} onPress={handleNextPage}>
+                <Text style={styles.buttonLabel}>Neste</Text>
+              </Pressable>
+            )}
+          </View>
         </View>
-        <Text style={styles.paragraph}>Side {pageNum}</Text>
       </VerticalScroll>
     </View>
   );

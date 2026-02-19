@@ -35,6 +35,10 @@ export const GameTypeListScreen = () => {
       navigation.navigate(creating ? "Spin" : Screen.GameList);
       return;
     }
+    if (screenEnum == GameType.Dice) {
+      navigation.navigate(GameType.Dice);
+      return;
+    }
     navigation.navigate(navTarget);
   };
 

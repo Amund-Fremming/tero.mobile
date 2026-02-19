@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
 
   dropdownItemSelected: {
     outlineWidth: moderateScale(5),
-    outlineColor: Color.White
+    outlineColor: Color.White,
   },
 
   bottomText: {

@@ -5,7 +5,7 @@ import { GameEntryMode } from "../common/constants/Types";
 import { useImposterSessionProvider } from "./context/ImposterSessionProvider";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
-import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
+import ActiveLobbyScreen from "./screens/ActiveLobbyScreen/ActiveLobbyScreen";
 
 export const ImposterGame = () => {
   const { gameEntryMode } = useGlobalSessionProvider();
@@ -35,9 +35,9 @@ export const ImposterGame = () => {
     case ImposterSessionScreen.Game:
       return <GameScreen />;
     case ImposterSessionScreen.Lobby:
-      return <LobbyScreen />;
+      return <ActiveLobbyScreen />;
     default:
-      return <LobbyScreen />;
+      return <ActiveLobbyScreen />;
   }
 };
 

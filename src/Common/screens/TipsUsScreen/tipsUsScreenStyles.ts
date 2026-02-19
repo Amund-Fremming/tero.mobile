@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
     width: "90%",
     borderRadius: moderateScale(15),
     height: verticalScale(69),
-    backgroundColor: Color.HomeRed,
+    backgroundColor: Color.BuzzifyLavender,
   },
 
   buttonText: {

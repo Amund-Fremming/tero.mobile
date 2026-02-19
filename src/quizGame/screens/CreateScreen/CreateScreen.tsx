@@ -38,14 +38,20 @@ export const CreateScreen = () => {
 
   const handleCreateGame = async () => {
     if (loading) return;
+    const gameName = createRequest.name.trim();
 
     if (!createRequest.category) {
       displayInfoModal("Du må velge kategori!");
       return;
     }
 
-    if (createRequest.name === "") {
+    if (gameName === "") {
       displayInfoModal("Spillet må ha ett navn");
+      return;
+    }
+
+    if (gameName.length < 3) {
+      displayInfoModal("Spillnavn må være minst 3 bokstaver");
       return;
     }
 
@@ -57,7 +63,10 @@ export const CreateScreen = () => {
     }
 
     setLoading(true);
-    const result = await gameService().createInteractiveGame(pseudoId, GameType.Quiz, createRequest);
+    const result = await gameService().createInteractiveGame(pseudoId, GameType.Quiz, {
+      ...createRequest,
+      name: gameName,
+    });
 
     if (result.isError()) {
       displayErrorModal(result.error);

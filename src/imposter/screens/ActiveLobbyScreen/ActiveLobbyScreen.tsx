@@ -12,7 +12,7 @@ import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import Color from "@/src/common/constants/Color";
 import { resetToHomeScreen } from "@/src/common/utils/navigation";
 
-export const LobbyScreen = () => {
+export const ActiveLobbyScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { connect, setListener, invokeFunction, disconnect } = useHubConnectionProvider();
@@ -133,7 +133,7 @@ export const LobbyScreen = () => {
     <SimpleInitScreen
       createScreen={false}
       themeColor={Color.LightGreen}
-      secondaryThemeColor={Color.DarkGreen}
+      secondaryThemeColor={Color.LighterGreen}
       onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"
@@ -151,4 +151,4 @@ export const LobbyScreen = () => {
   );
 };
 
-export default LobbyScreen;
+export default ActiveLobbyScreen;

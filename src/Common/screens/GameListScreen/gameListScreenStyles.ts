@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Color.LightGray,
+    backgroundColor: Color.White,
   },
 
   paragraph: {
@@ -45,8 +45,7 @@ export const styles = StyleSheet.create({
 
   card: {
     height: verticalScale(110),
-    width: "90%",
-    backgroundColor: Color.White,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: moderateScale(10),
@@ -62,7 +61,7 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     height: verticalScale(90),
-    width: "90%",
+    width: "85%",
     flexDirection: "row",
   },
 
@@ -99,28 +98,54 @@ export const styles = StyleSheet.create({
 
   cardHeader: {
     fontFamily: Font.PassionOneRegular,
-    fontSize: moderateScale(22),
-    color: Color.Black,
+    fontSize: moderateScale(28),
+    color: Color.OffBlack,
   },
 
   cardDescription: {
     fontFamily: Font.SintonyRegular,
-    fontSize: moderateScale(14),
+    fontSize: moderateScale(18),
     color: Color.Gray,
-    marginTop: verticalScale(2),
+    paddingTop: verticalScale(4),
   },
 
   cardCategory: {
     fontFamily: Font.SintonyBold,
     fontSize: moderateScale(12),
-    color: Color.Purple,
+    color: Color.Burgunde,
     marginTop: verticalScale(4),
+    textTransform: "uppercase",
+    letterSpacing: 1.2,
+    marginBottom: -2,
+    fontWeight: 800,
   },
 
   saveIcon: {
     position: "absolute",
     right: horizontalScale(15),
     top: verticalScale(15),
+  },
+
+  separator: {
+    backgroundColor: Color.LightGray,
+    height: verticalScale(5),
+    width: "90%",
+    borderRadius: moderateScale(20),
+  },
+
+  noGames: {
+    fontFamily: Font.SintonyBold,
+    fontSize: moderateScale(25),
+    textAlign: "center",
+    width: "80%",
+    color: Color.OffBlack,
+    paddingTop: verticalScale(50),
+  },
+
+  pagination: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
