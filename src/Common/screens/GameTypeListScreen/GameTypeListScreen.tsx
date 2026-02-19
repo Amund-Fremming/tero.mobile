@@ -23,11 +23,14 @@ const iconMap: { [key: string]: any } = {
 
 export const GameTypeListScreen = () => {
   const navigation: any = useNavigation();
-  const { setGameType, gameEntryMode } = useGlobalSessionProvider();
+  const { setGameType, gameEntryMode, setIsDraft } = useGlobalSessionProvider();
 
   const handlePress = (screen: string) => {
     const screenEnum = screen as GameType;
     const creating = gameEntryMode === GameEntryMode.Creator;
+    if (creating) {
+      setIsDraft(true);
+    }
     setGameType(screenEnum);
 
     const navTarget = creating ? screenEnum : Screen.GameList;

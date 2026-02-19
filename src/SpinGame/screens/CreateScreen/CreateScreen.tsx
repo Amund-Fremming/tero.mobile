@@ -18,7 +18,8 @@ export const CreateScreen = ({
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
-  const { setGameKey, setGameEntryMode, setHubAddress, gameType, isHost, setIsHost } = useGlobalSessionProvider();
+  const { setGameKey, setGameEntryMode, setHubAddress, gameType, isHost, setIsHost, setIsDraft } =
+    useGlobalSessionProvider();
   const { setScreen, themeColor, secondaryThemeColor, featherIcon, setThemeColors } = useSpinSessionProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -82,6 +83,7 @@ export const CreateScreen = ({
     }
 
     console.info("Game initiated with key:", result.value.key, "hub:", result.value.hub_address, "type:", gameType);
+    setIsDraft(result.value.is_draft);
     setGameKey(result.value.key);
     setHubAddress(result.value.hub_address);
     setGameEntryMode(GameEntryMode.Creator);

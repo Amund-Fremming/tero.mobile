@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
 import { GameEntryMode } from "../common/constants/Types";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
@@ -14,7 +14,6 @@ import { HubChannel } from "../common/constants/HubChannel";
 import { View, ActivityIndicator } from "react-native";
 import { resetToHomeScreen } from "../common/utils/navigation";
 import { useNavigation } from "expo-router";
-import { useRef } from "react";
 
 export const SpinGame = () => {
   const navigation: any = useNavigation();
@@ -23,16 +22,24 @@ export const SpinGame = () => {
   const { screen, setScreen, setRoundText, setSelectedBatch, setGameState, setIterations, setPlayers } =
     useSpinSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
-  const { displayErrorModal } = useModalProvider();
+  const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
   const { clearSpinSessionValues } = useSpinSessionProvider();
 
   const isHandlingErrorRef = useRef(false);
   const [hubReady, setHubReady] = useState<boolean>(false);
 
+  const resetSessionAndNavigateHome = async () => {
+    await disconnect();
+    clearSpinSessionValues();
+    clearGlobalSessionValues();
+    resetToHomeScreen(navigation);
+  };
+
   useEffect(() => {
     const initScreen = getInitialScreen();
     setScreen(initScreen);
+    console.log("INIT SCREEN ", initScreen);
 
     if (initScreen === SpinSessionScreen.Create) {
       return;
@@ -80,6 +87,7 @@ export const SpinGame = () => {
     });
 
     setListener("selected", (batch: string[]) => {
+      console.log(batch);
       setSelectedBatch(batch);
     });
 
@@ -92,7 +100,16 @@ export const SpinGame = () => {
       isHandlingErrorRef.current = true;
 
       displayErrorModal("Tilkoblingen mistet", async () => {
-        await disconnect();
+        await resetSessionAndNavigateHome();
+      });
+    });
+
+    setListener("cancelled", async (message: string) => {
+      if (isHandlingErrorRef.current) return;
+      isHandlingErrorRef.current = true;
+
+      await disconnect();
+      displayInfoModal(message, "Spillet ble avsluttet", async () => {
         clearSpinSessionValues();
         clearGlobalSessionValues();
         resetToHomeScreen(navigation);
@@ -129,7 +146,7 @@ export const SpinGame = () => {
   switch (screen) {
     case SpinSessionScreen.Create:
       return (
-        <CreateScreen onGameCreated={(address, key) => initializeHub(address, key, SpinSessionScreen.PassiveLobby)} />
+        <CreateScreen onGameCreated={(address, key) => initializeHub(address, key, SpinSessionScreen.ActiveLobby)} />
       );
     case SpinSessionScreen.Game:
       return hubReady ? <GameScreen /> : <LoadingView />;

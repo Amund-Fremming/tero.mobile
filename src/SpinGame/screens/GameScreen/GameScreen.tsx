@@ -6,7 +6,6 @@ import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProv
 import Color from "@/src/common/constants/Color";
 import { useHubConnectionProvider } from "@/src/common/context/HubConnectionProvider";
 import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { HubChannel } from "@/src/common/constants/HubChannel";
 import { useAuthProvider } from "@/src/common/context/AuthProvider";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import { Feather } from "@expo/vector-icons";
@@ -24,14 +23,13 @@ export const GameScreen = () => {
   const { isHost, clearGlobalSessionValues, gameKey } = useGlobalSessionProvider();
   const { clearSpinSessionValues, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
-  const { disconnect, setListener, invokeFunction, debugDisconnect } = useHubConnectionProvider();
+  const { disconnect, invokeFunction, debugDisconnect } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
 
   useFocusEffect(
     useCallback(() => {
       setBgColor(themeColor);
-      setupScreenListeners();
 
       return () => {
         clearSpinSessionValues();
@@ -58,7 +56,7 @@ export const GameScreen = () => {
         setBgColor(Color.Red);
       }
     }
-  }, [selectedBatch]);
+  }, [selectedBatch, pseudoId]);
 
   const handleLeaveGame = async () => {
     clearGlobalSessionValues();
@@ -78,17 +76,6 @@ export const GameScreen = () => {
     clearGlobalSessionValues();
     clearSpinSessionValues();
     resetToHomeScreen(navigation);
-  };
-
-  const setupScreenListeners = () => {
-    setListener("cancelled", async (message: string) => {
-      if (disconnectTriggeredRef.current) return;
-
-      await disconnect();
-      displayInfoModal(message, "Spillet ble avsluttet", () => {
-        navigateHome();
-      });
-    });
   };
 
   const handleNextRound = async () => {
