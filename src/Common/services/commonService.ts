@@ -1,6 +1,6 @@
 import axios from "axios";
 import { err, ok, Result } from "../utils/result";
-import { LogCeverity, LogCategoryCount, PagedResponse, SystemHealth, SystemLog } from "../constants/Types";
+import { LogCeverity, LogCategoryCount, PagedResponse, SystemHealth, SystemLog, GameTip } from "../constants/Types";
 import { getHeaders } from "./utils";
 
 export class CommonService {
@@ -56,7 +56,7 @@ export class CommonService {
   async getLogs(
     token: string,
     ceverity: LogCeverity | null,
-    pageNum: number
+    pageNum: number,
   ): Promise<Result<PagedResponse<SystemLog>>> {
     try {
       const categoryParam = ceverity ? `&ceverity=${ceverity}` : "";
@@ -71,6 +71,22 @@ export class CommonService {
     } catch (error) {
       console.error("getLogs:", error);
       return err("Failed to get logs");
+    }
+  }
+
+  async getGameTips(token: string, pageNum: number = 0): Promise<Result<PagedResponse<GameTip>>> {
+    try {
+      const url = `${this.urlBase}/tips/admin?page_num=${pageNum}`;
+
+      const response = await axios.get<PagedResponse<GameTip>>(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return ok(response.data);
+    } catch (error) {
+      return err(error + "");
     }
   }
 }

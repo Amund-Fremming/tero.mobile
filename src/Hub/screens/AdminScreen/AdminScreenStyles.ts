@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     borderColor: Color.Purple,
   },
 
-  healthCard: {
+  card: {
     borderRadius: moderateScale(10),
     width: "85%",
     gap: verticalScale(10),
@@ -86,7 +86,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
-  healthText: {
+  text: {
     fontFamily: Font.SintonyRegular,
     fontSize: moderateScale(20),
     fontWeight: 400,

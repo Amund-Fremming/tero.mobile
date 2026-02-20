@@ -71,6 +71,11 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
   },
 
+  iconPlaceholder: {
+    height: verticalScale(50),
+    width: horizontalScale(50),
+  },
+
   textIcon: {
     paddingTop: verticalScale(3),
     fontSize: moderateScale(45),

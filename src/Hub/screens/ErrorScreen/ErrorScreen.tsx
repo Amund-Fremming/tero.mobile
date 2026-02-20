@@ -8,7 +8,7 @@ export const ErrorScreen = () => {
     <View style={styles.container}>
       <View style={styles.contentWrapper}>
         <View style={styles.iconContainer}>
-          <Feather name="alert-circle" size={120} color={Color.Purple} />
+          <Feather name="alert-circle" size={120} color={Color.HomeRed} />
         </View>
 
         <Text style={styles.mainHeader}>Oops!</Text>

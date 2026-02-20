@@ -15,7 +15,6 @@ import GameTypeListScreen from "../common/screens/GameTypeListScreen/GameTypeLis
 import GameListScreen from "../common/screens/GameListScreen/GameListScreen";
 import ProfileScreen from "./screens/ProfileScreen/ProfileScreen";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen";
-import ChangePasswordScreen from "./screens/ChangePasswordScreen/ChangePasswordScreen";
 import { SavedGamesScreen } from "./screens/SavedGamesScreen/SavedGamesScreen";
 import { TipsUsScreen } from "../common/screens/TipsUsScreen/TipsUsScreen";
 import { ErrorScreen } from "./screens/ErrorScreen/ErrorScreen";
@@ -23,6 +22,7 @@ import { ProblemScreen } from "./screens/ProblemScreen/ProblemScreen";
 import ImposterGame from "../imposter/ImposterGame";
 import DiceGame from "../diceGame/DiceGame";
 import { InfoScreen } from "../common/screens/InfoScreen/InfoScreen";
+import { TipsListScreen } from "./screens/TipsListScreen/TipsListScreen";
 
 const Stack = createStackNavigator();
 
@@ -39,7 +39,6 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Home} component={HomeScreen} />
       <Stack.Screen name={Screen.Profile} component={ProfileScreen} />
       <Stack.Screen name={Screen.EditProfile} component={EditProfileScreen} />
-      <Stack.Screen name={Screen.ChangePassword} component={ChangePasswordScreen} />
       <Stack.Screen name={Screen.Hub} component={HubScreen} />
       <Stack.Screen name={Screen.Join} component={JoinScreen} />
       <Stack.Screen name={Screen.Spin} component={SpinGame} />
@@ -55,6 +54,7 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
       <Stack.Screen name={Screen.Info} component={InfoScreen} />
+      <Stack.Screen name={Screen.TipsList} component={TipsListScreen} />
     </Stack.Navigator>
   );
 };

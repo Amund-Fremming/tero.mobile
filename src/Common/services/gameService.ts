@@ -23,7 +23,6 @@ export class GameService {
     try {
       const response = await axios.post<InteractiveGameResponse>(`${this.urlBase}/tips`, request);
 
-      let result: InteractiveGameResponse = response.data;
       return ok();
     } catch (error) {
       console.error("createInteractiveGame:", error);
@@ -45,7 +44,7 @@ export class GameService {
         },
       );
 
-      let result: InteractiveGameResponse = response.data;
+      const result: InteractiveGameResponse = response.data;
       return ok(result);
     } catch (error) {
       console.error("createInteractiveGame:", error);

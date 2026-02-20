@@ -11,11 +11,13 @@ import Screen from "@/src/common/constants/Screen";
 import { horizontalScale } from "@/src/common/utils/dimensions";
 import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
 import VerticalScroll from "@/src/common/wrappers/VerticalScroll";
+import { useModalProvider } from "@/src/common/context/ModalProvider";
 
 export const ProfileScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId, triggerLogout, accessToken, setPseudoId, userData, setUserData } = useAuthProvider();
   const { userService } = useServiceProvider();
+  const { displayErrorModal, displayInfoModal } = useModalProvider();
 
   const isLoggedIn = accessToken != null;
 
@@ -48,7 +50,7 @@ export const ProfileScreen = () => {
       return;
     }
 
-    let result = await userService().getUser(accessToken);
+    const result = await userService().getUser(accessToken);
     if (result.isError()) {
       return;
     }
@@ -78,6 +80,29 @@ export const ProfileScreen = () => {
     return <View />;
   }
 
+  const handleResetPassword = async () => {
+    if (!userData?.email) {
+      displayErrorModal("Mangler e-post. Logg inn på nytt.");
+      await triggerLogout();
+      return;
+    }
+
+    if (!pseudoId) {
+      // TODO - handle
+      console.error("User missin pseudo id");
+      return;
+    }
+
+    const result = await userService().resetPassword(accessToken, pseudoId, userData.email);
+    if (result.isError()) {
+      console.error("Failed to reset password: {}", result.error);
+      displayErrorModal("Kunne ikke resette passord.");
+      return;
+    }
+
+    displayInfoModal("Reset-lenke sendt.", "E-post");
+  };
+
   return (
     <View style={styles.container}>
       <VerticalScroll>
@@ -104,48 +129,28 @@ export const ProfileScreen = () => {
                 <Feather name="edit" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Rediger profil</Text>
-              <Feather
-                name="chevron-right"
-                size={35}
-                color={Color.Black}
-                style={{ marginRight: horizontalScale(10) }}
-              />
+              <Feather name="chevron-right" size={35} color={Color.Black} />
             </Pressable>
-            <Pressable onPress={() => navigation.navigate(Screen.ChangePassword)} style={styles.bigButton}>
+            <Pressable onPress={handleResetPassword} style={styles.bigButton}>
               <View style={styles.iconGuard}>
                 <Feather name="lock" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Bytt passord</Text>
-              <Feather
-                name="chevron-right"
-                size={35}
-                color={Color.Black}
-                style={{ marginRight: horizontalScale(10) }}
-              />
+              <Feather name="chevron-right" size={35} color={Color.Black} />
             </Pressable>
             <Pressable onPress={() => navigation.navigate(Screen.TipsUs)} style={styles.bigButton}>
               <View style={styles.iconGuard}>
                 <Feather name="sun" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Tips oss</Text>
-              <Feather
-                name="chevron-right"
-                size={35}
-                color={Color.Black}
-                style={{ marginRight: horizontalScale(10) }}
-              />
+              <Feather name="chevron-right" size={35} color={Color.Black} />
             </Pressable>
             <Pressable onPress={() => navigation.navigate(Screen.SavedGames)} style={styles.bigButton}>
               <View style={styles.iconGuard}>
                 <Feather name="play" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Dine spill</Text>
-              <Feather
-                name="chevron-right"
-                size={35}
-                color={Color.Black}
-                style={{ marginRight: horizontalScale(10) }}
-              />
+              <Feather name="chevron-right" size={35} color={Color.Black} />
             </Pressable>
             {isAdmin && (
               <Pressable onPress={() => navigation.navigate(Screen.Admin)} style={styles.bigButton}>
@@ -153,12 +158,7 @@ export const ProfileScreen = () => {
                   <Feather name="shield" size={30} color={Color.Black} />
                 </View>
                 <Text style={styles.buttonText}>Admin</Text>
-                <Feather
-                  name="chevron-right"
-                  size={35}
-                  color={Color.Black}
-                  style={{ marginRight: horizontalScale(10) }}
-                />
+                <Feather name="chevron-right" size={35} color={Color.Black} />
               </Pressable>
             )}
           </View>

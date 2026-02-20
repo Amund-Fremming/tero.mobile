@@ -33,7 +33,7 @@ export const ActiveLobbyScreen = () => {
     }
 
     if (round === "") {
-      displayInfoModal("Du har glemt å skrive inn en runde");
+      displayInfoModal("Skriv inn en runde.");
       return;
     }
 
@@ -42,7 +42,7 @@ export const ActiveLobbyScreen = () => {
 
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Klarte ikke legge til runde");
+      displayErrorModal("Kunne ikke legge til runde.");
       setIsAddingRound(false);
       return;
     }
@@ -65,28 +65,28 @@ export const ActiveLobbyScreen = () => {
 
     if (!pseudoId) {
       console.error("No pseudo id present");
-      displayErrorModal("En feil har skjedd");
+      displayErrorModal("Noe gikk galt.");
       setStartGameTriggered(false);
       return;
     }
 
     if (!gameKey || gameKey == "") {
-      displayErrorModal("En feil har skjedd, fosøk å opprette spillet på nytt");
+      displayErrorModal("Mangler spillkode. Lag spillet på nytt.");
       setStartGameTriggered(false);
       return;
     }
 
-    let minPlayers = gameType == GameType.Roulette ? 2 : 3;
+    const minPlayers = gameType == GameType.Roulette ? 2 : 3;
 
     if (players < minPlayers) {
-      displayInfoModal(`Minimum ${minPlayers} spillere for å starte, du har: ${players}`);
+      displayInfoModal(`Minst ${minPlayers} spillere. Nå: ${players}.`);
       setStartGameTriggered(false);
       return;
     }
 
     if (iterations < 1) {
       // TODO set to 10!
-      displayInfoModal("Minimum 10 runder for å starte spillet");
+      displayInfoModal("Minst 10 runder.");
       setStartGameTriggered(false);
       return;
     }
@@ -94,7 +94,7 @@ export const ActiveLobbyScreen = () => {
     const startResult = await invokeFunction("StartGame", gameKey, true); // isDraft = true
     if (startResult.isError()) {
       console.log(startResult.error);
-      displayErrorModal("En feil skjedde når spillet skulle starte");
+      displayErrorModal("Kunne ikke starte spillet.");
       setStartGameTriggered(false);
       return;
     }

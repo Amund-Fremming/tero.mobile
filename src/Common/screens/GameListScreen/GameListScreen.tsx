@@ -141,7 +141,7 @@ export const GameListScreen = () => {
 
     const result = await gameService().saveGame(accessToken, gameId);
     if (result.isError()) {
-      displayErrorModal("Det har skjedd en feil, forsøk igjen senere");
+      displayErrorModal("Noe gikk galt. Prøv igjen.");
     }
   };
 
@@ -157,7 +157,7 @@ export const GameListScreen = () => {
         setGameEntryMode(GameEntryMode.Host);
         const qResult = await gameService().initiateStaticGame<QuizSession>(gameType, gameId, pseudoId);
         if (qResult.isError()) {
-          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          displayErrorModal("Kunne ikke hente spill.");
           return;
         }
 
@@ -170,11 +170,11 @@ export const GameListScreen = () => {
 
         const rResult = await gameService().initiateSessionGame(pseudoId, gameType, gameId);
         if (rResult.isError()) {
-          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          displayErrorModal("Kunne ikke hente spill.");
           return;
         }
 
-        let roulette = rResult.value;
+        const roulette = rResult.value;
         setIsDraft(roulette.is_draft);
         setGameKey(roulette.key);
         setHubAddress(roulette.hub_address);
@@ -185,11 +185,11 @@ export const GameListScreen = () => {
         setGameEntryMode(GameEntryMode.Host);
         const dResult = await gameService().initiateSessionGame(pseudoId, gameType, gameId);
         if (dResult.isError()) {
-          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          displayErrorModal("Kunne ikke hente spill.");
           return;
         }
 
-        let duel = dResult.value;
+        const duel = dResult.value;
         setGameKey(duel.key);
         setHubAddress(duel.hub_address);
         navigation.navigate(Screen.Spin);
@@ -218,12 +218,8 @@ export const GameListScreen = () => {
         )}
 
         {pagedResponse.items.map((game) => (
-          <>
-            <TouchableOpacity
-              onPress={() => handleGamePressed(game.id, game.game_type)}
-              key={game.id}
-              style={styles.card}
-            >
+          <React.Fragment key={game.id}>
+            <TouchableOpacity onPress={() => handleGamePressed(game.id, game.game_type)} style={styles.card}>
               <View style={styles.innerCard}>
                 <MaterialCommunityIcons
                   name={CATEGORY_ICONS[game.category]}
@@ -242,7 +238,7 @@ export const GameListScreen = () => {
               </Pressable>
             </TouchableOpacity>
             <View style={styles.separator} />
-          </>
+          </React.Fragment>
         ))}
 
         <View style={styles.pagination}>

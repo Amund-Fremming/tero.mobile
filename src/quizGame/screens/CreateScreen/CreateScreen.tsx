@@ -41,24 +41,24 @@ export const CreateScreen = () => {
     const gameName = createRequest.name.trim();
 
     if (!createRequest.category) {
-      displayInfoModal("Du må velge kategori!");
+      displayInfoModal("Velg kategori.");
       return;
     }
 
     if (gameName === "") {
-      displayInfoModal("Spillet må ha ett navn");
+      displayInfoModal("Skriv inn navn.");
       return;
     }
 
     if (gameName.length < 3) {
-      displayInfoModal("Spillnavn må være minst 3 bokstaver");
+      displayInfoModal("Navn må ha minst 3 tegn.");
       return;
     }
 
     if (!pseudoId) {
       // TODO - handle
       console.error("No pseudo id present");
-      displayErrorModal("En feil har skjedd, forsøk å åpne appen på nytt");
+      displayErrorModal("Mangler bruker. Start appen på nytt.");
       return;
     }
 
@@ -99,7 +99,7 @@ export const CreateScreen = () => {
       topButtonOnPress={() => {}}
       bottomButtonText="Opprett"
       bottomButtonCallback={handleCreateGame}
-      featherIcon="layers"
+      featherIcon="stack"
       iterations={"?"}
       inputPlaceholder="Spillnavn..."
       inputValue={createRequest.name}

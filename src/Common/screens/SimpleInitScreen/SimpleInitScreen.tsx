@@ -1,8 +1,8 @@
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./simpleInitScreenStyles";
 import { TextInput } from "react-native-gesture-handler";
-import { Feather } from "@expo/vector-icons";
-import { moderateScale } from "@/src/common/utils/dimensions";
+import { Feather, FontAwesome6, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
+import { moderateScale, verticalScale } from "@/src/common/utils/dimensions";
 import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
 import { GameCategory } from "../../constants/Types";
 import Color from "../../constants/Color";
@@ -41,7 +41,7 @@ export const SimpleInitScreen = ({
   topButtonText: categoryButtonText,
   bottomButtonText,
   secondaryThemeColor,
-  featherIcon,
+  featherIcon: icon,
   themeColor,
   iterations,
   setInput,
@@ -60,6 +60,31 @@ export const SimpleInitScreen = ({
     { label: "Mixed", value: GameCategory.Mixed },
     { label: "Indre krets", value: GameCategory.InnerCircle },
   ];
+
+  const getIcon = () => {
+    if (icon === "sword-cross") {
+      return (
+        <MaterialCommunityIcons
+          name={icon as any}
+          size={moderateScale(200)}
+          color="black"
+          style={STATIC_STYLES.iconOpacity}
+        />
+      );
+    }
+
+    if (icon === "stack") {
+      return <Octicons name={icon as any} size={moderateScale(200)} color="black" style={STATIC_STYLES.iconOpacity} />;
+    }
+
+    if (icon === "arrows-spin") {
+      return (
+        <FontAwesome6 name={icon as any} size={moderateScale(200)} color="black" style={STATIC_STYLES.iconOpacity} />
+      );
+    }
+
+    return <Feather name={icon as any} size={moderateScale(200)} color="black" style={STATIC_STYLES.iconOpacity} />;
+  };
 
   const handleBackPressed = () => {
     if (onBackPressed) {
@@ -93,8 +118,19 @@ export const SimpleInitScreen = ({
         </TouchableOpacity>
       </View>
       <View style={styles.midSection}>
-        <Text style={styles.iterations}>{iterations}</Text>
-        <Feather name={featherIcon as any} size={moderateScale(200)} style={STATIC_STYLES.iconOpacity} />
+        <View style={{}} />
+        {iterations === "?" && (
+          <>
+            <View style={{ paddingTop: verticalScale(100) }} />
+            {getIcon()}
+          </>
+        )}
+        {iterations !== "?" && (
+          <>
+            <Text style={styles.iterations}>{iterations === "?" ? "" : iterations}</Text>
+            {getIcon()}
+          </>
+        )}
       </View>
       <View style={styles.bottomSection}>
         <TextInput

@@ -47,7 +47,7 @@ export const AdminScreen = () => {
 
     const result = await commonService().getLogCounts(accessToken);
     if (result.isError()) {
-      displayErrorModal("Klarte ikke hente log stats");
+      displayErrorModal("Kunne ikke hente loggstatistikk.");
       return;
     }
 
@@ -114,10 +114,6 @@ export const AdminScreen = () => {
     navigation.navigate(Screen.Logs);
   };
 
-  const handleInfoPressed = () => {
-    //
-  };
-
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -133,25 +129,20 @@ export const AdminScreen = () => {
         paddingBottom: verticalScale(200),
       }}
     >
-      <ScreenHeader
-        title="Admin"
-        onInfoPress={handleInfoPressed}
-        onBackPressed={() => navigation.goBack()}
-        backgroundColor={Color.LightGray}
-      />
+      <ScreenHeader title="Admin" onBackPressed={() => navigation.goBack()} backgroundColor={Color.LightGray} />
 
       <Text style={styles.uri}>Redirect uri: {redirectUri}</Text>
 
       <View style={styles.separator} />
 
-      <Pressable onPress={handleErrorLogCardClick} style={styles.healthCard}>
+      <Pressable onPress={handleErrorLogCardClick} style={styles.card}>
         <View style={styles.healthWrapper}>
           <Text style={styles.errorLogTextBold}>Info</Text>
           <Text style={[styles.errorLogTextBold, { color: Color.Green }]}>{logCategoryCount.info}</Text>
         </View>
         <View style={styles.healthWrapper}>
           <Text style={styles.errorLogTextBold}>Warning</Text>
-          <Text style={[styles.errorLogTextBold, { color: Color.BuzzifyYellow }]}>{logCategoryCount.warning}</Text>
+          <Text style={[styles.errorLogTextBold, { color: Color.BuzzifyOrange }]}>{logCategoryCount.warning}</Text>
         </View>
         <View style={styles.healthWrapper}>
           <Text style={styles.errorLogTextBold}>Critical</Text>
@@ -161,18 +152,18 @@ export const AdminScreen = () => {
 
       <View style={styles.separator} />
 
-      <View style={styles.healthCard}>
+      <View style={styles.card}>
         <View style={styles.healthWrapper}>
-          <Text style={styles.healthText}>Platform</Text>
-          <Text style={styles.healthText}>{systemHealth.platform ? "✅" : "❌"}</Text>
+          <Text style={styles.text}>Platform</Text>
+          <Text style={styles.text}>{systemHealth.platform ? "✅" : "❌"}</Text>
         </View>
         <View style={styles.healthWrapper}>
-          <Text style={styles.healthText}>Database</Text>
-          <Text style={styles.healthText}>{systemHealth.database ? "✅" : "❌"}</Text>
+          <Text style={styles.text}>Database</Text>
+          <Text style={styles.text}>{systemHealth.database ? "✅" : "❌"}</Text>
         </View>
         <View style={styles.healthWrapper}>
-          <Text style={styles.healthText}>Session</Text>
-          <Text style={styles.healthText}>{systemHealth.session ? "✅" : "❌"}</Text>
+          <Text style={styles.text}>Session</Text>
+          <Text style={styles.text}>{systemHealth.session ? "✅" : "❌"}</Text>
         </View>
       </View>
 
@@ -180,24 +171,24 @@ export const AdminScreen = () => {
 
       {!stats && (
         // TODO - load again button
-        <View style={styles.healthCard}>
-          <Text style={styles.healthText}>Klarte ikke laste stats...</Text>
+        <View style={styles.card}>
+          <Text style={styles.text}>Klarte ikke laste stats...</Text>
         </View>
       )}
       {stats && (
-        <View style={styles.healthCard}>
+        <View style={styles.card}>
           <Text>Brukere</Text>
           <View style={styles.healthWrapper}>
-            <Text style={styles.healthText}>I dag</Text>
-            <Text style={styles.healthText}>{stats.recent.todays_users}</Text>
+            <Text style={styles.text}>I dag</Text>
+            <Text style={styles.text}>{stats.recent.todays_users}</Text>
           </View>
           <View style={styles.healthWrapper}>
-            <Text style={styles.healthText}>Denne uken</Text>
-            <Text style={styles.healthText}>{stats.recent.this_week_users}</Text>
+            <Text style={styles.text}>Denne uken</Text>
+            <Text style={styles.text}>{stats.recent.this_week_users}</Text>
           </View>
           <View style={styles.healthWrapper}>
-            <Text style={styles.healthText}>Denne måneden</Text>
-            <Text style={styles.healthText}>{stats.recent.this_month_users}</Text>
+            <Text style={styles.text}>Denne måneden</Text>
+            <Text style={styles.text}>{stats.recent.this_month_users}</Text>
           </View>
         </View>
       )}
@@ -205,50 +196,58 @@ export const AdminScreen = () => {
       <View style={styles.separator} />
 
       {stats && (
-        <View style={styles.healthCard}>
+        <View style={styles.card}>
           <Text>Brukere</Text>
           <View style={styles.healthWrapper}>
-            <Text style={styles.healthText}>Daglig</Text>
-            <Text style={styles.healthText}>{stats.average.avg_daily_users}</Text>
+            <Text style={styles.text}>Daglig</Text>
+            <Text style={styles.text}>{stats.average.avg_daily_users}</Text>
           </View>
           <View style={styles.healthWrapper}>
-            <Text style={styles.healthText}>Ukentlig</Text>
-            <Text style={styles.healthText}>{stats.average.avg_daily_users}</Text>
+            <Text style={styles.text}>Ukentlig</Text>
+            <Text style={styles.text}>{stats.average.avg_daily_users}</Text>
           </View>
           <View style={styles.healthWrapper}>
-            <Text style={styles.healthText}>Månedlig</Text>
-            <Text style={styles.healthText}>{stats.average.avg_month_users}</Text>
+            <Text style={styles.text}>Månedlig</Text>
+            <Text style={styles.text}>{stats.average.avg_month_users}</Text>
           </View>
           <View style={styles.healthWrapper}>
-            <Text style={styles.healthText}>Totalt</Text>
-            <Text style={styles.healthText}>{stats.total_user_count}</Text>
+            <Text style={styles.text}>Totalt</Text>
+            <Text style={styles.text}>{stats.total_user_count}</Text>
           </View>
         </View>
       )}
+
+      <View style={styles.separator} />
+
+      <Pressable onPress={() => navigation.navigate(Screen.TipsList)} style={styles.card}>
+        <Text style={styles.text}>Spill tips</Text>
+        <Text></Text>
+      </Pressable>
 
       <View style={styles.separator} />
 
       {!popup && (
         // TODO - load again button
-        <View style={styles.healthCard}>
-          <Text style={styles.healthText}>Klarte ikke laste modal...</Text>
+        <View style={styles.card}>
+          <Text style={styles.text}>Klarte ikke laste modal...</Text>
         </View>
       )}
       {popup && !popupEditing && (
-        <View style={styles.healthCard}>
+        <View style={styles.card}>
           <Pressable style={styles.activeButton}>
             <Text style={styles.modalIndicator}>{popup.active ? "✅" : "❌"}</Text>
           </Pressable>
           <Text>Popup</Text>
-          <Text style={styles.healthText}>{popup.heading}</Text>
-          <Text style={styles.healthText}>{popup.paragraph}</Text>
+          <Text style={styles.text}>{popup.heading}</Text>
+          <Text style={styles.text}>{popup.paragraph}</Text>
           <Pressable onPress={() => setPopupEditing(true)} style={styles.popupButton}>
             <Text style={styles.popupText}>Rediger</Text>
           </Pressable>
         </View>
       )}
+
       {popup && popupEditing && (
-        <View style={styles.healthCard}>
+        <View style={styles.card}>
           <Pressable
             onPress={() => setPopup((prev) => (prev ? { ...prev, active: !prev.active } : prev))}
             style={styles.activeButton}
@@ -256,8 +255,8 @@ export const AdminScreen = () => {
             <Text style={styles.modalIndicator}>{popup.active ? "✅" : "❌"}</Text>
           </Pressable>
           <Text>Popup</Text>
-          <Text style={styles.healthText}>{popup.heading}</Text>
-          <Text style={styles.healthText}>{popup.paragraph}</Text>
+          <Text style={styles.text}>{popup.heading}</Text>
+          <Text style={styles.text}>{popup.paragraph}</Text>
           <Pressable onPress={handleUpdateModal} style={styles.popupButton}>
             <Text style={styles.popupText}>Lagre</Text>
           </Pressable>

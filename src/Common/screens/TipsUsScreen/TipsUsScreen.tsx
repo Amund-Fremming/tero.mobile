@@ -25,54 +25,54 @@ export const TipsUsScreen = () => {
   const handleCreateTip = async () => {
     // Validate name/header (3-30 chars)
     if (!createRequest.header || createRequest.header.trim().length === 0) {
-      displayErrorModal("Vennligst fyll inn navn");
+      displayErrorModal("Fyll inn navn.");
       return;
     }
 
     if (createRequest.header.trim().length < 3) {
-      displayErrorModal("Navn må være minst 3 tegn");
+      displayErrorModal("Navn må ha minst 3 tegn.");
       return;
     }
 
     if (createRequest.header.length > 30) {
-      displayErrorModal("Navn kan ikke være mer enn 30 tegn");
+      displayErrorModal("Navn er for langt.");
       return;
     }
 
     // Validate phone number (1-20 chars)
     if (!createRequest.mobile_phone || createRequest.mobile_phone.trim().length === 0) {
-      displayErrorModal("Vennligst fyll inn mobilnummer");
+      displayErrorModal("Fyll inn mobilnummer.");
       return;
     }
 
     if (createRequest.mobile_phone.length > 20) {
-      displayErrorModal("Mobilnummer kan ikke være mer enn 20 tegn");
+      displayErrorModal("Mobilnummer er for langt.");
       return;
     }
 
     // Validate description (8-300 chars)
     if (!createRequest.description || createRequest.description.trim().length === 0) {
-      displayErrorModal("Vennligst beskriv din ide");
+      displayErrorModal("Beskriv ideen.");
       return;
     }
 
     if (createRequest.description.length < 8) {
-      displayErrorModal("Din ide må være minst 8 tegn");
+      displayErrorModal("Ideen er for kort.");
       return;
     }
 
     if (createRequest.description.length > 300) {
-      displayErrorModal("Din ide kan ikke være mer enn 300 tegn");
+      displayErrorModal("Ideen er for lang.");
       return;
     }
 
     const result = await gameService().createGameTip(createRequest);
     if (result.isError()) {
       console.error("Create tip failed: ", result.error);
-      displayErrorModal("Klarte ikke sende inn tips, prøv igjen senere");
+      displayErrorModal("Kunne ikke sende tips.");
       return;
     }
-    displayInfoModal("Takk for tipset!", "Danke", () => navigation.goBack());
+    displayInfoModal("Takk for tipset!", "Takk", () => navigation.goBack());
   };
 
   const handleInfoPressed = () => {
@@ -81,12 +81,7 @@ export const TipsUsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader
-        title="Tips oss"
-        backgroundColor={Color.LightGray}
-        onBackPressed={() => navigation.goBack()}
-        onInfoPress={handleInfoPressed}
-      />
+      <ScreenHeader title="Tips oss" backgroundColor={Color.LightGray} onBackPressed={() => navigation.goBack()} />
 
       <ScrollView
         style={styles.scrollView}

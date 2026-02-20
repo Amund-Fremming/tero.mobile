@@ -84,7 +84,7 @@ export const GameScreen = () => {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("En feil har skjedd med forbindelsen");
+      displayErrorModal("Koblingsfeil.");
       return;
     }
 
@@ -106,7 +106,7 @@ export const GameScreen = () => {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("En feil har skjedd med forbindelsen");
+      displayErrorModal("Koblingsfeil.");
       return;
     }
   };

@@ -28,7 +28,6 @@ export const JoinScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("JoinScreen focused, setting isHost to false");
       setGameEntryMode(GameEntryMode.Participant);
       setIsHost(false);
     }, []),
@@ -42,7 +41,7 @@ export const JoinScreen = () => {
     }
 
     if (userInput === "") {
-      displayInfoModal("Du har glemt å skrive inn en spill id i tekstfeltet", "Oisann");
+      displayInfoModal("Skriv inn spillkode.", "Mangler");
       return;
     }
 
@@ -51,7 +50,7 @@ export const JoinScreen = () => {
     const result = await gameService().joinInteractiveGame(pseudoId, gameKey);
     if (result.isError()) {
       console.warn(result.error);
-      displayInfoModal("Spillet har startet eller finnes ikke");
+      displayInfoModal("Spillet finnes ikke eller er startet.");
       return;
     }
 

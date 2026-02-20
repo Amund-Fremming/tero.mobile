@@ -130,7 +130,7 @@ export const SavedGamesScreen = () => {
         setGameEntryMode(GameEntryMode.Host);
         const qResult = await gameService().initiateStaticGame<QuizSession>(gameType, gameId, pseudoId);
         if (qResult.isError()) {
-          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          displayErrorModal("Kunne ikke hente spill.");
           return;
         }
 
@@ -142,11 +142,11 @@ export const SavedGamesScreen = () => {
         setGameEntryMode(GameEntryMode.Host);
         const rResult = await gameService().initiateSessionGame(pseudoId, gameType, gameId);
         if (rResult.isError()) {
-          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          displayErrorModal("Kunne ikke hente spill.");
           return;
         }
 
-        let roulette = rResult.value;
+        const roulette = rResult.value;
         setIsDraft(roulette.is_draft);
         setGameKey(roulette.key);
         setHubAddress(roulette.hub_address);
@@ -157,11 +157,11 @@ export const SavedGamesScreen = () => {
         setGameEntryMode(GameEntryMode.Host);
         const dResult = await gameService().initiateSessionGame(pseudoId, gameType, gameId);
         if (dResult.isError()) {
-          displayErrorModal("Klarte ikke hente spillet, prøv igjen senere");
+          displayErrorModal("Kunne ikke hente spill.");
           return;
         }
 
-        let duel = dResult.value;
+        const duel = dResult.value;
         setIsDraft(duel.is_draft);
         setGameKey(duel.key);
         setHubAddress(duel.hub_address);

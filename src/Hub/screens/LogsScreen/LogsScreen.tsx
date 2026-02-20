@@ -8,6 +8,7 @@ import { screenHeight, verticalScale } from "@/src/common/utils/dimensions";
 import Color from "@/src/common/constants/Color";
 import { useModalProvider } from "@/src/common/context/ModalProvider";
 import { SystemLog, LogCeverity, PagedResponse } from "@/src/common/constants/Types";
+import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
 
 export const LogsScreen = () => {
   const navigation: any = useNavigation();
@@ -34,7 +35,7 @@ export const LogsScreen = () => {
     console.warn("Getting:", category);
     const result = await commonService().getLogs(accessToken, category, page);
     if (result.isError()) {
-      displayErrorModal("Klarte ikke hente logger");
+      displayErrorModal("Kunne ikke hente logger.");
       return;
     }
 
@@ -79,7 +80,7 @@ export const LogsScreen = () => {
       case LogCeverity.Info:
         return Color.Green;
       case LogCeverity.Warning:
-        return Color.BuzzifyYellow;
+        return Color.BuzzifyOrange;
       case LogCeverity.Critical:
         return Color.Red;
       default:
@@ -104,7 +105,7 @@ export const LogsScreen = () => {
       scrollEnabled={true}
       style={{
         width: "100%",
-        backgroundColor: Color.LightGray,
+        backgroundColor: Color.White,
         height: screenHeight(),
       }}
       contentContainerStyle={{
@@ -113,11 +114,7 @@ export const LogsScreen = () => {
         paddingBottom: verticalScale(200),
       }}
     >
-      <View style={styles.leadContainer}>
-        <Pressable onPress={() => navigation.goBack()}>
-          <Text style={styles.header}>Logger</Text>
-        </Pressable>
-      </View>
+      <ScreenHeader title="Logs" onBackPressed={() => navigation.goBack()} backgroundColor={Color.LightGray} />
 
       <View style={styles.categoryBar}>
         <Pressable
@@ -152,17 +149,22 @@ export const LogsScreen = () => {
         </Pressable>
       </View>
 
+      <View style={styles.separator} />
+
       {logs.length === 0 && <Text style={styles.emptyText}>Ingen logger funnet</Text>}
 
       {logs.map((log) => (
-        <View key={log.id} style={styles.logCard}>
-          <Text style={[styles.logCategory, { color: getCategoryColor(log.ceverity) }]}>{log.ceverity}</Text>
-          <Text style={styles.logMessage}>{log.description}</Text>
-          <Text style={styles.logSource}>Action: {log.action}</Text>
-          <Text style={styles.logSource}>Subject: {log.subject_type}</Text>
-          {log.file_name && <Text style={styles.logSource}>Source: {log.file_name}</Text>}
-          <Text style={styles.logTimestamp}>{formatTimestamp(log.created_at)}</Text>
-        </View>
+        <>
+          <View key={log.id} style={styles.logCard}>
+            <Text style={[styles.logCategory, { color: getCategoryColor(log.ceverity) }]}>{log.ceverity}</Text>
+            <Text style={styles.logMessage}>{log.description}</Text>
+            <Text style={styles.logSource}>Action: {log.action}</Text>
+            <Text style={styles.logSource}>Subject: {log.subject_type}</Text>
+            {log.file_name && <Text style={styles.logSource}>Source: {log.file_name}</Text>}
+            <Text style={styles.logTimestamp}>{formatTimestamp(log.created_at)}</Text>
+          </View>
+          <View style={styles.separator} />
+        </>
       ))}
 
       {(hasPrev || hasNext) && (

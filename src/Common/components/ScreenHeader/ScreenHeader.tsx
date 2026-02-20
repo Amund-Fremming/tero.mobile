@@ -6,7 +6,7 @@ import styles from "./screenHeaderStyles";
 interface ScreenHeaderProps {
   title: string;
   onBackPressed: () => void;
-  onInfoPress: () => void;
+  onInfoPress?: () => void;
   infoIconOverride?: "?" | "user" | "log-out" | "x";
   showBorder?: boolean;
   backgroundColor?: string;
@@ -40,16 +40,18 @@ export const ScreenHeader = ({
           )}
         </View>
 
-        {infoIconOverride == "?" && (
-          <TouchableOpacity onPress={onInfoPress} style={styles.iconWrapper}>
-            <Text style={styles.textIcon}>?</Text>
-          </TouchableOpacity>
-        )}
-
-        {infoIconOverride != "?" && (
-          <TouchableOpacity onPress={onInfoPress} style={styles.iconWrapper}>
-            <Feather name={infoIconOverride} size={moderateScale(35)} />
-          </TouchableOpacity>
+        {onInfoPress ? (
+          infoIconOverride === "?" ? (
+            <TouchableOpacity onPress={onInfoPress} style={styles.iconWrapper}>
+              <Text style={styles.textIcon}>?</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={onInfoPress} style={styles.iconWrapper}>
+              <Feather name={infoIconOverride} size={moderateScale(35)} />
+            </TouchableOpacity>
+          )
+        ) : (
+          <View style={styles.iconPlaceholder} />
         )}
       </View>
     </View>

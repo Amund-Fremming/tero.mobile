@@ -17,9 +17,9 @@ import { useNavigation } from "expo-router";
 
 export const SpinGame = () => {
   const navigation: any = useNavigation();
-  const { gameEntryMode, hubAddress, gameKey, setIsHost, clearGlobalSessionValues, isDraft } =
+  const { gameEntryMode, hubAddress, gameKey, setIsHost, clearGlobalSessionValues, isDraft, gameType } =
     useGlobalSessionProvider();
-  const { screen, setScreen, setRoundText, setSelectedBatch, setGameState, setIterations, setPlayers } =
+  const { screen, setScreen, setRoundText, setSelectedBatch, setGameState, setIterations, setPlayers, setThemeColors } =
     useSpinSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
@@ -37,9 +37,10 @@ export const SpinGame = () => {
   };
 
   useEffect(() => {
+    setThemeColors(gameType);
+
     const initScreen = getInitialScreen();
     setScreen(initScreen);
-    console.log("INIT SCREEN ", initScreen);
 
     if (initScreen === SpinSessionScreen.Create) {
       return;
@@ -56,7 +57,7 @@ export const SpinGame = () => {
     const result = await connect(address);
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("En feil har skjedd, forsøk å gå ut og inn av spillet");
+      displayErrorModal("Koblingsfeil. Bli med på nytt.");
       return;
     }
 
@@ -65,7 +66,7 @@ export const SpinGame = () => {
     const groupResult = await invokeFunction("ConnectToGroup", key, pseudoId, false);
     if (groupResult.isError()) {
       console.error(groupResult.error);
-      displayErrorModal("Klarte ikke koble til, forsøk å lukke appen og start på nytt");
+      displayErrorModal("Kunne ikke koble til.");
       return;
     }
 
@@ -109,7 +110,7 @@ export const SpinGame = () => {
       isHandlingErrorRef.current = true;
 
       await disconnect();
-      displayInfoModal(message, "Spillet ble avsluttet", async () => {
+      displayInfoModal(message, "Avsluttet", async () => {
         clearSpinSessionValues();
         clearGlobalSessionValues();
         resetToHomeScreen(navigation);
@@ -143,7 +144,10 @@ export const SpinGame = () => {
     }
   };
 
-  switch (screen) {
+  const resolvedScreen =
+    screen === SpinSessionScreen.Create && gameEntryMode !== GameEntryMode.Creator ? getInitialScreen() : screen;
+
+  switch (resolvedScreen) {
     case SpinSessionScreen.Create:
       return (
         <CreateScreen onGameCreated={(address, key) => initializeHub(address, key, SpinSessionScreen.ActiveLobby)} />

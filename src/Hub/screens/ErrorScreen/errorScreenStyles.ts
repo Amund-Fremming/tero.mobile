@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
 
   subHeader: {
     fontSize: moderateScale(28),
-    color: Color.Purple,
+    color: Color.BuzzifyLavender,
     fontWeight: "700",
     fontFamily: "PassionOne-Regular",
     marginBottom: verticalScale(25),

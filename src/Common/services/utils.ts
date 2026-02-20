@@ -1,12 +1,11 @@
 export function getHeaders(pseudo_id: string, token: string | null): Record<string, string> {
-  let headers: Record<string, string> = {};
   if (!token) {
-    headers = {
+    return {
       "X-Guest-Authentication": pseudo_id,
     };
-  } else {
-    headers["Authorization"] = `Bearer ${token}`;
   }
 
-  return headers;
+  return {
+    Authorization: `Bearer ${token}`,
+  };
 }

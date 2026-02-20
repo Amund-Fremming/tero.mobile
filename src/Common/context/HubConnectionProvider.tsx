@@ -18,7 +18,7 @@ interface IHubConnectionContext {
 const defaultContextValue: IHubConnectionContext = {
   connect: async (_hubAddress: string) => err(""),
   disconnect: async () => err(""),
-  debugDisconnect: async () => { },
+  debugDisconnect: async () => {},
   setListener: (_channel: string, _fn: (item: any) => void) => err(""),
   invokeFunction: async (_functionName: string, ..._params: any[]) => err(""),
 };
@@ -100,12 +100,12 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
 
     reattachListeners();
 
-    let invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId, true);
+    const invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId, true);
     if (invokeResult.isError()) {
       console.error("Failed to invoke reconnect function:", invokeResult.error);
       try {
         await connectionRef.current?.stop();
-      } catch (_) { }
+      } catch (_) {}
       clearValues();
       closeLoadingModal();
       await new Promise((resolve) => setTimeout(resolve, 300));
@@ -135,7 +135,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
         continue;
       }
 
-      let connection = result.value;
+      const connection = result.value;
       connectionRef.current = connection;
 
       console.info("Reconnected successfully");
@@ -246,7 +246,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
         return err("Ingen tilkobling opprettet.");
       }
 
-      let state: any = await connectionRef.current?.invoke(functionName, ...params);
+      const state: any = await connectionRef.current?.invoke(functionName, ...params);
       return ok(state);
     } catch (error) {
       console.error("invokeFunction", error);

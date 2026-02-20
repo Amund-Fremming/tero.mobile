@@ -58,7 +58,7 @@ export const GameScreen = () => {
     const result = await invokeFunction("StartGame", gameKey, true); // isDraft = true
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Klarte ikke starte spill, prøv igjen senere");
+      displayErrorModal("Kunne ikke starte spillet.");
       return;
     }
   };
@@ -69,7 +69,7 @@ export const GameScreen = () => {
       if (exitTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("En feil har skjedd med forbindelsen");
+      displayErrorModal("Koblingsfeil.");
       return;
     }
   };
@@ -84,7 +84,7 @@ export const GameScreen = () => {
       if (exitTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("En feil har skjedd med forbindelsen");
+      displayErrorModal("Koblingsfeil.");
       return;
     }
   };

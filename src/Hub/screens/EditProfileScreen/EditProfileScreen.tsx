@@ -84,7 +84,7 @@ export const EditProfileScreen = () => {
       return;
     }
 
-    let result = await userService().getUser(accessToken);
+    const result = await userService().getUser(accessToken);
     if (result.isError()) {
       return;
     }
@@ -107,7 +107,7 @@ export const EditProfileScreen = () => {
 
     const result = await userService().patchUser(accessToken, userData?.id, patchRequest);
     if (result.isError()) {
-      displayErrorModal("Noe gikk galt. Sjekk at du har fylt inn gyldig data");
+      displayErrorModal("Ugyldige felt.");
       return;
     }
 
@@ -257,9 +257,6 @@ export const EditProfileScreen = () => {
       </ScrollView>
 
       <View style={styles.buttonWrapper}>
-        <TouchableOpacity style={styles.cancelButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.cancelButtonText}>Avbryt</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={handlePatchUser} style={styles.saveButton}>
           <Text style={styles.saveButtonText}>Lagre</Text>
         </TouchableOpacity>

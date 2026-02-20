@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const storedPseudoId = await SecureStore.getItemAsync("pseudo_id");
     await rotateTokens();
 
-    let result = await userService().ensurePseudoId(storedPseudoId);
+    const result = await userService().ensurePseudoId(storedPseudoId);
     if (result.isError()) {
       console.error(result.error);
       return err("Failed to get pseudo id");
@@ -151,11 +151,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           console.info("User logged inn successfully");
         } catch (error) {
           console.error("Token exchange failed:", error);
-          displayErrorModal("Feil ved tokenutveksling");
+          displayErrorModal("Innlogging feilet.");
         }
       } else if (response?.type === "error") {
         console.error(response.error);
-        displayErrorModal("Det skjedde en feil ved login");
+        displayErrorModal("Innlogging feilet.");
         return;
       }
     };
@@ -170,13 +170,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     if (!request) {
-      displayErrorModal("Køen er full, vent litt med å forsøke igjen");
+      displayErrorModal("Prøv igjen om litt.");
       return;
     }
 
     promptAsync().catch((e) => {
       console.error(e);
-      displayErrorModal("Det skjedde en feil ved login");
+      displayErrorModal("Innlogging feilet.");
     });
   };
 
@@ -197,7 +197,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
 
       const logoutUrl = `https://${Auth0Config.domain}/v2/logout?${params.toString()}`;
-      let response = await WebBrowser.openAuthSessionAsync(logoutUrl, returnTo);
+      const response = await WebBrowser.openAuthSessionAsync(logoutUrl, returnTo);
       if (response.type === "cancel" || response.type === "dismiss") {
         console.warn("Logout was cancelled by user");
         return false;
@@ -266,7 +266,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setAccessToken(tokens.access_token);
       console.log("Tokens refreshed successfully");
     } catch (error) {
-      displayErrorModal("En uventet feil har skjedd, logger deg ut.");
+      displayErrorModal("Uventet feil. Logger ut.");
       setAccessToken(null);
       await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
       console.error(error);

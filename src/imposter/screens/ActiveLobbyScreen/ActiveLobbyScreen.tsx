@@ -38,7 +38,7 @@ export const ActiveLobbyScreen = () => {
     const result = await connect(hubAddress);
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("En feil har skjedd, forsøk å gå ut og inn av spillet");
+      displayErrorModal("Koblingsfeil. Bli med på nytt.");
       return;
     }
 
@@ -65,21 +65,21 @@ export const ActiveLobbyScreen = () => {
     const groupResult = await invokeFunction("ConnectToGroup", gameKey, pseudoId);
     if (groupResult.isError()) {
       console.error(groupResult.error);
-      displayErrorModal("Klarte ikke koble til, forsøk å lukke appen og start på nytt");
+      displayErrorModal("Kunne ikke koble til.");
       return;
     }
   };
 
   const handleAddRound = async () => {
     if (round === "") {
-      displayInfoModal("Du har glemt å skrive inn en runde");
+      displayInfoModal("Skriv inn en runde.");
       return;
     }
 
     const result = await invokeFunction("AddRound", gameKey, round);
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Klarte ikke legge til runde");
+      displayErrorModal("Kunne ikke legge til runde.");
       return;
     }
 
@@ -93,14 +93,14 @@ export const ActiveLobbyScreen = () => {
 
     if (!pseudoId) {
       console.error("No pseudo id present");
-      displayErrorModal("En feil har skjedd");
+      displayErrorModal("Noe gikk galt.");
       return;
     }
 
-    let minPlayers = gameType == GameType.Roulette ? 2 : 3;
+    const minPlayers = gameType == GameType.Roulette ? 2 : 3;
 
     if (players < minPlayers) {
-      displayInfoModal(`Minimum ${minPlayers} spillere for å starte, du har: ${players}`);
+      displayInfoModal(`Minst ${minPlayers} spillere. Nå: ${players}.`);
       return;
     }
 
@@ -109,7 +109,7 @@ export const ActiveLobbyScreen = () => {
 
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Klarte ikke starte spill");
+      displayErrorModal("Kunne ikke starte spillet.");
       setStarted(false);
       return;
     }

@@ -64,7 +64,7 @@ export const LobbyScreen = () => {
     console.debug("Connecting to group with key:", key);
     const connectResult = await invokeFunction("ConnectToGroup", key);
     if (connectResult.isError()) {
-      displayErrorModal("En feil har skjedd, forsøk å gå ut og inn av spillet");
+      displayErrorModal("Koblingsfeil. Bli med på nytt.");
       await disconnect();
       return;
     }
@@ -76,7 +76,7 @@ export const LobbyScreen = () => {
     }
 
     if (question === "") {
-      displayInfoModal("Du har glemt å skrive inn ett spørsmål");
+      displayInfoModal("Skriv inn et spørsmål.");
       return;
     }
 
@@ -85,7 +85,7 @@ export const LobbyScreen = () => {
 
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Klarte ikke legge til spørsmål");
+      displayErrorModal("Kunne ikke legge til spørsmål.");
       setIsAddingQuestion(false);
       return;
     }
@@ -102,17 +102,17 @@ export const LobbyScreen = () => {
 
     if (iterations < 1) {
       // TODO set to 10!
-      displayInfoModal("Minimum 10 spørsmål for å starte spillet");
+      displayInfoModal("Minst 10 spørsmål.");
       return;
     }
 
     setStarted(true);
 
     console.log("🎮 STARTING GAME: Calling StartGame for key:", gameKey);
-    const result = await invokeFunction("StartGame", gameKey, true); // isDraft = true
+    const result = await invokeFunction("StartGame", gameKey);
 
     if (result.isError()) {
-      displayErrorModal("Klarte ikke starte spill");
+      displayErrorModal("Kunne ikke starte spillet.");
       setStarted(false);
       return;
     }

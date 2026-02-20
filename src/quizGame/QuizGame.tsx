@@ -14,7 +14,6 @@ export const QuizGame = () => {
 
   useEffect(() => {
     const initScreen = getInitialScreen();
-    console.debug("QuizGame.tsx - initial screen:", initScreen);
     setScreen(initScreen);
   }, []);
 

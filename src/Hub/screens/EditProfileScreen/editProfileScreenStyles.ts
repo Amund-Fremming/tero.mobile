@@ -97,12 +97,11 @@ export const styles = StyleSheet.create({
 
   buttonWrapper: {
     position: "absolute",
-    bottom: verticalScale(20),
+    bottom: verticalScale(40),
     width: "100%",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: verticalScale(15),
     paddingHorizontal: "5%",
   },
 

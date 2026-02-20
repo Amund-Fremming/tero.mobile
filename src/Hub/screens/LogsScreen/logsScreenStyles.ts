@@ -11,6 +11,13 @@ export const styles = StyleSheet.create({
     gap: verticalScale(20),
   },
 
+  separator: {
+    backgroundColor: Color.LightGray,
+    height: verticalScale(5),
+    width: "90%",
+    borderRadius: moderateScale(20),
+  },
+
   leadContainer: {
     paddingTop: verticalScale(50),
     width: "90%",
@@ -65,7 +72,6 @@ export const styles = StyleSheet.create({
   },
 
   logCard: {
-    borderRadius: moderateScale(10),
     backgroundColor: Color.White,
     width: "90%",
     paddingLeft: horizontalScale(20),

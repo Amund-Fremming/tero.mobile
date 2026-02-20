@@ -9,7 +9,7 @@ interface ISpinSessionContext {
   setScreen: React.Dispatch<React.SetStateAction<SpinSessionScreen>>;
   themeColor: string;
   secondaryThemeColor: string;
-  featherIcon: "refresh-cw" | "rotate-cw";
+  featherIcon: "sword-cross" | "arrows-spin";
   setThemeColors: (gameType: GameType) => void;
   roundText: string;
   setRoundText: React.Dispatch<React.SetStateAction<string>>;
@@ -29,7 +29,7 @@ const defaultContextValue: ISpinSessionContext = {
   setScreen: () => {},
   themeColor: Color.BeigeLight,
   secondaryThemeColor: Color.Beige,
-  featherIcon: "refresh-cw",
+  featherIcon: "sword-cross",
   setThemeColors: () => {},
   roundText: "",
   setRoundText: () => {},
@@ -55,7 +55,7 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
   const [screen, setScreen] = useState<SpinSessionScreen>(SpinSessionScreen.Create);
   const [themeColor, setThemeColor] = useState<string>(Color.BeigeLight);
   const [secondaryThemeColor, setSecondaryThemeColor] = useState<string>(Color.Beige);
-  const [featherIcon, setFeatherIcon] = useState<"refresh-cw" | "rotate-cw">("refresh-cw");
+  const [featherIcon, setFeatherIcon] = useState<"sword-cross" | "arrows-spin">("sword-cross");
   const [roundText, setRoundText] = useState<string>("");
   const [selectedBatch, setSelectedBatch] = useState<string[]>([]);
   const [gameState, setGameState] = useState<SpinGameState>(SpinGameState.Initialized);
@@ -67,12 +67,12 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
       case GameType.Duel:
         setSecondaryThemeColor(Color.BeigeLight);
         setThemeColor(Color.Beige);
-        setFeatherIcon("refresh-cw");
+        setFeatherIcon("sword-cross");
         break;
       case GameType.Roulette:
         setSecondaryThemeColor(Color.SkyBlueLight);
         setThemeColor(Color.SkyBlue);
-        setFeatherIcon("rotate-cw");
+        setFeatherIcon("arrows-spin");
         break;
     }
   };

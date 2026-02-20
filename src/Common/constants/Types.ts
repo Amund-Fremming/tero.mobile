@@ -140,6 +140,18 @@ export enum GameCategory {
   InnerCircle = "InnerCircle",
 }
 
+export interface ResetPasswordRequest {
+  email: string;
+}
+
+export interface GameTip {
+  id: string;
+  header: string;
+  mobile_phone: string;
+  description: string;
+  created_at: string;
+}
+
 export interface InteractiveGameResponse {
   key: string;
   hub_address: string;
