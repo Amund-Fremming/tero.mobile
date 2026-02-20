@@ -5,7 +5,11 @@ import Hub from "@/src/hub/Hub";
 import AuthProvider from "../src/common/context/AuthProvider";
 import ServiceProvider from "@/src/common/context/ServiceProvider";
 import { View, StatusBar, Dimensions } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
+import { useEffect } from "react";
+
+SplashScreen.preventAutoHideAsync().catch(() => {});
 import QuizSessionProvider from "@/src/quizGame/context/QuizGameProvider";
 import SpinSessionProvider from "@/src/spinGame/context/SpinGameProvider";
 import ImposterSessionProvider from "@/src/imposter/context/ImposterSessionProvider";
@@ -45,6 +49,12 @@ const FontLoader = ({ children }: { children: React.ReactNode }) => {
     "Sintony-Bold": require("../src/common/assets/fonts/Sintony-Bold.ttf"),
     "ArchivoBlack-Regular": require("../src/common/assets/fonts/ArchivoBlack-Regular.ttf"),
   });
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync().catch(() => {});
+    }
+  }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
