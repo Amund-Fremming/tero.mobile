@@ -31,6 +31,10 @@ export const GameScreen = () => {
     resetToHomeScreen(navigation);
   };
 
+  const handleInfoPressed = () => {
+    //
+  };
+
   return (
     <View style={styles.container}>
       <ScreenHeader title="Imposter" onBackPressed={handleLeaveGame} onInfoPress={handleInfoPressed} />

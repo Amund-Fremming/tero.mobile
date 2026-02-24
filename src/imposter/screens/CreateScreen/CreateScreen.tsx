@@ -82,15 +82,15 @@ export const CreateScreen = ({
   return (
     <SimpleInitScreen
       createScreen={true}
-      themeColor={Color.LightGreen}
-      secondaryThemeColor={Color.LighterGreen}
+      themeColor={Color.BuzzifyLavender}
+      secondaryThemeColor={Color.BuzzifyLavenderLight}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"
       topButtonText={createRequest.category}
       topButtonOnChange={handleSetCategory}
       topButtonOnPress={() => {}}
-      bottomButtonText="Opprett"
+      bottomButtonText="Neste"
       bottomButtonCallback={handleCreateGame}
       featherIcon={"users"}
       iterations={"?"}

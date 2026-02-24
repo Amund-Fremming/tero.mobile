@@ -66,7 +66,7 @@ export const GameListScreen = () => {
   const handleHeaderBg = () => {
     switch (gameType) {
       case GameType.Imposter:
-        setHeaderBg(Color.LightGreen);
+        setHeaderBg(Color.BuzzifyLavender);
         break;
       case GameType.Duel:
         setHeaderBg(Color.BeigeLight);
@@ -75,7 +75,7 @@ export const GameListScreen = () => {
         setHeaderBg(Color.SkyBlueLight);
         break;
       case GameType.Quiz:
-        setHeaderBg(Color.BuzzifyLavender);
+        setHeaderBg(Color.LightGreen);
         break;
       default:
         setHeaderBg(Color.LightGray);

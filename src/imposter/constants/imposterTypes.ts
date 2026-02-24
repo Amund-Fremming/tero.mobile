@@ -1,13 +1,15 @@
 export const enum ImposterSessionScreen {
-  Lobby = "Lobby",
+  ActiveLobby = "ActiveLobby",
   Create = "Create",
   Game = "Game",
   Started = "Started",
+  AddPlayers = "Players",
 }
 
-export enum ImposterGameState {
-  Initialized = "Initialized",
-  Created = "Created",
-  Started = "Started",
-  Finished = "Finished",
+export interface ImposterSession {
+  gameId: string;
+  hostId: string;
+  currentIteration: number;
+  rounds: Array<string>;
+  players: Set<string>;
 }

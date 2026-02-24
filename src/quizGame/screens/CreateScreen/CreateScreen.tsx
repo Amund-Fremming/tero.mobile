@@ -82,8 +82,8 @@ export const CreateScreen = () => {
   return (
     <SimpleInitScreen
       createScreen={true}
-      themeColor={Color.BuzzifyLavender}
-      secondaryThemeColor={Color.BuzzifyLavenderLight}
+      themeColor={Color.LighterGreen}
+      secondaryThemeColor={Color.LighterGreen}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"

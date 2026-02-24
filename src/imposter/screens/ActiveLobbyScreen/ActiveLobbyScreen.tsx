@@ -48,7 +48,7 @@ export const ActiveLobbyScreen = () => {
     }
 
     setStarted(true);
-    const result = await invokeFunction("StartGame", gameKey, true); // isDraft = true
+    const result = await invokeFunction("StartGame", gameKey);
 
     if (result.isError()) {
       console.error(result.error);
@@ -75,8 +75,8 @@ export const ActiveLobbyScreen = () => {
   return (
     <SimpleInitScreen
       createScreen={false}
-      themeColor={Color.LightGreen}
-      secondaryThemeColor={Color.LighterGreen}
+      themeColor={Color.BuzzifyLavender}
+      secondaryThemeColor={Color.BuzzifyLavenderLight}
       onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"

@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(80),
     alignItems: "center",
     gap: 10,
-    backgroundColor: Color.BuzzifyLavender,
+    backgroundColor: Color.LighterGreen,
     justifyContent: "space-between",
   },
 
@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
     width: "86%",
     borderRadius: moderateScale(10),
     height: verticalScale(69),
-    backgroundColor: Color.BuzzifyLavenderLight,
+    backgroundColor: Color.LighterGreen,
   },
 });
 

@@ -128,8 +128,8 @@ export const LobbyScreen = () => {
   return (
     <SimpleInitScreen
       createScreen={false}
-      themeColor={Color.BuzzifyLavender}
-      secondaryThemeColor={Color.BuzzifyLavenderLight}
+      themeColor={Color.LighterGreen}
+      secondaryThemeColor={Color.LighterGreen}
       onBackPressed={() => {
         disconnect();
         resetToHomeScreen(navigation);

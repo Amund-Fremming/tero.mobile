@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
 
   errorContainer: {
     backgroundColor: Color.White,
-    borderColor: Color.Red,
+    borderColor: Color.Gray,
   },
 
   header: {
@@ -51,7 +51,7 @@ export const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: Color.BuzzifyLavender,
+    backgroundColor: Color.Gray,
     borderRadius: moderateScale(10),
     marginTop: verticalScale(12),
     width: "80%",
