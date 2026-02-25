@@ -12,7 +12,7 @@ import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import Color from "@/src/common/constants/Color";
 import { resetToHomeScreen } from "@/src/common/utils/navigation";
 
-export const ActiveLobbyScreen = () => {
+export const LobbyScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { connect, setListener, invokeFunction, disconnect } = useHubConnectionProvider();
@@ -62,14 +62,18 @@ export const ActiveLobbyScreen = () => {
   };
 
   const handleBackPressed = async () => {
-    await disconnect();
-    clearGlobalSessionValues();
-    clearImposterSessionValues();
-    resetToHomeScreen(navigation);
+    setScreen(ImposterSessionScreen.AddPlayers);
+    // await disconnect();
+    // clearGlobalSessionValues();
+    // clearImposterSessionValues();
+    // resetToHomeScreen(navigation);
   };
 
   const handleInfoPressed = () => {
-    console.log("Info pressed");
+    displayInfoModal(
+      "Del rom navnet med en venn. Legg til ord eller kategorier som skal brukes per runde.",
+      "Spillord!",
+    );
   };
 
   return (
@@ -87,11 +91,11 @@ export const ActiveLobbyScreen = () => {
       bottomButtonCallback={handleStartGame}
       featherIcon={"users"}
       iterations={iterations}
-      inputPlaceholder="Spillnavn..."
+      inputPlaceholder="Runde ord..."
       inputValue={round}
       setInput={handleSetRound}
     />
   );
 };
 
-export default ActiveLobbyScreen;
+export default LobbyScreen;

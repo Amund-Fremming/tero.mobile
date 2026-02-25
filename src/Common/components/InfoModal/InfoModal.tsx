@@ -13,7 +13,7 @@ export const InfoModal = ({ isError, header, message, onCloseFunc }: InfoModalPr
   return (
     <View style={styles.overlay}>
       <View style={[styles.genericContainer, isError ? styles.errorContainer : styles.messageContainer]}>
-        <Text style={{ ...styles.header, color: isError ? Color.Red : Color.Beige }}>{header}</Text>
+        <Text style={{ ...styles.header, color: isError ? Color.Red : Color.BeigeLight }}>{header}</Text>
         <Text style={styles.message}>{message}</Text>
         <Pressable onPress={onCloseFunc} style={styles.button}>
           <Text style={styles.buttonText}>Lukk</Text>

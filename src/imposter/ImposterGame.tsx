@@ -5,7 +5,7 @@ import { GameEntryMode } from "../common/constants/Types";
 import { useImposterSessionProvider } from "./context/ImposterSessionProvider";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
-import ActiveLobbyScreen from "./screens/ActiveLobbyScreen/ActiveLobbyScreen";
+import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
 import { useModalProvider } from "../common/context/ModalProvider";
 import { resetToHomeScreen } from "../common/utils/navigation";
 import { useHubConnectionProvider } from "../common/context/HubConnectionProvider";
@@ -121,13 +121,13 @@ export const ImposterGame = () => {
     case ImposterSessionScreen.Game:
       return <GameScreen />;
     case ImposterSessionScreen.ActiveLobby:
-      return <ActiveLobbyScreen />;
+      return <LobbyScreen />;
     case ImposterSessionScreen.Started:
       return <StartedScreen />;
     case ImposterSessionScreen.AddPlayers:
       return <AddPlayersScreen />;
     default:
-      return <ActiveLobbyScreen />;
+      return <LobbyScreen />;
   }
 };
 

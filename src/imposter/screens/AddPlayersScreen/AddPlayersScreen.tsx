@@ -3,7 +3,7 @@ import styles from "./addPlayersScreenStyles";
 import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
 import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/common/utils/navigation";
-import React, { useState } from "react";
+import React from "react";
 import Color from "@/src/common/constants/Color";
 import { Feather } from "@expo/vector-icons";
 import { useModalProvider } from "@/src/common/context/ModalProvider";
@@ -15,20 +15,19 @@ import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProv
 export const AddPlayersScreen = () => {
   const navigation: any = useNavigation();
 
-  const { displayErrorModal } = useModalProvider();
+  const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { invokeFunction } = useHubConnectionProvider();
   const { gameKey } = useGlobalSessionProvider();
-  const { setScreen } = useImposterSessionProvider();
+  const { setScreen, players, setPlayers } = useImposterSessionProvider();
 
-  const [players, setPlayers] = useState<string[]>(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = React.useState(false);
 
   const handleGoHome = () => {
     resetToHomeScreen(navigation);
   };
 
   const handleInfoPressed = () => {
-    //
+    displayInfoModal("Legg til de som skal være med. Trykk på kortene for å endre navn.", "Hvem er med?");
   };
 
   const handleNextPressed = async () => {
