@@ -11,12 +11,13 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { MaterialIcons } from "@expo/vector-icons";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import PlayerCard from "../../components/PlayerCard/PlayerCard";
+import ScreenHeaderChildren from "@/src/core/components/ScreenHeader/ScreenHeaderChildren";
 
 export const RolesScreen = () => {
   const navigation: any = useNavigation();
 
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearImposterSessionValues, session, players, setScreen, imposterName, newRound, roundWord } =
+  const { clearImposterSessionValues, players, setScreen, imposterName, newRound, roundWord } =
     useImposterSessionProvider();
   const { displayActionModal, displayInfoModal } = useModalProvider();
 
@@ -55,12 +56,12 @@ export const RolesScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader
-        miniHeader="Finn din"
-        title="rolle"
-        onBackPressed={handleLeaveGame}
-        onInfoPress={handleInfoPressed}
-      />
+      <ScreenHeaderChildren onBackPressed={handleLeaveGame} onInfoPress={handleInfoPressed}>
+        <View style={styles.headerInline}>
+          <Text style={styles.toastHeader}>ER DU</Text>
+          <Text style={styles.headerSecondScreen}>Imposter?</Text>
+        </View>
+      </ScreenHeaderChildren>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}

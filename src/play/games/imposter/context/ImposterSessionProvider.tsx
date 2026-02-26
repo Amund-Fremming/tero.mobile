@@ -7,8 +7,8 @@ interface IImposterSessionContext {
   setScreen: React.Dispatch<React.SetStateAction<ImposterSessionScreen>>;
   iterations: number;
   setIterations: React.Dispatch<React.SetStateAction<number>>;
-  session: ImposterSession | undefined;
-  setSession: React.Dispatch<React.SetStateAction<ImposterSession | undefined>>;
+  imposterSession: ImposterSession | undefined;
+  setImposterSession: React.Dispatch<React.SetStateAction<ImposterSession | undefined>>;
   players: string[];
   setPlayers: React.Dispatch<React.SetStateAction<string[]>>;
   imposterName: string;
@@ -22,8 +22,8 @@ const defaultContextValue: IImposterSessionContext = {
   setScreen: () => {},
   iterations: 0,
   setIterations: () => {},
-  session: undefined,
-  setSession: () => {},
+  imposterSession: undefined,
+  setImposterSession: () => {},
   players: ["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"],
   setPlayers: () => {},
   imposterName: "",
@@ -42,23 +42,24 @@ interface SpinGameProviderProps {
 export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => {
   const [screen, setScreen] = useState<ImposterSessionScreen>(ImposterSessionScreen.Create);
   const [iterations, setIterations] = useState<number>(0);
-  const [session, setSession] = useState<ImposterSession | undefined>(undefined);
+  const [imposterSession, setImposterSession] = useState<ImposterSession | undefined>(undefined);
   const [players, setPlayers] = useState<string[]>(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
   const [imposterName, setImposterName] = useState<string>("");
   const [roundWord, setRoundWord] = useState<string>("");
 
   const newRound = () => {
-    if (!session || !session.players || !session.rounds || session.rounds.length === 0) return;
-    const playersArray = Array.from(session.players);
+    if (!imposterSession || !imposterSession.players || !imposterSession.rounds || imposterSession.rounds.length === 0)
+      return;
+    const playersArray = Array.from(imposterSession.players);
     const randomPlayerIndex = Math.floor(Math.random() * playersArray.length);
     setImposterName(playersArray[randomPlayerIndex]);
-    const randomRoundIndex = Math.floor(Math.random() * session.rounds.length);
-    const picked = session.rounds[randomRoundIndex];
+    const randomRoundIndex = Math.floor(Math.random() * imposterSession.rounds.length);
+    const picked = imposterSession.rounds[randomRoundIndex];
     setRoundWord(picked);
-    setSession({
-      ...session,
-      currentIteration: session.currentIteration + 1,
-      rounds: session.rounds.filter((_, i) => i !== randomRoundIndex),
+    setImposterSession({
+      ...imposterSession,
+      currentIteration: imposterSession.currentIteration + 1,
+      rounds: imposterSession.rounds.filter((_, i) => i !== randomRoundIndex),
     });
   };
 
@@ -76,8 +77,8 @@ export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => 
     setScreen,
     iterations,
     setIterations,
-    session,
-    setSession,
+    imposterSession,
+    setImposterSession,
     players,
     setPlayers,
     imposterName,

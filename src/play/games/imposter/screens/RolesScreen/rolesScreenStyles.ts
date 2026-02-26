@@ -11,6 +11,24 @@ export const styles = StyleSheet.create({
     backgroundColor: Color.BuzzifyLavender,
   },
 
+  headerInline: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  toastHeader: {
+    marginBottom: verticalScale(-5),
+    fontSize: moderateScale(25),
+    fontFamily: Font.PassionOneRegular,
+  },
+
+  headerSecondScreen: {
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(45),
+    fontWeight: 600,
+    opacity: 0.8,
+  },
+
   helperWrapper: {
     justifyContent: "center",
     alignItems: "center",

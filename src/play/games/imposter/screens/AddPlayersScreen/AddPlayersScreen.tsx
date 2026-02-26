@@ -11,14 +11,16 @@ import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvid
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { GameEntryMode } from "@/src/core/constants/Types";
 
 export const AddPlayersScreen = () => {
   const navigation: any = useNavigation();
 
   const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
   const { invokeFunction } = useHubConnectionProvider();
-  const { gameKey, clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { setScreen, players, setPlayers, clearImposterSessionValues } = useImposterSessionProvider();
+  const { gameKey, clearGlobalSessionValues, gameEntryMode } = useGlobalSessionProvider();
+  const { setScreen, players, setPlayers, clearImposterSessionValues, setImposterSession } =
+    useImposterSessionProvider();
 
   const [editMode, setEditMode] = React.useState(false);
 
@@ -43,6 +45,11 @@ export const AddPlayersScreen = () => {
       return;
     }
 
+    if (players.length < 3) {
+      displayInfoModal("Må ha minst 3 spillere for å starte.");
+      return;
+    }
+
     const defaultNamePrefixCount = players.filter((name) => name.startsWith("Spiller")).length;
     if (defaultNamePrefixCount === players.length) {
       displayActionModal(
@@ -53,7 +60,22 @@ export const AddPlayersScreen = () => {
       return;
     }
 
-    addPlayersToServer();
+    if (gameEntryMode === GameEntryMode.Creator) {
+      addPlayersToServer();
+      return;
+    }
+
+    if (gameEntryMode === GameEntryMode.Host) {
+      setImposterSession((prev) => {
+        if (!prev) return prev;
+
+        return {
+          ...prev,
+          players: new Set(players),
+        };
+      });
+      return;
+    }
   };
 
   const addPlayersToServer = async () => {
@@ -101,6 +123,11 @@ export const AddPlayersScreen = () => {
   };
 
   const handleDeletePlayer = (index: number) => {
+    if (players.length <= 3) {
+      displayInfoModal("Må ha minst 3 spillere for å spille");
+      return;
+    }
+
     setPlayers(players.filter((_, i) => i !== index));
   };
 

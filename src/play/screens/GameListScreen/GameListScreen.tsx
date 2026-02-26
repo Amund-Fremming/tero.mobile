@@ -23,6 +23,8 @@ import { QuizSession } from "@/src/play/games/quizGame/constants/quizTypes";
 import { moderateScale } from "../../../core/utils/dimensions";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
 import React from "react";
+import { ImposterSession } from "../../games/imposter/constants/imposterTypes";
+import { useImposterSessionProvider } from "../../games/imposter/context/ImposterSessionProvider";
 
 const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.Girls]: "Jentene",
@@ -41,6 +43,7 @@ const CATEGORY_ICONS: Record<GameCategory, any> = {
 export const GameListScreen = () => {
   const navigation: any = useNavigation();
 
+  const { setImposterSession } = useImposterSessionProvider();
   const { setQuizSession } = useQuizSessionProvider();
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { displayErrorModal, displayActionModal } = useModalProvider();
@@ -181,6 +184,19 @@ export const GameListScreen = () => {
         setGameKey(duel.key);
         setHubAddress(duel.hub_address);
         navigation.navigate(Screen.Spin);
+        break;
+      case GameType.Imposter:
+        setIsHost(true);
+        setGameEntryMode(GameEntryMode.Host);
+        const iResult = await gameService().initiateStaticGame<ImposterSession>(gameType, gameId, pseudoId);
+        if (iResult.isError()) {
+          displayErrorModal("Kunne ikke hente spill.");
+          return;
+        }
+
+        const imposter = iResult.value;
+        setImposterSession(imposter);
+        navigation.navigate(Screen.Imposter);
         break;
       default:
         console.error("Oh yes this is bad. Game had unsupported type");

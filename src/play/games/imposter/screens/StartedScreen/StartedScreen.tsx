@@ -1,7 +1,6 @@
 import { View, Text } from "react-native";
 import styles from "./startedScreenStyles";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import Color from "@/src/core/constants/Color";
 import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
@@ -10,20 +9,13 @@ import { useImposterSessionProvider } from "../../context/ImposterSessionProvide
 
 export const StartedScreen = () => {
   const navigation: any = useNavigation();
-  const { displayActionModal } = useModalProvider();
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
   const { clearImposterSessionValues } = useImposterSessionProvider();
 
   const handleGoHome = () => {
-    displayActionModal(
-      "Er du sikker på at du vil forlate spillet?",
-      () => {
-        clearGlobalSessionValues();
-        clearImposterSessionValues();
-        resetToHomeScreen(navigation);
-      },
-      () => {},
-    );
+    clearGlobalSessionValues();
+    clearImposterSessionValues();
+    resetToHomeScreen(navigation);
   };
 
   return (

@@ -13,13 +13,13 @@ import * as Haptics from "expo-haptics";
 export const RevealScreen = () => {
   const navigation: any = useNavigation();
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearImposterSessionValues, imposterName, session, setScreen } = useImposterSessionProvider();
+  const { clearImposterSessionValues, imposterName, imposterSession, setScreen } = useImposterSessionProvider();
   const { displayActionModal, displayInfoModal } = useModalProvider();
 
   const [revealed, setRevealed] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(false);
 
-  const hasMoreRounds = (session?.rounds?.length ?? 0) > 0;
+  const hasMoreRounds = (imposterSession?.rounds?.length ?? 0) > 0;
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const swayAnim = useRef(new Animated.Value(0)).current;

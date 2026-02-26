@@ -18,7 +18,8 @@ import { GameEntryMode } from "@/src/core/constants/Types";
 
 export const ImposterGame = () => {
   const navigation: any = useNavigation();
-  const { screen, setScreen, clearImposterSessionValues, setIterations, setSession } = useImposterSessionProvider();
+  const { screen, setScreen, clearImposterSessionValues, setIterations, setImposterSession } =
+    useImposterSessionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameEntryMode, hubAddress, gameKey, setIsHost, clearGlobalSessionValues, isHost, isDraft, gameType } =
     useGlobalSessionProvider();
@@ -68,7 +69,7 @@ export const ImposterGame = () => {
     });
 
     setListener("session", async (session: ImposterSession) => {
-      setSession(session);
+      setImposterSession(session);
       setScreen(ImposterSessionScreen.Roles);
     });
 
@@ -106,7 +107,7 @@ export const ImposterGame = () => {
       case GameEntryMode.Creator:
         return ImposterSessionScreen.Create;
       case GameEntryMode.Host:
-        return ImposterSessionScreen.Roles;
+        return ImposterSessionScreen.AddPlayers;
       case GameEntryMode.Participant || GameEntryMode.Member:
         return ImposterSessionScreen.ActiveLobby;
       default:
