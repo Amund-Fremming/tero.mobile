@@ -3,18 +3,18 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "./joinScreenStyles";
 import { Pressable, TextInput } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { useAuthProvider } from "@/src/common/context/AuthProvider";
-import { useGlobalSessionProvider } from "../../../common/context/GlobalSessionProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { useAuthProvider } from "@/src/Common/context/AuthProvider";
+import { useGlobalSessionProvider } from "../../../Common/context/GlobalSessionProvider";
 import { Feather } from "@expo/vector-icons";
-import Color from "@/src/common/constants/Color";
-import { GameEntryMode, GameType } from "@/src/common/constants/Types";
-import { useServiceProvider } from "@/src/common/context/ServiceProvider";
+import Color from "@/src/Common/constants/Color";
+import { GameEntryMode, GameType } from "@/src/Common/constants/Types";
+import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useNavigation, useFocusEffect } from "expo-router";
-import Screen from "@/src/common/constants/Screen";
-import { moderateScale } from "@/src/common/utils/dimensions";
+import Screen from "@/src/Common/constants/Screen";
+import { moderateScale } from "@/src/Common/utils/dimensions";
 import { useCallback } from "react";
-import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
+import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
 
 export const JoinScreen = () => {
   const navigation: any = useNavigation();
@@ -82,7 +82,7 @@ export const JoinScreen = () => {
         backgroundColor={Color.HomeRed}
       />
       <View style={styles.cardWrapper}>
-        <Image source={require("@/src/common/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
+        <Image source={require("@/src/Common/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
         <View style={styles.card}>
           <View style={styles.inputContainer}>
             <Feather

@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { moderateScale } from "@/src/common/utils/dimensions";
-import Color from "@/src/common/constants/Color";
+import { moderateScale } from "@/src/Common/utils/dimensions";
+import Color from "@/src/Common/constants/Color";
 
 export const ScatteredCircles: React.FC = () => {
   const circles = [

@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { styles } from "./problemScreenStyles";
 import { Feather } from "@expo/vector-icons";
-import Color from "@/src/common/constants/Color";
+import Color from "@/src/Common/constants/Color";
 
 export const ProblemScreen = () => {
   return (

@@ -1,8 +1,8 @@
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
 import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
-import { GameEntryMode } from "../common/constants/Types";
+import { GameEntryMode } from "../Common/constants/Types";
 import { useEffect } from "react";
 import { QuizGameScreen } from "./constants/quizTypes";
 import { CreateScreen } from "./screens/CreateScreen/CreateScreen";

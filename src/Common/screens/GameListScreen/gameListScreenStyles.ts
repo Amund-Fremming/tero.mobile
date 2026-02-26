@@ -1,5 +1,5 @@
-import Color from "@/src/common/constants/Color";
-import { horizontalScale, moderateScale, verticalScale } from "@/src/common/utils/dimensions";
+import Color from "@/src/Common/constants/Color";
+import { horizontalScale, moderateScale, verticalScale } from "@/src/Common/utils/dimensions";
 import { StyleSheet } from "react-native";
 import Font from "../../constants/Font";
 

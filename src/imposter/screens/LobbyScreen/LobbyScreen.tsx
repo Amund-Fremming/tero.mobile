@@ -1,16 +1,16 @@
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useEffect, useState } from "react";
-import { useHubConnectionProvider } from "@/src/common/context/HubConnectionProvider";
-import { HubChannel } from "@/src/common/constants/HubChannel";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { useAuthProvider } from "@/src/common/context/AuthProvider";
+import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
+import { HubChannel } from "@/src/Common/constants/HubChannel";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { useAuthProvider } from "@/src/Common/context/AuthProvider";
 import { useNavigation } from "expo-router";
-import { GameType } from "@/src/common/constants/Types";
-import SimpleInitScreen from "@/src/common/screens/SimpleInitScreen/SimpleInitScreen";
+import { GameType } from "@/src/Common/constants/Types";
+import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
-import Color from "@/src/common/constants/Color";
-import { resetToHomeScreen } from "@/src/common/utils/navigation";
+import Color from "@/src/Common/constants/Color";
+import { resetToHomeScreen } from "@/src/Common/utils/navigation";
 
 export const LobbyScreen = () => {
   const navigation: any = useNavigation();

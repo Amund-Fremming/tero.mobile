@@ -1,14 +1,14 @@
-import { useModalProvider } from "@/src/common/context/ModalProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { useEffect, useState } from "react";
-import { useHubConnectionProvider } from "@/src/common/context/HubConnectionProvider";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
-import { HubChannel } from "@/src/common/constants/HubChannel";
+import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
+import { HubChannel } from "@/src/Common/constants/HubChannel";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 import { QuizGameScreen, QuizSession } from "../../constants/quizTypes";
 import { useNavigation } from "expo-router";
-import SimpleInitScreen from "@/src/common/screens/SimpleInitScreen/SimpleInitScreen";
-import Color from "@/src/common/constants/Color";
-import { resetToHomeScreen } from "@/src/common/utils/navigation";
+import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
+import Color from "@/src/Common/constants/Color";
+import { resetToHomeScreen } from "@/src/Common/utils/navigation";
 
 export const LobbyScreen = () => {
   const navigation: any = useNavigation();

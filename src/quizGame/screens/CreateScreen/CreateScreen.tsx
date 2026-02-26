@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { CreateGameRequest, GameCategory, GameEntryMode, GameType } from "@/src/common/constants/Types";
-import { useAuthProvider } from "@/src/common/context/AuthProvider";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
-import { useServiceProvider } from "@/src/common/context/ServiceProvider";
+import { CreateGameRequest, GameCategory, GameEntryMode, GameType } from "@/src/Common/constants/Types";
+import { useAuthProvider } from "@/src/Common/context/AuthProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
+import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useNavigation } from "expo-router";
 import { QuizGameScreen as QuizSessionScreen } from "../../constants/quizTypes";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
-import Color from "@/src/common/constants/Color";
-import SimpleInitScreen from "@/src/common/screens/SimpleInitScreen/SimpleInitScreen";
+import Color from "@/src/Common/constants/Color";
+import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
 
 export const CreateScreen = () => {
   const navigation: any = useNavigation();

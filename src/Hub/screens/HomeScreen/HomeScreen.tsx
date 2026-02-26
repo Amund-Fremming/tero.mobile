@@ -1,18 +1,18 @@
 import { View, Text, Pressable, Image } from "react-native";
-import Screen from "../../../common/constants/Screen";
+import Screen from "../../../Common/constants/Screen";
 import styles from "./homeScreenStyles";
-import { useGlobalSessionProvider } from "../../../common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "../../../Common/context/GlobalSessionProvider";
 import { useEffect, useState } from "react";
-import { useServiceProvider } from "@/src/common/context/ServiceProvider";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { useAuthProvider } from "@/src/common/context/AuthProvider";
-import DiagonalSplit from "../../../common/components/Shapes/DiagonalSplit";
-import ArcWithCircles from "../../../common/components/Shapes/ArcWithCircles";
-import ScatteredCircles from "../../../common/components/Shapes/ScatteredCircles";
-import { GameEntryMode } from "@/src/common/constants/Types";
+import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { useAuthProvider } from "@/src/Common/context/AuthProvider";
+import DiagonalSplit from "../../../Common/components/Shapes/DiagonalSplit";
+import ArcWithCircles from "../../../Common/components/Shapes/ArcWithCircles";
+import ScatteredCircles from "../../../Common/components/Shapes/ScatteredCircles";
+import { GameEntryMode } from "@/src/Common/constants/Types";
 import * as SecureStore from "expo-secure-store";
 
-import redFigure from "../../../common/assets/images/red-figure.png";
+import redFigure from "../../../Common/assets/images/red-figure.png";
 import { useNavigation } from "expo-router";
 
 const subHeaderList = [

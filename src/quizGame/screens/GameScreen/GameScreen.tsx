@@ -4,11 +4,11 @@ import styles from "./gameScreenStyles";
 import { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
 import { QuizSession } from "../../constants/quizTypes";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { Feather } from "@expo/vector-icons";
-import { moderateScale } from "@/src/common/utils/dimensions";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
-import { resetToHomeScreen } from "@/src/common/utils/navigation";
+import { moderateScale } from "@/src/Common/utils/dimensions";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
+import { resetToHomeScreen } from "@/src/Common/utils/navigation";
 
 export const GameScreen = () => {
   const navigation: any = useNavigation();

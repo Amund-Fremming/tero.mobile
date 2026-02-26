@@ -1,13 +1,13 @@
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useState } from "react";
-import { useHubConnectionProvider } from "@/src/common/context/HubConnectionProvider";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
+import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import { useNavigation } from "expo-router";
-import { GameType } from "@/src/common/constants/Types";
-import SimpleInitScreen from "@/src/common/screens/SimpleInitScreen/SimpleInitScreen";
-import { resetToHomeScreen } from "@/src/common/utils/navigation";
+import { GameType } from "@/src/Common/constants/Types";
+import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
+import { resetToHomeScreen } from "@/src/Common/utils/navigation";
 
 export const ActiveLobbyScreen = () => {
   const navigation: any = useNavigation();

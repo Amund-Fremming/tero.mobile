@@ -2,11 +2,11 @@ import { View, Text, Animated, TouchableOpacity, Easing, Pressable } from "react
 import styles from "./revealScreenStyles";
 import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "expo-router";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { resetToHomeScreen } from "@/src/common/utils/navigation";
-import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { resetToHomeScreen } from "@/src/Common/utils/navigation";
+import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import * as Haptics from "expo-haptics";
 
