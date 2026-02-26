@@ -3,18 +3,18 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import styles from "./joinScreenStyles";
 import { Pressable, TextInput } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
-import { useModalProvider } from "@/src/Common/context/ModalProvider";
-import { useAuthProvider } from "@/src/Common/context/AuthProvider";
-import { useGlobalSessionProvider } from "../../../Common/context/GlobalSessionProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionProvider";
 import { Feather } from "@expo/vector-icons";
-import Color from "@/src/Common/constants/Color";
-import { GameEntryMode, GameType } from "@/src/Common/constants/Types";
-import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
+import Color from "@/src/core/constants/Color";
+import { GameEntryMode, GameType } from "@/src/core/constants/Types";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { useNavigation, useFocusEffect } from "expo-router";
-import Screen from "@/src/Common/constants/Screen";
-import { moderateScale } from "@/src/Common/utils/dimensions";
+import Screen from "@/src/core/constants/Screen";
+import { moderateScale } from "@/src/core/utils/dimensions";
 import { useCallback } from "react";
-import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
+import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 
 export const JoinScreen = () => {
   const navigation: any = useNavigation();
@@ -82,7 +82,7 @@ export const JoinScreen = () => {
         backgroundColor={Color.HomeRed}
       />
       <View style={styles.cardWrapper}>
-        <Image source={require("@/src/Common/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
+        <Image source={require("@/src/core/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
         <View style={styles.card}>
           <View style={styles.inputContainer}>
             <Feather

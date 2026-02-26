@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { styles } from "./errorScreenStyles";
 import { Feather } from "@expo/vector-icons";
-import Color from "@/src/Common/constants/Color";
+import Color from "@/src/core/constants/Color";
 
 export const ErrorScreen = () => {
   return (

@@ -1,18 +1,18 @@
 import { View, Text, Pressable, Image } from "react-native";
-import Screen from "../../../Common/constants/Screen";
+import Screen from "../../../core/constants/Screen";
 import styles from "./homeScreenStyles";
-import { useGlobalSessionProvider } from "../../../Common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionProvider";
 import { useEffect, useState } from "react";
-import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
-import { useModalProvider } from "@/src/Common/context/ModalProvider";
-import { useAuthProvider } from "@/src/Common/context/AuthProvider";
-import DiagonalSplit from "../../../Common/components/Shapes/DiagonalSplit";
-import ArcWithCircles from "../../../Common/components/Shapes/ArcWithCircles";
-import ScatteredCircles from "../../../Common/components/Shapes/ScatteredCircles";
-import { GameEntryMode } from "@/src/Common/constants/Types";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import DiagonalSplit from "../../../core/components/Shapes/DiagonalSplit";
+import ArcWithCircles from "../../../core/components/Shapes/ArcWithCircles";
+import ScatteredCircles from "../../../core/components/Shapes/ScatteredCircles";
+import { GameEntryMode } from "@/src/core/constants/Types";
 import * as SecureStore from "expo-secure-store";
 
-import redFigure from "../../../Common/assets/images/red-figure.png";
+import redFigure from "../../../core/assets/images/red-figure.png";
 import { useNavigation } from "expo-router";
 
 const subHeaderList = [
@@ -59,13 +59,10 @@ export const HomeScreen = () => {
 
     const maxAttempts = 5;
     const baseDelay = 1000;
-    displayLoadingModal(
-      () => {
-        closeLoadingModal();
-        navigation.navigate(Screen.Problem);
-      },
-      "Trying to reconnect.",
-    );
+    displayLoadingModal(() => {
+      closeLoadingModal();
+      navigation.navigate(Screen.Problem);
+    }, "Trying to reconnect.");
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const result = await ensurePseudoId();

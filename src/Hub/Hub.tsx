@@ -1,27 +1,26 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TransitionPresets } from "@react-navigation/stack";
-import Color from "../Common/constants/Color";
+import Color from "../core/constants/Color";
 
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
-import SpinGame from "../SpinGame/SpinGame";
-import QuizGame from "../quizGame/QuizGame";
+import SpinGame from "../play/games/spinGame/SpinGame";
+import QuizGame from "../play/games/quizGame/QuizGame";
 import HubScreen from "./screens/HubScreen/HubScreen";
 import JoinScreen from "./screens/JoinScreen/JoinScreen";
-import Screen from "../Common/constants/Screen";
+import Screen from "../core/constants/Screen";
 import AdminScreen from "./screens/AdminScreen/AdminScreen";
 import LogsScreen from "./screens/LogsScreen/LogsScreen";
-import GameTypeListScreen from "../Common/screens/GameTypeListScreen/GameTypeListScreen";
-import GameListScreen from "../Common/screens/GameListScreen/GameListScreen";
+import GameTypeListScreen from "../play/screens/GameTypeListScreen/GameTypeListScreen";
+import GameListScreen from "../play/screens/GameListScreen/GameListScreen";
 import ProfileScreen from "./screens/ProfileScreen/ProfileScreen";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen";
 import { SavedGamesScreen } from "./screens/SavedGamesScreen/SavedGamesScreen";
-import { TipsUsScreen } from "../Common/screens/TipsUsScreen/TipsUsScreen";
+import { TipsUsScreen } from "../play/screens/TipsUsScreen/TipsUsScreen";
 import { ErrorScreen } from "./screens/ErrorScreen/ErrorScreen";
 import { ProblemScreen } from "./screens/ProblemScreen/ProblemScreen";
-import ImposterGame from "../imposter/ImposterGame";
-import DiceGame from "../diceGame/DiceGame";
-import { InfoScreen } from "../Common/screens/InfoScreen/InfoScreen";
+import ImposterGame from "../play/games/imposter/ImposterGame";
+import DiceGame from "../play/games/diceGame/DiceGame";
 import { TipsListScreen } from "./screens/TipsListScreen/TipsListScreen";
 
 const Stack = createStackNavigator();
@@ -53,7 +52,6 @@ export const Hub = () => {
       <Stack.Screen name={Screen.TipsUs} component={TipsUsScreen} />
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
-      <Stack.Screen name={Screen.Info} component={InfoScreen} />
       <Stack.Screen name={Screen.TipsList} component={TipsListScreen} />
     </Stack.Navigator>
   );

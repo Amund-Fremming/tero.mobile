@@ -1,20 +1,18 @@
-import HubConnectionProvider from "@/src/Common/context/HubConnectionProvider";
-import GlobalGameProvider from "../src/Common/context/GlobalSessionProvider";
-import ModalProvider from "@/src/Common/context/ModalProvider";
-import Hub from "@/src/Hub/Hub";
-import AuthProvider from "../src/Common/context/AuthProvider";
-import ServiceProvider from "@/src/Common/context/ServiceProvider";
+import HubConnectionProvider from "@/src/play/context/HubConnectionProvider";
+import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
+import ModalProvider from "@/src/core/context/ModalProvider";
+import Hub from "@/src/hub/Hub";
+import AuthProvider from "../src/core/context/AuthProvider";
+import ServiceProvider from "@/src/core/context/ServiceProvider";
 import { View, StatusBar, Dimensions } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { useEffect } from "react";
+import QuizSessionProvider from "@/src/play/games/quizGame/context/QuizGameProvider";
+import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
+import SpinSessionProvider from "@/src/play/games/spinGame/context/SpinGameProvider";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
-import QuizSessionProvider from "@/src/quizGame/context/QuizGameProvider";
-import SpinSessionProvider from "@/src/SpinGame/context/SpinGameProvider";
-import ImposterSessionProvider from "@/src/imposter/context/ImposterSessionProvider";
-import "@/src/Common/utils/logConfig"; // Configure logging
-
 const { width, height } = Dimensions.get("window");
 
 export default () => (
@@ -42,12 +40,12 @@ export default () => (
 
 const FontLoader = ({ children }: { children: React.ReactNode }) => {
   const [fontsLoaded] = Font.useFonts({
-    "PassionOne-Regular": require("../src/Common/assets/fonts/PassionOne-Regular.ttf"),
-    "PassionOne-Bold": require("../src/Common/assets/fonts/PassionOne-Bold.ttf"),
-    "SpaceMono-Regular": require("../src/Common/assets/fonts/SpaceMono-Regular.ttf"),
-    "Sintony-Regular": require("../src/Common/assets/fonts/Sintony-Regular.ttf"),
-    "Sintony-Bold": require("../src/Common/assets/fonts/Sintony-Bold.ttf"),
-    "ArchivoBlack-Regular": require("../src/Common/assets/fonts/ArchivoBlack-Regular.ttf"),
+    "PassionOne-Regular": require("../src/core/assets/fonts/PassionOne-Regular.ttf"),
+    "PassionOne-Bold": require("../src/core/assets/fonts/PassionOne-Bold.ttf"),
+    "SpaceMono-Regular": require("../src/core/assets/fonts/SpaceMono-Regular.ttf"),
+    "Sintony-Regular": require("../src/core/assets/fonts/Sintony-Regular.ttf"),
+    "Sintony-Bold": require("../src/core/assets/fonts/Sintony-Bold.ttf"),
+    "ArchivoBlack-Regular": require("../src/core/assets/fonts/ArchivoBlack-Regular.ttf"),
   });
 
   useEffect(() => {

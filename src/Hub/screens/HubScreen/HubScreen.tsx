@@ -1,13 +1,13 @@
 import { View, Text, Button, Pressable, TouchableOpacity } from "react-native";
 import styles from "./hubScreenStyles";
-import Screen from "../../../Common/constants/Screen";
+import Screen from "../../../core/constants/Screen";
 import { Feather } from "@expo/vector-icons";
-import Color from "@/src/Common/constants/Color";
+import Color from "@/src/core/constants/Color";
 import { useNavigation } from "expo-router";
-import { useAuthProvider } from "@/src/Common/context/AuthProvider";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useEffect, useRef, useState } from "react";
-import { moderateScale } from "@/src/Common/utils/dimensions";
-import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
+import { moderateScale } from "@/src/core/utils/dimensions";
+import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 
 export const HubScreen = () => {
   const navigation: any = useNavigation();

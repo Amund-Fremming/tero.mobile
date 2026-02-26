@@ -1,13 +1,13 @@
-import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
+import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { useNavigation } from "expo-router";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./tipsListScreenStyles";
-import Color from "@/src/Common/constants/Color";
+import Color from "@/src/core/constants/Color";
 import React, { useEffect, useState } from "react";
-import { useAuthProvider } from "@/src/Common/context/AuthProvider";
-import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
-import { useModalProvider } from "@/src/Common/context/ModalProvider";
-import { GameTip, PagedResponse } from "@/src/Common/constants/Types";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { GameTip, PagedResponse } from "@/src/core/constants/Types";
 
 export const TipsListScreen = () => {
   const navigation: any = useNavigation();

@@ -1,22 +1,22 @@
 import { View, Text, Pressable, ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "./savedGameScreenStyles";
-import VerticalScroll from "@/src/Common/wrappers/VerticalScroll";
+import VerticalScroll from "@/src/core/components/VerticalScroll/VerticalScroll";
 import { useEffect, useRef, useState } from "react";
-import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
-import { useAuthProvider } from "@/src/Common/context/AuthProvider";
-import { useModalProvider } from "@/src/Common/context/ModalProvider";
-import { GameBase, GameCategory, GameEntryMode, GameType, PagedResponse } from "@/src/Common/constants/Types";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { GameBase, GameCategory, GameEntryMode, GameType, PagedResponse } from "@/src/core/constants/Types";
 import { useNavigation } from "@react-navigation/native";
-import { moderateScale } from "@/src/Common/utils/dimensions";
-import Color from "@/src/Common/constants/Color";
+import { moderateScale } from "@/src/core/utils/dimensions";
+import Color from "@/src/core/constants/Color";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
+import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import React from "react";
-import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
-import Screen from "@/src/Common/constants/Screen";
-import { useSpinSessionProvider } from "@/src/SpinGame/context/SpinGameProvider";
-import { useQuizSessionProvider } from "@/src/quizGame/context/QuizGameProvider";
-import { QuizSession } from "@/src/quizGame/constants/quizTypes";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import Screen from "@/src/core/constants/Screen";
+import { useSpinSessionProvider } from "@/src/play/games/spinGame/context/SpinGameProvider";
+import { useQuizSessionProvider } from "@/src/play/games/quizGame/context/QuizGameProvider";
+import { QuizSession } from "@/src/play/games/quizGame/constants/quizTypes";
 
 const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.Girls]: "Jentene",
