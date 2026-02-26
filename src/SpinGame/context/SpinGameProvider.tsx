@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { SpinSessionScreen, SpinGameState } from "../constants/SpinTypes";
-import Color from "@/src/common/constants/Color";
-import { GameType } from "@/src/common/constants/Types";
+import Color from "@/src/Common/constants/Color";
+import { GameType } from "@/src/Common/constants/Types";
 
 interface ISpinSessionContext {
   clearSpinSessionValues: () => void;

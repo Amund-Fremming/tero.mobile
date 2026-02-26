@@ -1,14 +1,14 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./passiveLobbyScreenStyles";
 import { Feather } from "@expo/vector-icons";
-import { moderateScale } from "@/src/common/utils/dimensions";
+import { moderateScale } from "@/src/Common/utils/dimensions";
 import { useNavigation } from "expo-router";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
-import { resetToHomeScreen } from "@/src/common/utils/navigation";
-import { useHubConnectionProvider } from "@/src/common/context/HubConnectionProvider";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { GameType } from "@/src/common/constants/Types";
+import { resetToHomeScreen } from "@/src/Common/utils/navigation";
+import { useHubConnectionProvider } from "@/src/Common/context/HubConnectionProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { GameType } from "@/src/Common/constants/Types";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useEffect, useState } from "react";
 

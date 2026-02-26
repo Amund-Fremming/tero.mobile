@@ -1,17 +1,17 @@
 import { View, Text, ScrollView, Pressable, Animated, TouchableOpacity } from "react-native";
 import styles from "./rolesScreenStyles";
 import { useEffect, useRef, useState } from "react";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
 import { useNavigation } from "expo-router";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
-import { resetToHomeScreen } from "@/src/common/utils/navigation";
-import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
+import { resetToHomeScreen } from "@/src/Common/utils/navigation";
+import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import Color from "@/src/common/constants/Color";
+import Color from "@/src/Common/constants/Color";
 import * as Haptics from "expo-haptics";
-import { moderateScale } from "@/src/common/utils/dimensions";
+import { moderateScale } from "@/src/Common/utils/dimensions";
 
 const FILL_DURATION = 800;
 const DRAIN_DELAY = 2000;

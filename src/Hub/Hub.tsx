@@ -1,27 +1,27 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { TransitionPresets } from "@react-navigation/stack";
-import Color from "../common/constants/Color";
+import Color from "../Common/constants/Color";
 
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
-import SpinGame from "../spinGame/SpinGame";
+import SpinGame from "../SpinGame/SpinGame";
 import QuizGame from "../quizGame/QuizGame";
 import HubScreen from "./screens/HubScreen/HubScreen";
 import JoinScreen from "./screens/JoinScreen/JoinScreen";
-import Screen from "../common/constants/Screen";
+import Screen from "../Common/constants/Screen";
 import AdminScreen from "./screens/AdminScreen/AdminScreen";
 import LogsScreen from "./screens/LogsScreen/LogsScreen";
-import GameTypeListScreen from "../common/screens/GameTypeListScreen/GameTypeListScreen";
-import GameListScreen from "../common/screens/GameListScreen/GameListScreen";
+import GameTypeListScreen from "../Common/screens/GameTypeListScreen/GameTypeListScreen";
+import GameListScreen from "../Common/screens/GameListScreen/GameListScreen";
 import ProfileScreen from "./screens/ProfileScreen/ProfileScreen";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen";
 import { SavedGamesScreen } from "./screens/SavedGamesScreen/SavedGamesScreen";
-import { TipsUsScreen } from "../common/screens/TipsUsScreen/TipsUsScreen";
+import { TipsUsScreen } from "../Common/screens/TipsUsScreen/TipsUsScreen";
 import { ErrorScreen } from "./screens/ErrorScreen/ErrorScreen";
 import { ProblemScreen } from "./screens/ProblemScreen/ProblemScreen";
 import ImposterGame from "../imposter/ImposterGame";
 import DiceGame from "../diceGame/DiceGame";
-import { InfoScreen } from "../common/screens/InfoScreen/InfoScreen";
+import { InfoScreen } from "../Common/screens/InfoScreen/InfoScreen";
 import { TipsListScreen } from "./screens/TipsListScreen/TipsListScreen";
 
 const Stack = createStackNavigator();

@@ -1,15 +1,15 @@
 import { Pressable, ScrollView, Text, View } from "react-native";
 import styles from "./AdminScreenStyles";
-import { useAuthProvider } from "@/src/common/context/AuthProvider";
-import { useServiceProvider } from "@/src/common/context/ServiceProvider";
+import { useAuthProvider } from "@/src/Common/context/AuthProvider";
+import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
-import { screenHeight, verticalScale, moderateScale } from "@/src/common/utils/dimensions";
-import Color from "@/src/common/constants/Color";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { ActivityStats, ClientPopup, LogCategoryCount, SystemHealth } from "@/src/common/constants/Types";
-import Screen from "@/src/common/constants/Screen";
-import ScreenHeader from "@/src/common/components/ScreenHeader/ScreenHeader";
+import { screenHeight, verticalScale, moderateScale } from "@/src/Common/utils/dimensions";
+import Color from "@/src/Common/constants/Color";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { ActivityStats, ClientPopup, LogCategoryCount, SystemHealth } from "@/src/Common/constants/Types";
+import Screen from "@/src/Common/constants/Screen";
+import ScreenHeader from "@/src/Common/components/ScreenHeader/ScreenHeader";
 import { TextInput } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 

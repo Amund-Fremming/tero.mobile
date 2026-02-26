@@ -2,7 +2,7 @@ import { Pressable, Text, View, TouchableOpacity, ScrollView } from "react-nativ
 import VerticalScroll from "../../wrappers/VerticalScroll";
 import { useEffect, useRef, useState } from "react";
 import { useModalProvider } from "../../context/ModalProvider";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
 import { useAuthProvider } from "../../context/AuthProvider";
 import { useNavigation } from "@react-navigation/native";
 import { useQuizSessionProvider } from "@/src/quizGame/context/QuizGameProvider";

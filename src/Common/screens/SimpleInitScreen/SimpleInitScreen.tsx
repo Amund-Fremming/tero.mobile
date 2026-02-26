@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./simpleInitScreenStyles";
 import { TextInput } from "react-native-gesture-handler";
 import { Feather, FontAwesome6, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
-import { moderateScale, verticalScale } from "@/src/common/utils/dimensions";
+import { moderateScale, verticalScale } from "@/src/Common/utils/dimensions";
 import CategoryDropdown from "../../components/CategoryDropdown/CategoryDropdown";
 import { GameCategory } from "../../constants/Types";
 import Color from "../../constants/Color";

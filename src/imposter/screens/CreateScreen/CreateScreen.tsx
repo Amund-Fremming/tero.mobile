@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { CreateGameRequest, GameCategory, GameEntryMode } from "@/src/common/constants/Types";
-import { useAuthProvider } from "@/src/common/context/AuthProvider";
-import { useModalProvider } from "@/src/common/context/ModalProvider";
-import { useGlobalSessionProvider } from "@/src/common/context/GlobalSessionProvider";
-import { useServiceProvider } from "@/src/common/context/ServiceProvider";
+import { CreateGameRequest, GameCategory, GameEntryMode } from "@/src/Common/constants/Types";
+import { useAuthProvider } from "@/src/Common/context/AuthProvider";
+import { useModalProvider } from "@/src/Common/context/ModalProvider";
+import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
+import { useServiceProvider } from "@/src/Common/context/ServiceProvider";
 import { useFocusEffect, useNavigation } from "expo-router";
-import SimpleInitScreen from "@/src/common/screens/SimpleInitScreen/SimpleInitScreen";
-import Color from "@/src/common/constants/Color";
+import SimpleInitScreen from "@/src/Common/screens/SimpleInitScreen/SimpleInitScreen";
+import Color from "@/src/Common/constants/Color";
 
 export const CreateScreen = ({
   onGameCreated,

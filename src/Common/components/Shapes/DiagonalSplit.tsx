@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import Color from "@/src/common/constants/Color";
+import Color from "@/src/Common/constants/Color";
 
 export const DiagonalSplit: React.FC = () => {
   return (
