@@ -27,22 +27,6 @@ export const styles = StyleSheet.create({
     transform: [{ translateY: "-45%" }],
   },
 
-  goBack: {
-    position: "absolute",
-    top: verticalScale(50),
-    left: verticalScale(20),
-    backgroundColor: Color.LightGray,
-    borderRadius: moderateScale(10),
-    justifyContent: "center",
-    alignItems: "center",
-    width: horizontalScale(40),
-    height: horizontalScale(40),
-  },
-
-  paragraph: {
-    fontSize: moderateScale(16),
-  },
-
   input: {
     flex: 1,
     fontSize: moderateScale(35),

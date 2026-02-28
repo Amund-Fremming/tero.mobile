@@ -68,7 +68,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   const displayLoadingModal = (onCloseAction: () => void, message?: string) => {
     setDisplayOption(DisplayOption.Action);
     onCloseActionRef.current = onCloseAction;
-    setMessage(message ?? "Forbindelsen er brutt. Vi prøver å koble deg til på nytt nå");
+    setMessage(message ?? "Forbindelsen er brutt. Vi prøver å koble deg til igjen.");
     setDisplayOption(DisplayOption.Loading);
   };
 

@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
 
   subHeader: {
     fontSize: moderateScale(28),
-    color: Color.BuzzifyLavender,
+    color: Color.Gray,
     fontWeight: "700",
     fontFamily: "PassionOne-Regular",
     marginBottom: verticalScale(25),
@@ -74,5 +74,22 @@ export const styles = StyleSheet.create({
 
   decorativeIcon: {
     opacity: 0.3,
+  },
+
+  button: {
+    backgroundColor: Color.BuzzifyLavender,
+    borderRadius: moderateScale(10),
+    marginTop: verticalScale(20),
+    width: "86%",
+    justifyContent: "center",
+    alignItems: "center",
+    height: verticalScale(50),
+  },
+
+  buttonText: {
+    fontFamily: "PassionOne-Regular",
+    fontSize: moderateScale(30),
+    color: Color.White,
+    fontWeight: "600",
   },
 });

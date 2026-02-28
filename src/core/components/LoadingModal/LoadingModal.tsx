@@ -13,7 +13,7 @@ export const LoadingModal = ({ onCloseFunc, message }: LoadingModalProps) => {
     <View style={styles.overlay}>
       <View style={styles.container}>
         <ActivityIndicator size="large" color={Color.BuzzifyLavender} style={{ marginVertical: 20 }} />
-        <Text style={styles.message}>{message ?? "Forbindelsen er brutt. Vi prøver å koble deg til på nytt nå"}</Text>
+        <Text style={styles.message}>{message ?? "Forbindelsen er brutt. Vi prøver å koble deg til igjen."}</Text>
         <TouchableOpacity
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -21,7 +21,7 @@ export const LoadingModal = ({ onCloseFunc, message }: LoadingModalProps) => {
           }}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Forlat</Text>
+          <Text style={styles.buttonText}>Avslutt</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -60,22 +60,29 @@ export default function SplashScreen({ onFinish }: Props) {
   };
 
   useEffect(() => {
+    Animated.sequence([
+      // Enter from right to center
+      wiggleWalk(x, y, 0, 800),
+      // Landing thud (callback mid-sequence via a zero-duration anim)
+      Animated.timing(scale, { toValue: 1, duration: 0, useNativeDriver: true }),
+    ]).start(() => {
+      // won't fire mid-sequence, so trigger landing right after entry
+    });
+
     // Trigger landing haptic/squash exactly when bird reaches center
     const landingTimer = setTimeout(landingThud, 800);
 
-    // After pause, exit to the left, then fade the background out
+    // After pause, exit to the left then fade out
     const exitTimer = setTimeout(() => {
       wiggleWalk(x, y, -width, 700).start(() => {
         Animated.timing(opacity, {
           toValue: 0,
-          duration: 500,
-          easing: Easing.out(Easing.quad),
+          duration: 300,
+          easing: Easing.out(Easing.ease),
           useNativeDriver: true,
         }).start(onFinish);
       });
     }, 800 + 600);
-
-    wiggleWalk(x, y, 0, 800).start();
 
     return () => {
       clearTimeout(landingTimer);

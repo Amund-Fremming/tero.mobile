@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     color: Color.BuzzifyLavender,
   },
 
-  card: {
+  popupButton: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -63,7 +63,7 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(4),
   },
 
-  popupButton: {
+  card: {
     borderRadius: moderateScale(10),
     width: "85%",
     gap: verticalScale(10),

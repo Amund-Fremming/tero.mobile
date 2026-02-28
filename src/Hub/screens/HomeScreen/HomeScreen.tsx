@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { ProblemScreen } from "../ProblemScreen/ProblemScreen";
 import DiagonalSplit from "../../../core/components/Shapes/DiagonalSplit";
 import ArcWithCircles from "../../../core/components/Shapes/ArcWithCircles";
 import ScatteredCircles from "../../../core/components/Shapes/ScatteredCircles";
@@ -22,7 +23,7 @@ const subHeaderList = [
   "ta en pause og bli med",
   "vi kjører på",
   "få i gang kvelden",
-  "rolige vibber, gode valg",
+  "kickstart stemingen",
   "klart for neste?",
 ];
 
@@ -36,6 +37,7 @@ export const HomeScreen = () => {
   const [subHeader, setSubheader] = useState<string>("");
   const [popupCloseCount, setPopupCloseCount] = useState<number>(0);
   const [isPseudoReady, setIsPseudoReady] = useState<boolean>(false);
+  const [isSystemDown, setIsSystemDown] = useState<boolean>(false);
 
   useEffect(() => {
     setSubHeader();
@@ -112,9 +114,8 @@ export const HomeScreen = () => {
 
   const systemHealth = async () => {
     const result = await commonService().healthDetailed();
-    if (result.isError()) {
-      console.error("Failed health, returning error page");
-      navigation.navigate(Screen.Error);
+    if (result.isError() || !result.value.platform || !result.value.database || !result.value.session) {
+      setIsSystemDown(true);
     }
   };
 
@@ -127,6 +128,10 @@ export const HomeScreen = () => {
     setGameEntryMode(gameEntryMode);
     navigation.navigate(destination);
   };
+
+  if (isSystemDown) {
+    return <ProblemScreen onHealthRestored={() => setIsSystemDown(false)} />;
+  }
 
   return (
     <View style={styles.container}>
