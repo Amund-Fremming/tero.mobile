@@ -76,7 +76,7 @@ export const CreateScreen = ({
   };
 
   const handleInfoPressed = () => {
-    displayInfoModal("Gi spillet ditt ett navn og kategori slik at du kan finne det igjen senere.", "Nytt spill");
+    displayInfoModal("Gi ditt nye spill ett navn og en kategori!", "Hva nå?");
   };
 
   return (

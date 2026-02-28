@@ -5,9 +5,8 @@ import { Font } from "../../../core/constants/Font";
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.LightGray,
     width: "100%",
-    height: "100%",
+    flex: 1,
     alignItems: "center",
     gap: 10,
   },
@@ -79,7 +78,7 @@ export const styles = StyleSheet.create({
     width: "86%",
     borderRadius: moderateScale(15),
     height: verticalScale(69),
-    backgroundColor: Color.BuzzifyLavender,
+    backgroundColor: Color.HomeRed,
   },
 
   buttonText: {

@@ -70,8 +70,31 @@ export const styles = StyleSheet.create({
     textShadowRadius: 6,
   },
 
-  paragraph: {
-    color: Color.Black,
+  footer: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    paddingVertical: verticalScale(30),
+    paddingHorizontal: horizontalScale(20),
+    gap: horizontalScale(12),
+  },
+
+  footerDivider: {
+    flex: 1,
+    height: moderateScale(2),
+    backgroundColor: Color.OffBlack,
+    borderRadius: moderateScale(10),
+    opacity: 0.15,
+  },
+
+  footerText: {
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(22),
+    color: Color.OffBlack,
+    letterSpacing: 2,
+    textTransform: "uppercase",
+    opacity: 0.3,
   },
 
   imagePlaceholder: {

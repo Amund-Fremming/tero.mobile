@@ -4,17 +4,18 @@ import styles from "./gameScreenStyles";
 import { useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
 import { QuizSession } from "../../constants/quizTypes";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { Feather } from "@expo/vector-icons";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
 
 export const GameScreen = () => {
   const navigation: any = useNavigation();
   const { quizSession } = useQuizSessionProvider();
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
   const { clearQuizGameValues } = useQuizSessionProvider();
+  const { displayInfoModal } = useModalProvider();
 
   const [quiz, setQuiz] = useState<QuizSession | undefined>(quizSession);
 
@@ -24,7 +25,6 @@ export const GameScreen = () => {
 
   const handlePrevPressed = () => {
     if (quiz?.current_iteration === 0) {
-      console.log("Tried getting prev when at iteration:", quiz?.current_iteration);
       return;
     }
 
@@ -37,7 +37,6 @@ export const GameScreen = () => {
 
   const handleNextPressed = () => {
     if ((quiz?.current_iteration ?? 0) + 1 === (quiz?.rounds.length ?? 0)) {
-      console.log("Tried getting next when at max iteration");
       return;
     }
 
@@ -49,7 +48,10 @@ export const GameScreen = () => {
   };
 
   const handleInfoPressed = () => {
-    console.log("Info pressed");
+    displayInfoModal(
+      "Her kan du spillet som du vil. Svar på spørsmålene i rundgang, send mobilen rundt og la den som leser svare eller spill det som 100 spørsmål!",
+      "Hvordan spille?",
+    );
   };
 
   const handleLeaveGame = () => {

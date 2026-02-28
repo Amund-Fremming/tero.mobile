@@ -7,9 +7,10 @@ import { Feather } from "@expo/vector-icons";
 import Color from "../../../core/constants/Color";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
 import { moderateScale } from "../../../core/utils/dimensions";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useServiceProvider } from "../../../core/context/ServiceProvider";
 import { CreateGameTipRequest } from "../../../core/constants/Types";
+import { KeyboardAvoidingWrapper } from "../../../core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
 
 export const TipsUsScreen = () => {
   const navigation: any = useNavigation();
@@ -21,6 +22,7 @@ export const TipsUsScreen = () => {
     mobile_phone: "",
     description: "",
   });
+  const anchorRef = useRef<View>(null);
 
   const handleCreateTip = async () => {
     // Validate name/header (3-14 chars)
@@ -80,88 +82,94 @@ export const TipsUsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScreenHeader title="Tips oss" backgroundColor={Color.LightGray} onBackPressed={() => navigation.goBack()} />
+    <KeyboardAvoidingWrapper backgroundColor={Color.LightGray} anchorRef={anchorRef}>
+      <View style={styles.container}>
+        <ScreenHeader title="Tips oss" backgroundColor={Color.LightGray} onBackPressed={() => navigation.goBack()} />
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.subHeader}>Send oss ditt spillforslag!</Text>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.subHeader}>Send oss ditt spillforslag!</Text>
 
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputContainer}>
-            <Feather
-              style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
-              name="user"
-              size={24}
-              color={Color.OffBlack}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Navn"
-              maxLength={14}
-              value={createRequest.header}
-              onChangeText={(input) => {
-                if (input.length > 14) {
-                  displayInfoModal("Navn kan ikke være lengre enn 14 tegn.");
-                  return;
-                }
-                setCreateRequest((prev) => ({ ...prev, header: input }));
-              }}
-              placeholderTextColor={Color.DarkerGray}
-            />
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputContainer}>
+              <Feather
+                style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
+                name="user"
+                size={24}
+                color={Color.OffBlack}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Navn"
+                maxLength={14}
+                value={createRequest.header}
+                onChangeText={(input) => {
+                  if (input.length > 14) {
+                    displayInfoModal("Navn kan ikke være lengre enn 14 tegn.");
+                    return;
+                  }
+                  setCreateRequest((prev) => ({ ...prev, header: input }));
+                }}
+                placeholderTextColor={Color.DarkerGray}
+              />
+            </View>
           </View>
-        </View>
 
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputContainer}>
-            <Feather
-              style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
-              name="phone"
-              size={24}
-              color={Color.OffBlack}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Mobil"
-              placeholderTextColor={Color.DarkerGray}
-              keyboardType="phone-pad"
-              maxLength={20}
-              value={createRequest.mobile_phone}
-              onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, mobile_phone: input }))}
-            />
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputContainer}>
+              <Feather
+                style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
+                name="phone"
+                size={24}
+                color={Color.OffBlack}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Mobil"
+                placeholderTextColor={Color.DarkerGray}
+                keyboardType="phone-pad"
+                maxLength={20}
+                value={createRequest.mobile_phone}
+                onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, mobile_phone: input }))}
+              />
+            </View>
           </View>
-        </View>
 
-        <View style={styles.inputWrapper}>
-          <View style={styles.multilineContainer}>
-            <Feather
-              style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10), paddingTop: moderateScale(5) }}
-              name="edit"
-              size={24}
-              color={Color.OffBlack}
-            />
-            <TextInput
-              style={styles.multiline}
-              placeholder="Din ide..."
-              placeholderTextColor={Color.DarkerGray}
-              multiline={true}
-              textAlignVertical="top"
-              scrollEnabled={true}
-              maxLength={300}
-              value={createRequest.description}
-              onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, description: input }))}
-            />
+          <View style={styles.inputWrapper}>
+            <View style={styles.multilineContainer}>
+              <Feather
+                style={{
+                  paddingLeft: moderateScale(15),
+                  paddingRight: moderateScale(10),
+                  paddingTop: moderateScale(5),
+                }}
+                name="edit"
+                size={24}
+                color={Color.OffBlack}
+              />
+              <TextInput
+                style={styles.multiline}
+                placeholder="Din ide..."
+                placeholderTextColor={Color.DarkerGray}
+                multiline={true}
+                textAlignVertical="top"
+                scrollEnabled={true}
+                maxLength={300}
+                value={createRequest.description}
+                onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, description: input }))}
+              />
+            </View>
+            <Text style={styles.charCounter}>{createRequest.description.length}/300</Text>
           </View>
-          <Text style={styles.charCounter}>{createRequest.description.length}/300</Text>
-        </View>
-      </ScrollView>
+        </ScrollView>
 
-      <TouchableOpacity style={styles.button} onPress={handleCreateTip}>
-        <Text style={styles.buttonText}>Send</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity ref={anchorRef} style={styles.button} onPress={handleCreateTip}>
+          <Text style={styles.buttonText}>Send</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingWrapper>
   );
 };

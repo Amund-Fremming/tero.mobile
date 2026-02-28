@@ -116,18 +116,9 @@ export const EditProfileScreen = () => {
     navigation.goBack();
   };
 
-  const handleInfoPressed = () => {
-    console.log("Info pressed");
-  };
-
   return (
     <View style={styles.container}>
-      <ScreenHeader
-        title="Rediger"
-        backgroundColor={Color.LightGray}
-        onBackPressed={() => navigation.goBack()}
-        onInfoPress={handleInfoPressed}
-      />
+      <ScreenHeader title="Rediger" backgroundColor={Color.LightGray} onBackPressed={() => navigation.goBack()} />
 
       <ScrollView
         style={styles.scrollView}

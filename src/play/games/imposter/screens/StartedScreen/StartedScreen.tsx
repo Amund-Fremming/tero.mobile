@@ -3,7 +3,6 @@ import styles from "./startedScreenStyles";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 

@@ -61,7 +61,6 @@ export const LobbyScreen = () => {
       disconnect();
     });
 
-    console.debug("Connecting to group with key:", key);
     const connectResult = await invokeFunction("ConnectToGroup", key);
     if (connectResult.isError()) {
       displayErrorModal("Koblingsfeil. Bli med på nytt.");
@@ -81,7 +80,9 @@ export const LobbyScreen = () => {
     }
 
     setIsAddingQuestion(true);
-    const result = await invokeFunction("AddQuestion", gameKey, question);
+    const toAdd = question;
+    setQuestion("");
+    const result = await invokeFunction("AddQuestion", gameKey, toAdd);
 
     if (result.isError()) {
       console.error(result.error);
@@ -107,8 +108,6 @@ export const LobbyScreen = () => {
     }
 
     setStarted(true);
-
-    console.log("🎮 STARTING GAME: Calling StartGame for key:", gameKey);
     const result = await invokeFunction("StartGame", gameKey);
 
     if (result.isError()) {
@@ -122,7 +121,7 @@ export const LobbyScreen = () => {
   };
 
   const handleInfoPressed = () => {
-    console.log("Info pressed");
+    displayInfoModal("Her skal du legge inn spørsmålene som skal være i spillet", "Legg til!");
   };
 
   return (

@@ -88,7 +88,6 @@ export const SpinGame = () => {
     });
 
     setListener("selected", (batch: string[]) => {
-      console.log(batch);
       setSelectedBatch(batch);
     });
 
@@ -163,10 +162,13 @@ export const SpinGame = () => {
   }
 };
 
-const LoadingView = () => (
-  <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <ActivityIndicator size="large" />
-  </View>
-);
+const LoadingView = () => {
+  const { themeColor } = useSpinSessionProvider();
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: themeColor }}>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+};
 
 export default SpinGame;

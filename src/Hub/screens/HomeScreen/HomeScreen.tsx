@@ -86,7 +86,6 @@ export const HomeScreen = () => {
 
   const getClientPopup = async () => {
     if (popupCloseCount >= 2) {
-      console.debug("Skipping modal");
       return;
     }
 

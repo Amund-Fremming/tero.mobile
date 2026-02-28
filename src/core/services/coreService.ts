@@ -13,7 +13,6 @@ export class CommonService {
     try {
       const url = `${this.urlBase}/health`;
       const response = await axios.get(url);
-      console.log(response.data);
       if (response.data !== "OK") {
         console.error("Server is down");
         return err("Server er nede, prøv igjen senere");
@@ -65,7 +64,6 @@ export class CommonService {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
       return ok(response.data);
     } catch (error) {
       console.error("getLogs:", error);

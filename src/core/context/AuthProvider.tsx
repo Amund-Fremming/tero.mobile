@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     setPseudoId(result.value);
     await SecureStore.setItemAsync("pseudo_id", result.value);
-    console.log("Pseudo user created with id: ", result.value);
+    console.info("Pseudo user created with id: ", result.value);
 
     return ok(result.value);
   };
@@ -223,7 +223,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       await SecureStore.deleteItemAsync("id_token");
       setAccessToken(null);
 
-      console.log("User has been successfully logged out.");
+      console.info("User has been successfully logged out.");
 
       return true;
     } catch (e) {
@@ -270,7 +270,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokens.refresh_token);
       setAccessToken(tokens.access_token);
-      console.log("Tokens refreshed successfully");
+      console.debug("Tokens refreshed successfully");
     } catch (error) {
       displayErrorModal("Uventet feil. Logger ut.");
       setAccessToken(null);
@@ -279,20 +279,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  // TODO - remove
   const logValues = () => {
-    console.log("Access token:", accessToken);
-    console.log("Refresh token:", SecureStore.getItem(REFRESH_TOKEN_KEY));
-    console.log("Pseudo id:", pseudoId);
+    console.debug("Access token:", accessToken);
+    console.debug("Refresh token:", SecureStore.getItem(REFRESH_TOKEN_KEY));
+    console.debug("Pseudo id:", pseudoId);
   };
 
-  // TODO - remove
   const resetPseudoId = async () => {
     setPseudoId("");
     await SecureStore.deleteItemAsync("pseudo_id");
   };
 
-  // TODO - remove
   const invalidateAccessToken = () => {
     setAccessToken(
       "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAahERJawntho0my942XheVLmGwLMBkQ",

@@ -35,11 +35,10 @@ export const HubScreen = () => {
       navigation.navigate(Screen.Profile);
     }
 
-    console.log("Redirect URI:", redirectUri);
+    console.debug("Redirect URI:", redirectUri);
   }, [accessToken, navigation]);
 
   const handleProfilePressed = () => {
-    console.debug("Profile pressed");
     if (accessToken) {
       navigation.navigate(Screen.Profile);
       return;

@@ -29,7 +29,11 @@ export const PassiveLobbyScreen = () => {
   };
 
   const handleInfoPressed = () => {
-    console.log("Info pressed");
+    if (isHost) {
+      displayInfoModal("Start spillet når alle spillere har blitt med.", "Hva nå?");
+    } else {
+      displayInfoModal("Venter på at alle spillere blir med i spillet. Verten vil starte når klar.", "Hva nå?");
+    }
   };
 
   const handleStartGame = async () => {
@@ -67,7 +71,7 @@ export const PassiveLobbyScreen = () => {
 
     const startResult = await invokeFunction("StartGame", gameKey, false); // isDraft = false
     if (startResult.isError()) {
-      console.log(startResult.error);
+      console.error(startResult.error);
       displayErrorModal("Kunne ikke starte spillet.");
       setStartGameTriggered(false);
       return;
@@ -75,7 +79,7 @@ export const PassiveLobbyScreen = () => {
 
     const gameReady = startResult.value;
     if (!gameReady) {
-      console.log("Game not ready");
+      console.debug("Game not ready");
       setStartGameTriggered(false);
       return;
     }

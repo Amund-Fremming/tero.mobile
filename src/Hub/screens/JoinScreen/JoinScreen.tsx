@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import { View, Text, TouchableOpacity, Image, Keyboard } from "react-native";
 
 import styles from "./joinScreenStyles";
 import { Pressable, TextInput } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionProvider";
@@ -15,6 +15,7 @@ import Screen from "@/src/core/constants/Screen";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { useCallback } from "react";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
+import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
 
 export const JoinScreen = () => {
   const navigation: any = useNavigation();
@@ -22,6 +23,7 @@ export const JoinScreen = () => {
   const { displayInfoModal } = useModalProvider();
   const { setGameEntryMode, setGameKey, setHubName, setGameType, setIsHost, setIsDraft } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
+  const anchorRef = useRef<View>(null);
 
   const [userInput, setUserInput] = useState<string>("");
 
@@ -39,7 +41,6 @@ export const JoinScreen = () => {
     }
 
     const gameKey = userInput.trim().toLocaleLowerCase();
-    console.debug("Trying to join:", gameKey);
     const result = await gameService().joinInteractiveGame(pseudoId, gameKey);
     if (result.isError()) {
       console.warn(result.error);
@@ -48,10 +49,8 @@ export const JoinScreen = () => {
     }
 
     const response = result.value;
-    console.debug(response);
     setGameEntryMode(GameEntryMode.Participant);
 
-    console.debug(response);
     setIsDraft(response.is_draft);
     setHubName(response.hub_name);
     setGameKey(response.game_key);
@@ -73,37 +72,41 @@ export const JoinScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScreenHeader
-        title="Bli med"
-        onBackPressed={() => navigation.goBack()}
-        onInfoPress={handleInfoPressed}
-        backgroundColor={Color.HomeRed}
-      />
-      <View style={styles.cardWrapper}>
-        <Image source={require("@/src/core/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
-        <View style={styles.card}>
-          <View style={styles.inputContainer}>
-            <Feather
-              style={{ paddingLeft: moderateScale(20), paddingRight: moderateScale(10) }}
-              name="key"
-              size={45}
-              color={Color.OffBlack}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="SLEM POTET"
-              placeholderTextColor={Color.DarkerGray}
-              value={userInput}
-              onChangeText={(input) => setUserInput(input?.toUpperCase())}
-            />
+    <KeyboardAvoidingWrapper backgroundColor={Color.LightGray} anchorRef={anchorRef}>
+      <View style={styles.container}>
+        <ScreenHeader
+          title="Bli med"
+          onBackPressed={() => navigation.goBack()}
+          onInfoPress={handleInfoPressed}
+          backgroundColor={Color.BuzzifyLavender}
+        />
+        <View style={styles.cardWrapper}>
+          <Image source={require("@/src/core/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
+          <View style={styles.card}>
+            <View style={styles.inputContainer}>
+              <Feather
+                style={{ paddingLeft: moderateScale(20), paddingRight: moderateScale(10) }}
+                name="key"
+                size={45}
+                color={Color.OffBlack}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="SLEM POTET"
+                placeholderTextColor={Color.DarkerGray}
+                value={userInput}
+                onChangeText={(input) => setUserInput(input?.toUpperCase())}
+                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="done"
+              />
+            </View>
+            <TouchableOpacity ref={anchorRef} style={styles.button} onPress={handleJoinGame}>
+              <Text style={styles.buttonText}>Bli med</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.button} onPress={handleJoinGame}>
-            <Text style={styles.buttonText}>Bli med</Text>
-          </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingWrapper>
   );
 };
 

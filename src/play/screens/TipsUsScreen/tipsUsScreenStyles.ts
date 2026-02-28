@@ -6,9 +6,8 @@ import { Font } from "../../../core/constants/Font";
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: Color.LightGray,
-    height: "100%",
+    flex: 1,
     width: "100%",
-    position: "relative",
   },
 
   scrollView: {

@@ -42,7 +42,6 @@ export class UserService {
     }
 
     const avatar = `https://api.dicebear.com/9.x/pixel-art/png?seed=${username}`;
-    console.log(avatar);
     return avatar;
   }
 
@@ -103,7 +102,7 @@ export class UserService {
 
       return ok();
     } catch (error) {
-      console.log("patchUserActivity:", error);
+      console.error("patchUserActivity:", error);
       return err("Klarte ikke oppdatere bruker aktivitet");
     }
   }
@@ -122,7 +121,7 @@ export class UserService {
 
       return ok();
     } catch (error) {
-      console.log("deleteUser:", error);
+      console.error("deleteUser:", error);
       return err("Klarte ikke slette bruker");
     }
   }
@@ -137,7 +136,7 @@ export class UserService {
       });
       return ok(response.data);
     } catch (error) {
-      console.log("listUsers:", error);
+      console.error("listUsers:", error);
       return err("Klarte ikke liste ut brukere");
     }
   }
@@ -160,7 +159,7 @@ export class UserService {
 
       return err("Invalid token");
     } catch (error) {
-      console.log("validateToken:", error);
+      console.error("validateToken:", error);
       return err("Klarte ikke validere token");
     }
   }
@@ -186,7 +185,7 @@ export class UserService {
 
       return ok(response.data);
     } catch (error) {
-      console.log("updateGlobalPopup:", error);
+      console.error("updateGlobalPopup:", error);
       return err("Klarte ikke oppdatere popup");
     }
   }

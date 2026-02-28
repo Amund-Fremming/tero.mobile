@@ -12,6 +12,7 @@ import { Feather } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { GameType } from "@/src/core/constants/Types";
 
 export const GameScreen = () => {
   const navigation: any = useNavigation();
@@ -20,7 +21,7 @@ export const GameScreen = () => {
 
   const disconnectTriggeredRef = useRef<boolean>(false);
 
-  const { isHost, clearGlobalSessionValues, gameKey } = useGlobalSessionProvider();
+  const { isHost, clearGlobalSessionValues, gameKey, gameType } = useGlobalSessionProvider();
   const { clearSpinSessionValues, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
   const { disconnect, invokeFunction, debugDisconnect } = useHubConnectionProvider();
@@ -90,7 +91,6 @@ export const GameScreen = () => {
 
     const state: SpinGameState = result.value;
     if (state === SpinGameState.Finished) {
-      console.debug("Host received game finished");
       setBgColor(Color.Gray);
       setGameState(state);
       await handleGameFinshed();
@@ -111,16 +111,41 @@ export const GameScreen = () => {
     }
   };
 
-  const handleInfoPressed = () => {
-    console.log("Info pressed");
-    debugDisconnect();
-  };
-
   const handleBackPressed = async () => {
     await disconnect();
     clearSpinSessionValues();
     clearGlobalSessionValues();
     resetToHomeScreen(navigation);
+  };
+
+  const handleInfoPressed = () => {
+    if (isHost) {
+      if (gameType === GameType.Duel) {
+        displayInfoModal(
+          "Les opp hva de 2 utvalgte må duellere om. Når alle er klare kan du starte spinnen, grønn betyr at du er valgt.",
+          "Hva nå?",
+        );
+      }
+      if (gameType === GameType.Roulette) {
+        displayInfoModal(
+          "Les opp hva taperen av ruletten må gjøre. Når alle er klare kan du starte spinnen, grønn betyr at du er valgt.",
+          "Hva nå?",
+        );
+      }
+    } else {
+      if (gameType === GameType.Duel) {
+        displayInfoModal(
+          "Verten vil lese opp hva de 2 utvalgte må duellere om. De som får grønn farge er utvalgt!",
+          "Hva nå?",
+        );
+      }
+      if (gameType === GameType.Roulette) {
+        displayInfoModal(
+          "Verten vil lese opp hva taperen av ruletten må gjøre. Den som får grønn farge er utvalgt!",
+          "Hva nå?",
+        );
+      }
+    }
   };
 
   return (
@@ -129,16 +154,15 @@ export const GameScreen = () => {
         <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
           <Feather name="chevron-left" size={moderateScale(45)} />
         </TouchableOpacity>
-        {/* TODO - remove this ? not needed here */}
         <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
-          <Text style={styles.textIcon}>x</Text>
+          <Text style={styles.textIcon}>?</Text>
         </TouchableOpacity>
       </View>
 
       <Text style={{ ...styles.text }}>
         {gameState === SpinGameState.RoundStarted && isHost && `"${roundText}"`}
         {gameState === SpinGameState.RoundStarted && !isHost && "Gjør deg klar!"}
-        {gameState === SpinGameState.RoundFinished && "Venter på ny runde"}
+        {gameState === SpinGameState.RoundFinished && ""}
         {gameState === SpinGameState.Finished && "Spillet er ferdig!"}
       </Text>
 

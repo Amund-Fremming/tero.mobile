@@ -9,6 +9,7 @@ import { verticalScale } from "../../../core/utils/dimensions";
 import { GameEntryMode, GameType } from "../../../core/constants/Types";
 import Color from "../../../core/constants/Color";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
 
 const { height } = Dimensions.get("window");
 
@@ -23,6 +24,7 @@ const iconMap: { [key: string]: any } = {
 export const GameTypeListScreen = () => {
   const navigation: any = useNavigation();
   const { setGameType, gameEntryMode, setIsDraft } = useGlobalSessionProvider();
+  const { displayInfoModal } = useModalProvider();
 
   const handlePress = (screen: string) => {
     const screenEnum = screen as GameType;
@@ -45,7 +47,7 @@ export const GameTypeListScreen = () => {
   };
 
   const handleInfoPressed = () => {
-    console.log("Info pressed");
+    displayInfoModal("For å opprette ett spill må du først velge hvilken type spill du vil lage.", "Hvordan?");
   };
 
   return (
@@ -64,7 +66,7 @@ export const GameTypeListScreen = () => {
           flexDirection: "row",
           alignItems: "center",
           gap: verticalScale(15),
-          paddingBottom: verticalScale(200),
+          paddingBottom: verticalScale(20),
         }}
       >
         <ScreenHeader
@@ -85,6 +87,11 @@ export const GameTypeListScreen = () => {
           <Image source={require("../../../core/assets/images/finger.jpg")} style={styles.cardImage} />
           <Text style={{ ...styles.cardHeader, color: Color.White }}>Ditt spill?</Text>
         </Pressable>
+        <View style={styles.footer}>
+          <View style={styles.footerDivider} />
+          <Text style={styles.footerText}>Flere spill på vei!</Text>
+          <View style={styles.footerDivider} />
+        </View>
       </ScrollView>
     </View>
   );

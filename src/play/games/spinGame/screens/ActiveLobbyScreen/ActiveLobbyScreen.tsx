@@ -5,7 +5,7 @@ import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import { useNavigation } from "expo-router";
-import { GameType } from "@/src/core/constants/Types";
+import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 
@@ -83,7 +83,7 @@ export const ActiveLobbyScreen = () => {
 
     const startResult = await invokeFunction("StartGame", gameKey, true); // isDraft = true
     if (startResult.isError()) {
-      console.log(startResult.error);
+      console.error(startResult.error);
       displayErrorModal("Kunne ikke starte spillet.");
       setStartGameTriggered(false);
       return;
@@ -91,7 +91,7 @@ export const ActiveLobbyScreen = () => {
 
     const gameReady = startResult.value;
     if (!gameReady) {
-      console.log("Game not ready");
+      console.debug("Game not ready");
       setStartGameTriggered(false);
       return;
     }
@@ -107,7 +107,12 @@ export const ActiveLobbyScreen = () => {
   };
 
   const handleInfoPressed = () => {
-    console.log("Info pressed");
+    if (gameType === GameType.Duel) {
+      displayInfoModal("Her skal du legge inn duellen som de som blir valgt må utføre.", "Legg til!");
+    }
+    if (gameType === GameType.Roulette) {
+      displayInfoModal("Her skal du legge inn hva taperen i ruletten må gjøre eller svare på.", "Legg til!");
+    }
   };
 
   return (
