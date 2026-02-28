@@ -5,14 +5,26 @@ import Hub from "@/src/hub/Hub";
 import AuthProvider from "../src/core/context/AuthProvider";
 import ServiceProvider from "@/src/core/context/ServiceProvider";
 import { View, StatusBar, Dimensions } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
-import { useEffect } from "react";
+import { Asset } from "expo-asset";
+import { useEffect, useState } from "react";
+import SplashScreen from "@/src/core/components/SplashScreen/SplashScreen";
 import QuizSessionProvider from "@/src/play/games/quizGame/context/QuizGameProvider";
 import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
 import SpinSessionProvider from "@/src/play/games/spinGame/context/SpinGameProvider";
+import * as ExpoSplashScreen from "expo-splash-screen";
 
-SplashScreen.preventAutoHideAsync().catch(() => {});
+ExpoSplashScreen.hide();
+
+const IMAGES = [
+  require("../src/core/assets/images/quiz.webp"),
+  require("../src/core/assets/images/roulette.webp"),
+  require("../src/core/assets/images/duel.webp"),
+  require("../src/core/assets/images/imposter.webp"),
+  require("../src/core/assets/images/dice.webp"),
+  require("../src/core/assets/images/finger.jpg"),
+];
+
 const { width, height } = Dimensions.get("window");
 
 export default () => (
@@ -47,10 +59,11 @@ const FontLoader = ({ children }: { children: React.ReactNode }) => {
     "Sintony-Bold": require("../src/core/assets/fonts/Sintony-Bold.ttf"),
     "ArchivoBlack-Regular": require("../src/core/assets/fonts/ArchivoBlack-Regular.ttf"),
   });
+  const [splashDone, setSplashDone] = useState(false);
 
   useEffect(() => {
     if (fontsLoaded) {
-      SplashScreen.hideAsync().catch(() => {});
+      Asset.loadAsync(IMAGES);
     }
   }, [fontsLoaded]);
 
@@ -58,5 +71,10 @@ const FontLoader = ({ children }: { children: React.ReactNode }) => {
     return null;
   }
 
-  return <View style={{ width, height, position: "absolute", top: 0, left: 0 }}>{children}</View>;
+  return (
+    <View style={{ width, height, position: "absolute", top: 0, left: 0 }}>
+      {children}
+      {!splashDone && <SplashScreen onFinish={() => setSplashDone(true)} />}
+    </View>
+  );
 };

@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useRef, useState } from "react";
 import InfoModal from "../components/InfoModal/InfoModal";
 import ActionModal from "../components/ActionModal/ActionModal";
-import { Modal } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import LoadingModal from "../components/LoadingModal/LoadingModal";
 
 enum DisplayOption {
@@ -121,11 +121,22 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   return (
     <ModalContext.Provider value={value}>
       {children}
-      <Modal visible={displayOption !== DisplayOption.None} animationType="fade" transparent={true}>
-        {renderModal()}
-      </Modal>
+      {displayOption !== DisplayOption.None && <View style={styles.overlay}>{renderModal()}</View>}
     </ModalContext.Provider>
   );
 };
+
+const { width, height } = Dimensions.get("window");
+
+const styles = StyleSheet.create({
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width,
+    height,
+    zIndex: 1000,
+  },
+});
 
 export default ModalProvider;

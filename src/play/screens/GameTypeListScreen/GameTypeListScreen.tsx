@@ -1,6 +1,7 @@
 import styles from "./gameTypeListScreenStyles";
 import data from "./data.json";
-import { View, Text, Pressable, ScrollView, Dimensions, Image } from "react-native";
+import { View, Text, ScrollView, Dimensions, Image, TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 import React from "react";
 import { useNavigation } from "expo-router";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
@@ -27,6 +28,7 @@ export const GameTypeListScreen = () => {
   const { displayInfoModal } = useModalProvider();
 
   const handlePress = (screen: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const screenEnum = screen as GameType;
     const creating = gameEntryMode === GameEntryMode.Creator;
     if (creating) {
@@ -78,15 +80,22 @@ export const GameTypeListScreen = () => {
         />
         {data &&
           data.map((item, index) => (
-            <Pressable key={index} style={styles.card} onPress={() => handlePress(item.screen)}>
+            <TouchableOpacity key={index} style={styles.card} onPress={() => handlePress(item.screen)}>
               <Image source={iconMap[item.icon]} style={styles.cardImage} />
               <Text style={{ ...styles.cardHeader, color: item.color }}>{item.name}</Text>
-            </Pressable>
+            </TouchableOpacity>
           ))}
-        <Pressable key={100} style={styles.card} onPress={() => navigation.navigate(Screen.TipsUs)}>
+        <TouchableOpacity
+          key={100}
+          style={styles.card}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            navigation.navigate(Screen.TipsUs);
+          }}
+        >
           <Image source={require("../../../core/assets/images/finger.jpg")} style={styles.cardImage} />
           <Text style={{ ...styles.cardHeader, color: Color.White }}>Ditt spill?</Text>
-        </Pressable>
+        </TouchableOpacity>
         <View style={styles.footer}>
           <View style={styles.footerDivider} />
           <Text style={styles.footerText}>Flere spill på vei!</Text>

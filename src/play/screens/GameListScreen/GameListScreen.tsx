@@ -1,4 +1,5 @@
-import { Pressable, Text, View, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, TouchableOpacity, ScrollView } from "react-native";
+import * as Haptics from "expo-haptics";
 import VerticalScroll from "../../../core/components/VerticalScroll/VerticalScroll";
 import { useEffect, useRef, useState } from "react";
 import { useModalProvider } from "../../../core/context/ModalProvider";
@@ -51,6 +52,21 @@ export const GameListScreen = () => {
   const { gameType, setGameKey, setHubName, setIsHost, setIsDraft } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
+  const getHeaderBg = () => {
+    switch (gameType) {
+      case GameType.Imposter:
+        return Color.BuzzifyLavender;
+      case GameType.Duel:
+        return Color.BeigeLight;
+      case GameType.Roulette:
+        return Color.SkyBlueLight;
+      case GameType.Quiz:
+        return Color.LighterGreen;
+      default:
+        return Color.LightGray;
+    }
+  };
+
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>({
     items: [],
     has_next: false,
@@ -58,38 +74,19 @@ export const GameListScreen = () => {
     page_num: 1,
   });
   const [category, setCategory] = useState<GameCategory | null>(null);
-  const [headerBg, setHeaderBg] = useState<string>("white");
+  const [headerBg] = useState<string>(getHeaderBg);
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    handleHeaderBg();
     getPage(0);
   }, []);
-
-  const handleHeaderBg = () => {
-    switch (gameType) {
-      case GameType.Imposter:
-        setHeaderBg(Color.BuzzifyLavender);
-        break;
-      case GameType.Duel:
-        setHeaderBg(Color.BeigeLight);
-        break;
-      case GameType.Roulette:
-        setHeaderBg(Color.SkyBlueLight);
-        break;
-      case GameType.Quiz:
-        setHeaderBg(Color.LightGreen);
-        break;
-      default:
-        setHeaderBg(Color.LightGray);
-    }
-  };
 
   const handleNextPage = async () => {
     if (!pagedResponse.has_next) {
       return;
     }
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     await getPage(pagedResponse.page_num + 1);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
@@ -99,6 +96,7 @@ export const GameListScreen = () => {
       return;
     }
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     await getPage(pagedResponse.page_num - 1);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
@@ -123,6 +121,7 @@ export const GameListScreen = () => {
   };
 
   const handleSaveGame = async (gameId: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!accessToken) {
       displayActionModal(
         "Du må logge inn for å lagre spill",
@@ -143,6 +142,7 @@ export const GameListScreen = () => {
   };
 
   const handleGamePressed = async (gameId: string, gameType: GameType) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     switch (gameType) {
       case GameType.Quiz:
         setGameEntryMode(GameEntryMode.Host);
@@ -237,9 +237,9 @@ export const GameListScreen = () => {
                   <Text style={styles.cardDescription}>{game.iterations} runder</Text>
                 </View>
               </View>
-              <Pressable style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
+              <TouchableOpacity style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
                 <Feather name="bookmark" size={26} color={Color.Gray} />
-              </Pressable>
+              </TouchableOpacity>
             </TouchableOpacity>
             <View style={styles.separator} />
           </React.Fragment>
@@ -249,14 +249,20 @@ export const GameListScreen = () => {
           <Text style={styles.paragraph}>Side {pagedResponse.page_num}</Text>
           <View style={styles.navButtons}>
             {pagedResponse.has_prev && (
-              <Pressable style={pagedResponse.has_next ? styles.button : styles.buttonSingle} onPress={handlePrevPage}>
+              <TouchableOpacity
+                style={pagedResponse.has_next ? styles.button : styles.buttonSingle}
+                onPress={handlePrevPage}
+              >
                 <Text style={styles.buttonLabel}>Forrige</Text>
-              </Pressable>
+              </TouchableOpacity>
             )}
             {pagedResponse.has_next && (
-              <Pressable style={pagedResponse.has_prev ? styles.button : styles.buttonSingle} onPress={handleNextPage}>
+              <TouchableOpacity
+                style={pagedResponse.has_prev ? styles.button : styles.buttonSingle}
+                onPress={handleNextPage}
+              >
                 <Text style={styles.buttonLabel}>Neste</Text>
-              </Pressable>
+              </TouchableOpacity>
             )}
           </View>
         </View>

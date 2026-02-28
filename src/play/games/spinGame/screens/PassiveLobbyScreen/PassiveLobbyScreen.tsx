@@ -10,7 +10,8 @@ import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvid
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { GameType } from "@/src/core/constants/Types";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import * as Haptics from "expo-haptics";
 
 export const PassiveLobbyScreen = () => {
   const navigation: any = useNavigation();
@@ -20,6 +21,14 @@ export const PassiveLobbyScreen = () => {
   const { displayErrorModal, displayInfoModal } = useModalProvider();
 
   const [startGameTriggered, setStartGameTriggered] = useState(false);
+  const prevPlayersRef = useRef(players);
+
+  useEffect(() => {
+    if (players > prevPlayersRef.current) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    prevPlayersRef.current = players;
+  }, [players]);
 
   const handleBackPressed = async () => {
     await disconnect();

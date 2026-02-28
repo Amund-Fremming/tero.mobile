@@ -1,6 +1,7 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { useNavigation } from "expo-router";
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import { styles } from "./tipsListScreenStyles";
 import Color from "@/src/core/constants/Color";
 import React, { useEffect, useState } from "react";
@@ -43,6 +44,7 @@ export const TipsListScreen = () => {
   };
 
   const handleCardToggled = (id: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setOpenCards((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {

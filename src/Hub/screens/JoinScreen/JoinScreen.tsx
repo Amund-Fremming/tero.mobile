@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image, Keyboard } from "react-native";
-
+import * as Haptics from "expo-haptics";
 import styles from "./joinScreenStyles";
-import { Pressable, TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useState, useRef } from "react";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
@@ -36,15 +36,16 @@ export const JoinScreen = () => {
 
   const handleJoinGame = async () => {
     if (userInput === "") {
-      displayInfoModal("Skriv inn spillkode.", "Mangler");
+      displayInfoModal("Du har glemt å skrive inn ett rom navn.", "Oisann");
       return;
     }
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const gameKey = userInput.trim().toLocaleLowerCase();
     const result = await gameService().joinInteractiveGame(pseudoId, gameKey);
     if (result.isError()) {
       console.warn(result.error);
-      displayInfoModal("Spillet finnes ikke eller er startet.");
+      displayInfoModal("Spillet finnes ikke eller har allerede startet.");
       return;
     }
 

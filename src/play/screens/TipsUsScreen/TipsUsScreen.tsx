@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Keyboard } from "react-native";
+import * as Haptics from "expo-haptics";
 import { styles } from "./tipsUsScreenStyles";
 import { TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "expo-router";
@@ -74,6 +75,7 @@ export const TipsUsScreen = () => {
       displayErrorModal("Kunne ikke sende tips.");
       return;
     }
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     displayInfoModal("Takk for tipset!", "Takk", () => navigation.goBack());
   };
 
@@ -106,6 +108,8 @@ export const TipsUsScreen = () => {
                 placeholder="Navn"
                 maxLength={14}
                 value={createRequest.header}
+                returnKeyType="done"
+                onSubmitEditing={Keyboard.dismiss}
                 onChangeText={(input) => {
                   if (input.length > 14) {
                     displayInfoModal("Navn kan ikke være lengre enn 14 tegn.");
@@ -158,6 +162,7 @@ export const TipsUsScreen = () => {
                 textAlignVertical="top"
                 scrollEnabled={true}
                 maxLength={300}
+                blurOnSubmit={true}
                 value={createRequest.description}
                 onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, description: input }))}
               />

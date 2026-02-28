@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import * as Haptics from "expo-haptics";
 import styles from "./addPlayersScreenStyles";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { useNavigation } from "expo-router";
@@ -123,6 +124,7 @@ export const AddPlayersScreen = () => {
 
   const handleAddPlayer = () => {
     const newPlayerNumber = players.length + 1;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPlayers([...players, `Spiller ${newPlayerNumber}`]);
   };
 
@@ -132,6 +134,7 @@ export const AddPlayersScreen = () => {
       return;
     }
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPlayers(players.filter((_, i) => i !== index));
   };
 

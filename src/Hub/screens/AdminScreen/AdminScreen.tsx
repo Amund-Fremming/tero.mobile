@@ -1,4 +1,5 @@
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import styles from "./AdminScreenStyles";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
@@ -15,9 +16,8 @@ import { Feather } from "@expo/vector-icons";
 
 export const AdminScreen = () => {
   const navigation: any = useNavigation();
-  const { redirectUri } = useAuthProvider();
+  const { redirectUri, accessToken } = useAuthProvider();
   const { commonService, userService } = useServiceProvider();
-  const { accessToken } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
 
   const [systemHealth, setSystemHealth] = useState<SystemHealth>({
@@ -113,6 +113,7 @@ export const AdminScreen = () => {
   };
 
   const handleErrorLogCardClick = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     navigation.navigate(Screen.Logs);
   };
 
@@ -137,7 +138,7 @@ export const AdminScreen = () => {
 
       <View style={styles.separator} />
 
-      <Pressable onPress={handleErrorLogCardClick} style={styles.card}>
+      <TouchableOpacity onPress={handleErrorLogCardClick} style={styles.card}>
         <Text style={styles.sectionTitle}>Logger</Text>
         <View style={styles.healthWrapper}>
           <Text style={styles.errorLogTextBold}>Info</Text>
@@ -151,7 +152,7 @@ export const AdminScreen = () => {
           <Text style={styles.errorLogTextBold}>Critical</Text>
           <Text style={[styles.errorLogTextBold, { color: Color.Red }]}>{logCategoryCount.critical}</Text>
         </View>
-      </Pressable>
+      </TouchableOpacity>
 
       <View style={styles.separator} />
 
@@ -222,10 +223,16 @@ export const AdminScreen = () => {
 
       <View style={styles.separator} />
 
-      <Pressable onPress={() => navigation.navigate(Screen.TipsList)} style={styles.card}>
+      <TouchableOpacity
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          navigation.navigate(Screen.TipsList);
+        }}
+        style={styles.card}
+      >
         <Text style={styles.sectionTitle}>Spill Tips</Text>
         <Text style={styles.text}>Administrer spill tips</Text>
-      </Pressable>
+      </TouchableOpacity>
 
       <View style={styles.separator} />
 
@@ -236,15 +243,18 @@ export const AdminScreen = () => {
       )}
       {popup && !popupEditing && (
         <View style={styles.card}>
-          <Pressable
-            onPress={() => setPopup((prev) => (prev ? { ...prev, active: !prev.active } : prev))}
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setPopup((prev) => (prev ? { ...prev, active: !prev.active } : prev));
+            }}
             style={[styles.toggleButton, popup.active ? styles.toggleButtonActive : styles.toggleButtonInactive]}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Text style={[styles.toggleText, popup.active ? styles.toggleTextActive : styles.toggleTextInactive]}>
               {popup.active ? "PÅ" : "AV"}
             </Text>
-          </Pressable>
+          </TouchableOpacity>
           <Text style={styles.cardTitle}>Popup Melding</Text>
           <View style={styles.inputWrapper}>
             <Text style={styles.inputLabel}>Tittel</Text>
@@ -258,23 +268,32 @@ export const AdminScreen = () => {
               <Text style={styles.text}>{popup.paragraph}</Text>
             </View>
           </View>
-          <Pressable onPress={() => setPopupEditing(true)} style={styles.popupButton}>
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setPopupEditing(true);
+            }}
+            style={styles.popupButton}
+          >
             <Text style={styles.popupText}>Rediger</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       )}
 
       {popup && popupEditing && (
         <View style={styles.card}>
-          <Pressable
-            onPress={() => setPopup((prev) => (prev ? { ...prev, active: !prev.active } : prev))}
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setPopup((prev) => (prev ? { ...prev, active: !prev.active } : prev));
+            }}
             style={[styles.toggleButton, popup.active ? styles.toggleButtonActive : styles.toggleButtonInactive]}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Text style={[styles.toggleText, popup.active ? styles.toggleTextActive : styles.toggleTextInactive]}>
               {popup.active ? "PÅ" : "AV"}
             </Text>
-          </Pressable>
+          </TouchableOpacity>
           <Text style={styles.cardTitle}>Rediger Popup</Text>
           <View style={styles.inputWrapper}>
             <Text style={styles.inputLabel}>Tittel</Text>
@@ -314,12 +333,24 @@ export const AdminScreen = () => {
             </View>
           </View>
           <View style={styles.buttonContainer}>
-            <Pressable onPress={() => setPopupEditing(false)} style={styles.cancelButton}>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setPopupEditing(false);
+              }}
+              style={styles.cancelButton}
+            >
               <Text style={styles.cancelText}>Avbryt</Text>
-            </Pressable>
-            <Pressable onPress={handleUpdateModal} style={styles.saveButton}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                handleUpdateModal();
+              }}
+              style={styles.saveButton}
+            >
               <Text style={styles.saveButtonText}>Lagre</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       )}

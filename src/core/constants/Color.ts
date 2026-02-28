@@ -32,6 +32,7 @@ export const Color = {
   LighterGreen: "#7d9286",
   DarkGreen: "#28353A",
   LightGreen: "#D3F0D2",
+  DeepForest: "#566b5f",
 };
 
 export default Color;

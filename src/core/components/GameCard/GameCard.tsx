@@ -1,6 +1,6 @@
-import { Text, Pressable } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 import styles from "./gameCardStyles";
-import { useNavigation } from "@react-navigation/native";
 import { GameBase } from "@/src/core/constants/Types";
 
 interface GameBaseCardProps {
@@ -9,13 +9,17 @@ interface GameBaseCardProps {
 }
 
 export const GameCard = ({ gameBase, handlePress }: GameBaseCardProps) => {
-  const navigation: any = useNavigation();
-
   return (
-    <Pressable style={styles.card} onPress={handlePress}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        handlePress();
+      }}
+    >
       <Text style={styles.header}>{gameBase.name}</Text>
       <Text style={styles.iterations}>{gameBase.iterations}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

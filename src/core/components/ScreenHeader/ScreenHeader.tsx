@@ -1,4 +1,5 @@
 import { Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import { Feather } from "@expo/vector-icons";
 import { moderateScale } from "../../utils/dimensions";
 import styles from "./screenHeaderStyles";
@@ -25,7 +26,13 @@ export const ScreenHeader = ({
   return (
     <View style={[styles.topWrapper, backgroundColor && { backgroundColor }]}>
       <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={onBackPressed} style={styles.iconWrapper}>
+        <TouchableOpacity
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            onBackPressed();
+          }}
+          style={styles.iconWrapper}
+        >
           <Feather name="chevron-left" size={moderateScale(45)} />
         </TouchableOpacity>
 
@@ -42,11 +49,23 @@ export const ScreenHeader = ({
 
         {onInfoPress ? (
           infoIconOverride === "?" ? (
-            <TouchableOpacity onPress={onInfoPress} style={styles.iconWrapper}>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                onInfoPress!();
+              }}
+              style={styles.iconWrapper}
+            >
               <Text style={styles.textIcon}>?</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={onInfoPress} style={styles.iconWrapper}>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                onInfoPress!();
+              }}
+              style={styles.iconWrapper}
+            >
               <Feather name={infoIconOverride} size={moderateScale(35)} />
             </TouchableOpacity>
           )

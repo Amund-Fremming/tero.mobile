@@ -1,4 +1,5 @@
-import { Pressable, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import { styles } from "./infoModalStyles";
 import Color from "../../constants/Color";
 
@@ -13,11 +14,17 @@ export const InfoModal = ({ isError, header, message, onCloseFunc }: InfoModalPr
   return (
     <View style={styles.overlay}>
       <View style={[styles.genericContainer, isError ? styles.errorContainer : styles.messageContainer]}>
-        <Text style={{ ...styles.header, color: isError ? Color.Red : Color.BeigeLight }}>{header}</Text>
+        <Text style={{ ...styles.header, color: isError ? Color.HomeRed : Color.BeigeLight }}>{header}</Text>
         <Text style={styles.message}>{message}</Text>
-        <Pressable onPress={onCloseFunc} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            onCloseFunc();
+          }}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Lukk</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

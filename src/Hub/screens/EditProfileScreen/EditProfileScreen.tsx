@@ -1,4 +1,5 @@
-import { Pressable, ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 import { styles } from "./editProfileScreenStyles";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useEffect, useState } from "react";
@@ -204,9 +205,12 @@ export const EditProfileScreen = () => {
         <View style={styles.inputWrapper}>
           <Text style={styles.genderLabel}>Kjønn</Text>
           <View style={styles.genderButtonContainer}>
-            <Pressable
+            <TouchableOpacity
               style={[styles.genderButton, patchRequest?.gender === Gender.Male && styles.genderButtonSelected]}
-              onPress={() => setPatchRequest((prev) => ({ ...prev, gender: Gender.Male }))}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setPatchRequest((prev) => ({ ...prev, gender: Gender.Male }));
+              }}
             >
               <Text
                 style={[
@@ -216,10 +220,13 @@ export const EditProfileScreen = () => {
               >
                 Mann
               </Text>
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[styles.genderButton, patchRequest?.gender === Gender.Female && styles.genderButtonSelected]}
-              onPress={() => setPatchRequest((prev) => ({ ...prev, gender: Gender.Female }))}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setPatchRequest((prev) => ({ ...prev, gender: Gender.Female }));
+              }}
             >
               <Text
                 style={[
@@ -229,10 +236,13 @@ export const EditProfileScreen = () => {
               >
                 Kvinne
               </Text>
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[styles.genderButton, patchRequest?.gender === Gender.Unknown && styles.genderButtonSelected]}
-              onPress={() => setPatchRequest((prev) => ({ ...prev, gender: Gender.Unknown }))}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setPatchRequest((prev) => ({ ...prev, gender: Gender.Unknown }));
+              }}
             >
               <Text
                 style={[
@@ -242,13 +252,19 @@ export const EditProfileScreen = () => {
               >
                 Annet
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
 
       <View style={styles.buttonWrapper}>
-        <TouchableOpacity onPress={handlePatchUser} style={styles.saveButton}>
+        <TouchableOpacity
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            handlePatchUser();
+          }}
+          style={styles.saveButton}
+        >
           <Text style={styles.saveButtonText}>Lagre</Text>
         </TouchableOpacity>
       </View>

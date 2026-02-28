@@ -1,4 +1,5 @@
 import { Text, TouchableOpacity, View, Keyboard } from "react-native";
+import * as Haptics from "expo-haptics";
 import { styles } from "./simpleInitScreenStyles";
 import { TextInput } from "react-native-gesture-handler";
 import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
@@ -107,7 +108,13 @@ export const SimpleInitScreen = ({
     <KeyboardAvoidingWrapper backgroundColor={themeColor} anchorRef={anchorRef}>
       <View style={styles.container}>
         <View style={styles.headerWrapper}>
-          <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              handleBackPressed();
+            }}
+            style={styles.iconWrapper}
+          >
             <Feather name="chevron-left" size={moderateScale(45)} />
           </TouchableOpacity>
           {createScreen && <Text style={styles.header}>{headerText}</Text>}
@@ -117,7 +124,13 @@ export const SimpleInitScreen = ({
               <Text style={styles.headerSecondScreen}>{gameKey?.toUpperCase()}</Text>
             </View>
           )}
-          <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
+          <TouchableOpacity
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              handleInfoPressed();
+            }}
+            style={styles.iconWrapper}
+          >
             <Text style={styles.textIcon}>?</Text>
           </TouchableOpacity>
         </View>
@@ -161,14 +174,23 @@ export const SimpleInitScreen = ({
           {!createScreen && (
             <TouchableOpacity
               ref={anchorRef}
-              onPress={topButtonOnPress}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                topButtonOnPress();
+              }}
               style={{ ...styles.categoryButton, backgroundColor: secondaryThemeColor }}
             >
               <Text style={styles.bottomText}>Legg til</Text>
             </TouchableOpacity>
           )}
           {isHost && (
-            <TouchableOpacity onPress={bottomButtonCallback} style={styles.createButton}>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                bottomButtonCallback();
+              }}
+              style={styles.createButton}
+            >
               <Text style={styles.bottomText}>{bottomButtonText}</Text>
             </TouchableOpacity>
           )}

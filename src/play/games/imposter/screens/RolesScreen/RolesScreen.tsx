@@ -1,4 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 import styles from "./rolesScreenStyles";
 import { useEffect, useState } from "react";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
@@ -51,6 +52,7 @@ export const RolesScreen = () => {
       displayInfoModal("Noen spillere har ikke sett sin rolle", "Vent litt!");
       return;
     }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setScreen(ImposterSessionScreen.Reveal);
   };
 

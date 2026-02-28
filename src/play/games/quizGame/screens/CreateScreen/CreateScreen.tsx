@@ -46,12 +46,12 @@ export const CreateScreen = () => {
     }
 
     if (gameName === "") {
-      displayInfoModal("Skriv inn navn.");
+      displayInfoModal("Spillnavn kan ikke være tomt");
       return;
     }
 
     if (gameName.length < 3) {
-      displayInfoModal("Navn må ha minst 3 tegn.");
+      displayInfoModal("Spillnavn må ha minst 3 tegn.");
       return;
     }
 
@@ -83,7 +83,7 @@ export const CreateScreen = () => {
     <SimpleInitScreen
       createScreen={true}
       themeColor={Color.LighterGreen}
-      secondaryThemeColor={Color.LighterGreen}
+      secondaryThemeColor={Color.DeepForest}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"

@@ -1,4 +1,4 @@
-import { View, Text, Animated, TouchableOpacity, Easing, Pressable } from "react-native";
+import { View, Text, Animated, TouchableOpacity, Easing } from "react-native";
 import styles from "./revealScreenStyles";
 import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "expo-router";
@@ -160,7 +160,7 @@ export const RevealScreen = () => {
       <ScreenHeader title="Avsløring" onBackPressed={handleLeaveGame} onInfoPress={handleInfoPressed} />
 
       <View style={styles.centerContent}>
-        <Pressable onPress={handleReveal} disabled={revealed}>
+        <TouchableOpacity onPress={handleReveal} disabled={revealed}>
           <Animated.View
             style={[
               styles.mysteryCard,
@@ -172,7 +172,7 @@ export const RevealScreen = () => {
           >
             <Text style={styles.questionMark}>?</Text>
           </Animated.View>
-        </Pressable>
+        </TouchableOpacity>
 
         <Animated.View
           style={[

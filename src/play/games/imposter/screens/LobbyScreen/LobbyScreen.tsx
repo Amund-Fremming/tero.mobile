@@ -61,16 +61,7 @@ export const LobbyScreen = () => {
   };
 
   const handleBackPressed = async () => {
-    displayActionModal(
-      "Er du sikker på at du vil forlate spillet?",
-      async () => {
-        await disconnect();
-        clearGlobalSessionValues();
-        clearImposterSessionValues();
-        resetToHomeScreen(navigation);
-      },
-      () => {},
-    );
+    setScreen(ImposterSessionScreen.AddPlayers);
   };
 
   const handleInfoPressed = () => {

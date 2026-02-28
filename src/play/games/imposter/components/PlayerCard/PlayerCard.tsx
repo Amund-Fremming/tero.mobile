@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Animated, Pressable, Text } from "react-native";
+import { Animated, Text, TouchableOpacity } from "react-native";
 import { styles } from "./playerCardStyles";
 import { Feather } from "@expo/vector-icons";
 import Color from "@/src/core/constants/Color";
@@ -72,7 +72,7 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
   };
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       disabled={locked}
@@ -86,7 +86,7 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
       >
         {revealed ? (isImposter ? "Imposter" : word) : name}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

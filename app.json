@@ -1,15 +1,9 @@
 {
   "expo": {
-    "name": "tero",
+    "name": "",
     "slug": "tero",
     "version": "1.0.0",
     "orientation": "portrait",
-    "splash": {
-      "image": "./app/tero.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#A9A4EB"
-    },
-    "icon": "./app/tero.png",
     "scheme": "com.tero",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -26,18 +20,7 @@
       "output": "static",
       "favicon": "./app/tero.png"
     },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./app/tero.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#A9A4EB"
-        }
-      ]
-    ],
+    "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
     }

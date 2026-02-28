@@ -18,11 +18,6 @@ export const styles = StyleSheet.create({
     fontWeight: 600,
   },
 
-  paragraph: {
-    color: "white",
-    fontSize: moderateScale(16),
-  },
-
   iterations: {
     color: "white",
     fontSize: moderateScale(18),

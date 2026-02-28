@@ -57,7 +57,7 @@ export const SpinGame = () => {
     const result = await connect(hubName);
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Koblingsfeil. Bli med på nytt.");
+      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt");
       return;
     }
 

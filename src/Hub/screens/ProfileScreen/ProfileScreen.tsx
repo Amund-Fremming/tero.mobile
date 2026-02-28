@@ -1,4 +1,5 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import { styles } from "./profileScreenStyles";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useEffect, useState } from "react";
@@ -108,42 +109,72 @@ export const ProfileScreen = () => {
           <Text style={styles.username}>@{userData?.username}</Text>
 
           <View style={styles.layover}>
-            <Pressable onPress={() => navigation.navigate(Screen.EditProfile)} style={styles.bigButton}>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.navigate(Screen.EditProfile);
+              }}
+              style={styles.bigButton}
+            >
               <View style={styles.iconGuard}>
                 <Feather name="edit" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Rediger profil</Text>
               <Feather name="chevron-right" size={35} color={Color.Black} />
-            </Pressable>
-            <Pressable onPress={handleResetPassword} style={styles.bigButton}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                handleResetPassword();
+              }}
+              style={styles.bigButton}
+            >
               <View style={styles.iconGuard}>
                 <Feather name="lock" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Bytt passord</Text>
               <Feather name="chevron-right" size={35} color={Color.Black} />
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate(Screen.TipsUs)} style={styles.bigButton}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.navigate(Screen.TipsUs);
+              }}
+              style={styles.bigButton}
+            >
               <View style={styles.iconGuard}>
                 <Feather name="sun" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Tips oss</Text>
               <Feather name="chevron-right" size={35} color={Color.Black} />
-            </Pressable>
-            <Pressable onPress={() => navigation.navigate(Screen.SavedGames)} style={styles.bigButton}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.navigate(Screen.SavedGames);
+              }}
+              style={styles.bigButton}
+            >
               <View style={styles.iconGuard}>
                 <Feather name="play" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Dine spill</Text>
               <Feather name="chevron-right" size={35} color={Color.Black} />
-            </Pressable>
+            </TouchableOpacity>
             {isAdmin && (
-              <Pressable onPress={() => navigation.navigate(Screen.Admin)} style={styles.bigButton}>
+              <TouchableOpacity
+                onPress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  navigation.navigate(Screen.Admin);
+                }}
+                style={styles.bigButton}
+              >
                 <View style={styles.iconGuard}>
                   <Feather name="shield" size={30} color={Color.Black} />
                 </View>
                 <Text style={styles.buttonText}>Admin</Text>
                 <Feather name="chevron-right" size={35} color={Color.Black} />
-              </Pressable>
+              </TouchableOpacity>
             )}
           </View>
         </View>

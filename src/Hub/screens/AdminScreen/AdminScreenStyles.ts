@@ -1,26 +1,13 @@
 import { StyleSheet } from "react-native";
-import Colors, { Color } from "../../../core/constants/Color";
+import { Color } from "../../../core/constants/Color";
 import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { Font } from "../../../core/constants/Font";
 
 export const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    height: "100%",
-    backgroundColor: Colors.LightGray,
-    gap: verticalScale(20),
-  },
-
   uri: {
     color: Color.Burgunde,
     fontFamily: Font.SintonyBold,
     fontSize: moderateScale(18),
-  },
-
-  leadContainer: {
-    paddingTop: verticalScale(50),
-    width: "90%",
-    justifyContent: "center",
   },
 
   toggleButton: {
@@ -65,7 +52,7 @@ export const styles = StyleSheet.create({
     color: Color.BuzzifyLavender,
   },
 
-  popupButton: {
+  card: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -76,18 +63,7 @@ export const styles = StyleSheet.create({
     marginTop: verticalScale(4),
   },
 
-  singleButton: {
-    marginTop: verticalScale(20),
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    borderRadius: moderateScale(10),
-    height: verticalScale(45),
-    borderWidth: moderateScale(3),
-    borderColor: Color.Purple,
-  },
-
-  card: {
+  popupButton: {
     borderRadius: moderateScale(10),
     width: "85%",
     gap: verticalScale(10),

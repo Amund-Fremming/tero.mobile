@@ -49,7 +49,7 @@ export const CreateScreen = ({
     }
 
     if (gameName === "") {
-      displayInfoModal("Skriv inn navn.");
+      displayInfoModal("Spillnavn kan ikke være tomt");
       return;
     }
 

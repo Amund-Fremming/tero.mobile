@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
     width: "86%",
     borderRadius: moderateScale(10),
     height: verticalScale(69),
-    backgroundColor: Color.LighterGreen,
+    backgroundColor: Color.DeepForest,
   },
 });
 

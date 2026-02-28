@@ -4,11 +4,17 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { useQuizSessionProvider } from "../../context/QuizGameProvider";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 
 export const StartedScreen = () => {
   const navigation: any = useNavigation();
+  const { clearQuizGameValues } = useQuizSessionProvider();
+  const { clearGlobalSessionValues } = useGlobalSessionProvider();
 
   const handleGoHome = () => {
+    clearQuizGameValues();
+    clearGlobalSessionValues();
     resetToHomeScreen(navigation);
   };
 

@@ -16,45 +16,47 @@ export const styles = StyleSheet.create({
   genericContainer: {
     paddingVertical: verticalScale(30),
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     width: horizontalScale(350),
     height: "auto",
     borderWidth: moderateScale(2),
     borderRadius: moderateScale(35),
     gap: verticalScale(15),
-    paddingHorizontal: horizontalScale(20),
+    paddingHorizontal: horizontalScale(26),
   },
 
   messageContainer: {
-    backgroundColor: Color.White,
+    backgroundColor: Color.LightGray,
     borderColor: Color.Gray,
-    borderWidth: moderateScale(5),
+    borderWidth: moderateScale(3),
   },
 
   errorContainer: {
     backgroundColor: Color.White,
-    borderColor: Color.Gray,
+    borderColor: Color.HomeRed,
+    borderWidth: moderateScale(3),
   },
 
   header: {
-    textAlign: "center",
+    textAlign: "left",
     fontFamily: Font.PassionOneBold,
-    fontSize: moderateScale(45),
-    opacity: 0.8,
+    fontSize: moderateScale(38),
+    opacity: 0.85,
   },
 
   message: {
     fontFamily: Font.SintonyBold,
-    fontSize: moderateScale(24),
-    textAlign: "center",
-    color: Color.Black,
+    fontSize: moderateScale(18),
+    textAlign: "left",
+    color: Color.OffBlack,
   },
 
   button: {
-    backgroundColor: Color.Gray,
+    backgroundColor: Color.Beige,
     borderRadius: moderateScale(10),
     marginTop: verticalScale(12),
     width: "80%",
+    alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
     height: verticalScale(50),

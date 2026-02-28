@@ -1,7 +1,5 @@
 import { StyleSheet } from "react-native";
-import Colors, { Color } from "../../../core/constants/Color";
-import { verticalScale, moderateScale, horizontalScale } from "@/src/core/utils/dimensions";
-import { Font } from "../../../core/constants/Font";
+import { Color } from "../../../core/constants/Color";
 
 export const styles = StyleSheet.create({
   container: {
@@ -15,19 +13,19 @@ export const styles = StyleSheet.create({
   },
 
   debugHeader: {
-    fontSize: moderateScale(25),
+    fontSize: moderateScale(20),
     fontWeight: 700,
-    paddingRight: "60%",
-    paddingBottom: verticalScale(15),
+    marginBottom: verticalScale(8),
   },
 
   debugBox: {
-    marginTop: verticalScale(50),
-    justifyContent: "center",
+    marginTop: verticalScale(30),
     alignItems: "flex-start",
-    paddingLeft: verticalScale(25),
+    padding: verticalScale(15),
+    gap: verticalScale(6),
     borderColor: Color.Red,
-    borderWidth: moderateScale(6),
+    borderWidth: moderateScale(2),
+    borderRadius: moderateScale(10),
     width: "90%",
   },
 });

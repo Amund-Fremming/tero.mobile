@@ -1,4 +1,5 @@
-import { View, Text, Pressable, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 import Screen from "../../../core/constants/Screen";
 import styles from "./homeScreenStyles";
 import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionProvider";
@@ -122,6 +123,7 @@ export const HomeScreen = () => {
       return;
     }
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setGameEntryMode(gameEntryMode);
     navigation.navigate(destination);
   };
@@ -133,7 +135,8 @@ export const HomeScreen = () => {
         <Text style={styles.subHeader}>{subHeader}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable
+        <TouchableOpacity
+          activeOpacity={0.8}
           style={{ ...styles.buttonBase, ...styles.topLeft }}
           disabled={!isPseudoReady}
           onPress={() => handlePress(GameEntryMode.Creator, Screen.GameTypeList)}
@@ -143,8 +146,9 @@ export const HomeScreen = () => {
             <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>LAG</Text>
             <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>SPILL</Text>
           </View>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
           style={{ ...styles.buttonBase, ...styles.topRight }}
           disabled={!isPseudoReady}
           onPress={() => handlePress(GameEntryMode.Host, Screen.GameTypeList)}
@@ -154,19 +158,24 @@ export const HomeScreen = () => {
             <Text style={{ ...styles.textBase, ...styles.textTopRight }}>VELG</Text>
             <Text style={{ ...styles.textBase, ...styles.textTopRight }}>SPILL</Text>
           </View>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
           style={{ ...styles.buttonBase, ...styles.bottomLeft }}
           disabled={!isPseudoReady}
-          onPress={() => navigation.navigate(Screen.Hub)}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            navigation.navigate(Screen.Hub);
+          }}
         >
           <ArcWithCircles />
           <View style={styles.buttonTextWrapper}>
             <Text style={{ ...styles.textBase, ...styles.textBottomLeft }}>TIL</Text>
             <Text style={{ ...styles.textBase, ...styles.textBottomLeft }}>HUB</Text>
           </View>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
           style={{ ...styles.buttonBase, ...styles.bottomRight }}
           disabled={!isPseudoReady}
           onPress={() => handlePress(GameEntryMode.Participant, Screen.Join)}
@@ -178,7 +187,7 @@ export const HomeScreen = () => {
               <Text style={{ ...styles.textBase, ...styles.textBottomRight }}>MED</Text>
             </View>
           </View>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

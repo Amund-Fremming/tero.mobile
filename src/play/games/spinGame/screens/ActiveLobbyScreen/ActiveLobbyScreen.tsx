@@ -1,5 +1,6 @@
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import * as Haptics from "expo-haptics";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
@@ -20,6 +21,14 @@ export const ActiveLobbyScreen = () => {
   const [startGameTriggered, setStartGameTriggered] = useState<boolean>(false);
   const [round, setRound] = useState<string>("");
   const [isAddingRound, setIsAddingRound] = useState<boolean>(false);
+  const prevIterationsRef = useRef(iterations);
+
+  useEffect(() => {
+    if (iterations > prevIterationsRef.current) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    prevIterationsRef.current = iterations;
+  }, [iterations]);
 
   const handleSetRound = (value: string) => {
     setRound(value);
@@ -35,7 +44,9 @@ export const ActiveLobbyScreen = () => {
     }
 
     setIsAddingRound(true);
-    const result = await invokeFunction("AddRound", gameKey, round);
+    const roundToAdd = round;
+    setRound("");
+    const result = await invokeFunction("AddRound", gameKey, roundToAdd);
 
     if (result.isError()) {
       console.error(result.error);

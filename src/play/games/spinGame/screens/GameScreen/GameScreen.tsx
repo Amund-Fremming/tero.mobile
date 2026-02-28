@@ -1,4 +1,5 @@
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import styles from "./gameScreenStyles";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { SpinGameState } from "../../constants/SpinTypes";
@@ -80,12 +81,13 @@ export const GameScreen = () => {
   };
 
   const handleNextRound = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const result = await invokeFunction("NextRound", gameKey);
     if (result.isError()) {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("Koblingsfeil.");
+      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt");
       return;
     }
 
@@ -101,17 +103,19 @@ export const GameScreen = () => {
     const channel = gameStarted ? "NextRound" : "StartRound";
     setGameStarted(false);
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const result = await invokeFunction(channel, gameKey);
     if (result.isError()) {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("Koblingsfeil.");
+      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt");
       return;
     }
   };
 
   const handleBackPressed = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     await disconnect();
     clearSpinSessionValues();
     clearGlobalSessionValues();
@@ -119,6 +123,7 @@ export const GameScreen = () => {
   };
 
   const handleInfoPressed = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (isHost) {
       if (gameType === GameType.Duel) {
         displayInfoModal(
@@ -167,21 +172,27 @@ export const GameScreen = () => {
       </Text>
 
       {gameState === SpinGameState.RoundStarted && isHost && (
-        <Pressable onPress={handleStartRound} style={styles.button}>
+        <TouchableOpacity onPress={handleStartRound} style={styles.button}>
           <Text style={styles.buttonText}>Start spin</Text>
-        </Pressable>
+        </TouchableOpacity>
       )}
 
       {gameState === SpinGameState.RoundFinished && isHost && (
-        <Pressable style={styles.button} onPress={handleNextRound}>
+        <TouchableOpacity style={styles.button} onPress={handleNextRound}>
           <Text style={styles.buttonText}>Ny runde</Text>
-        </Pressable>
+        </TouchableOpacity>
       )}
 
       {gameState === SpinGameState.Finished && (
-        <Pressable style={styles.button} onPress={navigateHome}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            navigateHome();
+          }}
+        >
           <Text style={styles.buttonText}>Hjem</Text>
-        </Pressable>
+        </TouchableOpacity>
       )}
     </View>
   );

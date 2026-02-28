@@ -1,10 +1,10 @@
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import * as Haptics from "expo-haptics";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { HubChannel } from "@/src/core/constants/HubChannel";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
-import { QuizGameScreen, QuizSession } from "../../constants/quizTypes";
+import { QuizGameScreen } from "../../constants/quizTypes";
 import { useNavigation } from "expo-router";
 import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
 import Color from "@/src/core/constants/Color";
@@ -14,59 +14,24 @@ export const LobbyScreen = () => {
   const navigation: any = useNavigation();
   const [question, setQuestion] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
-  const [iterations, setIterations] = useState<number>(0);
   const [isAddingQuestion, setIsAddingQuestion] = useState<boolean>(false);
 
-  const { gameKey, hubName } = useGlobalSessionProvider();
-  const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
-  const { displayErrorModal, displayInfoModal } = useModalProvider();
-  const { setQuizSession, setScreen } = useQuizSessionProvider();
+  const { gameKey, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { disconnect, invokeFunction } = useHubConnectionProvider();
+  const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
+  const { setScreen, iterations, clearQuizGameValues } = useQuizSessionProvider();
+
+  const prevIterationsRef = useRef(iterations);
 
   useEffect(() => {
-    if (gameKey) {
-      createHubConnection(gameKey, hubName);
+    if (iterations > prevIterationsRef.current) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
-
-    return () => {
-      disconnect();
-    };
-  }, [gameKey]);
+    prevIterationsRef.current = iterations;
+  }, [iterations]);
 
   const handleSetQuestion = (value: string) => {
     setQuestion(value);
-  };
-
-  const createHubConnection = async (key: string, hubName: string) => {
-    const result = await connect(hubName);
-    if (result.isError()) {
-      displayErrorModal(result.error);
-      return;
-    }
-
-    setListener(HubChannel.Iterations, (iterations: number) => {
-      setIterations(iterations);
-    });
-
-    setListener(HubChannel.Error, (message: string) => {
-      disconnect();
-      displayErrorModal(message, () => resetToHomeScreen(navigation));
-    });
-
-    setListener(HubChannel.Game, (game: QuizSession) => {
-      setQuizSession(game);
-    });
-
-    setListener(HubChannel.State, (message: string) => {
-      setScreen(QuizGameScreen.Started);
-      disconnect();
-    });
-
-    const connectResult = await invokeFunction("ConnectToGroup", key);
-    if (connectResult.isError()) {
-      displayErrorModal("Koblingsfeil. Bli med på nytt.");
-      await disconnect();
-      return;
-    }
   };
 
   const handleAddQuestion = async () => {
@@ -75,7 +40,6 @@ export const LobbyScreen = () => {
     }
 
     if (question === "") {
-      displayInfoModal("Skriv inn et spørsmål.");
       return;
     }
 
@@ -124,15 +88,25 @@ export const LobbyScreen = () => {
     displayInfoModal("Her skal du legge inn spørsmålene som skal være i spillet", "Legg til!");
   };
 
+  const handleBackPressed = () => {
+    displayActionModal(
+      "Er du sikker på at du vil forlate spillet?",
+      () => {
+        disconnect();
+        clearQuizGameValues();
+        clearGlobalSessionValues();
+        resetToHomeScreen(navigation);
+      },
+      () => {},
+    );
+  };
+
   return (
     <SimpleInitScreen
       createScreen={false}
       themeColor={Color.LighterGreen}
-      secondaryThemeColor={Color.LighterGreen}
-      onBackPressed={() => {
-        disconnect();
-        resetToHomeScreen(navigation);
-      }}
+      secondaryThemeColor={Color.DeepForest}
+      onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
       headerText="asdasd"
       topButtonText="Legg til"

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable, Animated, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Animated, TouchableOpacity } from "react-native";
 import styles from "./rolesScreenStyles";
 import { useEffect, useRef, useState } from "react";
 import { useGlobalSessionProvider } from "@/src/Common/context/GlobalSessionProvider";
@@ -80,7 +80,7 @@ const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps) => {
   };
 
   return (
-    <Pressable
+    <TouchableOpacity
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       disabled={locked}
@@ -94,7 +94,7 @@ const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps) => {
       >
         {revealed ? (isImposter ? "Imposter" : word) : name}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

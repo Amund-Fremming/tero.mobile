@@ -12,70 +12,75 @@ export const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
   },
+
   container: {
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     width: horizontalScale(350),
-    borderWidth: moderateScale(5),
-    borderRadius: moderateScale(30),
+    borderWidth: moderateScale(3),
+    borderRadius: moderateScale(35),
     gap: verticalScale(15),
-    backgroundColor: Color.White,
+    backgroundColor: Color.LightGray,
     borderColor: Color.Gray,
-    paddingHorizontal: horizontalScale(20),
-    paddingTop: verticalScale(20),
+    paddingHorizontal: horizontalScale(26),
+    paddingTop: verticalScale(30),
     paddingBottom: verticalScale(30),
   },
 
   header: {
-    textAlign: "center",
+    textAlign: "left",
     fontFamily: Font.PassionOneBold,
-    fontSize: moderateScale(45),
-    color: Color.OffBlack,
-    opacity: 0.8,
+    fontSize: moderateScale(38),
+    color: Color.BeigeLight,
+    opacity: 0.85,
   },
 
   message: {
     fontFamily: Font.SintonyBold,
-    fontSize: moderateScale(24),
-    textAlign: "center",
-    color: Color.Black,
+    fontSize: moderateScale(18),
+    textAlign: "left",
+    color: Color.OffBlack,
   },
 
   buttonsWrapper: {
     flexDirection: "row",
     gap: horizontalScale(15),
     marginTop: verticalScale(12),
+    alignSelf: "center",
     width: "86%",
   },
 
   button: {
     flex: 1,
-    backgroundColor: Color.Gray,
+    backgroundColor: Color.Beige,
     borderRadius: moderateScale(10),
     justifyContent: "center",
     alignItems: "center",
     height: verticalScale(50),
   },
+
   buttonText: {
     fontFamily: Font.PassionOneRegular,
     fontSize: moderateScale(30),
     color: Color.White,
     fontWeight: "600",
   },
+
   buttonInverted: {
     flex: 1,
-    backgroundColor: Color.White,
+    backgroundColor: "transparent",
     borderRadius: moderateScale(10),
-    borderWidth: moderateScale(4),
-    borderColor: Color.Gray,
+    borderWidth: moderateScale(3),
+    borderColor: Color.Beige,
     justifyContent: "center",
     alignItems: "center",
     height: verticalScale(50),
   },
+
   buttonInvertedText: {
     fontFamily: Font.PassionOneRegular,
     fontSize: moderateScale(30),
-    color: Color.Gray,
+    color: Color.Beige,
     fontWeight: "600",
   },
 });

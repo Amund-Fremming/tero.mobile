@@ -1,4 +1,5 @@
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import { styles } from "./loadingModalStyles";
 import Color from "../../constants/Color";
 
@@ -13,9 +14,15 @@ export const LoadingModal = ({ onCloseFunc, message }: LoadingModalProps) => {
       <View style={styles.container}>
         <ActivityIndicator size="large" color={Color.BuzzifyLavender} style={{ marginVertical: 20 }} />
         <Text style={styles.message}>{message ?? "Forbindelsen er brutt. Vi prøver å koble deg til på nytt nå"}</Text>
-        <Pressable onPress={onCloseFunc} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            onCloseFunc && onCloseFunc();
+          }}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Forlat</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -1,4 +1,5 @@
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 import styles from "./gameScreenStyles";
 import { useEffect, useState } from "react";
@@ -15,7 +16,7 @@ export const GameScreen = () => {
   const { quizSession } = useQuizSessionProvider();
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
   const { clearQuizGameValues } = useQuizSessionProvider();
-  const { displayInfoModal } = useModalProvider();
+  const { displayInfoModal, displayActionModal } = useModalProvider();
 
   const [quiz, setQuiz] = useState<QuizSession | undefined>(quizSession);
 
@@ -40,6 +41,7 @@ export const GameScreen = () => {
       return;
     }
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setQuiz((prev) => {
       if (!prev) return prev;
       if (prev.current_iteration == prev.rounds.length - 1) return prev;
@@ -55,9 +57,15 @@ export const GameScreen = () => {
   };
 
   const handleLeaveGame = () => {
-    clearGlobalSessionValues();
-    clearQuizGameValues();
-    resetToHomeScreen(navigation);
+    displayActionModal(
+      "Er du sikker på at du vil forlate spillet?",
+      () => {
+        clearGlobalSessionValues();
+        clearQuizGameValues();
+        resetToHomeScreen(navigation);
+      },
+      () => {},
+    );
   };
 
   return (

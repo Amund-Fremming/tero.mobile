@@ -1,4 +1,5 @@
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 import styles from "./logsScreenStyles";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
@@ -46,6 +47,7 @@ export const LogsScreen = () => {
   };
 
   const handleCategorySelect = (category: LogCeverity | null) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedCategory(category);
     setPageNum(0);
     setHasPrev(false);
@@ -56,6 +58,7 @@ export const LogsScreen = () => {
       return;
     }
 
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     const page = pageNum + 1;
     setPageNum(page);
     setHasPrev(true);
@@ -67,6 +70,8 @@ export const LogsScreen = () => {
     if (pageNum === 0) {
       return;
     }
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     if (pageNum === 1) {
       setHasPrev(false);
@@ -113,36 +118,36 @@ export const LogsScreen = () => {
           style={styles.categoryScroll}
           contentContainerStyle={styles.categoryScrollContent}
         >
-          <Pressable
+          <TouchableOpacity
             style={[styles.categoryButton, selectedCategory === null && styles.categoryButtonActive]}
             onPress={() => handleCategorySelect(null)}
           >
             <Text style={[styles.categoryText, selectedCategory === null && styles.categoryTextActive]}>Alle</Text>
-          </Pressable>
-          <Pressable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[styles.categoryButton, selectedCategory === LogCeverity.Info && styles.categoryButtonActive]}
             onPress={() => handleCategorySelect(LogCeverity.Info)}
           >
             <Text style={[styles.categoryText, selectedCategory === LogCeverity.Info && styles.categoryTextActive]}>
               Info
             </Text>
-          </Pressable>
-          <Pressable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[styles.categoryButton, selectedCategory === LogCeverity.Warning && styles.categoryButtonActive]}
             onPress={() => handleCategorySelect(LogCeverity.Warning)}
           >
             <Text style={[styles.categoryText, selectedCategory === LogCeverity.Warning && styles.categoryTextActive]}>
               Warning
             </Text>
-          </Pressable>
-          <Pressable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={[styles.categoryButton, selectedCategory === LogCeverity.Critical && styles.categoryButtonActive]}
             onPress={() => handleCategorySelect(LogCeverity.Critical)}
           >
             <Text style={[styles.categoryText, selectedCategory === LogCeverity.Critical && styles.categoryTextActive]}>
               Critical
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </ScrollView>
 
         <View style={styles.separator} />
@@ -168,14 +173,14 @@ export const LogsScreen = () => {
             <Text style={styles.pageInfo}>Side {pageNum + 1}</Text>
             <View style={styles.navButtons}>
               {hasPrev && (
-                <Pressable style={hasNext ? styles.button : styles.buttonSingle} onPress={handlePrevPage}>
+                <TouchableOpacity style={hasNext ? styles.button : styles.buttonSingle} onPress={handlePrevPage}>
                   <Text style={styles.buttonLabel}>Forrige</Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
               {hasNext && (
-                <Pressable style={hasPrev ? styles.button : styles.buttonSingle} onPress={handleNextPage}>
+                <TouchableOpacity style={hasPrev ? styles.button : styles.buttonSingle} onPress={handleNextPage}>
                   <Text style={styles.buttonLabel}>Neste</Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
             </View>
           </View>

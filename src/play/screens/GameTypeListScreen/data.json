@@ -9,13 +9,13 @@
     "name": "Quiz",
     "icon": "quiz.webp",
     "screen": "Quiz",
-    "color": "#befbff"
+    "color": "white"
   },
   {
     "name": "Duel",
     "icon": "duel.webp",
     "screen": "Duel",
-    "color": "#befbff"
+    "color": "white"
   },
   {
     "name": "Imposter",

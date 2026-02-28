@@ -50,7 +50,7 @@ export const ImposterGame = () => {
     if (result.isError()) {
       console.warn(hubName);
       console.error(result.error);
-      displayErrorModal("Koblingsfeil. Bli med på nytt.");
+      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt");
       return;
     }
 
