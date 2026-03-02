@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { CommonActions } from "@react-navigation/native";
 import { ImposterSession, ImposterSessionScreen } from "./constants/imposterTypes";
 import { useImposterSessionProvider } from "./context/ImposterSessionProvider";
+import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { RolesScreen } from "./screens/RolesScreen/RolesScreen";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
@@ -37,18 +38,22 @@ export const ImposterGame = () => {
   };
 
   useEffect(() => {
-    const initScreen = getInitialScreen();
+    if (!useGameScreenStore.getState().screens["imposter"]) {
+      const initScreen = getInitialScreen();
+      setScreen(initScreen);
 
-    if (initScreen === ImposterSessionScreen.Create) {
-      return;
-    }
-
-    if ([GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)) {
-      initializeHub(hubName, gameKey, initScreen);
+      if (
+        initScreen !== ImposterSessionScreen.Create &&
+        [GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)
+      ) {
+        initializeHub(hubName, gameKey, initScreen);
+      }
     }
 
     return () => {
       disconnect();
+      clearImposterSessionValues();
+      clearGlobalSessionValues();
     };
   }, []);
 

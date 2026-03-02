@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { GameEntryMode, GameType } from "../../core/constants/Types";
+import { registerCrashResetCallback } from "../../core/utils/navigationRef";
 
 interface IGlobalSessionContext {
   gameEntryMode: GameEntryMode;
@@ -50,6 +51,10 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
   const [isDraft, setIsDraft] = useState<boolean>(false);
 
   useEffect(() => {}, [isHost]);
+
+  useEffect(() => {
+    return registerCrashResetCallback(clearGlobalSessionValues);
+  }, []);
 
   const clearGlobalSessionValues = () => {
     setGameEntryMode(GameEntryMode.Creator);

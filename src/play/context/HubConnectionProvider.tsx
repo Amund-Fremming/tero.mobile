@@ -2,7 +2,7 @@ import * as signalR from "@microsoft/signalr";
 import React, { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 import { useModalProvider } from "../../core/context/ModalProvider";
 import { ok, err, Result } from "../../core/utils/result";
-import { resetToHomeGlobal } from "../../core/utils/navigationRef";
+import { resetToHomeGlobal, registerCrashResetCallback } from "../../core/utils/navigationRef";
 import { useAuthProvider } from "../../core/context/AuthProvider";
 import { useGlobalSessionProvider } from "./GlobalSessionProvider";
 import { HUB_URL_BASE } from "../../core/config/api";
@@ -38,7 +38,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
   const listenersMapRef = useRef<Map<string, (item: any) => void>>(new Map());
   const gameKeyRef = useRef<string>("");
 
-  const { gameKey } = useGlobalSessionProvider();
+  const { gameKey, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { displayLoadingModal, closeLoadingModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
 
@@ -46,8 +46,13 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     gameKeyRef.current = gameKey;
   }, [gameKey]);
 
+  useEffect(() => {
+    return registerCrashResetCallback(clearValues);
+  }, []);
+
   const giveUpAndGoHome = () => {
     clearValues();
+    clearGlobalSessionValues();
     closeLoadingModal();
     resetToHomeGlobal();
   };

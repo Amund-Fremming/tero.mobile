@@ -8,6 +8,7 @@ import ActiveLobbyScreen from "./screens/ActiveLobbyScreen/ActiveLobbyScreen";
 import PassiveLobbyScreen from "./screens/PassiveLobbyScreen/PassiveLobbyScreen";
 import { SpinSessionScreen, SpinGameState } from "./constants/SpinTypes";
 import { useSpinSessionProvider } from "./context/SpinGameProvider";
+import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
 import { View, ActivityIndicator } from "react-native";
 import { useNavigation } from "expo-router";
 import { GameEntryMode } from "@/src/core/constants/Types";
@@ -54,13 +55,19 @@ export const SpinGame = () => {
   useEffect(() => {
     setThemeColors(gameType);
 
-    const initScreen = getInitialScreen();
-    if (initScreen === SpinSessionScreen.Create) return;
+    if (!useGameScreenStore.getState().screens["spin"]) {
+      const initScreen = getInitialScreen();
+      setScreen(initScreen);
 
-    initializeHub(hubName, gameKey, initScreen);
+      if (initScreen !== SpinSessionScreen.Create) {
+        initializeHub(hubName, gameKey, initScreen);
+      }
+    }
 
     return () => {
       disconnect();
+      clearSpinSessionValues();
+      clearGlobalSessionValues();
     };
   }, []);
 

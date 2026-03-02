@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react";
 import { QuizGameScreen, QuizSession } from "./constants/quizTypes";
 import { CreateScreen } from "./screens/CreateScreen/CreateScreen";
 import { useQuizSessionProvider } from "./context/QuizGameProvider";
+import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
 import { GameEntryMode } from "@/src/core/constants/Types";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
@@ -24,6 +25,18 @@ export const QuizGame = () => {
   const { setQuizSession, setIterations, clearQuizGameValues } = useQuizSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal } = useModalProvider();
+
+  useEffect(() => {
+    if (!useGameScreenStore.getState().screens["quiz"]) {
+      const initScreen = getInitialScreen();
+      setScreen(initScreen);
+    }
+
+    return () => {
+      clearQuizGameValues();
+      clearGlobalSessionValues();
+    };
+  }, []);
 
   useEffect(() => {
     if (!gameKey) return;

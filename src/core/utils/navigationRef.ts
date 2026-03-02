@@ -16,3 +16,22 @@ export function resetToHomeGlobal() {
     }),
   );
 }
+
+// Crash reset registry — called by GameErrorBoundary on unhandled render errors
+type ResetCallback = () => void;
+const crashResetCallbacks = new Set<ResetCallback>();
+
+export function registerCrashResetCallback(fn: ResetCallback): () => void {
+  crashResetCallbacks.add(fn);
+  return () => crashResetCallbacks.delete(fn);
+}
+
+export function runCrashResetCallbacks() {
+  crashResetCallbacks.forEach((fn) => {
+    try {
+      fn();
+    } catch (e) {
+      console.warn("Error in crash reset callback:", e);
+    }
+  });
+}

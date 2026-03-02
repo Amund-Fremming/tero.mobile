@@ -7,7 +7,7 @@
  * Usage: wrapped around each game in Hub.tsx via withErrorBoundary().
  */
 import React, { Component, ErrorInfo, ReactNode } from "react";
-import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
+import { resetToHomeGlobal, runCrashResetCallbacks } from "@/src/core/utils/navigationRef";
 
 interface Props {
   children: ReactNode;
@@ -26,6 +26,7 @@ export class GameErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     console.error("GameErrorBoundary caught:", error, info);
+    runCrashResetCallbacks();
     resetToHomeGlobal();
   }
 

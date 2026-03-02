@@ -1,7 +1,11 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { SpinSessionScreen, SpinGameState } from "../constants/SpinTypes";
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
+import { registerCrashResetCallback } from "@/src/core/utils/navigationRef";
+import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
+
+const GAME_KEY = "spin";
 
 interface ISpinSessionContext {
   clearSpinSessionValues: () => void;
@@ -52,7 +56,12 @@ interface SpinSessionProviderProps {
 }
 
 export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
-  const [screen, setScreen] = useState<SpinSessionScreen>(SpinSessionScreen.Create);
+  const persistedScreen = useGameScreenStore((s) => s.screens[GAME_KEY]) as SpinSessionScreen | undefined;
+  const screen = persistedScreen ?? SpinSessionScreen.Create;
+  const setScreen = (value: SpinSessionScreen | ((prev: SpinSessionScreen) => SpinSessionScreen)) => {
+    const next = typeof value === "function" ? value(screen) : value;
+    useGameScreenStore.getState().setScreen(GAME_KEY, next);
+  };
   const [themeColor, setThemeColor] = useState<string>(Color.BeigeLight);
   const [secondaryThemeColor, setSecondaryThemeColor] = useState<string>(Color.Beige);
   const [featherIcon, setFeatherIcon] = useState<"sword-cross" | "arrows-spin">("sword-cross");
@@ -78,13 +87,17 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
   };
 
   const clearSpinSessionValues = () => {
-    setScreen(SpinSessionScreen.Create);
+    useGameScreenStore.getState().clearScreen(GAME_KEY);
     setIterations(0);
     setGameState(SpinGameState.Initialized);
     setPlayers(0);
     setSelectedBatch([]);
     setRoundText("");
   };
+
+  useEffect(() => {
+    return registerCrashResetCallback(clearSpinSessionValues);
+  }, []);
 
   const value = {
     clearSpinSessionValues,

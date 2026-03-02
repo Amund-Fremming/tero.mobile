@@ -61,9 +61,9 @@ export const GameScreen = () => {
   }, [selectedBatch, pseudoId]);
 
   const handleLeaveGame = async () => {
+    await disconnect();
     clearGlobalSessionValues();
     clearSpinSessionValues();
-    await disconnect();
     resetToHomeScreen(navigation);
   };
 
