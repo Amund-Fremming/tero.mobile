@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { CommonActions } from "@react-navigation/native";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
@@ -6,7 +8,6 @@ import ActiveLobbyScreen from "./screens/ActiveLobbyScreen/ActiveLobbyScreen";
 import PassiveLobbyScreen from "./screens/PassiveLobbyScreen/PassiveLobbyScreen";
 import { SpinSessionScreen, SpinGameState } from "./constants/SpinTypes";
 import { useSpinSessionProvider } from "./context/SpinGameProvider";
-import { getSpinScreenCache } from "./context/SpinGameProvider";
 import { View, ActivityIndicator } from "react-native";
 import { useNavigation } from "expo-router";
 import { GameEntryMode } from "@/src/core/constants/Types";
@@ -16,39 +17,40 @@ import { useHubConnectionProvider } from "../../context/HubConnectionProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { HubChannel } from "@/src/core/constants/HubChannel";
 
+const SpinStack = createStackNavigator();
+
 export const SpinGame = () => {
-  const navigation: any = useNavigation();
+  const outerNavigation: any = useNavigation();
+  const innerNavRef = useRef<any>(null);
   const { gameEntryMode, hubName, gameKey, setIsHost, clearGlobalSessionValues, isDraft, gameType } =
     useGlobalSessionProvider();
-  const { screen, setScreen, setRoundText, setSelectedBatch, setGameState, setIterations, setPlayers, setThemeColors } =
+  const { setRoundText, setSelectedBatch, setGameState, setIterations, setPlayers, setThemeColors, clearSpinSessionValues } =
     useSpinSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
-  const { clearSpinSessionValues } = useSpinSessionProvider();
 
   const isHandlingErrorRef = useRef(false);
   const [hubReady, setHubReady] = useState<boolean>(false);
+
+  const navigateInner = (screenName: string) => {
+    innerNavRef.current?.dispatch(
+      CommonActions.reset({ index: 0, routes: [{ name: screenName }] }),
+    );
+  };
 
   const resetSessionAndNavigateHome = async () => {
     await disconnect();
     clearSpinSessionValues();
     clearGlobalSessionValues();
-    resetToHomeScreen(navigation);
+    resetToHomeScreen(outerNavigation);
   };
 
   useEffect(() => {
     setThemeColors(gameType);
 
-    // Skip screen reset on hot reload — cache already has the current screen
-    if (getSpinScreenCache() !== null) return;
-
     const initScreen = getInitialScreen();
-    setScreen(initScreen);
-
-    if (initScreen === SpinSessionScreen.Create) {
-      return;
-    }
+    if (initScreen === SpinSessionScreen.Create) return;
 
     initializeHub(hubName, gameKey, initScreen);
 
@@ -57,7 +59,7 @@ export const SpinGame = () => {
     };
   }, []);
 
-  const initializeHub = async (hubName: string, key: string, initialScreen: SpinSessionScreen) => {
+  const initializeHub = async (hubName: string, key: string, targetScreen: SpinSessionScreen) => {
     const result = await connect(hubName);
     if (result.isError()) {
       console.error(result.error);
@@ -75,7 +77,7 @@ export const SpinGame = () => {
     }
 
     setHubReady(true);
-    setScreen(initialScreen);
+    navigateInner(targetScreen);
   };
 
   const setupListeners = async () => {
@@ -84,7 +86,7 @@ export const SpinGame = () => {
     });
 
     setListener("signal_start", (_value: boolean) => {
-      setScreen(SpinSessionScreen.Game);
+      navigateInner(SpinSessionScreen.Game);
     });
 
     setListener(HubChannel.State, (state: SpinGameState) => {
@@ -116,7 +118,7 @@ export const SpinGame = () => {
       displayInfoModal(message, "Avsluttet", async () => {
         clearSpinSessionValues();
         clearGlobalSessionValues();
-        resetToHomeScreen(navigation);
+        resetToHomeScreen(outerNavigation);
       });
     });
 
@@ -147,23 +149,39 @@ export const SpinGame = () => {
     }
   };
 
-  const resolvedScreen =
-    screen === SpinSessionScreen.Create && gameEntryMode !== GameEntryMode.Creator ? getInitialScreen() : screen;
+  const initialRoute = getInitialScreen();
 
-  switch (resolvedScreen) {
-    case SpinSessionScreen.Create:
-      return (
-        <CreateScreen onGameCreated={(address, key) => initializeHub(address, key, SpinSessionScreen.ActiveLobby)} />
-      );
-    case SpinSessionScreen.Game:
-      return hubReady ? <GameScreen /> : <LoadingView />;
-    case SpinSessionScreen.ActiveLobby:
-      return hubReady ? <ActiveLobbyScreen /> : <LoadingView />;
-    case SpinSessionScreen.PassiveLobby:
-      return hubReady ? <PassiveLobbyScreen /> : <LoadingView />;
-    default:
-      return hubReady ? <ActiveLobbyScreen /> : <LoadingView />;
-  }
+  return (
+    <SpinStack.Navigator
+      initialRouteName={initialRoute}
+      screenOptions={{ headerShown: false }}
+    >
+      <SpinStack.Screen name={SpinSessionScreen.Create}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return <CreateScreen onGameCreated={(a, k) => initializeHub(a, k, SpinSessionScreen.ActiveLobby)} />;
+        }}
+      </SpinStack.Screen>
+      <SpinStack.Screen name={SpinSessionScreen.ActiveLobby}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return hubReady ? <ActiveLobbyScreen /> : <LoadingView />;
+        }}
+      </SpinStack.Screen>
+      <SpinStack.Screen name={SpinSessionScreen.PassiveLobby}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return hubReady ? <PassiveLobbyScreen /> : <LoadingView />;
+        }}
+      </SpinStack.Screen>
+      <SpinStack.Screen name={SpinSessionScreen.Game}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return hubReady ? <GameScreen /> : <LoadingView />;
+        }}
+      </SpinStack.Screen>
+    </SpinStack.Navigator>
+  );
 };
 
 const LoadingView = () => {

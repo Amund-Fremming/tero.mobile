@@ -16,7 +16,12 @@ export function getHeaders(pseudo_id: string, token: string | null): Record<stri
 export const resetToHomeScreen = (navigation: NavigationProp<any>) => {
   if (!navigation) return;
 
-  navigation.dispatch(
+  let root: any = navigation;
+  while (root.getParent?.()) {
+    root = root.getParent();
+  }
+
+  root.dispatch(
     CommonActions.reset({
       index: 0,
       routes: [{ name: Screen.Home }],

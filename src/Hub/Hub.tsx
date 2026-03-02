@@ -23,6 +23,7 @@ import ImposterGame from "../play/games/imposter/ImposterGame";
 import DiceGame from "../play/games/diceGame/DiceGame";
 import { TipsListScreen } from "./screens/TipsListScreen/TipsListScreen";
 import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErrorBoundary";
+import TutorialScreen from "../play/screens/TutorialScreen/TutorialScreen";
 
 const withErrorBoundary = (GameComponent: React.ComponentType) => () => (
   <GameErrorBoundary>
@@ -65,6 +66,7 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
       <Stack.Screen name={Screen.TipsList} component={TipsListScreen} />
+      <Stack.Screen name={Screen.Tutorial} component={TutorialScreen} />
     </Stack.Navigator>
   );
 };

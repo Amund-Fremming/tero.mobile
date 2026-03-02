@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useNavigation } from "expo-router";
+import { CommonActions } from "@react-navigation/native";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
@@ -18,7 +19,7 @@ export const RolesScreen = () => {
   const navigation: any = useNavigation();
 
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearImposterSessionValues, players, setScreen, imposterName, newRound, roundWord } =
+  const { clearImposterSessionValues, players, imposterName, newRound, roundWord } =
     useImposterSessionProvider();
   const { displayActionModal, displayInfoModal } = useModalProvider();
 
@@ -53,7 +54,9 @@ export const RolesScreen = () => {
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setScreen(ImposterSessionScreen.Reveal);
+    navigation.dispatch(
+      CommonActions.reset({ index: 0, routes: [{ name: ImposterSessionScreen.Reveal }] }),
+    );
   };
 
   return (

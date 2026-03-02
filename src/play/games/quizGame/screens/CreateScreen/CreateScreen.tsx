@@ -5,6 +5,7 @@ import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { useNavigation } from "expo-router";
+import { CommonActions } from "@react-navigation/native";
 import { QuizGameScreen as QuizSessionScreen } from "../../constants/quizTypes";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 import Color from "@/src/core/constants/Color";
@@ -16,7 +17,6 @@ export const CreateScreen = () => {
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
   const { setGameKey, setGameEntryMode, setHubName, isHost, setIsHost } = useGlobalSessionProvider();
-  const { setScreen } = useQuizSessionProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [createRequest, setCreateRequest] = useState<CreateGameRequest>({
@@ -71,7 +71,9 @@ export const CreateScreen = () => {
     setGameKey(result.value.key);
     setHubName(result.value.hub_name);
     setGameEntryMode(GameEntryMode.Creator);
-    setScreen(QuizSessionScreen.Lobby);
+    navigation.dispatch(
+      CommonActions.reset({ index: 0, routes: [{ name: QuizSessionScreen.Lobby }] }),
+    );
     setLoading(false);
   };
 

@@ -1,7 +1,7 @@
-import { Text, View, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, TouchableOpacity, ScrollView, Animated } from "react-native";
 import * as Haptics from "expo-haptics";
 import VerticalScroll from "../../../core/components/VerticalScroll/VerticalScroll";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useModalProvider } from "../../../core/context/ModalProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useAuthProvider } from "../../../core/context/AuthProvider";
@@ -23,9 +23,40 @@ import Color from "../../../core/constants/Color";
 import { QuizSession } from "@/src/play/games/quizGame/constants/quizTypes";
 import { moderateScale } from "../../../core/utils/dimensions";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
-import React from "react";
+import React, { memo } from "react";
 import { ImposterSession } from "../../games/imposter/constants/imposterTypes";
 import { useImposterSessionProvider } from "../../games/imposter/context/ImposterSessionProvider";
+
+const SkeletonCard = memo(() => {
+  const opacity = useRef(new Animated.Value(0.4)).current;
+
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, { toValue: 1, duration: 800, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 0.4, duration: 800, useNativeDriver: true }),
+      ]),
+    );
+    pulse.start();
+    return () => pulse.stop();
+  }, []);
+
+  return (
+    <Animated.View style={{ opacity }}>
+      <View style={styles.card}>
+        <View style={styles.innerCard}>
+          <View style={styles.skeletonIcon} />
+          <View style={styles.textWrapper}>
+            <View style={styles.skeletonLineShort} />
+            <View style={styles.skeletonLineLong} />
+            <View style={styles.skeletonLineMedium} />
+          </View>
+        </View>
+      </View>
+      <View style={styles.separator} />
+    </Animated.View>
+  );
+});
 
 const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.Girls]: "Jentene",
@@ -73,6 +104,7 @@ export const GameListScreen = () => {
     has_prev: false,
     page_num: 1,
   });
+  const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<GameCategory | null>(null);
   const [headerBg] = useState<string>(getHeaderBg);
   const scrollRef = useRef<ScrollView>(null);
@@ -110,14 +142,17 @@ export const GameListScreen = () => {
   };
 
   const getPage = async (pageNum: number) => {
+    setLoading(true);
     const request = createPageQuery(pageNum);
     const result = await gameService().getGamePage<GameBase>(pseudoId, request);
     if (result.isError()) {
       displayErrorModal(result.error);
+      setLoading(false);
       return;
     }
 
     setPagedResponse(result.value);
+    setLoading(false);
   };
 
   const handleSaveGame = async (gameId: string) => {
@@ -217,55 +252,59 @@ export const GameListScreen = () => {
           backgroundColor={headerBg}
         />
 
-        {pagedResponse.items.length === 0 && (
+        {!loading && pagedResponse.items.length === 0 && (
           <Text style={styles.noGames}>Det finnes ingen spill av denne typen enda</Text>
         )}
 
-        {pagedResponse.items.map((game) => (
-          <React.Fragment key={game.id}>
-            <TouchableOpacity onPress={() => handleGamePressed(game.id, game.game_type)} style={styles.card}>
-              <View style={styles.innerCard}>
-                <MaterialCommunityIcons
-                  name={CATEGORY_ICONS[game.category]}
-                  size={moderateScale(60)}
-                  color={Color.Gray}
-                />
+        {loading
+          ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
+          : pagedResponse.items.map((game) => (
+              <React.Fragment key={game.id}>
+                <TouchableOpacity onPress={() => handleGamePressed(game.id, game.game_type)} style={styles.card}>
+                  <View style={styles.innerCard}>
+                    <MaterialCommunityIcons
+                      name={CATEGORY_ICONS[game.category]}
+                      size={moderateScale(60)}
+                      color={Color.Gray}
+                    />
 
-                <View style={styles.textWrapper}>
-                  <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
-                  <Text style={styles.cardHeader}>{game.name}</Text>
-                  <Text style={styles.cardDescription}>{game.iterations} runder</Text>
-                </View>
-              </View>
-              <TouchableOpacity style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
-                <Feather name="bookmark" size={26} color={Color.Gray} />
-              </TouchableOpacity>
-            </TouchableOpacity>
-            <View style={styles.separator} />
-          </React.Fragment>
-        ))}
+                    <View style={styles.textWrapper}>
+                      <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
+                      <Text style={styles.cardHeader}>{game.name}</Text>
+                      <Text style={styles.cardDescription}>{game.iterations} runder</Text>
+                    </View>
+                  </View>
+                  <TouchableOpacity style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
+                    <Feather name="bookmark" size={26} color={Color.Gray} />
+                  </TouchableOpacity>
+                </TouchableOpacity>
+                <View style={styles.separator} />
+              </React.Fragment>
+            ))}
 
-        <View style={styles.pagination}>
-          <Text style={styles.paragraph}>Side {pagedResponse.page_num}</Text>
-          <View style={styles.navButtons}>
-            {pagedResponse.has_prev && (
-              <TouchableOpacity
-                style={pagedResponse.has_next ? styles.button : styles.buttonSingle}
-                onPress={handlePrevPage}
-              >
-                <Text style={styles.buttonLabel}>Forrige</Text>
-              </TouchableOpacity>
-            )}
-            {pagedResponse.has_next && (
-              <TouchableOpacity
-                style={pagedResponse.has_prev ? styles.button : styles.buttonSingle}
-                onPress={handleNextPage}
-              >
-                <Text style={styles.buttonLabel}>Neste</Text>
-              </TouchableOpacity>
-            )}
+        {!loading && (
+          <View style={styles.pagination}>
+            <Text style={styles.paragraph}>Side {pagedResponse.page_num}</Text>
+            <View style={styles.navButtons}>
+              {pagedResponse.has_prev && (
+                <TouchableOpacity
+                  style={pagedResponse.has_next ? styles.buttonInverted : styles.buttonSingleLeft}
+                  onPress={handlePrevPage}
+                >
+                  <Text style={pagedResponse.has_next ? styles.buttonLabelInverted : styles.buttonLabel}>Forrige</Text>
+                </TouchableOpacity>
+              )}
+              {pagedResponse.has_next && (
+                <TouchableOpacity
+                  style={pagedResponse.has_prev ? styles.button : styles.buttonSingleRight}
+                  onPress={handleNextPage}
+                >
+                  <Text style={styles.buttonLabel}>Neste</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-        </View>
+        )}
       </VerticalScroll>
     </View>
   );

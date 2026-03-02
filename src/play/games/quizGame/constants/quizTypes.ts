@@ -1,8 +1,8 @@
 export enum QuizGameScreen {
-  Create,
-  Game,
-  Lobby,
-  Started,
+  Create = "Create",
+  Game = "Game",
+  Lobby = "Lobby",
+  Started = "Started",
 }
 
 export interface QuizSession {

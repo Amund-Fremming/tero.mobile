@@ -31,22 +31,19 @@ export const GameTypeListScreen = () => {
   const handlePress = (screen: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const screenEnum = screen as GameType;
-    const creating = isCreating;
-    if (creating) {
-      setIsDraft(true);
-    }
     setGameType(screenEnum);
 
-    const navTarget = creating ? screenEnum : Screen.GameList;
-    if (screenEnum == GameType.Duel || screenEnum == GameType.Roulette) {
-      navigation.navigate(creating ? "Spin" : Screen.GameList);
+    if (isCreating) {
+      setIsDraft(true);
+      navigation.navigate(Screen.Tutorial);
       return;
     }
-    if (screenEnum == GameType.Dice) {
-      navigation.navigate(GameType.Dice);
+
+    if (screenEnum === GameType.Duel || screenEnum === GameType.Roulette) {
+      navigation.navigate(Screen.GameList);
       return;
     }
-    navigation.navigate(navTarget);
+    navigation.navigate(Screen.GameList);
   };
 
   const handleInfoPressed = () => {

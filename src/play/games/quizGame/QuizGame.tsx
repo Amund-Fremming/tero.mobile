@@ -1,12 +1,13 @@
+import { createStackNavigator } from "@react-navigation/stack";
+import { CommonActions } from "@react-navigation/native";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
 import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { QuizGameScreen, QuizSession } from "./constants/quizTypes";
 import { CreateScreen } from "./screens/CreateScreen/CreateScreen";
 import { useQuizSessionProvider } from "./context/QuizGameProvider";
-import { getQuizScreenCache } from "./context/QuizGameProvider";
 import { GameEntryMode } from "@/src/core/constants/Types";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
@@ -14,20 +15,15 @@ import { HubChannel } from "@/src/core/constants/HubChannel";
 import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 
+const QuizStack = createStackNavigator();
+
 export const QuizGame = () => {
-  const navigation: any = useNavigation();
+  const outerNavigation: any = useNavigation();
+  const innerNavRef = useRef<any>(null);
   const { gameEntryMode, gameKey, hubName, clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { screen, setScreen, setQuizSession, setIterations, clearQuizGameValues } = useQuizSessionProvider();
+  const { setQuizSession, setIterations, clearQuizGameValues } = useQuizSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal } = useModalProvider();
-
-  useEffect(() => {
-    // Skip screen reset on hot reload — cache already has the current screen
-    if (getQuizScreenCache() !== null) return;
-
-    const initScreen = getInitialScreen();
-    setScreen(initScreen);
-  }, []);
 
   useEffect(() => {
     if (!gameKey) return;
@@ -66,7 +62,7 @@ export const QuizGame = () => {
       disconnect();
       clearQuizGameValues();
       clearGlobalSessionValues();
-      displayErrorModal(message, () => resetToHomeScreen(navigation));
+      displayErrorModal(message, () => resetToHomeScreen(outerNavigation));
     });
 
     setListener(HubChannel.Game, (game: QuizSession) => {
@@ -74,7 +70,9 @@ export const QuizGame = () => {
     });
 
     setListener(HubChannel.State, (_message: string) => {
-      setScreen(QuizGameScreen.Started);
+      innerNavRef.current?.dispatch(
+        CommonActions.reset({ index: 0, routes: [{ name: QuizGameScreen.Started }] }),
+      );
       disconnect();
     });
   };
@@ -93,18 +91,39 @@ export const QuizGame = () => {
     }
   };
 
-  switch (screen) {
-    case QuizGameScreen.Create:
-      return <CreateScreen />;
-    case QuizGameScreen.Game:
-      return <GameScreen />;
-    case QuizGameScreen.Lobby:
-      return <LobbyScreen />;
-    case QuizGameScreen.Started:
-      return <StartedScreen />;
-    default:
-      return <LobbyScreen />;
-  }
+  const initialRoute = getInitialScreen();
+
+  return (
+    <QuizStack.Navigator
+      initialRouteName={initialRoute}
+      screenOptions={{ headerShown: false }}
+    >
+      <QuizStack.Screen name={QuizGameScreen.Create}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return <CreateScreen />;
+        }}
+      </QuizStack.Screen>
+      <QuizStack.Screen name={QuizGameScreen.Game}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return <GameScreen />;
+        }}
+      </QuizStack.Screen>
+      <QuizStack.Screen name={QuizGameScreen.Lobby}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return <LobbyScreen />;
+        }}
+      </QuizStack.Screen>
+      <QuizStack.Screen name={QuizGameScreen.Started}>
+        {({ navigation }) => {
+          innerNavRef.current = navigation;
+          return <StartedScreen />;
+        }}
+      </QuizStack.Screen>
+    </QuizStack.Navigator>
+  );
 };
 
 export default QuizGame;
