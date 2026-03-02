@@ -24,11 +24,15 @@ import DiceGame from "../play/games/diceGame/DiceGame";
 import { TipsListScreen } from "./screens/TipsListScreen/TipsListScreen";
 import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErrorBoundary";
 
-const withErrorBoundary = (GameComponent: React.ComponentType) => () => (
-  <GameErrorBoundary>
-    <GameComponent />
-  </GameErrorBoundary>
-);
+const withErrorBoundary = (GameComponent: React.ComponentType) => {
+  const WrappedGame = () => (
+    <GameErrorBoundary>
+      <GameComponent />
+    </GameErrorBoundary>
+  );
+  WrappedGame.displayName = `WithErrorBoundary(${GameComponent.displayName ?? GameComponent.name ?? "Component"})`;
+  return WrappedGame;
+};
 
 const SafeSpinGame = withErrorBoundary(SpinGame);
 const SafeQuizGame = withErrorBoundary(QuizGame);
