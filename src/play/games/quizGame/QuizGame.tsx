@@ -22,10 +22,15 @@ export const QuizGame = () => {
   const { displayErrorModal } = useModalProvider();
 
   useEffect(() => {
-    if (useGameScreenStore.getState().screens["quiz"]) return;
+    if (!useGameScreenStore.getState().screens["quiz"]) {
+      const initScreen = getInitialScreen();
+      setScreen(initScreen);
+    }
 
-    const initScreen = getInitialScreen();
-    setScreen(initScreen);
+    return () => {
+      clearQuizGameValues();
+      clearGlobalSessionValues();
+    };
   }, []);
 
   useEffect(() => {

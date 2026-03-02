@@ -6,6 +6,7 @@ interface GameScreenState {
   screens: Record<string, string>;
   setScreen: (gameKey: string, screen: string) => void;
   clearScreen: (gameKey: string) => void;
+  clearAllScreens: () => void;
 }
 
 export const useGameScreenStore = create<GameScreenState>()(
@@ -18,6 +19,7 @@ export const useGameScreenStore = create<GameScreenState>()(
           const { [gameKey]: _, ...rest } = state.screens;
           return { screens: rest };
         }),
+      clearAllScreens: () => set({ screens: {} }),
     }),
     {
       name: "game-screen-store",

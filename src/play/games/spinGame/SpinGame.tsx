@@ -40,19 +40,19 @@ export const SpinGame = () => {
   useEffect(() => {
     setThemeColors(gameType);
 
-    if (useGameScreenStore.getState().screens["spin"]) return;
+    if (!useGameScreenStore.getState().screens["spin"]) {
+      const initScreen = getInitialScreen();
+      setScreen(initScreen);
 
-    const initScreen = getInitialScreen();
-    setScreen(initScreen);
-
-    if (initScreen === SpinSessionScreen.Create) {
-      return;
+      if (initScreen !== SpinSessionScreen.Create) {
+        initializeHub(hubName, gameKey, initScreen);
+      }
     }
-
-    initializeHub(hubName, gameKey, initScreen);
 
     return () => {
       disconnect();
+      clearSpinSessionValues();
+      clearGlobalSessionValues();
     };
   }, []);
 

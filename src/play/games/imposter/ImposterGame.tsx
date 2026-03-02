@@ -30,21 +30,22 @@ export const ImposterGame = () => {
   const isHandlingErrorRef = useRef(false);
 
   useEffect(() => {
-    if (useGameScreenStore.getState().screens["imposter"]) return;
+    if (!useGameScreenStore.getState().screens["imposter"]) {
+      const initScreen = getInitialScreen();
+      setScreen(initScreen);
 
-    const initScreen = getInitialScreen();
-    setScreen(initScreen);
-
-    if (initScreen === ImposterSessionScreen.Create) {
-      return;
-    }
-
-    if ([GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)) {
-      initializeHub(hubName, gameKey, initScreen);
+      if (
+        initScreen !== ImposterSessionScreen.Create &&
+        [GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)
+      ) {
+        initializeHub(hubName, gameKey, initScreen);
+      }
     }
 
     return () => {
       disconnect();
+      clearImposterSessionValues();
+      clearGlobalSessionValues();
     };
   }, []);
 
