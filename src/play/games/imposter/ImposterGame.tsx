@@ -25,9 +25,8 @@ export const ImposterGame = () => {
   const outerNavigation: any = useNavigation();
   const innerNavRef = useRef<any>(null);
   const { clearImposterSessionValues, setIterations, setImposterSession } = useImposterSessionProvider();
-  const { displayErrorModal, displayInfoModal } = useModalProvider();
-  const { gameEntryMode, hubName, gameKey, setIsHost, clearGlobalSessionValues, isHost, isDraft, gameType } =
-    useGlobalSessionProvider();
+  const { displayErrorModal } = useModalProvider();
+  const { gameEntryMode, hubName, gameKey, setIsHost, clearGlobalSessionValues, isHost } = useGlobalSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
   const { pseudoId } = useAuthProvider();
 
