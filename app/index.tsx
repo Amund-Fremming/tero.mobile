@@ -1,7 +1,7 @@
 import HubConnectionProvider from "@/src/play/context/HubConnectionProvider";
 import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
 import ModalProvider from "@/src/core/context/ModalProvider";
-import Hub from "@/src/hub/Hub";
+import Hub from "@/src/Hub/Hub";
 import AuthProvider from "../src/core/context/AuthProvider";
 import ServiceProvider from "@/src/core/context/ServiceProvider";
 import { View, StatusBar, Dimensions } from "react-native";
@@ -27,7 +27,7 @@ const IMAGES = [
 
 const { width, height } = Dimensions.get("window");
 
-export default () => (
+const App = () => (
   <FontLoader>
     <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
     <ServiceProvider>
@@ -49,6 +49,8 @@ export default () => (
     </ServiceProvider>
   </FontLoader>
 );
+
+export default App;
 
 const FontLoader = ({ children }: { children: React.ReactNode }) => {
   const [fontsLoaded] = Font.useFonts({
