@@ -22,6 +22,18 @@ import { ProblemScreen } from "./screens/ProblemScreen/ProblemScreen";
 import ImposterGame from "../play/games/imposter/ImposterGame";
 import DiceGame from "../play/games/diceGame/DiceGame";
 import { TipsListScreen } from "./screens/TipsListScreen/TipsListScreen";
+import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErrorBoundary";
+
+const withErrorBoundary = (GameComponent: React.ComponentType) => () => (
+  <GameErrorBoundary>
+    <GameComponent />
+  </GameErrorBoundary>
+);
+
+const SafeSpinGame = withErrorBoundary(SpinGame);
+const SafeQuizGame = withErrorBoundary(QuizGame);
+const SafeDiceGame = withErrorBoundary(DiceGame);
+const SafeImposterGame = withErrorBoundary(ImposterGame);
 
 const Stack = createStackNavigator();
 
@@ -40,10 +52,10 @@ export const Hub = () => {
       <Stack.Screen name={Screen.EditProfile} component={EditProfileScreen} />
       <Stack.Screen name={Screen.Hub} component={HubScreen} />
       <Stack.Screen name={Screen.Join} component={JoinScreen} />
-      <Stack.Screen name={Screen.Spin} component={SpinGame} />
-      <Stack.Screen name={Screen.Quiz} component={QuizGame} />
-      <Stack.Screen name={Screen.Dice} component={DiceGame} />
-      <Stack.Screen name={Screen.Imposter} component={ImposterGame} />
+      <Stack.Screen name={Screen.Spin} component={SafeSpinGame} />
+      <Stack.Screen name={Screen.Quiz} component={SafeQuizGame} />
+      <Stack.Screen name={Screen.Dice} component={SafeDiceGame} />
+      <Stack.Screen name={Screen.Imposter} component={SafeImposterGame} />
       <Stack.Screen name={Screen.GameList} component={GameListScreen} />
       <Stack.Screen name={Screen.GameTypeList} component={GameTypeListScreen} />
       <Stack.Screen name={Screen.Admin} component={AdminScreen} />

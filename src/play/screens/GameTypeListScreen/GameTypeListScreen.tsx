@@ -26,11 +26,12 @@ export const GameTypeListScreen = () => {
   const navigation: any = useNavigation();
   const { setGameType, gameEntryMode, setIsDraft } = useGlobalSessionProvider();
   const { displayInfoModal } = useModalProvider();
+  const isCreating = gameEntryMode === GameEntryMode.Creator;
 
   const handlePress = (screen: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const screenEnum = screen as GameType;
-    const creating = gameEntryMode === GameEntryMode.Creator;
+    const creating = isCreating;
     if (creating) {
       setIsDraft(true);
     }
@@ -72,7 +73,7 @@ export const GameTypeListScreen = () => {
         }}
       >
         <ScreenHeader
-          title={gameEntryMode === GameEntryMode.Creator ? "Lag spill" : "Velg type"}
+          title={gameEntryMode === GameEntryMode.Creator ? "Nytt spill" : "Klare spill"}
           onBackPressed={() => navigation.goBack()}
           onInfoPress={handleInfoPressed}
           showBorder={true}
@@ -80,8 +81,15 @@ export const GameTypeListScreen = () => {
         />
         {data &&
           data.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.card} onPress={() => handlePress(item.screen)}>
+            <TouchableOpacity
+              key={index}
+              style={[styles.card, { borderColor: isCreating ? Color.Gray : Color.BuzzifyLightBeige }]}
+              onPress={() => handlePress(item.screen)}
+            >
               <Image source={iconMap[item.icon]} style={styles.cardImage} />
+              <View style={[styles.modeBadge, { backgroundColor: isCreating ? Color.HomeRed : Color.Purple }]}>
+                <Text style={styles.modeBadgeText}>{isCreating ? "LAG" : "SPILL"}</Text>
+              </View>
               <Text style={{ ...styles.cardHeader, color: item.color }}>{item.name}</Text>
             </TouchableOpacity>
           ))}

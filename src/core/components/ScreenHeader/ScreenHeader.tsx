@@ -37,7 +37,6 @@ export const ScreenHeader = ({
         </TouchableOpacity>
 
         <View style={styles.borderAndHeader}>
-          {miniHeader && <Text style={styles.miniHeader}>{miniHeader}</Text>}
           <Text style={styles.header}>{title}</Text>
           {showBorder && (
             <View style={styles.borderWrapper}>

@@ -16,6 +16,7 @@ import * as SecureStore from "expo-secure-store";
 
 import redFigure from "../../../core/assets/images/red-figure.png";
 import { useNavigation } from "expo-router";
+import { setStackNavigator } from "@/src/core/utils/navigationRef";
 
 const subHeaderList = [
   "klar for en runde?",
@@ -40,6 +41,7 @@ export const HomeScreen = () => {
   const [isSystemDown, setIsSystemDown] = useState<boolean>(false);
 
   useEffect(() => {
+    setStackNavigator(navigation);
     setSubHeader();
     initializeScreen();
   }, []);
@@ -148,7 +150,7 @@ export const HomeScreen = () => {
         >
           <Image style={styles.image} source={redFigure} />
           <View style={styles.buttonTextWrapper}>
-            <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>LAG</Text>
+            <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>NYTT</Text>
             <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>SPILL</Text>
           </View>
         </TouchableOpacity>
@@ -160,7 +162,7 @@ export const HomeScreen = () => {
         >
           <DiagonalSplit />
           <View style={styles.buttonTextWrapper}>
-            <Text style={{ ...styles.textBase, ...styles.textTopRight }}>VELG</Text>
+            <Text style={{ ...styles.textBase, ...styles.textTopRight }}>KLARE</Text>
             <Text style={{ ...styles.textBase, ...styles.textTopRight }}>SPILL</Text>
           </View>
         </TouchableOpacity>

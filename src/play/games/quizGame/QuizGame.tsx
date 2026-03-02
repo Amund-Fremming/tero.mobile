@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { QuizGameScreen, QuizSession } from "./constants/quizTypes";
 import { CreateScreen } from "./screens/CreateScreen/CreateScreen";
 import { useQuizSessionProvider } from "./context/QuizGameProvider";
+import { getQuizScreenCache } from "./context/QuizGameProvider";
 import { GameEntryMode } from "@/src/core/constants/Types";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
@@ -21,6 +22,9 @@ export const QuizGame = () => {
   const { displayErrorModal } = useModalProvider();
 
   useEffect(() => {
+    // Skip screen reset on hot reload — cache already has the current screen
+    if (getQuizScreenCache() !== null) return;
+
     const initScreen = getInitialScreen();
     setScreen(initScreen);
   }, []);

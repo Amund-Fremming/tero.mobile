@@ -41,27 +41,35 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
       isCompleted.current = true;
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setRevealed(true);
-
-      setTimeout(() => {
-        setRevealed(false);
-
-        setTimeout(() => {
-          currentAnimation.current = Animated.timing(fillAnim, {
-            toValue: 0,
-            duration: DRAIN_DURATION,
-            useNativeDriver: false,
-          });
-          currentAnimation.current.start(() => {
-            setLocked(true);
-            onLocked();
-          });
-        }, 300);
-      }, DRAIN_DELAY);
     });
   };
 
+  const startDrain = () => {
+    setTimeout(() => {
+      setRevealed(false);
+
+      setTimeout(() => {
+        currentAnimation.current = Animated.timing(fillAnim, {
+          toValue: 0,
+          duration: DRAIN_DURATION,
+          useNativeDriver: false,
+        });
+        currentAnimation.current.start(() => {
+          setLocked(true);
+          onLocked();
+        });
+      }, 300);
+    }, DRAIN_DELAY);
+  };
+
   const handlePressOut = () => {
-    if (locked || isCompleted.current) return;
+    if (locked) return;
+
+    if (isCompleted.current) {
+      startDrain();
+      return;
+    }
+
     currentAnimation.current?.stop();
     currentAnimation.current = Animated.timing(fillAnim, {
       toValue: 0,
@@ -73,6 +81,7 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
 
   return (
     <TouchableOpacity
+      activeOpacity={1}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       disabled={locked}

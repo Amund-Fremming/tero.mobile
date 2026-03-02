@@ -153,6 +153,17 @@ export const GameScreen = () => {
     }
   };
 
+  const tutorialHeader = () => {
+    if (gameType === GameType.Duel) {
+      return "Les opp hva de uvalgte må duellere om:";
+    }
+    if (gameType === GameType.Roulette) {
+      return "Taperen må: ";
+    }
+
+    return "";
+  };
+
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
       <View style={styles.headerWrapper}>
@@ -164,10 +175,15 @@ export const GameScreen = () => {
         </TouchableOpacity>
       </View>
 
+      {gameState === SpinGameState.RoundStarted && isHost && (
+        <View style={styles.tutorialWrapper}>
+          <Text style={styles.tutorialHeader}>{tutorialHeader()}</Text>
+          <Text style={styles.tutorialText}>{roundText}</Text>
+        </View>
+      )}
       <Text style={{ ...styles.text }}>
-        {gameState === SpinGameState.RoundStarted && isHost && `"${roundText}"`}
         {gameState === SpinGameState.RoundStarted && !isHost && "Gjør deg klar!"}
-        {gameState === SpinGameState.RoundFinished && ""}
+        {gameState === SpinGameState.RoundFinished && roundText}
         {gameState === SpinGameState.Finished && "Spillet er ferdig!"}
       </Text>
 

@@ -6,13 +6,14 @@ import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import React from "react";
 import Color from "@/src/core/constants/Color";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { GameEntryMode } from "@/src/core/constants/Types";
+import { moderateScale } from "@/src/core/utils/dimensions";
 
 export const AddPlayersScreen = () => {
   const navigation: any = useNavigation();
@@ -177,6 +178,11 @@ export const AddPlayersScreen = () => {
               />
             </View>
           ))}
+        </View>
+
+        <View style={styles.helperWrapper}>
+          <MaterialIcons name="touch-app" size={moderateScale(25)} color="black" />
+          <Text style={styles.helperText}>Trykk på boksen for å endre navn</Text>
         </View>
 
         <View style={styles.buttonsWrapper}>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ImposterSession, ImposterSessionScreen } from "./constants/imposterTypes";
 import { useImposterSessionProvider } from "./context/ImposterSessionProvider";
+import { getImposterScreenCache } from "./context/ImposterSessionProvider";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { RolesScreen } from "./screens/RolesScreen/RolesScreen";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
@@ -29,6 +30,9 @@ export const ImposterGame = () => {
   const isHandlingErrorRef = useRef(false);
 
   useEffect(() => {
+    // Skip screen reset on hot reload — cache already has the current screen
+    if (getImposterScreenCache() !== null) return;
+
     const initScreen = getInitialScreen();
     setScreen(initScreen);
 

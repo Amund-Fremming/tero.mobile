@@ -13,14 +13,9 @@ export function getHeaders(pseudo_id: string, token: string | null): Record<stri
   };
 }
 
-/**
- * Resets the navigation stack and navigates to the Home screen.
- * This ensures the navigation stack is cleared, preventing layers from accumulating
- * and avoiding race conditions when starting new games.
- *
- * @param navigation - The navigation object from useNavigation hook
- */
 export const resetToHomeScreen = (navigation: NavigationProp<any>) => {
+  if (!navigation) return;
+
   navigation.dispatch(
     CommonActions.reset({
       index: 0,

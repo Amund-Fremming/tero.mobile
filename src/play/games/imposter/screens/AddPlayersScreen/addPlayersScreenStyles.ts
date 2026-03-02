@@ -12,6 +12,18 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
+  helperWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingTop: verticalScale(20),
+  },
+
+  helperText: {
+    fontFamily: Font.SintonyRegular,
+    fontSize: moderateScale(16),
+  },
+
   addButton: {
     justifyContent: "center",
     alignItems: "center",

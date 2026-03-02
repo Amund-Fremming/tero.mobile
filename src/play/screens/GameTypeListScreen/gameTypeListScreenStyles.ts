@@ -56,6 +56,23 @@ export const styles = StyleSheet.create({
     textShadowRadius: 6,
   },
 
+  modeBadge: {
+    position: "absolute",
+    top: moderateScale(8),
+    right: moderateScale(8),
+    paddingHorizontal: horizontalScale(8),
+    paddingVertical: verticalScale(2),
+    borderRadius: moderateScale(8),
+  },
+
+  modeBadgeText: {
+    color: Color.White,
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(14),
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
+  },
+
   cardSubheader: {
     position: "absolute",
     fontWeight: 600,

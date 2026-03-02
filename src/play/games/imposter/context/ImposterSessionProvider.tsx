@@ -39,8 +39,17 @@ interface SpinGameProviderProps {
   children: ReactNode;
 }
 
+// Module-level cache survives Fast Refresh / hot reload
+let __screenCache: ImposterSessionScreen | null = null;
+export const getImposterScreenCache = () => __screenCache;
+
 export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => {
-  const [screen, setScreen] = useState<ImposterSessionScreen>(ImposterSessionScreen.Create);
+  const [screen, _setScreen] = useState<ImposterSessionScreen>(__screenCache ?? ImposterSessionScreen.Create);
+  const setScreen: React.Dispatch<React.SetStateAction<ImposterSessionScreen>> = (value) => {
+    const next = typeof value === "function" ? value(screen) : value;
+    __screenCache = next;
+    _setScreen(next);
+  };
   const [iterations, setIterations] = useState<number>(0);
   const [imposterSession, setImposterSession] = useState<ImposterSession | undefined>(undefined);
   const [players, setPlayers] = useState<string[]>(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
@@ -64,6 +73,7 @@ export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => 
   };
 
   const clearImposterSessionValues = () => {
+    __screenCache = null;
     setScreen(ImposterSessionScreen.Create);
     setIterations(0);
     setPlayers(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);

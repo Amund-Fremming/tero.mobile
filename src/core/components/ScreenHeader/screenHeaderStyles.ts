@@ -26,16 +26,9 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
   },
 
-  miniHeader: {
-    fontFamily: Font.SintonyRegular,
-    fontSize: moderateScale(14),
-    opacity: 0.6,
-    marginBottom: verticalScale(2),
-  },
-
   header: {
     fontFamily: Font.PassionOneBold,
-    fontSize: moderateScale(55),
+    fontSize: moderateScale(50),
     fontWeight: "600",
     opacity: 0.8,
   },

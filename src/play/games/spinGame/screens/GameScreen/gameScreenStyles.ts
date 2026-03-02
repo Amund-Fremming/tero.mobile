@@ -35,11 +35,35 @@ export const styles = StyleSheet.create({
     opacity: 0.8,
   },
 
+  tutorialWrapper: {
+    width: "90%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  tutorialText: {
+    width: "90%",
+    color: Color.White,
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(40),
+    textAlign: "center",
+  },
+
   text: {
     width: "90%",
     color: Color.White,
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(40),
+    textAlign: "center",
+    paddingTop: "50%",
+  },
+
+  tutorialHeader: {
+    width: "90%",
+    color: Color.Gray,
+    opacity: 0.7,
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(45),
     textAlign: "center",
     paddingTop: "50%",
   },

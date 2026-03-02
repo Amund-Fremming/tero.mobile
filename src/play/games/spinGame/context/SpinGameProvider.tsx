@@ -51,8 +51,17 @@ interface SpinSessionProviderProps {
   children: ReactNode;
 }
 
+// Module-level cache survives Fast Refresh / hot reload
+let __screenCache: SpinSessionScreen | null = null;
+export const getSpinScreenCache = () => __screenCache;
+
 export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
-  const [screen, setScreen] = useState<SpinSessionScreen>(SpinSessionScreen.Create);
+  const [screen, _setScreen] = useState<SpinSessionScreen>(__screenCache ?? SpinSessionScreen.Create);
+  const setScreen: React.Dispatch<React.SetStateAction<SpinSessionScreen>> = (value) => {
+    const next = typeof value === "function" ? value(screen) : value;
+    __screenCache = next;
+    _setScreen(next);
+  };
   const [themeColor, setThemeColor] = useState<string>(Color.BeigeLight);
   const [secondaryThemeColor, setSecondaryThemeColor] = useState<string>(Color.Beige);
   const [featherIcon, setFeatherIcon] = useState<"sword-cross" | "arrows-spin">("sword-cross");
@@ -78,6 +87,7 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
   };
 
   const clearSpinSessionValues = () => {
+    __screenCache = null;
     setScreen(SpinSessionScreen.Create);
     setIterations(0);
     setGameState(SpinGameState.Initialized);
