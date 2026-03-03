@@ -3,7 +3,6 @@ import { SpinSessionScreen, SpinGameState } from "../constants/SpinTypes";
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
 import { registerCrashResetCallback } from "@/src/core/utils/navigationRef";
-import { useGameScreenStore, resolveKey } from "@/src/play/stores/gameScreenStore";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 
 interface ISpinSessionContext {
@@ -55,12 +54,11 @@ interface SpinSessionProviderProps {
 }
 
 export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
-  const { gameType } = useGlobalSessionProvider();
-  const persistedScreen = useGameScreenStore((s) => s.screens[resolveKey(gameType)]) as SpinSessionScreen | undefined;
-  const screen = persistedScreen ?? SpinSessionScreen.Create;
+  const { gameType, getGameScreen, setGameScreen } = useGlobalSessionProvider();
+  const screen = (getGameScreen() as SpinSessionScreen) || SpinSessionScreen.Create;
   const setScreen = (value: SpinSessionScreen | ((prev: SpinSessionScreen) => SpinSessionScreen)) => {
     const next = typeof value === "function" ? value(screen) : value;
-    useGameScreenStore.getState().setScreen(gameType, next);
+    setGameScreen(next);
   };
   const [themeColor, setThemeColor] = useState<string>(Color.BeigeLight);
   const [secondaryThemeColor, setSecondaryThemeColor] = useState<string>(Color.Beige);
@@ -87,7 +85,6 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
   };
 
   const clearSpinSessionValues = () => {
-    useGameScreenStore.getState().clearScreen(gameType);
     setIterations(0);
     setGameState(SpinGameState.Initialized);
     setPlayers(0);

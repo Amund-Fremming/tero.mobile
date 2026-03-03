@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { CommonActions } from "@react-navigation/native";
 import { ImposterSession, ImposterSessionScreen } from "./constants/imposterTypes";
 import { useImposterSessionProvider } from "./context/ImposterSessionProvider";
-import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import { RolesScreen } from "./screens/RolesScreen/RolesScreen";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
@@ -12,7 +11,7 @@ import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import AddPlayersScreen from "./screens/AddPlayersScreen/AddPlayersScreen";
 import RevealScreen from "./screens/RevealScreen/RevealScreen";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
-import { GameEntryMode, GameType } from "@/src/core/constants/Types";
+import { GameEntryMode } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { HubChannel } from "@/src/core/constants/HubChannel";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
@@ -37,16 +36,12 @@ export const ImposterGame = () => {
   };
 
   useEffect(() => {
-    if (!useGameScreenStore.getState().screens[GameType.Imposter]) {
-      const initScreen = getInitialScreen();
-      useGameScreenStore.getState().setScreen(GameType.Imposter, initScreen);
-
-      if (
-        initScreen !== ImposterSessionScreen.Create &&
-        [GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)
-      ) {
-        initializeHub(hubName, gameKey, initScreen);
-      }
+    const initScreen = getInitialScreen();
+    if (
+      initScreen !== ImposterSessionScreen.Create &&
+      [GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)
+    ) {
+      initializeHub(hubName, gameKey, initScreen);
     }
 
     return () => {

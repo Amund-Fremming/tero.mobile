@@ -1,37 +1,28 @@
 # Game Screen Store
 
-Persists which screen each game is currently on across re-mounts (e.g. app backgrounded).
+Persists the current game screen across app backgrounds/reloads.
 
 ## How it works
 
-`useGameScreenStore` holds a `screens` record keyed by a resolved string per game:
-
-| GameType            | Resolved key |
-| ------------------- | ------------ |
-| `GameType.Quiz`     | `"Quiz"`     |
-| `GameType.Imposter` | `"Imposter"` |
-| `GameType.Duel`     | `"spin"`     |
-| `GameType.Roulette` | `"spin"`     |
-
-Duel and Roulette share the `"spin"` key because they share the same navigator (`SpinGame`).
-
-The `resolveKey(gameType)` helper (exported from `gameScreenStore.ts`) handles this mapping. It is called internally by `setScreen` and `clearScreen`, so callers always pass a `GameType`.
+`useGameScreenStore` holds a single `screen` string value that represents the current screen within the active game session. The screen is cleared automatically when the game session is cleared via `clearGlobalSessionValues()` in the GlobalSessionProvider.
 
 ## Usage
 
+Access screen state through the `GlobalSessionProvider`:
+
 ```ts
+const { setGameScreen, getGameScreen } = useGlobalSessionProvider();
+
 // Set current screen
-useGameScreenStore.getState().setScreen(GameType.Quiz, QuizGameScreen.Lobby);
+setGameScreen("Lobby");
 
-// Read current screen (in a provider/component)
-const screen = useGameScreenStore((s) => s.screens[GameType.Quiz]);
-
-// Clear on session end
-useGameScreenStore.getState().clearScreen(GameType.Quiz);
+// Get current screen
+const currentScreen = getGameScreen();
 ```
 
-## Where screens are initialized
+## Implementation Details
 
-Each game's root component (`QuizGame.tsx`, `SpinGame.tsx`, `ImposterGame.tsx`) sets the initial screen in a `useEffect` on mount — only if no persisted screen exists yet.
-
-Each game's session provider reads the persisted screen and exposes `setScreen` / `clearScreen` to the rest of the game.
+- **Storage**: Zustand store with AsyncStorage persistence
+- **Scope**: Single active game session (one screen at a time)
+- **Cleared**: Automatically when switching games or ending session
+- **Type**: Stored as string, cast to appropriate screen enum in each game provider

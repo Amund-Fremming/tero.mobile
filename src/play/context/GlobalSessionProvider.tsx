@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { GameEntryMode, GameType } from "../../core/constants/Types";
 import { registerCrashResetCallback } from "../../core/utils/navigationRef";
+import { useGameScreenStore } from "../stores/gameScreenStore";
 
 interface IGlobalSessionContext {
   gameEntryMode: GameEntryMode;
@@ -16,6 +17,8 @@ interface IGlobalSessionContext {
   clearGlobalSessionValues: () => void;
   isDraft: boolean;
   setIsDraft: React.Dispatch<React.SetStateAction<boolean>>;
+  setGameScreen: (screen: string) => void;
+  getGameScreen: () => string | undefined;
 }
 
 const defaultContextValue: IGlobalSessionContext = {
@@ -32,6 +35,8 @@ const defaultContextValue: IGlobalSessionContext = {
   isDraft: false,
   setIsDraft: () => {},
   clearGlobalSessionValues: () => {},
+  setGameScreen: () => {},
+  getGameScreen: () => undefined,
 };
 
 const GlobalSessionContext = createContext<IGlobalSessionContext>(defaultContextValue);
@@ -56,12 +61,21 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
     return registerCrashResetCallback(clearGlobalSessionValues);
   }, []);
 
+  const setGameScreen = (screen: string) => {
+    useGameScreenStore.getState().setScreen(screen);
+  };
+
+  const getGameScreen = () => {
+    return useGameScreenStore.getState().screen;
+  };
+
   const clearGlobalSessionValues = () => {
     setGameEntryMode(GameEntryMode.Creator);
     setGameType(GameType.Quiz);
     setGameKey("");
     setHubName("");
     setIsHost(false);
+    useGameScreenStore.getState().clearScreen();
   };
 
   const value = {
@@ -78,6 +92,8 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
     setIsHost,
     isDraft,
     setIsDraft,
+    setGameScreen,
+    getGameScreen,
   };
 
   return <GlobalSessionContext.Provider value={value}>{children}</GlobalSessionContext.Provider>;

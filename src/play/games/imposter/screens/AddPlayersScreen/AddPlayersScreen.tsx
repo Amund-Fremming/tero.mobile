@@ -12,9 +12,8 @@ import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvid
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { GameEntryMode, GameType } from "@/src/core/constants/Types";
+import { GameEntryMode } from "@/src/core/constants/Types";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
 
 export const AddPlayersScreen = () => {
   const navigation: any = useNavigation();
@@ -66,13 +65,13 @@ export const AddPlayersScreen = () => {
     console.log(gameEntryMode);
     if (gameEntryMode === GameEntryMode.Creator) {
       addPlayersToServer();
-      useGameScreenStore.getState().setScreen(GameType.Imposter, ImposterSessionScreen.ActiveLobby);
+      setScreen(ImposterSessionScreen.ActiveLobby);
       return;
     }
 
     if (gameEntryMode === GameEntryMode.Host) {
       addPlayerToProvider();
-      useGameScreenStore.getState().setScreen(GameType.Imposter, ImposterSessionScreen.Roles);
+      setScreen(ImposterSessionScreen.Roles);
       return;
     }
   };

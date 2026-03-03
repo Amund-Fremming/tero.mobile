@@ -17,7 +17,6 @@ import * as SecureStore from "expo-secure-store";
 import redFigure from "../../../core/assets/images/red-figure.png";
 import { useNavigation } from "expo-router";
 import { setStackNavigator } from "@/src/core/utils/navigationRef";
-import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
 
 const subHeaderList = [
   "klar for en runde?",
@@ -43,7 +42,6 @@ export const HomeScreen = () => {
 
   useEffect(() => {
     setStackNavigator(navigation);
-    useGameScreenStore.getState().clearAllScreens();
     setSubHeader();
     initializeScreen();
   }, []);

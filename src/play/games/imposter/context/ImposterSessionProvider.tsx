@@ -1,13 +1,10 @@
 import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { ImposterSession, ImposterSessionScreen } from "../constants/imposterTypes";
 import { registerCrashResetCallback } from "@/src/core/utils/navigationRef";
-import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
-import { GameType } from "@/src/core/constants/Types";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 
 interface IImposterSessionContext {
   clearImposterSessionValues: () => void;
-  screen: ImposterSessionScreen;
-  setScreen: React.Dispatch<React.SetStateAction<ImposterSessionScreen>>;
   iterations: number;
   setIterations: React.Dispatch<React.SetStateAction<number>>;
   imposterSession: ImposterSession | undefined;
@@ -17,12 +14,12 @@ interface IImposterSessionContext {
   imposterName: string;
   newRound: () => void;
   roundWord: string;
+  screen: ImposterSessionScreen;
+  setScreen: React.Dispatch<React.SetStateAction<ImposterSessionScreen>>;
 }
 
 const defaultContextValue: IImposterSessionContext = {
   clearImposterSessionValues: () => {},
-  screen: ImposterSessionScreen.Create,
-  setScreen: () => {},
   iterations: 0,
   setIterations: () => {},
   imposterSession: undefined,
@@ -32,6 +29,8 @@ const defaultContextValue: IImposterSessionContext = {
   imposterName: "",
   newRound: () => {},
   roundWord: "",
+  screen: ImposterSessionScreen.Create,
+  setScreen: () => {},
 };
 
 const ImposterSessionContext = createContext<IImposterSessionContext>(defaultContextValue);
@@ -43,17 +42,17 @@ interface SpinGameProviderProps {
 }
 
 export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => {
-  const persistedScreen = useGameScreenStore((s) => s.screens[GameType.Imposter]) as ImposterSessionScreen | undefined;
-  const screen = persistedScreen ?? ImposterSessionScreen.Create;
-  const setScreen = (value: ImposterSessionScreen | ((prev: ImposterSessionScreen) => ImposterSessionScreen)) => {
-    const next = typeof value === "function" ? value(screen) : value;
-    useGameScreenStore.getState().setScreen(GameType.Imposter, next);
-  };
+  const { getGameScreen, setGameScreen } = useGlobalSessionProvider();
   const [iterations, setIterations] = useState<number>(0);
   const [imposterSession, setImposterSession] = useState<ImposterSession | undefined>(undefined);
   const [players, setPlayers] = useState<string[]>(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
   const [imposterName, setImposterName] = useState<string>("");
   const [roundWord, setRoundWord] = useState<string>("");
+  const screen = (getGameScreen() as ImposterSessionScreen) || ImposterSessionScreen.Create;
+  const setScreen = (value: ImposterSessionScreen | ((prev: ImposterSessionScreen) => ImposterSessionScreen)) => {
+    const next = typeof value === "function" ? value(screen) : value;
+    setGameScreen(next);
+  };
 
   const newRound = () => {
     if (!imposterSession || !imposterSession.players || !imposterSession.rounds || imposterSession.rounds.length === 0)
@@ -72,7 +71,6 @@ export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => 
   };
 
   const clearImposterSessionValues = () => {
-    useGameScreenStore.getState().clearScreen(GameType.Imposter);
     setIterations(0);
     setPlayers(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
     setImposterName("");
@@ -85,8 +83,6 @@ export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => 
 
   const value = {
     clearImposterSessionValues,
-    screen,
-    setScreen,
     iterations,
     setIterations,
     imposterSession,
@@ -96,6 +92,8 @@ export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => 
     imposterName,
     newRound,
     roundWord,
+    screen,
+    setScreen,
   };
 
   return <ImposterSessionContext.Provider value={value}>{children}</ImposterSessionContext.Provider>;

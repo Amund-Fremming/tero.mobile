@@ -1,8 +1,7 @@
 import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { QuizGameScreen as QuizSessionScreen, QuizSession } from "../constants/quizTypes";
 import { registerCrashResetCallback } from "@/src/core/utils/navigationRef";
-import { useGameScreenStore } from "@/src/play/stores/gameScreenStore";
-import { GameType } from "@/src/core/constants/Types";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 
 interface IQuizSessionContext {
   clearQuizGameValues: () => void;
@@ -33,17 +32,16 @@ interface QuizSessionProviderProps {
 }
 
 export const QuizSessionProvider = ({ children }: QuizSessionProviderProps) => {
+  const { getGameScreen, setGameScreen } = useGlobalSessionProvider();
   const [quizSession, setQuizSession] = useState<QuizSession | undefined>(undefined);
-  const persistedScreen = useGameScreenStore((s) => s.screens[GameType.Quiz]) as QuizSessionScreen | undefined;
-  const screen = persistedScreen ?? QuizSessionScreen.Create;
+  const screen = (getGameScreen() as QuizSessionScreen) || QuizSessionScreen.Create;
   const setScreen = (value: QuizSessionScreen | ((prev: QuizSessionScreen) => QuizSessionScreen)) => {
     const next = typeof value === "function" ? value(screen) : value;
-    useGameScreenStore.getState().setScreen(GameType.Quiz, next);
+    setGameScreen(next);
   };
   const [iterations, setIterations] = useState<number>(0);
 
   const clearQuizSessionValues = () => {
-    useGameScreenStore.getState().clearScreen(GameType.Quiz);
     setQuizSession(undefined);
     setIterations(0);
   };

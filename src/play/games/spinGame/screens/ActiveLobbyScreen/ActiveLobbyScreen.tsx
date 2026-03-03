@@ -8,6 +8,7 @@ import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
 import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
+import { Text } from "react-native";
 
 export const ActiveLobbyScreen = () => {
   const { invokeFunction, disconnect } = useHubConnectionProvider();
