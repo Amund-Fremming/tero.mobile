@@ -1,5 +1,5 @@
-import { err, ok, Result } from "../utils/result";
 import axios from "axios";
+import { err, ok, Result } from "../utils/result";
 
 import {
   ActivityStats,
@@ -52,7 +52,7 @@ export class UserService {
       const response = await axios.post<string>(url);
       return ok(response.data);
     } catch (error) {
-      console.error("ensurePseudoId:", error);
+      console.warn("ensurePseudoId:", error);
       return err("Klarte ikke å hente gjeste id");
     }
   }

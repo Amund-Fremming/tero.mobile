@@ -1,14 +1,13 @@
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useEffect, useRef, useState } from "react";
-import * as Haptics from "expo-haptics";
-import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
+import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
+import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
+import * as Haptics from "expo-haptics";
+import { useEffect, useRef, useState } from "react";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
-import { GameEntryMode, GameType } from "@/src/core/constants/Types";
-import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
-import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
-import { Text } from "react-native";
 
 export const ActiveLobbyScreen = () => {
   const { invokeFunction, disconnect } = useHubConnectionProvider();

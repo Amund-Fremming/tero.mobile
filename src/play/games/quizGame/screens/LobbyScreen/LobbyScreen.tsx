@@ -1,15 +1,15 @@
+import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { useEffect, useRef, useState } from "react";
-import * as Haptics from "expo-haptics";
-import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useQuizSessionProvider } from "../../context/QuizGameProvider";
-import { QuizGameScreen } from "../../constants/quizTypes";
-import { useNavigation } from "expo-router";
-import { CommonActions } from "@react-navigation/native";
-import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
-import Color from "@/src/core/constants/Color";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
+import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "expo-router";
+import { useEffect, useRef, useState } from "react";
+import { QuizGameScreen } from "../../constants/quizTypes";
+import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 
 export const LobbyScreen = () => {
   const navigation: any = useNavigation();
@@ -20,7 +20,8 @@ export const LobbyScreen = () => {
   const { gameKey, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { disconnect, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
-  const { iterations, clearQuizGameValues } = useQuizSessionProvider();
+  const { iterations, clearQuizGameValues, setScreen } = useQuizSessionProvider();
+  const theme = getGameTheme(GameType.Quiz);
 
   const prevIterationsRef = useRef(iterations);
 
@@ -82,7 +83,7 @@ export const LobbyScreen = () => {
     }
 
     await disconnect();
-    navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: QuizGameScreen.Game }] }));
+    setScreen(QuizGameScreen.Game);
   };
 
   const handleInfoPressed = () => {
@@ -105,8 +106,8 @@ export const LobbyScreen = () => {
   return (
     <SimpleInitScreen
       createScreen={false}
-      themeColor={Color.LighterGreen}
-      secondaryThemeColor={Color.DeepForest}
+      themeColor={theme.primaryColor}
+      secondaryThemeColor={theme.secondaryColor}
       onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
       headerText="asdasd"

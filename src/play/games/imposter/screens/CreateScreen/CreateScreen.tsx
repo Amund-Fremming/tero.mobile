@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
 import { CreateGameRequest, GameCategory, GameEntryMode } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
-import { useFocusEffect, useNavigation } from "expo-router";
+import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
-import Color from "@/src/core/constants/Color";
+import { useFocusEffect, useNavigation } from "expo-router";
+import { useCallback, useState } from "react";
 
 export const CreateScreen = ({
   onGameCreated,
@@ -18,6 +18,7 @@ export const CreateScreen = ({
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
   const { setGameKey, setGameEntryMode, setHubName, gameType, setIsHost } = useGlobalSessionProvider();
+  const theme = getGameTheme(gameType);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [createRequest, setCreateRequest] = useState<CreateGameRequest>({
@@ -82,8 +83,8 @@ export const CreateScreen = ({
   return (
     <SimpleInitScreen
       createScreen={true}
-      themeColor={Color.BuzzifyLavender}
-      secondaryThemeColor={Color.BuzzifyLavenderLight}
+      themeColor={theme.primaryColor}
+      secondaryThemeColor={theme.secondaryColor}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"

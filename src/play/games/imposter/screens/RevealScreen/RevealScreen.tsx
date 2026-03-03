@@ -1,20 +1,19 @@
-import { View, Text, Animated, TouchableOpacity, Easing } from "react-native";
-import styles from "./revealScreenStyles";
-import { useEffect, useRef, useState } from "react";
-import { useNavigation } from "expo-router";
-import { CommonActions } from "@react-navigation/native";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
+import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { ImposterSessionScreen } from "../../constants/imposterTypes";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import * as Haptics from "expo-haptics";
+import { useNavigation } from "expo-router";
+import { useEffect, useRef, useState } from "react";
+import { Animated, Easing, Text, TouchableOpacity, View } from "react-native";
+import { ImposterSessionScreen } from "../../constants/imposterTypes";
+import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
+import styles from "./revealScreenStyles";
 
 export const RevealScreen = () => {
   const navigation: any = useNavigation();
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearImposterSessionValues, imposterName, imposterSession } = useImposterSessionProvider();
+  const { clearImposterSessionValues, imposterName, imposterSession, setScreen } = useImposterSessionProvider();
   const { displayActionModal, displayInfoModal } = useModalProvider();
 
   const [revealed, setRevealed] = useState(false);
@@ -143,7 +142,7 @@ export const RevealScreen = () => {
 
   const handleNext = () => {
     if (hasMoreRounds) {
-      navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: ImposterSessionScreen.Roles }] }));
+      setScreen(ImposterSessionScreen.Roles);
     } else {
       clearGlobalSessionValues();
       clearImposterSessionValues();

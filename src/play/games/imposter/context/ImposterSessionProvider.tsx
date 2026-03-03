@@ -1,7 +1,7 @@
-import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { ImposterSession, ImposterSessionScreen } from "../constants/imposterTypes";
 import { registerCrashResetCallback } from "@/src/core/utils/navigationRef";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { ImposterSession, ImposterSessionScreen } from "../constants/imposterTypes";
+import { useImposterScreenStore } from "./imposterScreenStore";
 
 interface IImposterSessionContext {
   clearImposterSessionValues: () => void;
@@ -42,16 +42,17 @@ interface SpinGameProviderProps {
 }
 
 export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => {
-  const { getGameScreen, setGameScreen } = useGlobalSessionProvider();
   const [iterations, setIterations] = useState<number>(0);
   const [imposterSession, setImposterSession] = useState<ImposterSession | undefined>(undefined);
   const [players, setPlayers] = useState<string[]>(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
   const [imposterName, setImposterName] = useState<string>("");
   const [roundWord, setRoundWord] = useState<string>("");
-  const screen = (getGameScreen() as ImposterSessionScreen) || ImposterSessionScreen.Create;
+
+  const screen = useImposterScreenStore((state) => state.screen) || ImposterSessionScreen.Create;
+
   const setScreen = (value: ImposterSessionScreen | ((prev: ImposterSessionScreen) => ImposterSessionScreen)) => {
     const next = typeof value === "function" ? value(screen) : value;
-    setGameScreen(next);
+    useImposterScreenStore.getState().setScreen(next);
   };
 
   const newRound = () => {
@@ -75,6 +76,7 @@ export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => 
     setPlayers(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
     setImposterName("");
     setRoundWord("");
+    useImposterScreenStore.getState().clearScreen();
   };
 
   useEffect(() => {

@@ -1,19 +1,19 @@
-import { View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
-import * as Haptics from "expo-haptics";
-import styles from "./addPlayersScreenStyles";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { useNavigation } from "expo-router";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import React from "react";
 import Color from "@/src/core/constants/Color";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { GameEntryMode } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { moderateScale } from "@/src/core/utils/dimensions";
+import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "expo-router";
+import React from "react";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { GameEntryMode } from "@/src/core/constants/Types";
-import { moderateScale } from "@/src/core/utils/dimensions";
+import styles from "./addPlayersScreenStyles";
 
 export const AddPlayersScreen = () => {
   const navigation: any = useNavigation();
@@ -62,18 +62,21 @@ export const AddPlayersScreen = () => {
   };
 
   const addPlayers = () => {
-    console.log(gameEntryMode);
     if (gameEntryMode === GameEntryMode.Creator) {
       addPlayersToServer();
       setScreen(ImposterSessionScreen.ActiveLobby);
+      console.log("Hei4");
       return;
     }
 
     if (gameEntryMode === GameEntryMode.Host) {
       addPlayerToProvider();
       setScreen(ImposterSessionScreen.Roles);
+      console.log("Hei2");
       return;
     }
+
+
   };
 
   const addPlayerToProvider = () => {

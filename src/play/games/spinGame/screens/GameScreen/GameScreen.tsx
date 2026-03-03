@@ -1,21 +1,24 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import * as Haptics from "expo-haptics";
-import styles from "./gameScreenStyles";
-import { useEffect, useState, useRef, useCallback } from "react";
-import { SpinGameState } from "../../constants/SpinTypes";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import Color from "@/src/core/constants/Color";
-import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { useSpinSessionProvider } from "../../context/SpinGameProvider";
-import { Feather } from "@expo/vector-icons";
-import { useFocusEffect } from "expo-router";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
-import { GameType } from "@/src/core/constants/Types";
+import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
+import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { useFocusEffect, useNavigation } from "expo-router";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { SpinGameState } from "../../constants/SpinTypes";
+import { useSpinSessionProvider } from "../../context/SpinGameProvider";
+import styles from "./gameScreenStyles";
 
 export const GameScreen = () => {
+  const outerNavigation: any = useNavigation();
+
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [bgColor, setBgColor] = useState<string>(Color.Gray);
 
@@ -86,7 +89,12 @@ export const GameScreen = () => {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt");
+      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt", () => {
+        clearSpinSessionValues();
+        clearGlobalSessionValues();
+        disconnect();
+        resetToHomeScreen(outerNavigation);
+      });
       return;
     }
 
@@ -108,7 +116,12 @@ export const GameScreen = () => {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 
       console.error(result.error);
-      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt");
+      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt", () => {
+        clearSpinSessionValues();
+        clearGlobalSessionValues();
+        disconnect();
+        resetToHomeScreen(outerNavigation);
+      });
       return;
     }
   };

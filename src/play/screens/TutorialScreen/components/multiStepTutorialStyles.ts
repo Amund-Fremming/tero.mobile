@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
   dot: {
     height: DOT_SIZE,
     borderRadius: DOT_SIZE / 2,
-    backgroundColor: Color.BuzzifyLavender,
   },
   buttonRow: {
     flexDirection: "row",
@@ -42,7 +41,6 @@ const styles = StyleSheet.create({
 
   nextButton: {
     flex: 1.8,
-    backgroundColor: Color.BuzzifyLavender,
     borderRadius: moderateScale(14),
     paddingVertical: verticalScale(16),
     alignItems: "center",

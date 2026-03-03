@@ -11,7 +11,6 @@ const DOT_GAP = moderateScale(6);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.LightGray,
   },
   page: {
     width,
@@ -71,7 +70,6 @@ const styles = StyleSheet.create({
   continueButton: {
     marginHorizontal: moderateScale(28),
     marginBottom: verticalScale(40),
-    backgroundColor: Color.BuzzifyLavender,
     borderRadius: moderateScale(14),
     paddingVertical: verticalScale(16),
     alignItems: "center",

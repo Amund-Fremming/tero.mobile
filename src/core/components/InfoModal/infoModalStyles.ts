@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Color } from "../../constants/Color";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/dimensions";
 import { Font } from "../../constants/Font";
+import { horizontalScale, moderateScale, verticalScale } from "../../utils/dimensions";
 
 export const styles = StyleSheet.create({
   overlay: {
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
 
   errorContainer: {
     backgroundColor: Color.White,
-    borderColor: Color.HomeRed,
+    borderColor: Color.Gray,
     borderWidth: moderateScale(3),
   },
 

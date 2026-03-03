@@ -24,8 +24,7 @@ export const tutorialConfig: Record<GameType, TutorialDef> = {
     items: [
       "Opprett ett spill med ett navn og en kategori",
       "Del rom navnet til de andre spillerene",
-      "Legg til så mange spørsmål dere ønsker",
-      "Når klare start spillet",
+      "Legg til så mange spørsmål dere ønsker og start spillet",
       "Les opp spørsmålet og svar på tur. Her kan dere sende telefonen rundt, eller svare på rundtur",
     ],
   },
@@ -33,9 +32,10 @@ export const tutorialConfig: Record<GameType, TutorialDef> = {
     mode: "simple",
     title: "Slik spiller du Roulette",
     items: [
+      "Opprett ett spill med ett navn og en kategori",
       "Hjulet snurrer og stopper på en tilfeldig spiller",
       "Personen som hjulet lander på må utføre en utfordring",
-      "Ingen vet hvem som er neste – hold deg klar!",
+      "Ingen vet hvem som er neste hold deg klar!",
     ],
   },
   [GameType.Duel]: {

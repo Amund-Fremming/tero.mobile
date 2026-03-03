@@ -1,25 +1,24 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import * as Haptics from "expo-haptics";
-import styles from "./rolesScreenStyles";
-import { useEffect, useState } from "react";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { useNavigation } from "expo-router";
-import { CommonActions } from "@react-navigation/native";
-import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
-import { ImposterSessionScreen } from "../../constants/imposterTypes";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { MaterialIcons } from "@expo/vector-icons";
-import { moderateScale } from "@/src/core/utils/dimensions";
-import PlayerCard from "../../components/PlayerCard/PlayerCard";
 import ScreenHeaderChildren from "@/src/core/components/ScreenHeader/ScreenHeaderChildren";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { moderateScale } from "@/src/core/utils/dimensions";
+import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { MaterialIcons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "expo-router";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import PlayerCard from "../../components/PlayerCard/PlayerCard";
+import { ImposterSessionScreen } from "../../constants/imposterTypes";
+import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
+import styles from "./rolesScreenStyles";
 
 export const RolesScreen = () => {
   const navigation: any = useNavigation();
 
   const { clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearImposterSessionValues, players, imposterName, newRound, roundWord } = useImposterSessionProvider();
+  const { clearImposterSessionValues, players, imposterName, newRound, roundWord, setScreen } =
+    useImposterSessionProvider();
   const { displayActionModal, displayInfoModal } = useModalProvider();
 
   const [lockedPlayers, setLockedPlayers] = useState<Set<number>>(new Set());
@@ -53,7 +52,7 @@ export const RolesScreen = () => {
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: ImposterSessionScreen.Reveal }] }));
+    setScreen(ImposterSessionScreen.Reveal);
   };
 
   return (

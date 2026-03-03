@@ -1,13 +1,13 @@
-import { Text, TouchableOpacity, View } from "react-native";
 import * as Haptics from "expo-haptics";
-import { styles } from "./infoModalStyles";
+import { Text, TouchableOpacity, View } from "react-native";
 import Color from "../../constants/Color";
+import { styles } from "./infoModalStyles";
 
 interface InfoModalProps {
   header: string;
   message: string;
   isError: boolean;
-  onCloseFunc: () => void;
+  onCloseFunc?: () => void ;
 }
 
 export const InfoModal = ({ isError, header, message, onCloseFunc }: InfoModalProps) => {
@@ -19,7 +19,7 @@ export const InfoModal = ({ isError, header, message, onCloseFunc }: InfoModalPr
         <TouchableOpacity
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            onCloseFunc();
+            onCloseFunc && onCloseFunc();
           }}
           style={styles.button}
         >

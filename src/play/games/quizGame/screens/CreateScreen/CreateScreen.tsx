@@ -1,15 +1,14 @@
-import { useEffect, useState } from "react";
 import { CreateGameRequest, GameCategory, GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
 import { useNavigation } from "expo-router";
-import { CommonActions } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { QuizGameScreen as QuizSessionScreen } from "../../constants/quizTypes";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
-import Color from "@/src/core/constants/Color";
-import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
 
 export const CreateScreen = () => {
   const navigation: any = useNavigation();
@@ -17,6 +16,8 @@ export const CreateScreen = () => {
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
   const { setGameKey, setGameEntryMode, setHubName, isHost, setIsHost } = useGlobalSessionProvider();
+  const { setScreen } = useQuizSessionProvider();
+  const theme = getGameTheme(GameType.Quiz);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [createRequest, setCreateRequest] = useState<CreateGameRequest>({
@@ -71,7 +72,7 @@ export const CreateScreen = () => {
     setGameKey(result.value.key);
     setHubName(result.value.hub_name);
     setGameEntryMode(GameEntryMode.Creator);
-    navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: QuizSessionScreen.Lobby }] }));
+    setScreen(QuizSessionScreen.Lobby);
     setLoading(false);
   };
 
@@ -82,8 +83,8 @@ export const CreateScreen = () => {
   return (
     <SimpleInitScreen
       createScreen={true}
-      themeColor={Color.LighterGreen}
-      secondaryThemeColor={Color.DeepForest}
+      themeColor={theme.primaryColor}
+      secondaryThemeColor={theme.secondaryColor}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"

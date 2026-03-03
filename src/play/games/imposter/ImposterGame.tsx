@@ -1,29 +1,25 @@
+import { HubChannel } from "@/src/core/constants/HubChannel";
+import { GameEntryMode } from "@/src/core/constants/Types";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { useNavigation } from "expo-router";
 import { useEffect, useRef } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { CommonActions } from "@react-navigation/native";
+import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
+import { useHubConnectionProvider } from "../../context/HubConnectionProvider";
 import { ImposterSession, ImposterSessionScreen } from "./constants/imposterTypes";
 import { useImposterSessionProvider } from "./context/ImposterSessionProvider";
-import CreateScreen from "./screens/CreateScreen/CreateScreen";
-import { RolesScreen } from "./screens/RolesScreen/RolesScreen";
-import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
-import { useNavigation } from "expo-router";
-import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import AddPlayersScreen from "./screens/AddPlayersScreen/AddPlayersScreen";
+import CreateScreen from "./screens/CreateScreen/CreateScreen";
+import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
 import RevealScreen from "./screens/RevealScreen/RevealScreen";
-import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
-import { GameEntryMode } from "@/src/core/constants/Types";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { HubChannel } from "@/src/core/constants/HubChannel";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { useHubConnectionProvider } from "../../context/HubConnectionProvider";
-
-const ImposterStack = createStackNavigator();
+import { RolesScreen } from "./screens/RolesScreen/RolesScreen";
+import StartedScreen from "./screens/StartedScreen/StartedScreen";
 
 export const ImposterGame = () => {
   const outerNavigation: any = useNavigation();
-  const innerNavRef = useRef<any>(null);
-  const { clearImposterSessionValues, setIterations, setImposterSession } = useImposterSessionProvider();
+  const { clearImposterSessionValues, setIterations, setImposterSession, screen, setScreen } =
+    useImposterSessionProvider();
   const { displayErrorModal } = useModalProvider();
   const { gameEntryMode, hubName, gameKey, setIsHost, clearGlobalSessionValues, isHost } = useGlobalSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
@@ -31,12 +27,9 @@ export const ImposterGame = () => {
 
   const isHandlingErrorRef = useRef(false);
 
-  const navigateInner = (screenName: string) => {
-    innerNavRef.current?.dispatch(CommonActions.reset({ index: 0, routes: [{ name: screenName }] }));
-  };
-
   useEffect(() => {
     const initScreen = getInitialScreen();
+    setScreen(initScreen);
     if (
       initScreen !== ImposterSessionScreen.Create &&
       [GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)
@@ -56,7 +49,12 @@ export const ImposterGame = () => {
     if (result.isError()) {
       console.warn(hubName);
       console.error(result.error);
-      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt");
+      displayErrorModal("Du har mistet tilkoblingen, forsøk å bli med på nytt", () => {
+        clearGlobalSessionValues();
+        clearImposterSessionValues();
+        disconnect();
+        resetToHomeScreen(outerNavigation);
+      });
       return;
     }
 
@@ -69,7 +67,7 @@ export const ImposterGame = () => {
       return;
     }
 
-    navigateInner(targetScreen);
+    setScreen(targetScreen);
   };
 
   const setupListeners = async () => {
@@ -79,13 +77,13 @@ export const ImposterGame = () => {
 
     setListener("session", async (session: ImposterSession) => {
       setImposterSession(session);
-      navigateInner(ImposterSessionScreen.Roles);
+      setScreen(ImposterSessionScreen.Roles);
     });
 
     setListener("signal_start", async (_value: boolean) => {
       if (!isHost) {
         await disconnect();
-        navigateInner(ImposterSessionScreen.Started);
+        setScreen(ImposterSessionScreen.Started);
         return;
       }
     });
@@ -117,59 +115,29 @@ export const ImposterGame = () => {
         return ImposterSessionScreen.Create;
       case GameEntryMode.Host:
         return ImposterSessionScreen.AddPlayers;
-      case GameEntryMode.Participant || GameEntryMode.Member:
+      case GameEntryMode.Participant:
+      case GameEntryMode.Member:
         return ImposterSessionScreen.ActiveLobby;
       default:
         return ImposterSessionScreen.ActiveLobby;
     }
   };
 
-  const initialRoute = getInitialScreen();
-
-  return (
-    <ImposterStack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
-      <ImposterStack.Screen name={ImposterSessionScreen.Create}>
-        {({ navigation }) => {
-          innerNavRef.current = navigation;
-          return (
-            <CreateScreen
-              onGameCreated={(address, key) => initializeHub(address, key, ImposterSessionScreen.AddPlayers)}
-            />
-          );
-        }}
-      </ImposterStack.Screen>
-      <ImposterStack.Screen name={ImposterSessionScreen.AddPlayers}>
-        {({ navigation }) => {
-          innerNavRef.current = navigation;
-          return <AddPlayersScreen />;
-        }}
-      </ImposterStack.Screen>
-      <ImposterStack.Screen name={ImposterSessionScreen.ActiveLobby}>
-        {({ navigation }) => {
-          innerNavRef.current = navigation;
-          return <LobbyScreen />;
-        }}
-      </ImposterStack.Screen>
-      <ImposterStack.Screen name={ImposterSessionScreen.Roles}>
-        {({ navigation }) => {
-          innerNavRef.current = navigation;
-          return <RolesScreen />;
-        }}
-      </ImposterStack.Screen>
-      <ImposterStack.Screen name={ImposterSessionScreen.Reveal}>
-        {({ navigation }) => {
-          innerNavRef.current = navigation;
-          return <RevealScreen />;
-        }}
-      </ImposterStack.Screen>
-      <ImposterStack.Screen name={ImposterSessionScreen.Started}>
-        {({ navigation }) => {
-          innerNavRef.current = navigation;
-          return <StartedScreen />;
-        }}
-      </ImposterStack.Screen>
-    </ImposterStack.Navigator>
-  );
+  switch (screen) {
+    case ImposterSessionScreen.Create:
+      return <CreateScreen onGameCreated={(address, key) => initializeHub(address, key, ImposterSessionScreen.AddPlayers)} />;
+    case ImposterSessionScreen.AddPlayers:
+      return <AddPlayersScreen />;
+    case ImposterSessionScreen.ActiveLobby:
+      return <LobbyScreen />;
+    case ImposterSessionScreen.Roles:
+      return <RolesScreen />;
+    case ImposterSessionScreen.Reveal:
+      return <RevealScreen />;
+    case ImposterSessionScreen.Started:
+    default:
+      return <StartedScreen />;
+  }
 };
 
 export default ImposterGame;

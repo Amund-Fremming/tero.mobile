@@ -1,16 +1,13 @@
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useEffect, useState } from "react";
-import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
-import { HubChannel } from "@/src/core/constants/HubChannel";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { useNavigation } from "expo-router";
 import { GameType } from "@/src/core/constants/Types";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
-import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
+import { useNavigation } from "expo-router";
+import { useState } from "react";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
-import Color from "@/src/core/constants/Color";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 
 export const LobbyScreen = () => {
   const navigation: any = useNavigation();
@@ -18,6 +15,7 @@ export const LobbyScreen = () => {
   const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
   const { gameKey, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { setScreen, iterations, clearImposterSessionValues } = useImposterSessionProvider();
+  const theme = getGameTheme(GameType.Imposter);
 
   const [round, setRound] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
@@ -74,8 +72,8 @@ export const LobbyScreen = () => {
   return (
     <SimpleInitScreen
       createScreen={false}
-      themeColor={Color.BuzzifyLavender}
-      secondaryThemeColor={Color.BuzzifyLavenderLight}
+      themeColor={theme.primaryColor}
+      secondaryThemeColor={theme.secondaryColor}
       onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"

@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Font.PassionOneRegular,
     fontSize: moderateScale(26),
-    color: Color.BeigeLight,
     marginBottom: verticalScale(4),
   },
 
@@ -37,7 +36,6 @@ const styles = StyleSheet.create({
     height: horizontalScale(38),
     borderRadius: moderateScale(10),
     borderWidth: moderateScale(3),
-    borderColor: Color.BuzzifyLavender,
     justifyContent: "center",
     alignItems: "center",
     flexShrink: 0,
@@ -46,7 +44,6 @@ const styles = StyleSheet.create({
   badgeText: {
     fontFamily: Font.ArchivoBlackRegular,
     fontSize: moderateScale(20),
-    color: Color.BuzzifyLavender,
     lineHeight: moderateScale(22),
   },
 

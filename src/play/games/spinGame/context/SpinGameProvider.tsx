@@ -1,9 +1,11 @@
-import React, { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { SpinSessionScreen, SpinGameState } from "../constants/SpinTypes";
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
 import { registerCrashResetCallback } from "@/src/core/utils/navigationRef";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { getGameTheme } from "@/src/play/config/gameTheme";
+import { SpinGameState, SpinSessionScreen } from "../constants/SpinTypes";
+import { useSpinScreenStore } from "./spinScreenStore";
 
 interface ISpinSessionContext {
   clearSpinSessionValues: () => void;
@@ -54,11 +56,11 @@ interface SpinSessionProviderProps {
 }
 
 export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
-  const { gameType, getGameScreen, setGameScreen } = useGlobalSessionProvider();
-  const screen = (getGameScreen() as SpinSessionScreen) || SpinSessionScreen.Create;
+  const { gameType } = useGlobalSessionProvider();
+  const screen = useSpinScreenStore((state) => state.screen) || SpinSessionScreen.Create;
   const setScreen = (value: SpinSessionScreen | ((prev: SpinSessionScreen) => SpinSessionScreen)) => {
     const next = typeof value === "function" ? value(screen) : value;
-    setGameScreen(next);
+    useSpinScreenStore.getState().setScreen(next);
   };
   const [themeColor, setThemeColor] = useState<string>(Color.BeigeLight);
   const [secondaryThemeColor, setSecondaryThemeColor] = useState<string>(Color.Beige);
@@ -70,16 +72,19 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
   const [players, setPlayers] = useState<number>(0);
 
   const setThemeColors = (gameType: GameType) => {
+    const theme = getGameTheme(gameType);
+    setThemeColor(theme.primaryColor);
+    setSecondaryThemeColor(theme.secondaryColor);
+
     switch (gameType) {
       case GameType.Duel:
-        setSecondaryThemeColor(Color.BeigeLight);
-        setThemeColor(Color.Beige);
         setFeatherIcon("sword-cross");
         break;
       case GameType.Roulette:
-        setSecondaryThemeColor(Color.SkyBlueLight);
-        setThemeColor(Color.SkyBlue);
         setFeatherIcon("arrows-spin");
+        break;
+      default:
+        setFeatherIcon("sword-cross");
         break;
     }
   };
@@ -90,6 +95,7 @@ export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
     setPlayers(0);
     setSelectedBatch([]);
     setRoundText("");
+    useSpinScreenStore.getState().clearScreen();
   };
 
   useEffect(() => {

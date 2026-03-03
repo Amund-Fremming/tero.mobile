@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useRef, useState } from "react";
-import InfoModal from "../components/InfoModal/InfoModal";
+import { Dimensions, StyleSheet, View } from "react-native";
 import ActionModal from "../components/ActionModal/ActionModal";
-import { View, StyleSheet, Dimensions } from "react-native";
+import InfoModal from "../components/InfoModal/InfoModal";
 import LoadingModal from "../components/LoadingModal/LoadingModal";
 
 enum DisplayOption {
