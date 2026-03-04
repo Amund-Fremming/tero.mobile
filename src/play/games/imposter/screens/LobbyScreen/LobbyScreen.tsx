@@ -3,7 +3,6 @@ import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
-import SimpleInitScreen from "@/src/play/screens/SimpleInitScreen/SimpleInitScreen";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
