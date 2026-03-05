@@ -1,18 +1,20 @@
 import Color from "@/src/core/constants/Color";
-import { GameCategory, PatchGameBaseRequest } from "@/src/core/constants/Types";
+import { GameCategory } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import GenericCreateScreen from "@/src/play/screens/GenericCreateScreen/GenericCreateScreen";
 import { useNavigation } from "expo-router";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 
-export const PatchScreen = () => {
+export const CreateScreen = () => {
   const navigation: any = useNavigation();
 
   const { pseudoId } = useAuthProvider();
+  const { invokeFunction } = useHubConnectionProvider();
   const { displayInfoModal, displayErrorModal } = useModalProvider();
   const { gameService } = useServiceProvider();
   const { setScreen } = useQuizSessionProvider();
@@ -23,15 +25,10 @@ export const PatchScreen = () => {
     displayInfoModal("Gi ditt nye spill ett navn og en kategori!", "Hva nå?");
   };
 
-  const handlePatchGame = async (name: string, category: GameCategory) => {
-    let request: PatchGameBaseRequest = {
-      name,
-      category,
-    };
-
-    const result = await gameService().patchGame(pseudoId, gameId, request);
-    if (result.isError()) {
-      console.error("Failed to patch game base: ", result.error);
+  const handlePersistGame = async (name: string, category: GameCategory) => {
+    const success = invokeFunction("PersistGame", gameSession.gameKey, name, category);
+    if (!success) {
+      console.error("Failed to persist game");
       displayErrorModal("Klarte ikke lagre spill korrekt. Spillet ditt finnes fortsatt men med ett annet navn.");
       return;
     }
@@ -49,10 +46,10 @@ export const PatchScreen = () => {
       onInfoPressed={handleInfoPressed}
       headerText="Lagre"
       bottomButtonText="Opprett"
-      handlePatchGame={handlePatchGame}
+      handlePatchGame={handlePersistGame}
       featherIcon="stack"
     />
   );
 };
 
-export default PatchScreen;
+export default CreateScreen;

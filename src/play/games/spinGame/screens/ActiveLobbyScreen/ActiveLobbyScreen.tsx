@@ -73,7 +73,7 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    const startResult = await invokeFunction("StartGame", gameSession.gameKey, true); // isDraft = true
+    const startResult = await invokeFunction("StartGame", gameSession.gameKey);
     if (startResult.isError()) {
       console.error(startResult.error);
       displayErrorModal("Kunne ikke starte spillet.");
