@@ -3,13 +3,28 @@ import Font from "@/src/core/constants/Font";
 import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
 
+// Exported so GameScreen.tsx can use the same value for Animated.diffClamp
+export const HEADER_HEIGHT = verticalScale(120);
+
+const HEADER_CONTENT_OFFSET = HEADER_HEIGHT;
+
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: verticalScale(60),
     justifyContent: "flex-start",
     alignItems: "center",
     width: "100%",
     height: "100%",
+  },
+
+  // Absolutely-positioned header that slides out when scrolling down
+  animatedHeader: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+    paddingTop: verticalScale(60),
+    paddingBottom: verticalScale(10),
   },
 
   iconWrapper: {
@@ -26,6 +41,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    alignSelf: "center",
   },
 
   textIcon: {
@@ -33,6 +49,20 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(45),
     fontFamily: Font.PassionOneRegular,
     opacity: 0.8,
+  },
+
+  // ScrollView that fills the remaining screen space
+  scrollView: {
+    flex: 1,
+    width: "100%",
+  },
+
+  // Content inside the ScrollView — paddingTop clears the absolute header
+  scrollContent: {
+    paddingTop: HEADER_CONTENT_OFFSET,
+    paddingBottom: verticalScale(100),
+    alignItems: "center",
+    minHeight: "100%",
   },
 
   tutorialWrapper: {

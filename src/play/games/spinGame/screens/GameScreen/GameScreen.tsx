@@ -11,10 +11,10 @@ import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Animated, Text, TouchableOpacity, View } from "react-native";
 import { SpinGameState } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
-import styles from "./gameScreenStyles";
+import styles, { HEADER_HEIGHT } from "./gameScreenStyles";
 
 export const GameScreen = () => {
   const outerNavigation: any = useNavigation();
@@ -23,6 +23,24 @@ export const GameScreen = () => {
   const [bgColor, setBgColor] = useState<string>(Color.Gray);
 
   const disconnectTriggeredRef = useRef<boolean>(false);
+
+  // Scroll-driven header animation
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const clampedScroll = useRef(Animated.diffClamp(scrollY, 0, HEADER_HEIGHT)).current;
+  const headerTranslateY = useRef(
+    clampedScroll.interpolate({
+      inputRange: [0, HEADER_HEIGHT],
+      outputRange: [0, -HEADER_HEIGHT],
+      extrapolate: "clamp",
+    }),
+  ).current;
+  const headerOpacity = useRef(
+    clampedScroll.interpolate({
+      inputRange: [0, HEADER_HEIGHT * 0.6, HEADER_HEIGHT],
+      outputRange: [1, 0.6, 0],
+      extrapolate: "clamp",
+    }),
+  ).current;
 
   const { isHost, clearGlobalSessionValues, gameSession, gameType } = useGlobalSessionProvider();
   const { clearSpinSessionValues, themeColor, roundText, selectedBatch, gameState, setGameState } =
@@ -179,27 +197,50 @@ export const GameScreen = () => {
 
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
-      <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
-          <Feather name="chevron-left" size={moderateScale(45)} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
-          <Text style={styles.textIcon}>?</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Animated header — absolutely positioned, slides out on scroll down */}
+      <Animated.View
+        style={[
+          styles.animatedHeader,
+          {
+            backgroundColor: bgColor,
+            transform: [{ translateY: headerTranslateY }],
+          },
+        ]}
+      >
+        <Animated.View style={[styles.headerWrapper, { opacity: headerOpacity }]}>
+          <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
+            <Feather name="chevron-left" size={moderateScale(45)} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
+            <Text style={styles.textIcon}>?</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </Animated.View>
 
-      {gameState === SpinGameState.RoundStarted && (
-        <View style={styles.tutorialWrapper}>
-          <Text style={styles.tutorialHeader}>{tutorialHeader()}</Text>
-          <Text style={styles.tutorialText}>{roundText}</Text>
-        </View>
-      )}
+      {/* Scrollable content area — paddingTop reserves space below the header */}
+      <Animated.ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: true,
+        })}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+      >
+        {gameState === SpinGameState.RoundStarted && (
+          <View style={styles.tutorialWrapper}>
+            <Text style={styles.tutorialHeader}>{tutorialHeader()}</Text>
+            <Text style={styles.tutorialText}>{roundText}</Text>
+          </View>
+        )}
 
-      {gameState === SpinGameState.RoundFinished && selectedBatch.includes(pseudoId) && (
-        <Text style={{ ...styles.text }}>{roundText}</Text>
-      )}
-      {gameState === SpinGameState.Finished && <Text style={{ ...styles.text }}>"Spillet er ferdig!</Text>}
+        {gameState === SpinGameState.RoundFinished && selectedBatch.includes(pseudoId) && (
+          <Text style={{ ...styles.text }}>{roundText}</Text>
+        )}
+        {gameState === SpinGameState.Finished && <Text style={{ ...styles.text }}>{'"'}Spillet er ferdig!</Text>}
+      </Animated.ScrollView>
 
+      {/* Fixed action buttons at the bottom, outside the ScrollView */}
       {gameState === SpinGameState.RoundStarted && isHost && (
         <TouchableOpacity onPress={handleStartRound} style={styles.button}>
           <Text style={styles.buttonText}>Start spin</Text>
