@@ -27,7 +27,7 @@ export const GenericTutorialScreen = ({ onFinishedPressed, lastButtonText }: Gen
     return (
       <View style={[styles.container, { backgroundColor: theme.primaryColor }]}>
         <ScreenHeader
-          title="Slik spiller du"
+          title="Tutorial"
           onBackPressed={() => navigation.goBack()}
           showBorder
           backgroundColor={theme.primaryColor}

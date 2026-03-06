@@ -24,7 +24,7 @@ interface GenericCreateScreenProps {
   onInfoPressed: () => void;
   headerText: string;
   bottomButtonText: string;
-  handlePatchGame: (name: string, category: GameCategory) => void;
+  handleCreateGame: (name: string, category: GameCategory) => void;
   featherIcon: string;
 }
 
@@ -35,7 +35,7 @@ export const GenericCreateScreen = ({
   onInfoPressed,
   headerText,
   bottomButtonText,
-  handlePatchGame,
+  handleCreateGame,
   featherIcon,
 }: GenericCreateScreenProps) => {
   const navigation: any = useNavigation();
@@ -109,7 +109,7 @@ export const GenericCreateScreen = ({
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    handlePatchGame(inputValue, category);
+    handleCreateGame(inputValue, category);
   };
 
   return (

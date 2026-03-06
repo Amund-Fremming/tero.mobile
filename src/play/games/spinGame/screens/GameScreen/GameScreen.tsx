@@ -168,10 +168,10 @@ export const GameScreen = () => {
 
   const tutorialHeader = () => {
     if (gameType === GameType.Duel) {
-      return "Les opp hva de uvalgte må duellere om:";
+      return "Duellen er:";
     }
     if (gameType === GameType.Roulette) {
-      return "Taperen må: ";
+      return "Taperen må:";
     }
 
     return "";

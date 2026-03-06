@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   CreateGameTipRequest,
+  CreateStaticGameRequest,
   GameBase,
   GamePagedRequest,
   GameType,
@@ -67,6 +68,23 @@ export class GameService {
       console.error("freeGameKey:", error);
       // TODO - AUDIT LOG?!?!
       return ok(undefined);
+    }
+  }
+
+  async persistStaticGame(
+    pseudoId: string,
+    gameType: GameType,
+    request: CreateStaticGameRequest,
+  ): Promise<Result<void>> {
+    try {
+      await axios.post(`${this.urlBase}/games/static/persist/${gameType}`, request, {
+        headers: getHeaders(pseudoId, null),
+      });
+
+      return ok(undefined);
+    } catch (error) {
+      console.error("persistStaticGame:", error);
+      return err("Klarte ikke lagre spill");
     }
   }
 

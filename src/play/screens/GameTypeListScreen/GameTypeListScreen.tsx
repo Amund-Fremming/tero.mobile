@@ -80,7 +80,7 @@ export const GameTypeListScreen = () => {
           onBackPressed={() => navigation.goBack()}
           onInfoPress={handleInfoPressed}
           showBorder={true}
-          backgroundColor={Color.LightGray}
+          backgroundColor={gameEntryMode === GameEntryMode.Creator ? Color.HomeRed : Color.Purple}
         />
         {data &&
           data.map((item, index) => (

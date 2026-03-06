@@ -1,6 +1,6 @@
 import Color from "@/src/core/constants/Color";
 import Font from "@/src/core/constants/Font";
-import { moderateScale, verticalScale } from "@/src/core/utils/dimensions";
+import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -27,6 +27,15 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(45),
     fontWeight: 600,
     opacity: 0.8,
+  },
+
+  helperTextWrapper: {
+    paddingLeft: horizontalScale(4),
+    justifyContent: "center",
+    flexDirection: "column",
+    gap: verticalScale(3),
+    alignItems: "center",
+    textAlign: "center",
   },
 
   helperWrapper: {
@@ -75,6 +84,13 @@ export const styles = StyleSheet.create({
     marginTop: "auto",
     paddingTop: verticalScale(20),
     paddingBottom: 50,
+    minHeight: verticalScale(89),
+  },
+
+  navigatingText: {
+    color: Color.Black,
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(40),
   },
 
   nextButton: {

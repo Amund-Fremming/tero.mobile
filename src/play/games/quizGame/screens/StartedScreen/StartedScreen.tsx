@@ -1,11 +1,10 @@
-import { View, Text } from "react-native";
-import styles from "./startedScreenStyles";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import Color from "@/src/core/constants/Color";
-import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { useNavigation } from "expo-router";
+import { Text, View } from "react-native";
+import { useQuizSessionProvider } from "../../context/QuizGameProvider";
+import styles from "./startedScreenStyles";
 
 export const StartedScreen = () => {
   const navigation: any = useNavigation();
@@ -20,7 +19,7 @@ export const StartedScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="Velg spill" onBackPressed={handleGoHome} />
+      <ScreenHeader title="" onBackPressed={handleGoHome} />
       <View style={styles.textBox}>
         <Text style={styles.header}>Spillet har startet!</Text>
         <Text style={styles.subHeader}>

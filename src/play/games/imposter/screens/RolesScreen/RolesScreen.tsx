@@ -6,8 +6,8 @@ import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvid
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Animated, ScrollView, Text, View } from "react-native";
 import PlayerCard from "../../components/PlayerCard/PlayerCard";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
@@ -22,10 +22,42 @@ export const RolesScreen = () => {
   const { displayActionModal, displayInfoModal } = useModalProvider();
 
   const [lockedPlayers, setLockedPlayers] = useState<Set<number>>(new Set());
+  const [isNavigating, setIsNavigating] = useState(false);
+  const navigatingOpacity = useRef(new Animated.Value(0)).current;
+  const hasAutoAdvanced = useRef(false);
+  const autoAdvanceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     newRound();
   }, []);
+
+  useEffect(() => {
+    const hasAllPlayersLocked = players.length > 0 && lockedPlayers.size === players.length;
+
+    if (!hasAllPlayersLocked || hasAutoAdvanced.current) {
+      return;
+    }
+
+    hasAutoAdvanced.current = true;
+    setIsNavigating(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    Animated.timing(navigatingOpacity, {
+      toValue: 1,
+      duration: 350,
+      useNativeDriver: true,
+    });
+
+    autoAdvanceTimeout.current = setTimeout(() => {
+      setScreen(ImposterSessionScreen.RoundInstructions);
+    }, 1000);
+
+    return () => {
+      if (autoAdvanceTimeout.current) {
+        clearTimeout(autoAdvanceTimeout.current);
+      }
+    };
+  }, [lockedPlayers.size, navigatingOpacity, players.length, setScreen]);
 
   const handleLeaveGame = () => {
     displayActionModal(
@@ -44,15 +76,6 @@ export const RolesScreen = () => {
       "Send telefonen på rundgang i rommet. Hold inn på ditt kort og hold rollen din skjult",
       "Rolle utdeling",
     );
-  };
-
-  const handleNextPressed = () => {
-    if (lockedPlayers.size < players.length) {
-      displayInfoModal("Noen spillere har ikke sett sin rolle", "Vent litt!");
-      return;
-    }
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setScreen(ImposterSessionScreen.Reveal);
   };
 
   return (
@@ -80,15 +103,18 @@ export const RolesScreen = () => {
           ))}
         </View>
         <View style={styles.helperWrapper}>
-          <MaterialIcons name="touch-app" size={moderateScale(25)} color="black" />
-          <Text style={styles.helperText}>Hold nede på boksen for å avsløre</Text>
+          <MaterialIcons name="touch-app" size={moderateScale(30)} color="black" />
+          <View style={styles.helperTextWrapper}>
+            <Text style={styles.helperText}>Hold nede på boksen for å avsløre</Text>
+            <Text style={styles.helperText}>{"( ikke la naboen titte )"}</Text>
+          </View>
         </View>
       </ScrollView>
 
       <View style={styles.buttonsWrapper}>
-        <TouchableOpacity onPress={handleNextPressed} style={styles.nextButton}>
-          <Text style={styles.buttonText}>Neste</Text>
-        </TouchableOpacity>
+        {isNavigating && (
+          <Animated.Text style={[styles.navigatingText, { opacity: navigatingOpacity }]}>Navigerer</Animated.Text>
+        )}
       </View>
     </View>
   );
