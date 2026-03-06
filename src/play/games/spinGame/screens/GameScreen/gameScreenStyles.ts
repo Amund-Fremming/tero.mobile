@@ -5,7 +5,6 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: verticalScale(60),
     justifyContent: "flex-start",
     alignItems: "center",
     width: "100%",
@@ -22,10 +21,24 @@ export const styles = StyleSheet.create({
   },
 
   headerWrapper: {
+    position: "absolute",
+    top: verticalScale(60),
+    left: 0,
+    right: 0,
     width: "90%",
+    alignSelf: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    zIndex: 10,
+  },
+
+  scrollContent: {
+    paddingTop: verticalScale(130),
+    paddingBottom: verticalScale(130),
+    alignItems: "center",
+    width: "100%",
+    minHeight: "100%",
   },
 
   textIcon: {
@@ -55,7 +68,6 @@ export const styles = StyleSheet.create({
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(40),
     textAlign: "center",
-    paddingTop: "50%",
   },
 
   tutorialHeader: {
@@ -65,15 +77,19 @@ export const styles = StyleSheet.create({
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(45),
     textAlign: "center",
-    paddingTop: "50%",
+  },
+
+  buttonWrapper: {
+    position: "absolute",
+    bottom: verticalScale(60),
+    width: "86%",
+    alignItems: "center",
   },
 
   button: {
-    position: "absolute",
-    bottom: verticalScale(60),
     justifyContent: "center",
     alignItems: "center",
-    width: "86%",
+    width: "100%",
     borderRadius: moderateScale(15),
     height: verticalScale(70),
     backgroundColor: Color.Black,

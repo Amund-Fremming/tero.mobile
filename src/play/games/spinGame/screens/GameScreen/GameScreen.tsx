@@ -2,7 +2,7 @@ import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { moderateScale } from "@/src/core/utils/dimensions";
+import { moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
@@ -11,7 +11,15 @@ import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  Animated,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SpinGameState } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import styles from "./gameScreenStyles";
@@ -24,6 +32,15 @@ export const GameScreen = () => {
 
   const disconnectTriggeredRef = useRef<boolean>(false);
 
+  const headerOpacity = useRef(new Animated.Value(1)).current;
+  const headerTranslateY = useRef(new Animated.Value(0)).current;
+  const contentOpacity = useRef(new Animated.Value(1)).current;
+  const contentTranslateY = useRef(new Animated.Value(0)).current;
+  const buttonOpacity = useRef(new Animated.Value(1)).current;
+  const buttonTranslateY = useRef(new Animated.Value(0)).current;
+  const lastScrollY = useRef(0);
+  const headerScrollState = useRef<"show" | "hide">("show");
+
   const { isHost, clearGlobalSessionValues, gameSession, gameType } = useGlobalSessionProvider();
   const { clearSpinSessionValues, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
@@ -34,6 +51,7 @@ export const GameScreen = () => {
   useFocusEffect(
     useCallback(() => {
       setBgColor(themeColor);
+      animateContentIn();
 
       return () => {
         clearSpinSessionValues();
@@ -50,6 +68,7 @@ export const GameScreen = () => {
     } else if (gameState === SpinGameState.RoundStarted) {
       setBgColor(themeColor);
     }
+    animateContentIn();
   }, [gameState]);
 
   useEffect(() => {
@@ -59,8 +78,49 @@ export const GameScreen = () => {
       } else {
         setBgColor(Color.Red);
       }
+      animateContentIn();
     }
   }, [selectedBatch, pseudoId]);
+
+  const animateContentIn = () => {
+    contentOpacity.stopAnimation();
+    contentTranslateY.stopAnimation();
+    buttonOpacity.stopAnimation();
+    buttonTranslateY.stopAnimation();
+
+    contentOpacity.setValue(0);
+    contentTranslateY.setValue(24);
+    buttonOpacity.setValue(0);
+    buttonTranslateY.setValue(40);
+
+    Animated.parallel([
+      Animated.timing(contentOpacity, { toValue: 1, duration: 350, useNativeDriver: true }),
+      Animated.timing(contentTranslateY, { toValue: 0, duration: 320, useNativeDriver: true }),
+      Animated.timing(buttonOpacity, { toValue: 1, duration: 400, useNativeDriver: true }),
+      Animated.spring(buttonTranslateY, { toValue: 0, friction: 6, useNativeDriver: true }),
+    ]).start();
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentY = event.nativeEvent.contentOffset.y;
+    const diff = currentY - lastScrollY.current;
+
+    if (diff > 6 && currentY > 10 && headerScrollState.current !== "hide") {
+      headerScrollState.current = "hide";
+      Animated.parallel([
+        Animated.timing(headerOpacity, { toValue: 0, duration: 180, useNativeDriver: true }),
+        Animated.timing(headerTranslateY, { toValue: -verticalScale(80), duration: 180, useNativeDriver: true }),
+      ]).start();
+    } else if (diff < -6 && headerScrollState.current !== "show") {
+      headerScrollState.current = "show";
+      Animated.parallel([
+        Animated.timing(headerOpacity, { toValue: 1, duration: 180, useNativeDriver: true }),
+        Animated.timing(headerTranslateY, { toValue: 0, duration: 180, useNativeDriver: true }),
+      ]).start();
+    }
+
+    lastScrollY.current = currentY;
+  };
 
   const handleLeaveGame = async () => {
     await disconnect();
@@ -179,49 +239,71 @@ export const GameScreen = () => {
 
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
-      <View style={styles.headerWrapper}>
+      <Animated.View
+        style={[
+          styles.headerWrapper,
+          { opacity: headerOpacity, transform: [{ translateY: headerTranslateY }] },
+        ]}
+      >
         <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
           <Feather name="chevron-left" size={moderateScale(45)} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
           <Text style={styles.textIcon}>?</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
-      {gameState === SpinGameState.RoundStarted && (
-        <View style={styles.tutorialWrapper}>
-          <Text style={styles.tutorialHeader}>{tutorialHeader()}</Text>
-          <Text style={styles.tutorialText}>{roundText}</Text>
-        </View>
-      )}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+      >
+        <Animated.View
+          style={{ opacity: contentOpacity, transform: [{ translateY: contentTranslateY }], width: "100%", alignItems: "center" }}
+        >
+          {gameState === SpinGameState.RoundStarted && (
+            <View style={styles.tutorialWrapper}>
+              <Text style={styles.tutorialHeader}>{tutorialHeader()}</Text>
+              <Text style={styles.tutorialText}>{roundText}</Text>
+            </View>
+          )}
 
-      {gameState === SpinGameState.RoundFinished && selectedBatch.includes(pseudoId) && (
-        <Text style={{ ...styles.text }}>{roundText}</Text>
-      )}
-      {gameState === SpinGameState.Finished && <Text style={{ ...styles.text }}>"Spillet er ferdig!</Text>}
+          {gameState === SpinGameState.RoundFinished && selectedBatch.includes(pseudoId) && (
+            <Text style={{ ...styles.text }}>{roundText}</Text>
+          )}
+          {gameState === SpinGameState.Finished && <Text style={{ ...styles.text }}>Spillet er ferdig!</Text>}
+        </Animated.View>
+      </ScrollView>
 
       {gameState === SpinGameState.RoundStarted && isHost && (
-        <TouchableOpacity onPress={handleStartRound} style={styles.button}>
-          <Text style={styles.buttonText}>Start spin</Text>
-        </TouchableOpacity>
+        <Animated.View style={[styles.buttonWrapper, { opacity: buttonOpacity, transform: [{ translateY: buttonTranslateY }] }]}>
+          <TouchableOpacity onPress={handleStartRound} style={styles.button}>
+            <Text style={styles.buttonText}>Start spin</Text>
+          </TouchableOpacity>
+        </Animated.View>
       )}
 
       {gameState === SpinGameState.RoundFinished && isHost && (
-        <TouchableOpacity style={styles.button} onPress={handleNextRound}>
-          <Text style={styles.buttonText}>Ny runde</Text>
-        </TouchableOpacity>
+        <Animated.View style={[styles.buttonWrapper, { opacity: buttonOpacity, transform: [{ translateY: buttonTranslateY }] }]}>
+          <TouchableOpacity style={styles.button} onPress={handleNextRound}>
+            <Text style={styles.buttonText}>Ny runde</Text>
+          </TouchableOpacity>
+        </Animated.View>
       )}
 
       {gameState === SpinGameState.Finished && (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            navigateHome();
-          }}
-        >
-          <Text style={styles.buttonText}>Hjem</Text>
-        </TouchableOpacity>
+        <Animated.View style={[styles.buttonWrapper, { opacity: buttonOpacity, transform: [{ translateY: buttonTranslateY }] }]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              navigateHome();
+            }}
+          >
+            <Text style={styles.buttonText}>Hjem</Text>
+          </TouchableOpacity>
+        </Animated.View>
       )}
     </View>
   );
