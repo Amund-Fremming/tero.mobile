@@ -84,6 +84,12 @@ export const styles = StyleSheet.create({
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(35),
   },
+
+  scrollContent: {
+    alignItems: "center",
+    width: "100%",
+    paddingBottom: verticalScale(100),
+  },
 });
 
 export default styles;
