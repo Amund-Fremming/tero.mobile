@@ -65,18 +65,14 @@ export const AddPlayersScreen = () => {
     if (gameEntryMode === GameEntryMode.Creator) {
       addPlayersToServer();
       setScreen(ImposterSessionScreen.ActiveLobby);
-      console.log("Hei4");
       return;
     }
 
     if (gameEntryMode === GameEntryMode.Host) {
       addPlayerToProvider();
       setScreen(ImposterSessionScreen.Roles);
-      console.log("Hei2");
       return;
     }
-
-
   };
 
   const addPlayerToProvider = () => {
@@ -185,7 +181,7 @@ export const AddPlayersScreen = () => {
         </View>
 
         <View style={styles.helperWrapper}>
-          <MaterialIcons name="touch-app" size={moderateScale(25)} color="black" />
+          <MaterialIcons name="touch-app" size={moderateScale(30)} color="black" />
           <Text style={styles.helperText}>Trykk på boksen for å endre navn</Text>
         </View>
 

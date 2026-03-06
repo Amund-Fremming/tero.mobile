@@ -13,6 +13,7 @@ import AddPlayersScreen from "./screens/AddPlayersScreen/AddPlayersScreen";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
 import RevealScreen from "./screens/RevealScreen/RevealScreen";
+import RoundInstructionsScreen from "./screens/RoundInstructionsScreen/RoundInstructionsScreen";
 import { RolesScreen } from "./screens/RolesScreen/RolesScreen";
 import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import TutorialScreen from "./screens/TutorialScreen/TutorialScreen";
@@ -30,6 +31,9 @@ export const ImposterGame = () => {
 
   useEffect(() => {
     const initScreen = getInitialScreen();
+    if ([GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)) {
+      setIsHost(false);
+    }
     setScreen(initScreen);
     if (
       initScreen !== ImposterSessionScreen.Create &&
@@ -68,6 +72,7 @@ export const ImposterGame = () => {
       return;
     }
 
+    console.debug("Hub conenction established");
     setScreen(targetScreen);
   };
 
@@ -113,7 +118,7 @@ export const ImposterGame = () => {
   const getInitialScreen = (): ImposterSessionScreen => {
     switch (gameEntryMode) {
       case GameEntryMode.Creator:
-        return ImposterSessionScreen.Create;
+        return ImposterSessionScreen.Tutorial;
       case GameEntryMode.Host:
         return ImposterSessionScreen.AddPlayers;
       case GameEntryMode.Participant:
@@ -125,7 +130,7 @@ export const ImposterGame = () => {
   };
 
   switch (screen) {
-    case ImposterSessionScreen.Create:
+    case ImposterSessionScreen.Tutorial:
       return (
         <TutorialScreen
           onGameCreated={(address, key) => initializeHub(address, key, ImposterSessionScreen.AddPlayers)}
@@ -137,6 +142,8 @@ export const ImposterGame = () => {
       return <LobbyScreen />;
     case ImposterSessionScreen.Roles:
       return <RolesScreen />;
+    case ImposterSessionScreen.RoundInstructions:
+      return <RoundInstructionsScreen />;
     case ImposterSessionScreen.Reveal:
       return <RevealScreen />;
     case ImposterSessionScreen.Create:

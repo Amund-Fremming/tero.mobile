@@ -157,6 +157,12 @@ export interface GameTip {
   created_at: string;
 }
 
+export interface CreateStaticGameRequest {
+  name: string;
+  category: GameCategory;
+  rounds: Array<string>;
+}
+
 export interface InteractiveGameResponse {
   key: string;
   hub_name: string;

@@ -33,7 +33,7 @@ export const CreateScreen = () => {
       onInfoPressed={handleInfoPressed}
       headerText="Opprett"
       bottomButtonText="Opprett"
-      handlePatchGame={handlePatchGame}
+      handleCreateGame={handlePatchGame}
       featherIcon={featherIcon}
     />
   );

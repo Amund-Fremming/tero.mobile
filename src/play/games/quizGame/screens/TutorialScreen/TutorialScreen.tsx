@@ -4,13 +4,16 @@ import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import GenericTutorialScreen from "@/src/play/screens/GenericTutorialScreen/GenericTutorialScreen";
+import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { QuizGameScreen } from "../../constants/quizTypes";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 
 export const TutorialScreen = () => {
+  const navigation: any = useNavigation();
+
   const { pseudoId } = useAuthProvider();
-  const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const { displayErrorModal } = useModalProvider();
   const { setGameSessionValues, setGameEntryMode, setIsHost } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
   const { setScreen } = useQuizSessionProvider();
@@ -28,8 +31,11 @@ export const TutorialScreen = () => {
     const result = await gameService().createSession(pseudoId, GameType.Quiz);
 
     if (result.isError()) {
-      displayErrorModal(result.error);
+      console.error("Failed to create game session", result.error);
       setLoading(false);
+      displayErrorModal("Klarte ikke opprette spill, forsøk på nytt", () => {
+        navigation.goBack();
+      });
       return;
     }
 

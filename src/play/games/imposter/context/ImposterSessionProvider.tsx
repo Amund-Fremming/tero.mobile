@@ -58,21 +58,26 @@ export const ImposterSessionProvider = ({ children }: SpinGameProviderProps) => 
   const newRound = () => {
     if (!imposterSession || !imposterSession.players || !imposterSession.rounds || imposterSession.rounds.length === 0)
       return;
+
+    const currentRoundIndex = Math.max(0, imposterSession.currentIteration ?? 0);
+    if (currentRoundIndex >= imposterSession.rounds.length) {
+      return;
+    }
+
     const playersArray = Array.from(imposterSession.players);
     const randomPlayerIndex = Math.floor(Math.random() * playersArray.length);
     setImposterName(playersArray[randomPlayerIndex]);
-    const randomRoundIndex = Math.floor(Math.random() * imposterSession.rounds.length);
-    const picked = imposterSession.rounds[randomRoundIndex];
+    const picked = imposterSession.rounds[currentRoundIndex];
     setRoundWord(picked);
     setImposterSession({
       ...imposterSession,
-      currentIteration: imposterSession.currentIteration + 1,
-      rounds: imposterSession.rounds.filter((_, i) => i !== randomRoundIndex),
+      currentIteration: currentRoundIndex + 1,
     });
   };
 
   const clearImposterSessionValues = () => {
     setIterations(0);
+    setImposterSession(undefined);
     setPlayers(["Spiller 1", "Spiller 2", "Spiller 3", "Spiller 4"]);
     setImposterName("");
     setRoundWord("");

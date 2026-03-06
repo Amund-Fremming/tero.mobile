@@ -17,14 +17,9 @@ export const LobbyScreen = () => {
   const { setScreen, iterations, clearImposterSessionValues } = useImposterSessionProvider();
   const theme = getGameTheme(GameType.Imposter);
 
-  const [round, setRound] = useState<string>("");
   const [started, setStarted] = useState<boolean>(false);
 
-  const handleSetRound = (value: string) => {
-    setRound(value);
-  };
-
-  const handleAddRound = async () => {
+  const handleAddRound = async (round: string) => {
     if (round === "") {
       return;
     }
@@ -35,8 +30,6 @@ export const LobbyScreen = () => {
       displayErrorModal("Kunne ikke legge til runde.");
       return;
     }
-
-    setRound("");
   };
 
   const handleStartGame = async () => {
@@ -69,18 +62,10 @@ export const LobbyScreen = () => {
     );
   };
 
-  const onStartPressed = async () => {
-    // TODO!
-  };
-
-  const onAddRoundPressed = async (round: string) => {
-    // TODO
-  };
-
   return (
     <GenericActiveLobbyScreen
-      onStartPressed={onStartPressed}
-      onAddRoundPressed={onAddRoundPressed}
+      onStartPressed={handleStartGame}
+      onAddRoundPressed={handleAddRound}
       themeColor={theme.primaryColor}
       secondaryThemeColor={theme.secondaryColor}
       onBackPressed={handleBackPressed}

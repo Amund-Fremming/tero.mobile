@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
-import styles from "./startedScreenStyles";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { useNavigation } from "expo-router";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { useNavigation } from "expo-router";
+import { Text, View } from "react-native";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
+import styles from "./startedScreenStyles";
 
 export const StartedScreen = () => {
   const navigation: any = useNavigation();
@@ -19,7 +19,7 @@ export const StartedScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="Velg spill" onBackPressed={handleGoHome} />
+      <ScreenHeader title="" onBackPressed={handleGoHome} />
       <View style={styles.textBox}>
         <Text style={styles.header}>Spillet har startet!</Text>
         <Text style={styles.subHeader}>

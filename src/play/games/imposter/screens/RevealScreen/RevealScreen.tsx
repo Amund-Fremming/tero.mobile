@@ -1,4 +1,5 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
+import { GameEntryMode } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
@@ -12,14 +13,14 @@ import styles from "./revealScreenStyles";
 
 export const RevealScreen = () => {
   const navigation: any = useNavigation();
-  const { clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { clearGlobalSessionValues, gameEntryMode } = useGlobalSessionProvider();
   const { clearImposterSessionValues, imposterName, imposterSession, setScreen } = useImposterSessionProvider();
   const { displayActionModal, displayInfoModal } = useModalProvider();
 
   const [revealed, setRevealed] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(false);
 
-  const hasMoreRounds = (imposterSession?.rounds?.length ?? 0) > 0;
+  const hasMoreRounds = (imposterSession?.currentIteration ?? 0) < (imposterSession?.rounds?.length ?? 0);
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const swayAnim = useRef(new Animated.Value(0)).current;
@@ -143,11 +144,15 @@ export const RevealScreen = () => {
   const handleNext = () => {
     if (hasMoreRounds) {
       setScreen(ImposterSessionScreen.Roles);
-    } else {
-      clearGlobalSessionValues();
-      clearImposterSessionValues();
-      resetToHomeScreen(navigation);
+      return;
     }
+
+    if (gameEntryMode === GameEntryMode.Creator) {
+      setScreen(ImposterSessionScreen.Create);
+      return;
+    }
+
+    resetToHomeScreen(navigation);
   };
 
   const rotate = swayAnim.interpolate({
