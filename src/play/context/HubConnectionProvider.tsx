@@ -38,13 +38,13 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
   const listenersMapRef = useRef<Map<string, (item: any) => void>>(new Map());
   const gameKeyRef = useRef<string>("");
 
-  const { gameSession, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { sessionData: sessionData, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { displayLoadingModal, closeLoadingModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
 
   useEffect(() => {
-    gameKeyRef.current = gameSession.gameKey;
-  }, [gameSession.gameKey]);
+    gameKeyRef.current = sessionData.gameKey;
+  }, [sessionData.gameKey]);
 
   useEffect(() => {
     return registerCrashResetCallback(clearValues);

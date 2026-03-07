@@ -16,8 +16,14 @@ export const TutorialScreen = ({ onGameCreated }: TutorialScreenProps) => {
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
-  const { setGameSessionValues, setGameEntryMode, gameType, isHost, setIsHost, setIsDraft } =
-    useGlobalSessionProvider();
+  const {
+    setSessionDataValues: setGameSessionValues,
+    setGameEntryMode,
+    gameType,
+    isHost,
+    setIsHost,
+    setIsDraft,
+  } = useGlobalSessionProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
 

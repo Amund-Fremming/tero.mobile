@@ -24,7 +24,7 @@ export const GameScreen = () => {
 
   const disconnectTriggeredRef = useRef<boolean>(false);
 
-  const { isHost, clearGlobalSessionValues, gameSession, gameType } = useGlobalSessionProvider();
+  const { isHost, clearGlobalSessionValues, sessionData: sessionData, gameType } = useGlobalSessionProvider();
   const { clearSpinSessionValues, setScreen, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
   const { disconnect, invokeFunction, debugDisconnect } = useHubConnectionProvider();
@@ -34,12 +34,6 @@ export const GameScreen = () => {
   useFocusEffect(
     useCallback(() => {
       setBgColor(themeColor);
-
-      return () => {
-        clearSpinSessionValues();
-        clearGlobalSessionValues();
-        disconnect();
-      };
     }, []),
   );
 
@@ -85,7 +79,7 @@ export const GameScreen = () => {
 
   const handleNextRound = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const result = await invokeFunction("NextRound", gameSession.gameKey);
+    const result = await invokeFunction("NextRound", sessionData.gameKey);
     if (result.isError()) {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 
@@ -112,7 +106,7 @@ export const GameScreen = () => {
     setGameStarted(false);
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const result = await invokeFunction(channel, gameSession.gameKey);
+    const result = await invokeFunction(channel, sessionData.gameKey);
     if (result.isError()) {
       if (disconnectTriggeredRef.current) return; // User left the game, don't show error
 

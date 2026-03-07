@@ -12,7 +12,7 @@ import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 export const ActiveLobbyScreen = () => {
   const { invokeFunction, disconnect } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
-  const { gameSession, gameType, isHost, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { sessionData: sessionData, gameType, isHost, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { setScreen, themeColor, secondaryThemeColor, featherIcon, clearSpinSessionValues, iterations, players } =
     useSpinSessionProvider();
 
@@ -31,7 +31,7 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    const result = await invokeFunction("AddRound", gameSession.gameKey, round);
+    const result = await invokeFunction("AddRound", sessionData.gameKey, round);
 
     if (result.isError()) {
       console.error(result.error);
@@ -52,7 +52,7 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    if (!gameSession.gameKey || gameSession.gameKey == "") {
+    if (!sessionData.gameKey || sessionData.gameKey == "") {
       displayErrorModal("Mangler spillkode. Lag spillet på nytt.");
       setStartGameTriggered(false);
       return;
@@ -73,7 +73,7 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    const startResult = await invokeFunction("StartGame", gameSession.gameKey);
+    const startResult = await invokeFunction("StartGame", sessionData.gameKey);
     if (startResult.isError()) {
       console.error(startResult.error);
       displayErrorModal("Kunne ikke starte spillet.");

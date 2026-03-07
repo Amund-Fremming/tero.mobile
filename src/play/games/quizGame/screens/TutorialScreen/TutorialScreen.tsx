@@ -14,7 +14,7 @@ export const TutorialScreen = () => {
 
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
-  const { setGameSessionValues, setGameEntryMode, setIsHost } = useGlobalSessionProvider();
+  const { setSessionDataValues: setGameSessionValues, setGameEntryMode, setIsHost } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
   const { setScreen } = useQuizSessionProvider();
 

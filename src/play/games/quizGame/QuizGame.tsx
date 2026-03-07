@@ -16,7 +16,7 @@ import TutorialScreen from "./screens/TutorialScreen/TutorialScreen";
 
 export const QuizGame = () => {
   const outerNavigation: any = useNavigation();
-  const { gameEntryMode, gameSession, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { gameEntryMode, sessionData: sessionData, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { setQuizSession, setIterations, clearQuizGameValues, screen, setScreen } = useQuizSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal } = useModalProvider();
@@ -45,7 +45,7 @@ export const QuizGame = () => {
   }, []);
 
   useEffect(() => {
-    if (!gameSession.gameKey) {
+    if (!sessionData.gameKey) {
       // TODO - return to home?
       return;
     }
@@ -54,8 +54,8 @@ export const QuizGame = () => {
       return;
     }
 
-    initializeHub(gameSession.gameKey, gameSession.hubName);
-  }, [gameSession.gameKey, gameSession.hubName]);
+    initializeHub(sessionData.gameKey, sessionData.hubName);
+  }, [sessionData.gameKey, sessionData.hubName]);
 
   const initializeHub = async (key: string, hub: string) => {
     const result = await connect(hub);

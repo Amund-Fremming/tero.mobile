@@ -18,8 +18,14 @@ import TutorialScreen from "./screens/TutorialScreen/TutorialScreen";
 
 export const SpinGame = () => {
   const outerNavigation: any = useNavigation();
-  const { gameEntryMode, gameSession, setIsHost, clearGlobalSessionValues, isDraft, gameType } =
-    useGlobalSessionProvider();
+  const {
+    gameEntryMode,
+    sessionData: sessionData,
+    setIsHost,
+    clearGlobalSessionValues,
+    isDraft,
+    gameType,
+  } = useGlobalSessionProvider();
   const {
     screen,
     setScreen,
@@ -51,7 +57,7 @@ export const SpinGame = () => {
     const initScreen = getInitialScreen();
     setScreen(initScreen);
     if (initScreen !== SpinSessionScreen.Create && initScreen !== SpinSessionScreen.Tutorial) {
-      initializeHub(gameSession.hubName, gameSession.gameKey, initScreen);
+      initializeHub(sessionData.hubName, sessionData.gameKey, initScreen);
     } else {
       setHubReady(true);
     }

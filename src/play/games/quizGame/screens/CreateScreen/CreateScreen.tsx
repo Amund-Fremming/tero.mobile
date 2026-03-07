@@ -19,8 +19,8 @@ export const CreateScreen = () => {
   const { displayInfoModal, displayErrorModal } = useModalProvider();
   const { gameService } = useServiceProvider();
   const { setScreen, quizSession } = useQuizSessionProvider();
-  const { gameSession, gameType } = useGlobalSessionProvider();
-  const { gameId } = gameSession;
+  const { sessionData: sessionData, gameType } = useGlobalSessionProvider();
+  const { gameId } = sessionData;
 
   const [loading, setLoading] = useState(false);
 

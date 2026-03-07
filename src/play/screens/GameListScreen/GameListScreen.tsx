@@ -79,7 +79,7 @@ export const GameListScreen = () => {
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { displayErrorModal, displayActionModal } = useModalProvider();
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
-  const { gameType, setGameSessionValues, setIsHost, setIsDraft } = useGlobalSessionProvider();
+  const { gameType, setSessionDataValues: setGameSessionValues, setIsHost, setIsDraft } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const getHeaderBg = () => {

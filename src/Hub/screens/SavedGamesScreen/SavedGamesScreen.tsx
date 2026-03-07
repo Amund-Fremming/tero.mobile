@@ -44,7 +44,12 @@ export const SavedGamesScreen = () => {
   const { gameService } = useServiceProvider();
   const { accessToken, pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
-  const { setIsHost, setGameSessionValues, setGameEntryMode, setIsDraft } = useGlobalSessionProvider();
+  const {
+    setIsHost,
+    setSessionDataValues: setGameSessionValues,
+    setGameEntryMode,
+    setIsDraft,
+  } = useGlobalSessionProvider();
   const { setQuizSession } = useQuizSessionProvider();
 
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>({

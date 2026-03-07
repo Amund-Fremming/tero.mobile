@@ -23,7 +23,7 @@ export const ImposterGame = () => {
   const { clearImposterSessionValues, setIterations, setImposterSession, screen, setScreen } =
     useImposterSessionProvider();
   const { displayErrorModal } = useModalProvider();
-  const { gameEntryMode, gameSession, setIsHost, clearGlobalSessionValues, isHost } = useGlobalSessionProvider();
+  const { gameEntryMode, sessionData: sessionData, setIsHost, clearGlobalSessionValues, isHost } = useGlobalSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
   const { pseudoId } = useAuthProvider();
 
@@ -39,7 +39,7 @@ export const ImposterGame = () => {
       initScreen !== ImposterSessionScreen.Create &&
       [GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)
     ) {
-      initializeHub(gameSession.hubName, gameSession.gameKey, initScreen);
+      initializeHub(sessionData.hubName, sessionData.gameKey, initScreen);
     }
 
     return () => {

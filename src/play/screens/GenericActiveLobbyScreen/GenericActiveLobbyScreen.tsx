@@ -39,7 +39,7 @@ export const GenericActiveLobbyScreen = ({
 }: GenericActiveLobbyScreenProps) => {
   const anchorRef = useRef<View>(null);
 
-  const { gameSession, isHost } = useGlobalSessionProvider();
+  const { sessionData: sessionData, isHost } = useGlobalSessionProvider();
 
   const [inputValue, setInputValue] = useState<string>("");
 
@@ -98,7 +98,7 @@ export const GenericActiveLobbyScreen = ({
           </TouchableOpacity>
           <View style={styles.headerInline}>
             <Text style={styles.toastHeader}>Rom:</Text>
-            <Text style={styles.headerSecondScreen}>{gameSession.gameKey?.toUpperCase()}</Text>
+            <Text style={styles.headerSecondScreen}>{sessionData.gameKey?.toUpperCase()}</Text>
           </View>
           <TouchableOpacity
             onPress={() => {

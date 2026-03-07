@@ -20,7 +20,13 @@ export const JoinScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId } = useAuthProvider();
   const { displayInfoModal } = useModalProvider();
-  const { setGameEntryMode, setGameSessionValues, setGameType, setIsHost, setIsDraft } = useGlobalSessionProvider();
+  const {
+    setGameEntryMode,
+    setSessionDataValues: setGameSessionValues,
+    setGameType,
+    setIsHost,
+    setIsDraft,
+  } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
   const anchorRef = useRef<View>(null);
 

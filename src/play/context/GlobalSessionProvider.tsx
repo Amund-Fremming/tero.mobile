@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { GameEntryMode, GameType } from "../../core/constants/Types";
 import { registerCrashResetCallback } from "../../core/utils/navigationRef";
 
-interface IGameSessionStore {
+interface ISessionData {
   gameKey: string;
   hubName: string;
   gameId: string;
@@ -13,9 +13,9 @@ interface IGlobalSessionContext {
   setGameEntryMode: React.Dispatch<React.SetStateAction<GameEntryMode>>;
   gameType: GameType;
   setGameType: React.Dispatch<React.SetStateAction<GameType>>;
-  gameSession: IGameSessionStore;
-  setGameSession: React.Dispatch<React.SetStateAction<IGameSessionStore>>;
-  setGameSessionValues: (gameKey: string, hubName: string, gameId: string) => void;
+  sessionData: ISessionData;
+  setSessionData: React.Dispatch<React.SetStateAction<ISessionData>>;
+  setSessionDataValues: (gameKey: string, hubName: string, gameId: string) => void;
   isHost: boolean;
   setIsHost: React.Dispatch<React.SetStateAction<boolean>>;
   clearGlobalSessionValues: () => void;
@@ -28,13 +28,13 @@ const defaultContextValue: IGlobalSessionContext = {
   setGameEntryMode: () => {},
   gameType: GameType.Quiz,
   setGameType: () => {},
-  gameSession: {
+  sessionData: {
     gameKey: "",
     hubName: "",
     gameId: "",
   },
-  setGameSession: () => {},
-  setGameSessionValues: () => {},
+  setSessionData: () => {},
+  setSessionDataValues: () => {},
   isHost: false,
   setIsHost: () => {},
   isDraft: false,
@@ -53,7 +53,7 @@ interface GlobalSessionProviderProps {
 export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => {
   const [gameEntryMode, setGameEntryMode] = useState<GameEntryMode>(GameEntryMode.Host);
   const [gameType, setGameType] = useState<GameType>(GameType.Quiz);
-  const [gameSession, setGameSession] = useState<IGameSessionStore>({ gameKey: "", hubName: "", gameId: "" });
+  const [sessionData, setSessionData] = useState<ISessionData>({ gameKey: "", hubName: "", gameId: "" });
   const [isHost, setIsHost] = useState<boolean>(false);
   const [isDraft, setIsDraft] = useState<boolean>(false);
 
@@ -65,13 +65,13 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
 
   const clearGlobalSessionValues = () => {
     setGameEntryMode(GameEntryMode.Creator);
-    setGameSession({ gameKey: "", hubName: "", gameId: "" });
+    setSessionData({ gameKey: "", hubName: "", gameId: "" });
     setIsHost(false);
     setIsDraft(false);
   };
 
-  const setGameSessionValues = (gameKey: string, hubName: string, gameId: string) => {
-    setGameSession({ gameKey, hubName, gameId });
+  const setSessionDataValues = (gameKey: string, hubName: string, gameId: string) => {
+    setSessionData({ gameKey, hubName, gameId });
   };
 
   const value = {
@@ -80,9 +80,9 @@ export const GlobalGameProvider = ({ children }: GlobalSessionProviderProps) => 
     setGameEntryMode,
     gameType,
     setGameType,
-    gameSession,
-    setGameSession,
-    setGameSessionValues,
+    sessionData,
+    setSessionData,
+    setSessionDataValues,
     isHost,
     setIsHost,
     isDraft,

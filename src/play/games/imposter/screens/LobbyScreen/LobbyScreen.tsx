@@ -13,7 +13,7 @@ export const LobbyScreen = () => {
   const navigation: any = useNavigation();
   const { invokeFunction, disconnect } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
-  const { gameSession, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { sessionData: sessionData, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { setScreen, iterations, clearImposterSessionValues } = useImposterSessionProvider();
   const theme = getGameTheme(GameType.Imposter);
 
@@ -24,7 +24,7 @@ export const LobbyScreen = () => {
       return;
     }
 
-    const result = await invokeFunction("AddRound", gameSession.gameKey, round);
+    const result = await invokeFunction("AddRound", sessionData.gameKey, round);
     if (result.isError()) {
       console.error(result.error);
       displayErrorModal("Kunne ikke legge til runde.");
@@ -38,7 +38,7 @@ export const LobbyScreen = () => {
     }
 
     setStarted(true);
-    const result = await invokeFunction("StartGame", gameSession.gameKey);
+    const result = await invokeFunction("StartGame", sessionData.gameKey);
 
     if (result.isError()) {
       console.error(result.error);

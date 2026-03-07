@@ -15,7 +15,7 @@ import { styles } from "./passiveLobbyScreenStyles";
 
 export const PassiveLobbyScreen = () => {
   const navigation: any = useNavigation();
-  const { gameSession, clearGlobalSessionValues, isHost, gameType } = useGlobalSessionProvider();
+  const { sessionData: sessionData, clearGlobalSessionValues, isHost, gameType } = useGlobalSessionProvider();
   const { themeColor, clearSpinSessionValues, players, iterations, setScreen } = useSpinSessionProvider();
   const { disconnect, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
@@ -57,7 +57,7 @@ export const PassiveLobbyScreen = () => {
       return;
     }
 
-    if (!gameSession.gameKey || gameSession.gameKey == "") {
+    if (!sessionData.gameKey || sessionData.gameKey == "") {
       displayErrorModal("Mangler spillkode. Lag spillet på nytt.");
       setStartGameTriggered(false);
       return;
@@ -78,7 +78,7 @@ export const PassiveLobbyScreen = () => {
       return;
     }
 
-    const startResult = await invokeFunction("StartGame", gameSession.gameKey, false); // isDraft = false
+    const startResult = await invokeFunction("StartGame", sessionData.gameKey, false); // isDraft = false
     if (startResult.isError()) {
       console.error(startResult.error);
       displayErrorModal("Kunne ikke starte spillet.");
@@ -104,7 +104,7 @@ export const PassiveLobbyScreen = () => {
         </TouchableOpacity>
         <View style={styles.headerInline}>
           <Text style={styles.toastHeader}>Rom:</Text>
-          <Text style={styles.headerSecondScreen}>{gameSession.gameKey?.toUpperCase()}</Text>
+          <Text style={styles.headerSecondScreen}>{sessionData.gameKey?.toUpperCase()}</Text>
         </View>
         <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
           <Text style={styles.textIcon}>?</Text>
