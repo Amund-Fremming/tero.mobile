@@ -151,7 +151,7 @@ export const SavedGamesScreen = () => {
 
         const roulette = rResult.value;
         setIsDraft(roulette.is_draft);
-        setGameSessionValues(roulette.key, roulette.hub_name);
+        setGameSessionValues(roulette.key, roulette.hub_name, roulette.game_id);
         navigation.navigate(Screen.Spin);
         break;
       case GameType.Duel:
@@ -165,7 +165,7 @@ export const SavedGamesScreen = () => {
 
         const duel = dResult.value;
         setIsDraft(duel.is_draft);
-        setGameSessionValues(duel.key, duel.hub_name);
+        setGameSessionValues(duel.key, duel.hub_name, duel.game_id);
         navigation.navigate(Screen.Spin);
         break;
       default:

@@ -1,6 +1,7 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import * as Haptics from "expo-haptics";
 import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { ReactNode } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { moderateScale } from "../../utils/dimensions";
 import styles from "./screenHeaderStyles";
 
@@ -12,6 +13,7 @@ interface ScreenHeaderProps {
   showBorder?: boolean;
   backgroundColor?: string;
   miniHeader?: string;
+  children?: ReactNode;
 }
 
 export const ScreenHeader = ({
@@ -22,6 +24,7 @@ export const ScreenHeader = ({
   showBorder = false,
   backgroundColor,
   miniHeader,
+  children,
 }: ScreenHeaderProps) => {
   return (
     <View style={[styles.topWrapper, backgroundColor && { backgroundColor }]}>
@@ -37,7 +40,7 @@ export const ScreenHeader = ({
         </TouchableOpacity>
 
         <View style={styles.borderAndHeader}>
-          <Text style={styles.header}>{title}</Text>
+          {children ?? <Text style={styles.header}>{title}</Text>}
           {showBorder && (
             <View style={styles.borderWrapper}>
               <View style={styles.borderLeft} />

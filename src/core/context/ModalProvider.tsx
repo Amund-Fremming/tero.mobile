@@ -8,6 +8,7 @@ enum DisplayOption {
   None,
   Error,
   Info,
+  Success,
   Action,
   Loading,
 }
@@ -16,6 +17,7 @@ interface IModalContext {
   displayActionModal: (message: string, onLeftCloseAction: () => void, onRightCloseAction: () => void) => void;
   displayErrorModal: (errorMessage: string, onCloseAction?: () => void) => void;
   displayInfoModal: (message: string, header?: string, onCloseAction?: () => void) => void;
+  displaySuccessModal: (message: string, header?: string, onCloseAction?: () => void) => void;
   displayLoadingModal: (onCloseAction: () => void, message?: string) => void;
   closeLoadingModal: () => void;
 }
@@ -24,6 +26,7 @@ const defaultContextValue: IModalContext = {
   displayActionModal: () => {},
   displayErrorModal: () => {},
   displayInfoModal: () => {},
+  displaySuccessModal: () => {},
   displayLoadingModal: () => {},
   closeLoadingModal: () => {},
 };
@@ -56,6 +59,13 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
     setDisplayOption(DisplayOption.Info);
     setMessage(message);
     setHeader(header ? header : "Heisann");
+  };
+
+  const displaySuccessModal = (message: string, header?: string, onCloseAction?: () => void) => {
+    onCloseActionRef.current = onCloseAction;
+    setDisplayOption(DisplayOption.Success);
+    setMessage(message);
+    setHeader(header ? header : "Suksess");
   };
 
   const displayActionModal = (message: string, onLeftCloseAction: () => void, onRightCloseAction: () => void) => {
@@ -92,6 +102,7 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   const value = {
     displayErrorModal,
     displayInfoModal,
+    displaySuccessModal,
     displayActionModal,
     displayLoadingModal,
     closeLoadingModal,
@@ -103,11 +114,13 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
         return <ActionModal message={message} onLeftClick={handleLeftClick} onRightClick={handleRightClick} />;
       case DisplayOption.Error:
       case DisplayOption.Info:
+      case DisplayOption.Success:
         return (
           <InfoModal
             message={message}
             header={header}
             isError={displayOption === DisplayOption.Error}
+            isSuccess={displayOption === DisplayOption.Success}
             onCloseFunc={handleClose}
           />
         );

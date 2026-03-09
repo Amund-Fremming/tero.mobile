@@ -78,7 +78,7 @@ export const PassiveLobbyScreen = () => {
       return;
     }
 
-    const startResult = await invokeFunction("StartGame", sessionData.gameKey, false); // isDraft = false
+    const startResult = await invokeFunction("StartGame", sessionData.gameKey); // isDraft = false
     if (startResult.isError()) {
       console.error(startResult.error);
       displayErrorModal("Kunne ikke starte spillet.");

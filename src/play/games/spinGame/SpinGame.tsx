@@ -25,6 +25,7 @@ export const SpinGame = () => {
     clearGlobalSessionValues,
     isDraft,
     gameType,
+    isHost,
   } = useGlobalSessionProvider();
   const {
     screen,
@@ -95,6 +96,12 @@ export const SpinGame = () => {
       return;
     }
 
+    let gameHasStarted = groupResult.value;
+    if (gameHasStarted) {
+      setHubReady(true);
+      setScreen(SpinSessionScreen.Game);
+      return;
+    }
     setHubReady(true);
     setScreen(targetScreen);
   };
@@ -108,7 +115,10 @@ export const SpinGame = () => {
       setScreen(SpinSessionScreen.Game);
     });
 
-    setListener(HubChannel.State, (state: SpinGameState) => {
+    setListener(HubChannel.State, async (state: SpinGameState) => {
+      if (state === SpinGameState.Finished && !isHost) {
+        await disconnect();
+      }
       setGameState(state);
     });
 
@@ -151,10 +161,6 @@ export const SpinGame = () => {
   };
 
   const getInitialScreen = (): SpinSessionScreen => {
-    if (!isDraft) {
-      return SpinSessionScreen.PassiveLobby;
-    }
-
     switch (gameEntryMode) {
       case GameEntryMode.Creator:
         return SpinSessionScreen.Tutorial;
@@ -162,7 +168,11 @@ export const SpinGame = () => {
         return SpinSessionScreen.PassiveLobby;
       case GameEntryMode.Participant:
       case GameEntryMode.Member:
-        return SpinSessionScreen.ActiveLobby;
+        if (isDraft) {
+          return SpinSessionScreen.ActiveLobby;
+        } else {
+          return SpinSessionScreen.PassiveLobby;
+        }
       default:
         return SpinSessionScreen.ActiveLobby;
     }
@@ -182,6 +192,7 @@ export const SpinGame = () => {
     case SpinSessionScreen.PassiveLobby:
       return <PassiveLobbyScreen />;
     case SpinSessionScreen.Game:
+      <GameScreen />;
     default:
       return <GameScreen />;
   }

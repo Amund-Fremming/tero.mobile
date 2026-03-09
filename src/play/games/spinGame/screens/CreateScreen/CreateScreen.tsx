@@ -12,9 +12,9 @@ export const CreateScreen = () => {
   const navigation: any = useNavigation();
 
   const { themeColor, secondaryThemeColor, featherIcon, clearSpinSessionValues } = useSpinSessionProvider();
-  const { displayInfoModal, displayErrorModal } = useModalProvider();
+  const { displayInfoModal, displayErrorModal, displaySuccessModal } = useModalProvider();
   const { invokeFunction, disconnect } = useHubConnectionProvider();
-  const { sessionData } = useGlobalSessionProvider();
+  const { sessionData, gameType } = useGlobalSessionProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -27,7 +27,7 @@ export const CreateScreen = () => {
 
     setLoading(true);
 
-    const result = await invokeFunction("PersistGame", sessionData.gameKey, name, category);
+    const result = await invokeFunction("PersistGame", sessionData.gameKey, gameType, name, category);
     if (result.isError()) {
       console.error("Failed to persist game:", result.error);
       displayErrorModal("Klarte ikke lagre spill, forsøk igjen senere", () => {
@@ -37,7 +37,7 @@ export const CreateScreen = () => {
       return;
     }
 
-    displayInfoModal("Takk for at du lagres spillet!", "Suksess", () => {
+    displaySuccessModal("Takk for at du lagres spillet!", "Suksess", () => {
       setLoading(false);
       clearSpinSessionValues();
       disconnect();
@@ -51,8 +51,8 @@ export const CreateScreen = () => {
       secondaryThemeColor={secondaryThemeColor}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
-      headerText="Opprett"
-      bottomButtonText="Opprett"
+      headerText="Lagre"
+      bottomButtonText="Publiser"
       handleCreateGame={handlePersistGame}
       featherIcon={featherIcon}
     />

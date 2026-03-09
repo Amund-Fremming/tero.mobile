@@ -15,7 +15,7 @@ export const CreateScreen = () => {
 
   const { pseudoId } = useAuthProvider();
   const theme = getGameTheme(GameType.Imposter);
-  const { displayInfoModal, displayErrorModal } = useModalProvider();
+  const { displayInfoModal, displayErrorModal, displaySuccessModal } = useModalProvider();
   const { imposterSession } = useImposterSessionProvider();
   const { gameType } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
@@ -48,7 +48,7 @@ export const CreateScreen = () => {
       return;
     }
 
-    displayInfoModal("Takk for at du lagret spillet ditt!", "Suksess", () => {
+    displaySuccessModal("Takk for at du lagret spillet ditt!", "Suksess", () => {
       resetToHomeScreen(navigation);
       setLoading(false);
     });

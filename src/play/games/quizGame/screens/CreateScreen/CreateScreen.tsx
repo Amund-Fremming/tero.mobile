@@ -16,7 +16,7 @@ export const CreateScreen = () => {
 
   const { pseudoId } = useAuthProvider();
   const { invokeFunction } = useHubConnectionProvider();
-  const { displayInfoModal, displayErrorModal } = useModalProvider();
+  const { displayInfoModal, displayErrorModal, displaySuccessModal } = useModalProvider();
   const { gameService } = useServiceProvider();
   const { setScreen, quizSession } = useQuizSessionProvider();
   const { sessionData: sessionData, gameType } = useGlobalSessionProvider();
@@ -50,7 +50,7 @@ export const CreateScreen = () => {
       return;
     }
 
-    displayInfoModal("Takk for at du lagret spillet ditt!", "Suksess", () => {
+    displaySuccessModal("Takk for at du lagret spillet ditt!", "Suksess", () => {
       setLoading(false);
       resetToHomeScreen(navigation);
     });

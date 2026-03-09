@@ -34,6 +34,7 @@ interface HubConnectionProviderProps {
 export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) => {
   const connectionRef = useRef<signalR.HubConnection | undefined>(undefined);
   const disconnectTriggeredRef = useRef<boolean>(false);
+  const debugDisconnectInProgressRef = useRef<boolean>(false);
   const hubNameRef = useRef<string | undefined>(undefined);
   const listenersMapRef = useRef<Map<string, (item: any) => void>>(new Map());
   const gameKeyRef = useRef<string>("");
@@ -55,6 +56,48 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     clearGlobalSessionValues();
     closeLoadingModal();
     resetToHomeGlobal();
+  };
+
+  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const attemptReconnectAfterDebugDisconnect = async () => {
+    if (!connectionRef.current) {
+      debugDisconnectInProgressRef.current = false;
+      return;
+    }
+
+    displayLoadingModal(() => giveUpAndGoHome());
+
+    const retryDelaysMs = [0, 1000, 2500];
+    for (const delayMs of retryDelaysMs) {
+      try {
+        if (delayMs > 0) {
+          await wait(delayMs);
+        }
+
+        if (connectionRef.current.state === signalR.HubConnectionState.Disconnected) {
+          await connectionRef.current.start();
+        }
+
+        reattachListeners();
+
+        const invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId);
+        if (invokeResult.isError()) {
+          throw new Error(invokeResult.error);
+        }
+
+        debugDisconnectInProgressRef.current = false;
+        closeLoadingModal();
+        console.info("DEBUG: Manual reconnect succeeded after forced disconnect");
+        return;
+      } catch (error) {
+        console.warn("DEBUG: Manual reconnect attempt failed", error);
+      }
+    }
+
+    debugDisconnectInProgressRef.current = false;
+    console.error("DEBUG: Manual reconnect failed after forced disconnect");
+    giveUpAndGoHome();
   };
 
   async function connect(hubName: string): Promise<Result<signalR.HubConnection>> {
@@ -94,10 +137,11 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
       });
 
       hubConnection.onreconnected(async () => {
+        debugDisconnectInProgressRef.current = false;
         console.info("SignalR reconnected successfully");
         reattachListeners();
 
-        const invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId, true);
+        const invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId);
         if (invokeResult.isError()) {
           console.error("Failed to rejoin group after reconnect:", invokeResult.error);
           giveUpAndGoHome();
@@ -109,6 +153,12 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
 
       hubConnection.onclose(() => {
         if (disconnectTriggeredRef.current) return;
+
+        if (debugDisconnectInProgressRef.current) {
+          console.warn("DEBUG: Connection closed while testing reconnect");
+          return;
+        }
+
         console.error("Connection closed permanently (all reconnect attempts failed)");
         giveUpAndGoHome();
       });
@@ -150,14 +200,21 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
       }
 
       console.info("DEBUG: Forcing disconnect to test reconnection");
-      const ws = (connectionRef.current as any).connection?._transport?.webSocket;
+      debugDisconnectInProgressRef.current = true;
+
+      const transport = (connectionRef.current as any).connection?.transport;
+      const ws = transport?._webSocket ?? transport?.webSocket;
+
       if (ws) {
         ws.close();
+      } else if (transport && typeof transport.stop === "function") {
+        transport.stop();
       } else {
-        console.warn("DEBUG: Could not access underlying WebSocket, falling back to stop()");
-        await connectionRef.current.stop();
+        console.warn("DEBUG: transport not accessible — cannot simulate disconnect");
+        debugDisconnectInProgressRef.current = false;
       }
     } catch (error) {
+      debugDisconnectInProgressRef.current = false;
       console.error("DEBUG: Failed to force disconnect", error);
     }
   }
@@ -211,6 +268,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     hubNameRef.current = undefined;
     listenersMapRef.current.clear();
     disconnectTriggeredRef.current = false;
+    debugDisconnectInProgressRef.current = false;
     gameKeyRef.current = "";
   };
 

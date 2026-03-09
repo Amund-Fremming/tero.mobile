@@ -5,7 +5,6 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    paddingTop: verticalScale(60),
     justifyContent: "flex-start",
     alignItems: "center",
     width: "100%",
@@ -18,6 +17,23 @@ export const styles = StyleSheet.create({
     height: verticalScale(50),
     width: horizontalScale(50),
     borderRadius: moderateScale(10),
+    opacity: 0.8,
+  },
+
+  headerInline: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  toastHeader: {
+    fontSize: moderateScale(25),
+    fontFamily: Font.PassionOneRegular,
+  },
+
+  headerSecondScreen: {
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(45),
+    fontWeight: 600,
     opacity: 0.8,
   },
 

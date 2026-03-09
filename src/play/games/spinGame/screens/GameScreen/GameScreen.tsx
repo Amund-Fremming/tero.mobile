@@ -1,13 +1,12 @@
+import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { moderateScale } from "@/src/core/utils/dimensions";
 import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
-import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -24,7 +23,7 @@ export const GameScreen = () => {
 
   const disconnectTriggeredRef = useRef<boolean>(false);
 
-  const { isHost, clearGlobalSessionValues, sessionData: sessionData, gameType } = useGlobalSessionProvider();
+  const { isHost, clearGlobalSessionValues, sessionData, gameType, isDraft } = useGlobalSessionProvider();
   const { clearSpinSessionValues, setScreen, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
   const { disconnect, invokeFunction, debugDisconnect } = useHubConnectionProvider();
@@ -166,14 +165,12 @@ export const GameScreen = () => {
 
   return (
     <View style={{ ...styles.container, backgroundColor: bgColor }}>
-      <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={handleBackPressed} style={styles.iconWrapper}>
-          <Feather name="chevron-left" size={moderateScale(45)} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleInfoPressed} style={styles.iconWrapper}>
-          <Text style={styles.textIcon}>?</Text>
-        </TouchableOpacity>
-      </View>
+      <ScreenHeader onBackPressed={handleBackPressed} onInfoPress={() => debugDisconnect()} title="">
+        <View style={styles.headerInline}>
+          <Text style={styles.toastHeader}>Rom:</Text>
+          <Text style={styles.headerSecondScreen}>{sessionData.gameKey?.toUpperCase()}</Text>
+        </View>
+      </ScreenHeader>
 
       {gameState === SpinGameState.RoundStarted && (
         <View style={styles.tutorialWrapper}>
@@ -199,13 +196,13 @@ export const GameScreen = () => {
         </TouchableOpacity>
       )}
 
-      {gameState === SpinGameState.Finished && isHost && (
+      {gameState === SpinGameState.Finished && isHost && isDraft && (
         <TouchableOpacity style={styles.button} onPress={() => setScreen(SpinSessionScreen.Create)}>
           <Text style={styles.buttonText}>Neste</Text>
         </TouchableOpacity>
       )}
 
-      {gameState === SpinGameState.Finished && !isHost && (
+      {gameState === SpinGameState.Finished && (!isDraft || !isHost) && (
         <TouchableOpacity style={styles.button} onPress={navigateHome}>
           <Text style={styles.buttonText}>Hjem</Text>
         </TouchableOpacity>
