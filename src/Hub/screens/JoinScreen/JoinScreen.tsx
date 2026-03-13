@@ -31,6 +31,7 @@ export const JoinScreen = () => {
   const anchorRef = useRef<View>(null);
 
   const [userInput, setUserInput] = useState<string>("");
+  const [errorText, setErrorText] = useState<string>("");
 
   useFocusEffect(
     useCallback(() => {
@@ -42,16 +43,17 @@ export const JoinScreen = () => {
   const handleJoinGame = async () => {
     setIsHost(false);
     if (userInput === "") {
-      displayInfoModal("Du har glemt å skrive inn ett rom navn.", "Oisann");
+      setErrorText("Du har glemt å skrive inn ett rom navn.");
       return;
     }
+    setErrorText("");
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     const gameKey = userInput.trim().toLocaleLowerCase();
     const result = await gameService().joinInteractiveGame(pseudoId, gameKey);
     if (result.isError()) {
       console.warn(result.error);
-      displayInfoModal("Spillet finnes ikke eller har allerede startet.");
+      setErrorText("Spillet finnes ikke eller har allerede startet.");
       return;
     }
 
@@ -101,11 +103,27 @@ export const JoinScreen = () => {
                 placeholder="SLEM POTET"
                 placeholderTextColor={Color.DarkerGray}
                 value={userInput}
-                onChangeText={(input) => setUserInput(input?.toUpperCase())}
+                onChangeText={(input) => {
+                  setUserInput(input?.toUpperCase());
+                  setErrorText("");
+                }}
                 onSubmitEditing={Keyboard.dismiss}
                 returnKeyType="done"
               />
             </View>
+            {errorText !== "" && (
+              <Text
+                style={{
+                  color: "red",
+                  fontFamily: styles.buttonText.fontFamily,
+                  fontSize: 16,
+                  textAlign: "center",
+                  paddingHorizontal: 16,
+                }}
+              >
+                {errorText}
+              </Text>
+            )}
             <TouchableOpacity ref={anchorRef} style={styles.button} onPress={handleJoinGame}>
               <Text style={styles.buttonText}>Bli med</Text>
             </TouchableOpacity>

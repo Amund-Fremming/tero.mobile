@@ -2,7 +2,7 @@ import { useModalProvider } from "@/src/core/context/ModalProvider";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { Dimensions, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
 import Color from "../../../core/constants/Color";
 import Screen from "../../../core/constants/Screen";
@@ -11,8 +11,6 @@ import { verticalScale } from "../../../core/utils/dimensions";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import data from "./data.json";
 import styles from "./gameTypeListScreenStyles";
-
-const { height } = Dimensions.get("window");
 
 const iconMap: { [key: string]: any } = {
   "quiz.webp": require("../../../core/assets/images/quiz.webp"),
@@ -58,13 +56,20 @@ export const GameTypeListScreen = () => {
 
   return (
     <View style={styles.container}>
+      <ScreenHeader
+        title={gameEntryMode === GameEntryMode.Creator ? "Nytt spill" : "Klare spill"}
+        onBackPressed={() => navigation.goBack()}
+        onInfoPress={handleInfoPressed}
+        showBorder={true}
+        backgroundColor={gameEntryMode === GameEntryMode.Creator ? Color.HomeRed : Color.Purple}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEnabled={true}
         style={{
+          paddingTop: verticalScale(15),
           width: "100%",
           backgroundColor: "transparent",
-          height: height,
         }}
         contentContainerStyle={{
           justifyContent: "center",
@@ -75,13 +80,6 @@ export const GameTypeListScreen = () => {
           paddingBottom: verticalScale(20),
         }}
       >
-        <ScreenHeader
-          title={gameEntryMode === GameEntryMode.Creator ? "Nytt spill" : "Klare spill"}
-          onBackPressed={() => navigation.goBack()}
-          onInfoPress={handleInfoPressed}
-          showBorder={true}
-          backgroundColor={gameEntryMode === GameEntryMode.Creator ? Color.HomeRed : Color.Purple}
-        />
         {data &&
           data.map((item, index) => (
             <TouchableOpacity

@@ -1,18 +1,18 @@
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import * as Haptics from "expo-haptics";
-import { styles } from "./profileScreenStyles";
-import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { useEffect, useState } from "react";
-import { UserRole } from "@/src/core/constants/Types";
-import { useServiceProvider } from "@/src/core/context/ServiceProvider";
-import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
-import Color from "@/src/core/constants/Color";
-import Screen from "@/src/core/constants/Screen";
-import { horizontalScale } from "@/src/core/utils/dimensions";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import VerticalScroll from "@/src/core/components/VerticalScroll/VerticalScroll";
+import Color from "@/src/core/constants/Color";
+import Screen from "@/src/core/constants/Screen";
+import { UserRole } from "@/src/core/constants/Types";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import * as Haptics from "expo-haptics";
+import { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./profileScreenStyles";
 
 export const ProfileScreen = () => {
   const navigation: any = useNavigation();
@@ -43,7 +43,11 @@ export const ProfileScreen = () => {
 
     const result = await userService().getUser(accessToken);
     if (result.isError()) {
-      return;
+      // TODO - syslog log
+      displayErrorModal("Klarte ikke finne din bruker", () => {
+        setUserData(null);
+        resetToHomeScreen(navigation);
+      });
     }
 
     const role = result.value.role;

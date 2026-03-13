@@ -1,11 +1,10 @@
 import ScreenHeaderChildren from "@/src/core/components/ScreenHeader/ScreenHeaderChildren";
+import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
+import { getGameTheme } from "@/src/play/config/gameTheme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useNavigation } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Animated, ScrollView, Text, View } from "react-native";
 import PlayerCard from "../../components/PlayerCard/PlayerCard";
@@ -13,13 +12,15 @@ import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import styles from "./rolesScreenStyles";
 
-export const RolesScreen = () => {
-  const navigation: any = useNavigation();
+type Props = {
+  onLeave: () => void;
+};
 
-  const { clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearImposterSessionValues, players, imposterName, newRound, roundWord, setScreen } =
-    useImposterSessionProvider();
-  const { displayActionModal, displayInfoModal } = useModalProvider();
+export const RolesScreen = ({ onLeave }: Props) => {
+  const { players, imposterName, newRound, roundWord, setScreen } = useImposterSessionProvider();
+  const { displayInfoModal } = useModalProvider();
+
+  const theme = getGameTheme(GameType.Imposter);
 
   const [lockedPlayers, setLockedPlayers] = useState<Set<number>>(new Set());
   const [isNavigating, setIsNavigating] = useState(false);
@@ -59,18 +60,6 @@ export const RolesScreen = () => {
     };
   }, [lockedPlayers.size, navigatingOpacity, players.length, setScreen]);
 
-  const handleLeaveGame = () => {
-    displayActionModal(
-      "Er du sikker på at du vil forlate spillet?",
-      () => {
-        clearGlobalSessionValues();
-        clearImposterSessionValues();
-        resetToHomeScreen(navigation);
-      },
-      () => {},
-    );
-  };
-
   const handleInfoPressed = () => {
     displayInfoModal(
       "Send telefonen på rundgang i rommet. Hold inn på ditt kort og hold rollen din skjult",
@@ -79,8 +68,8 @@ export const RolesScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScreenHeaderChildren onBackPressed={handleLeaveGame} onInfoPress={handleInfoPressed}>
+    <View style={{ ...styles.container, backgroundColor: theme.primaryColor }}>
+      <ScreenHeaderChildren onBackPressed={onLeave} onInfoPress={handleInfoPressed}>
         <View style={styles.headerInline}>
           <Text style={styles.toastHeader}>ER DU</Text>
           <Text style={styles.headerSecondScreen}>Imposter?</Text>

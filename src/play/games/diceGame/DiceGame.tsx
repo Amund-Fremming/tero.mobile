@@ -367,12 +367,7 @@ export const DiceGame = () => {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader
-        title="Terning"
-        backgroundColor={Color.LightGray}
-        onBackPressed={() => navigation.goBack()}
-        onInfoPress={handleInfoPressed}
-      />
+      <ScreenHeader title="Terning" backgroundColor={Color.DarkBrown} onBackPressed={() => navigation.goBack()} />
 
       <View style={styles.content}>
         <View style={styles.tableSurface}>

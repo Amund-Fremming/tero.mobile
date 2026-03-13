@@ -1,21 +1,22 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useNavigation } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import { styles } from "./passiveLobbyScreenStyles";
 
-export const PassiveLobbyScreen = () => {
-  const navigation: any = useNavigation();
-  const { sessionData: sessionData, clearGlobalSessionValues, isHost, gameType } = useGlobalSessionProvider();
+type Props = {
+  onLeave: () => void;
+};
+
+export const PassiveLobbyScreen = ({ onLeave }: Props) => {
+  const { sessionData: sessionData, isHost, gameType } = useGlobalSessionProvider();
   const { themeColor, clearSpinSessionValues, players, iterations, setScreen } = useSpinSessionProvider();
   const { disconnect, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
@@ -31,10 +32,7 @@ export const PassiveLobbyScreen = () => {
   }, [players]);
 
   const handleBackPressed = async () => {
-    await disconnect();
-    clearGlobalSessionValues();
-    clearSpinSessionValues();
-    resetToHomeScreen(navigation);
+    await onLeave();
   };
 
   const handleInfoPressed = () => {

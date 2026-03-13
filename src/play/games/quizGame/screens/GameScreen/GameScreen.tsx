@@ -13,12 +13,16 @@ import { QuizGameScreen, QuizSession } from "../../constants/quizTypes";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 import styles from "./gameScreenStyles";
 
-export const GameScreen = () => {
+type Props = {
+  onLeave: () => void;
+};
+
+export const GameScreen = ({ onLeave }: Props) => {
   const navigation: any = useNavigation();
   const { quizSession } = useQuizSessionProvider();
-  const { clearGlobalSessionValues, gameEntryMode } = useGlobalSessionProvider();
+  const { gameEntryMode } = useGlobalSessionProvider();
   const { clearQuizGameValues, setScreen } = useQuizSessionProvider();
-  const { displayInfoModal, displayActionModal } = useModalProvider();
+  const { displayInfoModal } = useModalProvider();
 
   const [quiz, setQuiz] = useState<QuizSession | undefined>(quizSession);
 
@@ -58,18 +62,6 @@ export const GameScreen = () => {
     );
   };
 
-  const handleLeaveGame = () => {
-    displayActionModal(
-      "Er du sikker på at du vil forlate spillet?",
-      () => {
-        clearGlobalSessionValues();
-        clearQuizGameValues();
-        resetToHomeScreen(navigation);
-      },
-      () => {},
-    );
-  };
-
   const handleFinishedPressed = () => {
     if (gameEntryMode === GameEntryMode.Creator) {
       setScreen(QuizGameScreen.Create);
@@ -81,7 +73,7 @@ export const GameScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={handleLeaveGame} style={styles.iconWrapper}>
+        <TouchableOpacity onPress={onLeave} style={styles.iconWrapper}>
           <Feather name="chevron-left" size={moderateScale(45)} />
         </TouchableOpacity>
         <Text style={styles.header}>

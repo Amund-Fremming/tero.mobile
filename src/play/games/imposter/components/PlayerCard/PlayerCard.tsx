@@ -1,9 +1,11 @@
+import Color from "@/src/core/constants/Color";
+import { GameType } from "@/src/core/constants/Types";
+import { getGameTheme } from "@/src/play/config/gameTheme";
+import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { useRef, useState } from "react";
 import { Animated, Text, TouchableOpacity } from "react-native";
 import { styles } from "./playerCardStyles";
-import { Feather } from "@expo/vector-icons";
-import Color from "@/src/core/constants/Color";
-import * as Haptics from "expo-haptics";
 
 const FILL_DURATION = 800;
 const DRAIN_DELAY = 2000;
@@ -24,6 +26,8 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
   const [cardWidth, setCardWidth] = useState(0);
   const isCompleted = useRef(false);
   const currentAnimation = useRef<Animated.CompositeAnimation | null>(null);
+
+  const theme = getGameTheme(GameType.Imposter);
 
   const handlePressIn = () => {
     if (locked || cardWidth === 0) return;
@@ -86,12 +90,15 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
       onPressOut={handlePressOut}
       disabled={locked}
       onLayout={(e) => setCardWidth(e.nativeEvent.layout.width)}
-      style={[styles.playerCard, locked && { opacity: 0.4 }]}
+      style={[styles.playerCard, locked && { opacity: 0.4 }, { backgroundColor: theme.secondaryColor }]}
     >
       <Animated.View style={[styles.playerCardFill, { width: fillAnim }]} />
       <Feather name="user" size={28} color={Color.White} />
       <Text
-        style={[styles.playerNameText, revealed && (isImposter ? { color: Color.HomeRed } : { color: Color.Green })]}
+        style={[
+          styles.playerNameText,
+          revealed && (isImposter ? { color: Color.HomeRed } : { color: Color.DarkGreen }),
+        ]}
       >
         {revealed ? (isImposter ? "Imposter" : word) : name}
       </Text>

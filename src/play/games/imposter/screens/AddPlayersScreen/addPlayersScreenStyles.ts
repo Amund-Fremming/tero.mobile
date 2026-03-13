@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: "100%",
-    backgroundColor: Color.BuzzifyLavender,
     justifyContent: "space-between",
   },
 
@@ -30,7 +29,6 @@ export const styles = StyleSheet.create({
     width: "86%",
     borderRadius: moderateScale(10),
     height: verticalScale(69),
-    backgroundColor: Color.BuzzifyLavenderLight,
   },
 
   nextButton: {
@@ -95,7 +93,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: Color.BuzzifyLavenderLight,
     paddingHorizontal: moderateScale(15),
     paddingVertical: verticalScale(25),
     borderRadius: moderateScale(15),

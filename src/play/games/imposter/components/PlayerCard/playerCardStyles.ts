@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: Color.Black,
+    backgroundColor: Color.BuzzifyLavender,
   },
 
   playerCard: {
@@ -17,7 +17,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: Color.BuzzifyLavenderLight,
     paddingHorizontal: moderateScale(15),
     paddingVertical: verticalScale(25),
     borderRadius: moderateScale(15),

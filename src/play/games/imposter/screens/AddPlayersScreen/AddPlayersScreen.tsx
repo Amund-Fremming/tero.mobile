@@ -1,42 +1,32 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
-import { GameEntryMode } from "@/src/core/constants/Types";
+import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useNavigation } from "expo-router";
 import React from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import styles from "./addPlayersScreenStyles";
 
-export const AddPlayersScreen = () => {
-  const navigation: any = useNavigation();
+type Props = {
+  onLeave: () => void;
+};
 
+export const AddPlayersScreen = ({ onLeave }: Props) => {
   const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
   const { invokeFunction } = useHubConnectionProvider();
-  const { sessionData: sessionData, clearGlobalSessionValues, gameEntryMode } = useGlobalSessionProvider();
-  const { setScreen, players, setPlayers, clearImposterSessionValues, setImposterSession } =
-    useImposterSessionProvider();
+  const { sessionData: sessionData, gameEntryMode } = useGlobalSessionProvider();
+  const { setScreen, players, setPlayers, setImposterSession } = useImposterSessionProvider();
+
+  const theme = getGameTheme(GameType.Imposter);
 
   const [editMode, setEditMode] = React.useState(false);
-
-  const handleGoHome = () => {
-    displayActionModal(
-      "Er du sikker på at du vil forlate spillet?",
-      () => {
-        clearGlobalSessionValues();
-        clearImposterSessionValues();
-        resetToHomeScreen(navigation);
-      },
-      () => {},
-    );
-  };
 
   const handleInfoPressed = () => {
     displayInfoModal("Legg til de som skal være med. Trykk på kortene for å endre navn.", "Hvem er med?");
@@ -146,13 +136,13 @@ export const AddPlayersScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, backgroundColor: theme.primaryColor }}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <ScreenHeader title="Spillere" onBackPressed={handleGoHome} onInfoPress={handleInfoPressed} />
+        <ScreenHeader title="Spillere" onBackPressed={onLeave} onInfoPress={handleInfoPressed} />
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => setEditMode(!editMode)}>
             <Text style={styles.editButtonText}>{editMode ? "Ferdig" : "Rediger"}</Text>
@@ -161,7 +151,7 @@ export const AddPlayersScreen = () => {
 
         <View style={styles.playersWrapper}>
           {players.map((player, index) => (
-            <View key={index} style={styles.playerCard}>
+            <View key={index} style={{ ...styles.playerCard, backgroundColor: theme.secondaryColor }}>
               {editMode && (
                 <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeletePlayer(index)}>
                   <Feather name="x" size={22} color={Color.White} />
@@ -186,7 +176,10 @@ export const AddPlayersScreen = () => {
         </View>
 
         <View style={styles.buttonsWrapper}>
-          <TouchableOpacity onPress={handleAddPlayer} style={styles.addButton}>
+          <TouchableOpacity
+            onPress={handleAddPlayer}
+            style={{ ...styles.addButton, backgroundColor: theme.secondaryColor }}
+          >
             <Text style={styles.buttonText}>Ny spiller</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleNextPressed} style={styles.nextButton}>

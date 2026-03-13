@@ -3,7 +3,6 @@ import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
@@ -15,7 +14,11 @@ import { SpinGameState, SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import styles from "./gameScreenStyles";
 
-export const GameScreen = () => {
+type Props = {
+  onLeave: () => void;
+};
+
+export const GameScreen = ({ onLeave }: Props) => {
   const outerNavigation: any = useNavigation();
 
   const [gameStarted, setGameStarted] = useState<boolean>(false);
@@ -47,27 +50,13 @@ export const GameScreen = () => {
   useEffect(() => {
     if (selectedBatch.length > 0) {
       if (pseudoId && selectedBatch.includes(pseudoId)) {
-        setBgColor(Color.Green);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        setBgColor(Color.SpinChosen);
       } else {
-        setBgColor(Color.Red);
+        setBgColor(themeColor);
       }
     }
   }, [selectedBatch, pseudoId]);
-
-  const handleLeaveGame = async () => {
-    await disconnect();
-    clearGlobalSessionValues();
-    clearSpinSessionValues();
-    resetToHomeGlobal();
-  };
-
-  // Only used when `disconnect()` is called first
-  const navigateHome = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    clearGlobalSessionValues();
-    clearSpinSessionValues();
-    resetToHomeGlobal();
-  };
 
   const handleNextRound = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -114,14 +103,12 @@ export const GameScreen = () => {
 
   const handleBackPressed = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    await disconnect();
-    clearSpinSessionValues();
-    clearGlobalSessionValues();
-    resetToHomeGlobal();
+    await onLeave();
   };
 
   const handleInfoPressed = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // TODO
     // if (isHost) {
     //   if (gameType === GameType.Duel) {
     //     displayInfoModal(
@@ -203,7 +190,7 @@ export const GameScreen = () => {
       )}
 
       {gameState === SpinGameState.Finished && (!isDraft || !isHost) && (
-        <TouchableOpacity style={styles.button} onPress={navigateHome}>
+        <TouchableOpacity style={styles.button} onPress={onLeave}>
           <Text style={styles.buttonText}>Hjem</Text>
         </TouchableOpacity>
       )}

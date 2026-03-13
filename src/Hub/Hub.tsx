@@ -10,7 +10,6 @@ import QuizGame from "../play/games/quizGame/QuizGame";
 import SpinGame from "../play/games/spinGame/SpinGame";
 import GameListScreen from "../play/screens/GameListScreen/GameListScreen";
 import GameTypeListScreen from "../play/screens/GameTypeListScreen/GameTypeListScreen";
-import GenericTutorialScreen from "../play/screens/GenericTutorialScreen/GenericTutorialScreen";
 import { TipsUsScreen } from "../play/screens/TipsUsScreen/TipsUsScreen";
 import AdminScreen from "./screens/AdminScreen/AdminScreen";
 import EditProfileScreen from "./screens/EditProfileScreen/EditProfileScreen";
@@ -65,7 +64,6 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
       <Stack.Screen name={Screen.TipsList} component={TipsListScreen} />
-      <Stack.Screen name={Screen.Tutorial} component={GenericTutorialScreen} />
     </Stack.Navigator>
   );
 };

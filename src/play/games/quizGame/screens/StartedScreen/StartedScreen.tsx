@@ -1,25 +1,18 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useNavigation } from "expo-router";
 import { Text, View } from "react-native";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 import styles from "./startedScreenStyles";
 
-export const StartedScreen = () => {
-  const navigation: any = useNavigation();
-  const { clearQuizGameValues } = useQuizSessionProvider();
-  const { clearGlobalSessionValues } = useGlobalSessionProvider();
+type Props = {
+  onLeave: () => void;
+};
 
-  const handleGoHome = () => {
-    clearQuizGameValues();
-    clearGlobalSessionValues();
-    resetToHomeScreen(navigation);
-  };
+export const StartedScreen = ({ onLeave }: Props) => {
+  const { clearQuizGameValues } = useQuizSessionProvider();
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="" onBackPressed={handleGoHome} />
+      <ScreenHeader title="" onBackPressed={onLeave} />
       <View style={styles.textBox}>
         <Text style={styles.header}>Spillet har startet!</Text>
         <Text style={styles.subHeader}>

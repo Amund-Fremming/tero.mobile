@@ -1,7 +1,8 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { GameEntryMode } from "@/src/core/constants/Types";
+import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
+import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
@@ -11,15 +12,20 @@ import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import styles from "./revealScreenStyles";
 
-export const RevealScreen = () => {
+type Props = {
+  onLeave: () => void;
+};
+
+export const RevealScreen = ({ onLeave }: Props) => {
   const navigation: any = useNavigation();
-  const { clearGlobalSessionValues, gameEntryMode } = useGlobalSessionProvider();
-  const { clearImposterSessionValues, imposterName, imposterSession, setScreen } = useImposterSessionProvider();
-  const { displayActionModal, displayInfoModal } = useModalProvider();
+  const { gameEntryMode } = useGlobalSessionProvider();
+  const { imposterName, imposterSession, setScreen } = useImposterSessionProvider();
+  const { displayInfoModal } = useModalProvider();
 
   const [revealed, setRevealed] = useState(false);
   const [buttonVisible, setButtonVisible] = useState(false);
 
+  const theme = getGameTheme(GameType.Imposter);
   const hasMoreRounds = (imposterSession?.currentIteration ?? 0) < (imposterSession?.rounds?.length ?? 0);
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -122,18 +128,6 @@ export const RevealScreen = () => {
     });
   };
 
-  const handleLeaveGame = () => {
-    displayActionModal(
-      "Er du sikker på at du vil forlate spillet?",
-      () => {
-        clearGlobalSessionValues();
-        clearImposterSessionValues();
-        resetToHomeScreen(navigation);
-      },
-      () => {},
-    );
-  };
-
   const handleInfoPressed = () => {
     displayInfoModal(
       "Når dere er ferdige med runden kan dere trykke her for å avsløre hvem som var imposteren.",
@@ -161,8 +155,8 @@ export const RevealScreen = () => {
   });
 
   return (
-    <View style={styles.container}>
-      <ScreenHeader title="Avsløring" onBackPressed={handleLeaveGame} onInfoPress={handleInfoPressed} />
+    <View style={{ ...styles.container, backgroundColor: theme.primaryColor }}>
+      <ScreenHeader title="Avsløring" onBackPressed={onLeave} onInfoPress={handleInfoPressed} />
 
       <View style={styles.centerContent}>
         <TouchableOpacity onPress={handleReveal} disabled={revealed}>

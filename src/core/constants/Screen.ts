@@ -20,7 +20,6 @@ export enum Screen {
   Problem = "Problem",
   Info = "Info",
   TipsList = "TipsList",
-  Tutorial = "Tutorial",
 }
 
 export default Screen;

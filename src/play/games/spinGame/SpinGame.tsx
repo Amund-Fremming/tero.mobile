@@ -45,7 +45,7 @@ export const SpinGame = () => {
   const isHandlingErrorRef = useRef(false);
   const [hubReady, setHubReady] = useState<boolean>(false);
 
-  const resetSessionAndNavigateHome = async () => {
+  const handleLeavePressed = async () => {
     await disconnect();
     clearSpinSessionValues();
     clearGlobalSessionValues();
@@ -135,7 +135,7 @@ export const SpinGame = () => {
       isHandlingErrorRef.current = true;
 
       displayErrorModal(message, async () => {
-        await resetSessionAndNavigateHome();
+        await handleLeavePressed();
       });
     });
 
@@ -190,11 +190,11 @@ export const SpinGame = () => {
     case SpinSessionScreen.ActiveLobby:
       return <ActiveLobbyScreen />;
     case SpinSessionScreen.PassiveLobby:
-      return <PassiveLobbyScreen />;
+      return <PassiveLobbyScreen onLeave={handleLeavePressed} />;
     case SpinSessionScreen.Game:
-      <GameScreen />;
+      <GameScreen onLeave={handleLeavePressed} />;
     default:
-      return <GameScreen />;
+      return <GameScreen onLeave={handleLeavePressed} />;
   }
 };
 

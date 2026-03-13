@@ -13,8 +13,8 @@ import AddPlayersScreen from "./screens/AddPlayersScreen/AddPlayersScreen";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
 import LobbyScreen from "./screens/LobbyScreen/LobbyScreen";
 import RevealScreen from "./screens/RevealScreen/RevealScreen";
-import RoundInstructionsScreen from "./screens/RoundInstructionsScreen/RoundInstructionsScreen";
 import { RolesScreen } from "./screens/RolesScreen/RolesScreen";
+import RoundInstructionsScreen from "./screens/RoundInstructionsScreen/RoundInstructionsScreen";
 import StartedScreen from "./screens/StartedScreen/StartedScreen";
 import TutorialScreen from "./screens/TutorialScreen/TutorialScreen";
 
@@ -22,8 +22,14 @@ export const ImposterGame = () => {
   const outerNavigation: any = useNavigation();
   const { clearImposterSessionValues, setIterations, setImposterSession, screen, setScreen } =
     useImposterSessionProvider();
-  const { displayErrorModal } = useModalProvider();
-  const { gameEntryMode, sessionData: sessionData, setIsHost, clearGlobalSessionValues, isHost } = useGlobalSessionProvider();
+  const { displayErrorModal, displayActionModal } = useModalProvider();
+  const {
+    gameEntryMode,
+    sessionData: sessionData,
+    setIsHost,
+    clearGlobalSessionValues,
+    isHost,
+  } = useGlobalSessionProvider();
   const { connect, setListener, disconnect, invokeFunction } = useHubConnectionProvider();
   const { pseudoId } = useAuthProvider();
 
@@ -115,6 +121,19 @@ export const ImposterGame = () => {
     resetToHomeScreen(outerNavigation);
   };
 
+  const handleLeavePressed = () => {
+    displayActionModal(
+      "Er du sikker på at du vil forlate spillet?",
+      () => {
+        clearImposterSessionValues();
+        clearGlobalSessionValues();
+        resetToHomeScreen(outerNavigation);
+        disconnect();
+      },
+      () => {},
+    );
+  };
+
   const getInitialScreen = (): ImposterSessionScreen => {
     switch (gameEntryMode) {
       case GameEntryMode.Creator:
@@ -137,20 +156,20 @@ export const ImposterGame = () => {
         />
       );
     case ImposterSessionScreen.AddPlayers:
-      return <AddPlayersScreen />;
+      return <AddPlayersScreen onLeave={handleLeavePressed} />;
     case ImposterSessionScreen.ActiveLobby:
       return <LobbyScreen />;
     case ImposterSessionScreen.Roles:
-      return <RolesScreen />;
+      return <RolesScreen onLeave={handleLeavePressed} />;
     case ImposterSessionScreen.RoundInstructions:
       return <RoundInstructionsScreen />;
     case ImposterSessionScreen.Reveal:
-      return <RevealScreen />;
+      return <RevealScreen onLeave={handleLeavePressed} />;
     case ImposterSessionScreen.Create:
       return <CreateScreen />;
     case ImposterSessionScreen.Started:
     default:
-      return <StartedScreen />;
+      return <StartedScreen onLeave={handleLeavePressed} />;
   }
 };
 

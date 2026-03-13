@@ -25,8 +25,8 @@ export const gameThemeMap: Record<GameType, GameTheme> = {
     secondaryColor: Color.BeigeLight,
   },
   [GameType.Imposter]: {
-    primaryColor: Color.BuzzifyLavender,
-    secondaryColor: Color.BuzzifyLavenderLight,
+    primaryColor: Color.ImposterPrimary,
+    secondaryColor: Color.ImposterSecondary,
   },
   [GameType.Dice]: {
     primaryColor: Color.LightGray,

@@ -1,24 +1,25 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import GenericActiveLobbyScreen from "@/src/play/screens/GenericActiveLobbyScreen/GenericActiveLobbyScreen";
 import * as Haptics from "expo-haptics";
-import { useNavigation } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { QuizGameScreen } from "../../constants/quizTypes";
 import { useQuizSessionProvider } from "../../context/QuizGameProvider";
 
-export const LobbyScreen = () => {
-  const navigation: any = useNavigation();
+type Props = {
+  onLeave: () => void;
+};
+
+export const LobbyScreen = ({ onLeave }: Props) => {
   const [started, setStarted] = useState<boolean>(false);
   const [isAddingQuestion, setIsAddingRound] = useState<boolean>(false);
 
-  const { sessionData: sessionData, clearGlobalSessionValues } = useGlobalSessionProvider();
+  const { sessionData: sessionData } = useGlobalSessionProvider();
   const { disconnect, invokeFunction } = useHubConnectionProvider();
-  const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
+  const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { iterations, clearQuizGameValues, setScreen } = useQuizSessionProvider();
   const theme = getGameTheme(GameType.Quiz);
 
@@ -83,16 +84,7 @@ export const LobbyScreen = () => {
   };
 
   const handleBackPressed = () => {
-    displayActionModal(
-      "Er du sikker på at du vil forlate spillet?",
-      () => {
-        disconnect();
-        clearQuizGameValues();
-        clearGlobalSessionValues();
-        resetToHomeScreen(navigation);
-      },
-      () => {},
-    );
+    onLeave();
   };
 
   return (

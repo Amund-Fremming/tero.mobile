@@ -201,7 +201,7 @@ export const GameListScreen = () => {
 
         const roulette = rResult.value;
         setIsDraft(roulette.is_draft);
-        setGameSessionValues(roulette.key, roulette.hub_name);
+        setGameSessionValues(roulette.key, roulette.hub_name, roulette.game_id);
         navigation.navigate(Screen.Spin);
         break;
       case GameType.Duel:
@@ -214,7 +214,7 @@ export const GameListScreen = () => {
         }
 
         const duel = dResult.value;
-        setGameSessionValues(duel.key, duel.hub_name);
+        setGameSessionValues(duel.key, duel.hub_name, duel.game_id);
         navigation.navigate(Screen.Spin);
         break;
       case GameType.Imposter:
@@ -241,14 +241,13 @@ export const GameListScreen = () => {
 
   return (
     <View style={styles.container}>
+      <ScreenHeader
+        title="Velg spill"
+        onBackPressed={() => navigation.goBack()}
+        onInfoPress={handleInfoPressed}
+        backgroundColor={headerBg}
+      />
       <VerticalScroll scrollRef={scrollRef}>
-        <ScreenHeader
-          title="Velg spill"
-          onBackPressed={() => navigation.goBack()}
-          onInfoPress={handleInfoPressed}
-          backgroundColor={headerBg}
-        />
-
         {!loading && pagedResponse.items.length === 0 && (
           <Text style={styles.noGames}>Det finnes ingen spill av denne typen enda</Text>
         )}

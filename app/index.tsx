@@ -13,6 +13,7 @@ import QuizSessionProvider from "@/src/play/games/quizGame/context/QuizGameProvi
 import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
 import SpinSessionProvider from "@/src/play/games/spinGame/context/SpinGameProvider";
 import * as ExpoSplashScreen from "expo-splash-screen";
+import { setupNotifications } from "@/src/core/services/notificationService";
 
 ExpoSplashScreen.hide();
 
@@ -64,6 +65,7 @@ const FontLoader = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (fontsLoaded) {
       Asset.loadAsync(IMAGES);
+      setupNotifications();
     }
   }, [fontsLoaded]);
 

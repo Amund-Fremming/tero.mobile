@@ -1,25 +1,18 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
-import { useNavigation } from "expo-router";
 import { Text, View } from "react-native";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import styles from "./startedScreenStyles";
 
-export const StartedScreen = () => {
-  const navigation: any = useNavigation();
-  const { clearGlobalSessionValues } = useGlobalSessionProvider();
-  const { clearImposterSessionValues } = useImposterSessionProvider();
+type Props = {
+  onLeave: () => void;
+};
 
-  const handleGoHome = () => {
-    clearGlobalSessionValues();
-    clearImposterSessionValues();
-    resetToHomeScreen(navigation);
-  };
+export const StartedScreen = ({ onLeave }: Props) => {
+  const { clearImposterSessionValues } = useImposterSessionProvider();
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="" onBackPressed={handleGoHome} />
+      <ScreenHeader title="" onBackPressed={onLeave} />
       <View style={styles.textBox}>
         <Text style={styles.header}>Spillet har startet!</Text>
         <Text style={styles.subHeader}>

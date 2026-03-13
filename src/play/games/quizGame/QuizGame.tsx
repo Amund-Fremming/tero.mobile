@@ -19,7 +19,7 @@ export const QuizGame = () => {
   const { gameEntryMode, sessionData: sessionData, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { setQuizSession, setIterations, clearQuizGameValues, screen, setScreen } = useQuizSessionProvider();
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
-  const { displayErrorModal } = useModalProvider();
+  const { displayErrorModal, displayActionModal } = useModalProvider();
 
   const getInitialScreen = (): QuizGameScreen => {
     switch (gameEntryMode) {
@@ -100,19 +100,32 @@ export const QuizGame = () => {
     });
   };
 
+  const handleLeavePressed = () => {
+    displayActionModal(
+      "Er du sikker på at du vil forlate spillet?",
+      () => {
+        disconnect();
+        clearQuizGameValues();
+        clearGlobalSessionValues();
+        resetToHomeScreen(outerNavigation);
+      },
+      () => {},
+    );
+  };
+
   switch (screen) {
     case QuizGameScreen.Tutorial:
       return <TutorialScreen />;
     case QuizGameScreen.Game:
-      return <GameScreen />;
+      return <GameScreen onLeave={handleLeavePressed} />;
     case QuizGameScreen.Started:
-      return <StartedScreen />;
+      return <StartedScreen onLeave={handleLeavePressed} />;
     case QuizGameScreen.Lobby:
-      return <LobbyScreen />;
+      return <LobbyScreen onLeave={handleLeavePressed} />;
     case QuizGameScreen.Create:
       return <CreateScreen />;
     default:
-      return <LobbyScreen />;
+      return <LobbyScreen onLeave={handleLeavePressed} />;
   }
 };
 

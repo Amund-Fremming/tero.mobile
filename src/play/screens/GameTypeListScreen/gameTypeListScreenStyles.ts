@@ -1,17 +1,14 @@
 import { StyleSheet } from "react-native";
-import Colors, { Color } from "../../../core/constants/Color";
-import { horizontalScale, moderateScale, verticalScale } from "../../../core/utils/dimensions";
+import { Color } from "../../../core/constants/Color";
 import { Font } from "../../../core/constants/Font";
+import { horizontalScale, moderateScale, verticalScale } from "../../../core/utils/dimensions";
 
 export const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: Color.White,
     width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    flexWrap: "wrap",
-    flexDirection: "row",
+    flexDirection: "column",
   },
 
   card: {

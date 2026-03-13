@@ -1,5 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import React, { createContext, ReactNode, useContext, useEffect, useRef } from "react";
+import { AppState } from "react-native";
 import { HUB_URL_BASE } from "../../core/config/api";
 import { useAuthProvider } from "../../core/context/AuthProvider";
 import { useModalProvider } from "../../core/context/ModalProvider";
@@ -49,6 +50,34 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
 
   useEffect(() => {
     return registerCrashResetCallback(clearValues);
+  }, []);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener("change", async (nextState) => {
+      if (nextState !== "active" || !connectionRef.current || disconnectTriggeredRef.current) {
+        return;
+      }
+
+      const state = connectionRef.current.state;
+      if (state !== signalR.HubConnectionState.Disconnected) return;
+
+      console.info("App foregrounded with dead connection — attempting reconnect");
+      displayLoadingModal(() => giveUpAndGoHome());
+
+      try {
+        await connectionRef.current.start();
+        reattachListeners();
+        const result = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId);
+        if (result.isError()) throw new Error(result.error);
+        closeLoadingModal();
+        console.info("Reconnected after app foregrounded");
+      } catch (error) {
+        console.error("Reconnect after foreground failed", error);
+        giveUpAndGoHome();
+      }
+    });
+
+    return () => sub.remove();
   }, []);
 
   const giveUpAndGoHome = () => {

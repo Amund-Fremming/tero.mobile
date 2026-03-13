@@ -20,7 +20,17 @@
       "output": "static",
       "favicon": "./app/tero.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {
+          "icon": "./app/tero.png",
+          "color": "#ffffff",
+          "sounds": []
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }
