@@ -1,11 +1,10 @@
 import { StyleSheet } from "react-native";
-import { Color } from "../../constants/Color";
-import { horizontalScale, moderateScale, verticalScale } from "../../utils/dimensions";
 import { Font } from "../../constants/Font";
+import { horizontalScale, moderateScale, verticalScale } from "../../utils/dimensions";
 
 export const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5);",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -20,8 +19,8 @@ export const styles = StyleSheet.create({
     borderWidth: moderateScale(3),
     borderRadius: moderateScale(35),
     gap: verticalScale(15),
-    backgroundColor: Color.LightGray,
-    borderColor: Color.Gray,
+    backgroundColor: "#EAF2FA",
+    borderColor: "#6F89A2",
     paddingHorizontal: horizontalScale(26),
     paddingTop: verticalScale(30),
     paddingBottom: verticalScale(30),
@@ -31,7 +30,7 @@ export const styles = StyleSheet.create({
     textAlign: "left",
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(38),
-    color: Color.BeigeLight,
+    color: "#3B6282",
     opacity: 0.85,
   },
 
@@ -39,7 +38,7 @@ export const styles = StyleSheet.create({
     fontFamily: Font.SintonyBold,
     fontSize: moderateScale(18),
     textAlign: "left",
-    color: Color.OffBlack,
+    color: "#2B3036",
   },
 
   buttonsWrapper: {
@@ -52,7 +51,7 @@ export const styles = StyleSheet.create({
 
   button: {
     flex: 1,
-    backgroundColor: Color.Beige,
+    backgroundColor: "#1F3D58",
     borderRadius: moderateScale(10),
     justifyContent: "center",
     alignItems: "center",
@@ -62,7 +61,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontFamily: Font.PassionOneRegular,
     fontSize: moderateScale(30),
-    color: Color.White,
+    color: "#EDF6FF",
     fontWeight: "600",
   },
 
@@ -71,7 +70,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderRadius: moderateScale(10),
     borderWidth: moderateScale(3),
-    borderColor: Color.Beige,
+    borderColor: "#1F3D58",
     justifyContent: "center",
     alignItems: "center",
     height: verticalScale(50),
@@ -80,7 +79,7 @@ export const styles = StyleSheet.create({
   buttonInvertedText: {
     fontFamily: Font.PassionOneRegular,
     fontSize: moderateScale(30),
-    color: Color.Beige,
+    color: "#1F3D58",
     fontWeight: "600",
   },
 });

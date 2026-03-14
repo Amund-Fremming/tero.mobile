@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
   borderRight: {
     borderTopRightRadius: moderateScale(5),
     borderBottomRightRadius: moderateScale(5),
-    backgroundColor: Color.BuzzifyLavender,
+    backgroundColor: Color.Green,
     flex: 1,
     height: verticalScale(7),
   },

@@ -20,7 +20,7 @@ interface IAuthContext {
   accessToken: string | null;
   callUpdateUserActivity: () => Promise<void>;
   triggerLogin: () => void;
-  triggerLogout: () => Promise<boolean>;
+  triggerLogout: (useBrowserConfirmation?: boolean) => Promise<boolean>;
   rotateTokens: () => Promise<void>;
   userData: BaseUser | null;
   setUserData: React.Dispatch<React.SetStateAction<BaseUser | null>>;
@@ -198,7 +198,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     });
   };
 
-  const triggerLogout = async (): Promise<boolean> => {
+  const triggerLogout = async (useBrowserConfirmation: boolean = true): Promise<boolean> => {
     try {
       const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
 
@@ -208,17 +208,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return false;
       }
 
-      const returnTo = Auth0Config.redirectUri;
-      const params = new URLSearchParams({
-        client_id: Auth0Config.clientId,
-        returnTo: returnTo,
-      });
+      if (useBrowserConfirmation) {
+        const returnTo = Auth0Config.redirectUri;
+        const params = new URLSearchParams({
+          client_id: Auth0Config.clientId,
+          returnTo: returnTo,
+        });
 
-      const logoutUrl = `https://${Auth0Config.domain}/v2/logout?${params.toString()}`;
-      const response = await WebBrowser.openAuthSessionAsync(logoutUrl, returnTo);
-      if (response.type === "cancel" || response.type === "dismiss") {
-        console.warn("Logout was cancelled by user");
-        return false;
+        const logoutUrl = `https://${Auth0Config.domain}/v2/logout?${params.toString()}`;
+        const response = await WebBrowser.openAuthSessionAsync(logoutUrl, returnTo);
+        if (response.type === "cancel" || response.type === "dismiss") {
+          console.warn("Logout was cancelled by user");
+          return false;
+        }
       }
 
       const revokeConfig = {

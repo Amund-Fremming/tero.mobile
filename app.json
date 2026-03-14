@@ -4,6 +4,7 @@
     "slug": "tero",
     "version": "1.0.0",
     "orientation": "portrait",
+    "platforms": ["ios"],
     "scheme": "com.tero",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

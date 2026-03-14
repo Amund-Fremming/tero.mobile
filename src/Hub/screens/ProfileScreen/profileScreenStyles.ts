@@ -14,10 +14,11 @@ export const styles = StyleSheet.create({
   },
 
   loggedIn: {
-    flex: 1,
+    flexGrow: 1,
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
+    minHeight: "100%",
   },
 
   imageCard: {
@@ -54,7 +55,7 @@ export const styles = StyleSheet.create({
 
   layover: {
     width: "100%",
-    height: "65%",
+    flex: 1,
     backgroundColor: Color.LightGray,
     borderTopLeftRadius: moderateScale(50),
     borderTopRightRadius: moderateScale(50),

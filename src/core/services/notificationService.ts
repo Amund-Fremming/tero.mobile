@@ -1,23 +1,15 @@
 import Constants, { ExecutionEnvironment } from "expo-constants";
-import * as Notifications from "expo-notifications";
+import { Platform } from "react-native";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+type NotificationsModule = typeof import("expo-notifications");
 
-async function requestPermissions(): Promise<boolean> {
-  const { status } = await Notifications.requestPermissionsAsync();
+async function requestPermissions(notifications: NotificationsModule): Promise<boolean> {
+  const { status } = await notifications.requestPermissionsAsync();
   return status === "granted";
 }
 
-async function cancelScheduledNotifications() {
-  await Notifications.cancelAllScheduledNotificationsAsync();
+async function cancelScheduledNotifications(notifications: NotificationsModule) {
+  await notifications.cancelAllScheduledNotificationsAsync();
 }
 
 interface Notification {
@@ -63,8 +55,8 @@ function randomNotification(): Notification {
   return notifications[idx];
 }
 
-async function scheduleWeeklyNotifications() {
-  await cancelScheduledNotifications();
+async function scheduleWeeklyNotifications(notifications: NotificationsModule) {
+  await cancelScheduledNotifications(notifications);
 
   // weekday: 6 = Friday, 7 = Saturday (Expo uses 1=Sun … 7=Sat)
   const days = [6, 7] as const;
@@ -88,13 +80,13 @@ async function scheduleWeeklyNotifications() {
 
   for (const weekday of days) {
     for (const slot of slots) {
-      await Notifications.scheduleNotificationAsync({
+      await notifications.scheduleNotificationAsync({
         content: {
           title: slot.title,
           body: slot.body,
         },
         trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+          type: notifications.SchedulableTriggerInputTypes.CALENDAR,
           repeats: true,
           weekday,
           hour: slot.hour,
@@ -106,8 +98,21 @@ async function scheduleWeeklyNotifications() {
 }
 
 export async function setupNotifications() {
+  if (Platform.OS !== "ios") return;
   if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) return;
-  const granted = await requestPermissions();
+  const notifications = await import("expo-notifications");
+
+  notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowBanner: true,
+      shouldShowList: true,
+    }),
+  });
+
+  const granted = await requestPermissions(notifications);
   if (!granted) return;
-  await scheduleWeeklyNotifications();
+  await scheduleWeeklyNotifications(notifications);
 }

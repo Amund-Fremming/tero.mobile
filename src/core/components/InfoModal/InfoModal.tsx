@@ -1,6 +1,5 @@
 import * as Haptics from "expo-haptics";
 import { Text, TouchableOpacity, View } from "react-native";
-import Color from "../../constants/Color";
 import { styles } from "./infoModalStyles";
 
 interface InfoModalProps {
@@ -12,7 +11,7 @@ interface InfoModalProps {
 }
 
 export const InfoModal = ({ isError, isSuccess, header, message, onCloseFunc }: InfoModalProps) => {
-  const headerColor = isError ? Color.HomeRed : isSuccess ? Color.Green : Color.BeigeLight;
+  const headerColor = isError ? "#B74837" : isSuccess ? "#236E58" : "#3B6282";
 
   return (
     <View style={styles.overlay}>

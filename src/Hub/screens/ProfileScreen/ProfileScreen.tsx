@@ -19,6 +19,7 @@ export const ProfileScreen = () => {
   const { pseudoId, triggerLogout, accessToken, setPseudoId, userData, setUserData } = useAuthProvider();
   const { userService } = useServiceProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const fallbackAvatar = "https://api.dicebear.com/9.x/pixel-art/png?seed=tero";
 
   const isLoggedIn = accessToken != null;
 
@@ -32,8 +33,13 @@ export const ProfileScreen = () => {
   }, [userData]);
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigation.goBack();
+      return;
+    }
+
     fetchUserData();
-  }, [accessToken]);
+  }, [accessToken, isLoggedIn]);
 
   const fetchUserData = async () => {
     if (!accessToken) {
@@ -44,10 +50,12 @@ export const ProfileScreen = () => {
     const result = await userService().getUser(accessToken);
     if (result.isError()) {
       // TODO - syslog log
-      displayErrorModal("Klarte ikke finne din bruker", () => {
+      displayErrorModal("Klarte ikke finne din bruker", async () => {
         setUserData(null);
+        setIsAdmin(false);
+        setAvatar("");
+        await triggerLogout(false);
         resetToHomeScreen(navigation);
-        triggerLogout();
       });
       return;
     }
@@ -72,7 +80,6 @@ export const ProfileScreen = () => {
   };
 
   if (!isLoggedIn) {
-    navigation.goBack();
     return <View />;
   }
 
@@ -106,7 +113,7 @@ export const ProfileScreen = () => {
         <View style={styles.loggedIn}>
           <View style={styles.imageCard}>
             {isAdmin && <Image source={crown} style={styles.crown} />}
-            <Image source={{ uri: avatar }} style={styles.image} />
+            <Image source={{ uri: avatar || fallbackAvatar }} style={styles.image} />
           </View>
           <Text style={styles.name}>
             {userData?.given_name} {userData?.family_name}

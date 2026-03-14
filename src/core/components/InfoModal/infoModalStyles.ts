@@ -1,11 +1,10 @@
 import { StyleSheet } from "react-native";
-import { Color } from "../../constants/Color";
 import { Font } from "../../constants/Font";
 import { horizontalScale, moderateScale, verticalScale } from "../../utils/dimensions";
 
 export const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5);",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -26,14 +25,14 @@ export const styles = StyleSheet.create({
   },
 
   messageContainer: {
-    backgroundColor: Color.LightGray,
-    borderColor: Color.Gray,
+    backgroundColor: "#EAF2FA",
+    borderColor: "#6F89A2",
     borderWidth: moderateScale(3),
   },
 
   errorContainer: {
-    backgroundColor: Color.White,
-    borderColor: Color.Gray,
+    backgroundColor: "#FFF4F2",
+    borderColor: "#C96E5A",
     borderWidth: moderateScale(3),
   },
 
@@ -48,11 +47,11 @@ export const styles = StyleSheet.create({
     fontFamily: Font.SintonyBold,
     fontSize: moderateScale(18),
     textAlign: "left",
-    color: Color.OffBlack,
+    color: "#2B3036",
   },
 
   button: {
-    backgroundColor: Color.Beige,
+    backgroundColor: "#1F3D58",
     borderRadius: moderateScale(10),
     marginTop: verticalScale(12),
     width: "80%",
@@ -65,7 +64,7 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontFamily: Font.PassionOneRegular,
     fontSize: moderateScale(30),
-    color: Color.White,
+    color: "#EDF6FF",
     fontWeight: "600",
   },
 });

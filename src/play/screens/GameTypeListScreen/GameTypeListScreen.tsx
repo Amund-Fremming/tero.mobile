@@ -25,6 +25,8 @@ export const GameTypeListScreen = () => {
   const { setGameType, gameEntryMode, setIsDraft } = useGlobalSessionProvider();
   const { displayInfoModal } = useModalProvider();
   const isCreating = gameEntryMode === GameEntryMode.Creator;
+  const totalCards = data.length + (isCreating ? 1 : 0);
+  const needsSpacer = totalCards % 2 !== 0;
 
   const handlePress = (screen: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -84,7 +86,7 @@ export const GameTypeListScreen = () => {
           data.map((item, index) => (
             <TouchableOpacity
               key={index}
-              style={[styles.card, { borderColor: isCreating ? Color.Gray : Color.BuzzifyLightBeige }]}
+              style={[styles.card, { borderColor: isCreating ? Color.Gray : Color.Purple }]}
               onPress={() => handlePress(item.screen)}
             >
               <Image source={iconMap[item.icon]} style={styles.cardImage} />
@@ -94,17 +96,20 @@ export const GameTypeListScreen = () => {
               <Text style={{ ...styles.cardHeader, color: item.color }}>{item.name}</Text>
             </TouchableOpacity>
           ))}
-        <TouchableOpacity
-          key={100}
-          style={styles.card}
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            navigation.navigate(Screen.TipsUs);
-          }}
-        >
-          <Image source={require("../../../core/assets/images/finger.jpg")} style={styles.cardImage} />
-          <Text style={{ ...styles.cardHeader, color: Color.White }}>Ditt spill?</Text>
-        </TouchableOpacity>
+        {gameEntryMode === GameEntryMode.Creator && (
+          <TouchableOpacity
+            key={100}
+            style={styles.card}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              navigation.navigate(Screen.TipsUs);
+            }}
+          >
+            <Image source={require("../../../core/assets/images/finger.jpg")} style={styles.cardImage} />
+            <Text style={{ ...styles.cardHeader, color: Color.White }}>Ditt spill?</Text>
+          </TouchableOpacity>
+        )}
+        {needsSpacer && <View style={styles.cardSpacer} />}
         <View style={styles.footer}>
           <View style={styles.footerDivider} />
           <Text style={styles.footerText}>Flere spill på vei!</Text>

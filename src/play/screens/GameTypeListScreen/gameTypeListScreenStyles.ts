@@ -22,6 +22,11 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
+  cardSpacer: {
+    height: verticalScale(210),
+    width: "45%",
+  },
+
   cardImage: {
     width: "100%",
     height: "100%",
