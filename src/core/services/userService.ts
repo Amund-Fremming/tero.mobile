@@ -18,10 +18,10 @@ export class UserService {
     this.baseUrl = baseUrl;
   }
 
-  async resetPassword(token: string, pseudoId: string, email: string): Promise<Result> {
+  async resetPassword(token: string, email: string): Promise<Result> {
     try {
       const payload: ResetPasswordRequest = { email };
-      const url = `${this.baseUrl}/users/reset-password/${pseudoId}`;
+      const url = `${this.baseUrl}/users/reset-password`;
 
       const response = await axios.post(url, payload, {
         headers: {

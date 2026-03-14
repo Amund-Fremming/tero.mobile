@@ -1,14 +1,14 @@
-import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import * as SecureStore from "expo-secure-store";
-import { Auth0Config } from "../config/auth";
 import * as AuthSession from "expo-auth-session";
-import { useModalProvider } from "./ModalProvider";
-import * as WebBrowser from "expo-web-browser";
-import { useServiceProvider } from "./ServiceProvider";
 import { useNavigation } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import * as WebBrowser from "expo-web-browser";
+import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { Auth0Config } from "../config/auth";
 import Screen from "../constants/Screen";
-import { err, ok, Result } from "../utils/result";
 import { BaseUser } from "../constants/Types";
+import { err, ok, Result } from "../utils/result";
+import { useModalProvider } from "./ModalProvider";
+import { useServiceProvider } from "./ServiceProvider";
 
 const REFRESH_TOKEN_KEY = "refresh_token";
 
@@ -66,6 +66,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<BaseUser | null>(null);
 
+  const ensureInProgress = useRef<Promise<Result<string>> | null>(null);
+
   const navigation: any = useNavigation();
   const { displayErrorModal } = useModalProvider();
   const { userService } = useServiceProvider();
@@ -87,19 +89,29 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const ensurePseudoId = async (): Promise<Result<string>> => {
-    const storedPseudoId = await SecureStore.getItemAsync("pseudo_id");
-
-    const result = await userService().ensurePseudoId(storedPseudoId);
-    if (result.isError()) {
-      console.error(result.error);
-      return err("Failed to get pseudo id");
+    if (ensureInProgress.current) {
+      return ensureInProgress.current;
     }
 
-    setPseudoId(result.value);
-    await SecureStore.setItemAsync("pseudo_id", result.value);
-    console.info("Pseudo user created with id: ", result.value);
+    const promise: Promise<Result<string>> = (async () => {
+      const storedPseudoId = await SecureStore.getItemAsync("pseudo_id");
 
-    return ok(result.value);
+      const result = await userService().ensurePseudoId(storedPseudoId);
+      if (result.isError()) {
+        ensureInProgress.current = null;
+        console.error(result.error);
+        return err("Failed to get pseudo id");
+      }
+
+      setPseudoId(result.value);
+      await SecureStore.setItemAsync("pseudo_id", result.value);
+      console.info("Pseudo user ensured with id: ", result.value);
+      ensureInProgress.current = null;
+      return ok(result.value);
+    })();
+
+    ensureInProgress.current = promise;
+    return promise;
   };
 
   const callUpdateUserActivity = async () => {

@@ -105,7 +105,6 @@ export const GameListScreen = () => {
   });
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<GameCategory | null>(null);
-  const [headerBg] = useState<string>(getHeaderBg);
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
@@ -245,7 +244,7 @@ export const GameListScreen = () => {
         title="Velg spill"
         onBackPressed={() => navigation.goBack()}
         onInfoPress={handleInfoPressed}
-        backgroundColor={headerBg}
+        backgroundColor={Color.BuzzifyLavender}
       />
       <VerticalScroll scrollRef={scrollRef}>
         {!loading && pagedResponse.items.length === 0 && (

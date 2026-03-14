@@ -1,4 +1,5 @@
 import * as Notifications from "expo-notifications";
+import Constants, { ExecutionEnvironment } from "expo-constants";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -105,6 +106,7 @@ async function scheduleWeeklyNotifications() {
 }
 
 export async function setupNotifications() {
+  if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) return;
   const granted = await requestPermissions();
   if (!granted) return;
   await scheduleWeeklyNotifications();

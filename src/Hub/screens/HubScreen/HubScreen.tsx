@@ -1,11 +1,11 @@
-import { View, Text, Button } from "react-native";
-import styles from "./hubScreenStyles";
-import Screen from "../../../core/constants/Screen";
-import Color from "@/src/core/constants/Color";
-import { useNavigation } from "expo-router";
-import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { useEffect, useRef, useState } from "react";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
+import Color from "@/src/core/constants/Color";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useNavigation } from "expo-router";
+import { useEffect, useRef, useState } from "react";
+import { Button, Text, View } from "react-native";
+import Screen from "../../../core/constants/Screen";
+import styles from "./hubScreenStyles";
 
 export const HubScreen = () => {
   const navigation: any = useNavigation();

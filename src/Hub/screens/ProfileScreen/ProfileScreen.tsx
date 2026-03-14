@@ -28,7 +28,7 @@ export const ProfileScreen = () => {
   const crown = require("../../../core/assets/images/crown.png");
 
   useEffect(() => {
-    setAvatar(userService().getProfilePicture(pseudoId, userData?.username));
+    setAvatar(userService().getProfilePicture(userData?.id ?? pseudoId, userData?.username));
   }, [userData]);
 
   useEffect(() => {
@@ -47,12 +47,13 @@ export const ProfileScreen = () => {
       displayErrorModal("Klarte ikke finne din bruker", () => {
         setUserData(null);
         resetToHomeScreen(navigation);
+        triggerLogout();
       });
+      return;
     }
 
     const role = result.value.role;
     const userData = result.value.user;
-    setPseudoId(userData.id);
     setIsAdmin(role === UserRole.Admin);
     setUserData(userData);
     setAvatar(userService().getProfilePicture(userData.id, userData.username));
@@ -82,7 +83,7 @@ export const ProfileScreen = () => {
       return;
     }
 
-    const result = await userService().resetPassword(accessToken, pseudoId, userData.email);
+    const result = await userService().resetPassword(accessToken, userData.email);
     if (result.isError()) {
       console.error("Failed to reset password: {}", result.error);
       displayErrorModal("Kunne ikke resette passord.");

@@ -61,7 +61,7 @@ export const GameTypeListScreen = () => {
         onBackPressed={() => navigation.goBack()}
         onInfoPress={handleInfoPressed}
         showBorder={true}
-        backgroundColor={gameEntryMode === GameEntryMode.Creator ? Color.HomeRed : Color.Purple}
+        backgroundColor={Color.BuzzifyLavender}
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
