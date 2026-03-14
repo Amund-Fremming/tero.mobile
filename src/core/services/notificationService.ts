@@ -1,5 +1,5 @@
-import * as Notifications from "expo-notifications";
 import Constants, { ExecutionEnvironment } from "expo-constants";
+import * as Notifications from "expo-notifications";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
