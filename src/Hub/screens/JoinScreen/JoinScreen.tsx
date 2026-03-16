@@ -100,7 +100,7 @@ export const JoinScreen = () => {
               />
               <TextInput
                 style={styles.input}
-                placeholder="SLEM POTET"
+                placeholder="Rom navn"
                 placeholderTextColor={Color.DarkerGray}
                 value={userInput}
                 onChangeText={(input) => {

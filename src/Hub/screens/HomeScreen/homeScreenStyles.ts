@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
 import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
+import { StyleSheet } from "react-native";
 import Colors, { Color } from "../../../core/constants/Color";
 import { Font } from "../../../core/constants/Font";
 
@@ -11,6 +11,10 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.SoftPurple,
     justifyContent: "space-between",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
   },
 
   image: {
@@ -31,6 +35,9 @@ export const styles = StyleSheet.create({
     color: Colors.Black,
     fontWeight: 900,
     fontFamily: Font.PassionOneBold,
+    textShadowColor: "rgba(0, 0, 0, 0.30)",
+    textShadowOffset: { width: 0, height: 10 },
+    textShadowRadius: 20,
   },
 
   subHeader: {
@@ -38,6 +45,9 @@ export const styles = StyleSheet.create({
     fontSize: moderateScale(30),
     color: Colors.White,
     fontFamily: Font.PassionOneRegular,
+    textShadowColor: "rgba(0, 0, 0, 0.20)",
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 8,
   },
 
   buttonContainer: {
@@ -54,6 +64,11 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     overflow: "visible",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 14,
+    elevation: 4,
   },
 
   topLeft: {
@@ -79,6 +94,11 @@ export const styles = StyleSheet.create({
     backgroundColor: Color.White,
     justifyContent: "center",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.16,
+    shadowRadius: 10,
+    elevation: 3,
   },
 
   buttonTextWrapper: {

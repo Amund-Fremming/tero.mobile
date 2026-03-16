@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    paddingTop: verticalScale(80),
+    paddingTop: verticalScale(60),
     alignItems: "center",
     gap: 10,
     backgroundColor: Color.LighterGreen,

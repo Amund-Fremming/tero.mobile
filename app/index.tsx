@@ -1,19 +1,20 @@
-import HubConnectionProvider from "@/src/play/context/HubConnectionProvider";
-import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
-import ModalProvider from "@/src/core/context/ModalProvider";
-import Hub from "@/src/hub/Hub";
-import AuthProvider from "../src/core/context/AuthProvider";
-import ServiceProvider from "@/src/core/context/ServiceProvider";
-import { View, StatusBar, Dimensions } from "react-native";
-import * as Font from "expo-font";
-import { Asset } from "expo-asset";
-import { useEffect, useState } from "react";
 import SplashScreen from "@/src/core/components/SplashScreen/SplashScreen";
-import QuizSessionProvider from "@/src/play/games/quizGame/context/QuizGameProvider";
-import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
-import SpinSessionProvider from "@/src/play/games/spinGame/context/SpinGameProvider";
-import * as ExpoSplashScreen from "expo-splash-screen";
+import ModalProvider from "@/src/core/context/ModalProvider";
+import ServiceProvider from "@/src/core/context/ServiceProvider";
+import ToastProvider from "@/src/core/context/ToastProvider";
 import { setupNotifications } from "@/src/core/services/notificationService";
+import Hub from "@/src/hub/Hub";
+import HubConnectionProvider from "@/src/play/context/HubConnectionProvider";
+import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
+import QuizSessionProvider from "@/src/play/games/quizGame/context/QuizGameProvider";
+import SpinSessionProvider from "@/src/play/games/spinGame/context/SpinGameProvider";
+import { Asset } from "expo-asset";
+import * as Font from "expo-font";
+import * as ExpoSplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
+import { Dimensions, StatusBar, View } from "react-native";
+import AuthProvider from "../src/core/context/AuthProvider";
+import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
 
 ExpoSplashScreen.hide();
 
@@ -32,21 +33,23 @@ export default () => (
   <FontLoader>
     <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
     <ServiceProvider>
-      <ModalProvider>
-        <AuthProvider>
-          <GlobalGameProvider>
-            <HubConnectionProvider>
-              <QuizSessionProvider>
-                <SpinSessionProvider>
-                  <ImposterSessionProvider>
-                    <Hub />
-                  </ImposterSessionProvider>
-                </SpinSessionProvider>
-              </QuizSessionProvider>
-            </HubConnectionProvider>
-          </GlobalGameProvider>
-        </AuthProvider>
-      </ModalProvider>
+      <ToastProvider>
+        <ModalProvider>
+          <AuthProvider>
+            <GlobalGameProvider>
+              <HubConnectionProvider>
+                <QuizSessionProvider>
+                  <SpinSessionProvider>
+                    <ImposterSessionProvider>
+                      <Hub />
+                    </ImposterSessionProvider>
+                  </SpinSessionProvider>
+                </QuizSessionProvider>
+              </HubConnectionProvider>
+            </GlobalGameProvider>
+          </AuthProvider>
+        </ModalProvider>
+      </ToastProvider>
     </ServiceProvider>
   </FontLoader>
 );

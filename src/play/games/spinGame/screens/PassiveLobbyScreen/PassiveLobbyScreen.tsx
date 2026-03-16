@@ -64,7 +64,7 @@ export const PassiveLobbyScreen = ({ onLeave }: Props) => {
     const minPlayers = gameType == GameType.Roulette ? 2 : 3;
 
     if (players < minPlayers) {
-      displayInfoModal(`Minst ${minPlayers} spillere. Nå: ${players}.`);
+      displayInfoModal(`Må ha minst ${minPlayers} spillere for å starte.`);
       setStartGameTriggered(false);
       return;
     }

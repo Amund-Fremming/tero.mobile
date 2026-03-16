@@ -21,6 +21,7 @@ import {
 import { useAuthProvider } from "../../../core/context/AuthProvider";
 import { useModalProvider } from "../../../core/context/ModalProvider";
 import { useServiceProvider } from "../../../core/context/ServiceProvider";
+import { useToastProvider } from "../../../core/context/ToastProvider";
 import { moderateScale } from "../../../core/utils/dimensions";
 import { ImposterSession } from "../../games/imposter/constants/imposterTypes";
 import { useImposterSessionProvider } from "../../games/imposter/context/ImposterSessionProvider";
@@ -78,6 +79,7 @@ export const GameListScreen = () => {
   const { setQuizSession } = useQuizSessionProvider();
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { displayErrorModal, displayActionModal } = useModalProvider();
+  const { displayToast } = useToastProvider();
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
   const { gameType, setSessionDataValues: setGameSessionValues, setIsHost, setIsDraft } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
@@ -171,7 +173,10 @@ export const GameListScreen = () => {
     const result = await gameService().saveGame(accessToken, gameId);
     if (result.isError()) {
       displayErrorModal("Noe gikk galt. Prøv igjen.");
+      return;
     }
+
+    displayToast(2.2);
   };
 
   const handleGamePressed = async (gameId: string, gameType: GameType) => {

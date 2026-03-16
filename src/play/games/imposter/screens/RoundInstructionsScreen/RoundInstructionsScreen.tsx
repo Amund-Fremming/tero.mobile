@@ -31,7 +31,7 @@ export const RoundInstructionsScreen = () => {
       `${starterName} starter ved å si en assosiasjon til ordet han så/ikke så`,
       "Fortsett en hel runde",
       "Stem på hvem dere tror er imposter",
-      "Avslutt spillet ved å se hvem det var, eller fortsett til dere finner personen",
+      "Avslutt spillet ved å se hvem det var, eller fortsett til dere finner imposteren",
     ],
     [starterName],
   );

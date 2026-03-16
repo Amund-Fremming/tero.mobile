@@ -1,5 +1,6 @@
 import { GameCategory } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useToastProvider } from "@/src/core/context/ToastProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
@@ -12,7 +13,8 @@ export const CreateScreen = () => {
   const navigation: any = useNavigation();
 
   const { themeColor, secondaryThemeColor, featherIcon, clearSpinSessionValues } = useSpinSessionProvider();
-  const { displayInfoModal, displayErrorModal, displaySuccessModal } = useModalProvider();
+  const { displayInfoModal, displayErrorModal } = useModalProvider();
+  const { displayToast } = useToastProvider();
   const { invokeFunction, disconnect } = useHubConnectionProvider();
   const { sessionData, gameType } = useGlobalSessionProvider();
 
@@ -37,12 +39,11 @@ export const CreateScreen = () => {
       return;
     }
 
-    displaySuccessModal("Takk for at du lagres spillet!", "Suksess", () => {
-      setLoading(false);
-      clearSpinSessionValues();
-      disconnect();
-      resetToHomeScreen();
-    });
+    displayToast(2.5);
+    setLoading(false);
+    clearSpinSessionValues();
+    disconnect();
+    resetToHomeScreen();
   };
 
   return (

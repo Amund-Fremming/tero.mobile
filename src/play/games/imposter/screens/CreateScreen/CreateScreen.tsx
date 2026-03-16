@@ -2,6 +2,7 @@ import { CreateStaticGameRequest, GameCategory, GameType } from "@/src/core/cons
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useToastProvider } from "@/src/core/context/ToastProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
@@ -15,7 +16,8 @@ export const CreateScreen = () => {
 
   const { pseudoId } = useAuthProvider();
   const theme = getGameTheme(GameType.Imposter);
-  const { displayInfoModal, displayErrorModal, displaySuccessModal } = useModalProvider();
+  const { displayInfoModal, displayErrorModal } = useModalProvider();
+  const { displayToast } = useToastProvider();
   const { imposterSession } = useImposterSessionProvider();
   const { gameType } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
@@ -48,10 +50,9 @@ export const CreateScreen = () => {
       return;
     }
 
-    displaySuccessModal("Takk for at du lagret spillet ditt!", "Suksess", () => {
-      resetToHomeScreen(navigation);
-      setLoading(false);
-    });
+    displayToast(2.5);
+    resetToHomeScreen(navigation);
+    setLoading(false);
   };
 
   return (

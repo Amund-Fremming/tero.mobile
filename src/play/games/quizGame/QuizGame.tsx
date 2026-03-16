@@ -21,22 +21,8 @@ export const QuizGame = () => {
   const { connect, disconnect, setListener, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayActionModal } = useModalProvider();
 
-  const getInitialScreen = (): QuizGameScreen => {
-    switch (gameEntryMode) {
-      case GameEntryMode.Creator:
-        return QuizGameScreen.Tutorial;
-      case GameEntryMode.Host:
-        return QuizGameScreen.Game;
-      case GameEntryMode.Participant:
-      case GameEntryMode.Member:
-        return QuizGameScreen.Lobby;
-      default:
-        return QuizGameScreen.Lobby;
-    }
-  };
-
   useEffect(() => {
-    setScreen(getInitialScreen());
+    setScreen(QuizGameScreen.Tutorial);
 
     return () => {
       clearQuizGameValues();
@@ -119,7 +105,7 @@ export const QuizGame = () => {
     case QuizGameScreen.Game:
       return <GameScreen onLeave={handleLeavePressed} />;
     case QuizGameScreen.Started:
-      return <StartedScreen onLeave={handleLeavePressed} />;
+      return <StartedScreen />;
     case QuizGameScreen.Lobby:
       return <LobbyScreen onLeave={handleLeavePressed} />;
     case QuizGameScreen.Create:

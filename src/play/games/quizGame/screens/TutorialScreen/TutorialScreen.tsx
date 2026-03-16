@@ -14,7 +14,12 @@ export const TutorialScreen = () => {
 
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
-  const { setSessionDataValues: setGameSessionValues, setGameEntryMode, setIsHost } = useGlobalSessionProvider();
+  const {
+    setSessionDataValues: setGameSessionValues,
+    setGameEntryMode,
+    setIsHost,
+    gameEntryMode,
+  } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
   const { setScreen } = useQuizSessionProvider();
 
@@ -26,6 +31,11 @@ export const TutorialScreen = () => {
 
   const onFinishedPressed = async () => {
     if (loading) return;
+
+    if (gameEntryMode !== GameEntryMode.Creator) {
+      setScreen(QuizGameScreen.Game);
+      return;
+    }
 
     setLoading(true);
     const result = await gameService().createSession(pseudoId, GameType.Quiz);
@@ -46,7 +56,12 @@ export const TutorialScreen = () => {
     setLoading(false);
   };
 
-  return <GenericTutorialScreen onFinishedPressed={onFinishedPressed} lastButtonText="Opprett spill" />;
+  return (
+    <GenericTutorialScreen
+      onFinishedPressed={onFinishedPressed}
+      lastButtonText={gameEntryMode === GameEntryMode.Creator ? "Opprett spill" : "Start spill"}
+    />
+  );
 };
 
 export default TutorialScreen;

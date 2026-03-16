@@ -1,22 +1,23 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import * as Haptics from "expo-haptics";
-import Screen from "../../../core/constants/Screen";
-import styles from "./homeScreenStyles";
-import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionProvider";
-import { useEffect, useState } from "react";
-import { useServiceProvider } from "@/src/core/context/ServiceProvider";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { ProblemScreen } from "../ProblemScreen/ProblemScreen";
-import DiagonalSplit from "../../../core/components/Shapes/DiagonalSplit";
-import ArcWithCircles from "../../../core/components/Shapes/ArcWithCircles";
-import ScatteredCircles from "../../../core/components/Shapes/ScatteredCircles";
 import { GameEntryMode } from "@/src/core/constants/Types";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import * as Haptics from "expo-haptics";
 import * as SecureStore from "expo-secure-store";
+import { useEffect, useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import ArcWithCircles from "../../../core/components/Shapes/ArcWithCircles";
+import DiagonalSplit from "../../../core/components/Shapes/DiagonalSplit";
+import ScatteredCircles from "../../../core/components/Shapes/ScatteredCircles";
+import Screen from "../../../core/constants/Screen";
+import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionProvider";
+import { ProblemScreen } from "../ProblemScreen/ProblemScreen";
+import styles from "./homeScreenStyles";
 
-import redFigure from "../../../core/assets/images/red-figure.png";
-import { useNavigation } from "expo-router";
+import { useToastProvider } from "@/src/core/context/ToastProvider";
 import { setStackNavigator } from "@/src/core/utils/navigationRef";
+import { useNavigation } from "expo-router";
+import redFigure from "../../../core/assets/images/red-figure.png";
 
 const subHeaderList = [
   "klar for en runde?",
@@ -34,6 +35,7 @@ export const HomeScreen = () => {
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { commonService, userService } = useServiceProvider();
   const { displayInfoModal, displayLoadingModal, closeLoadingModal } = useModalProvider();
+  const { displayToast } = useToastProvider();
 
   const [subHeader, setSubheader] = useState<string>("");
   const [popupCloseCount, setPopupCloseCount] = useState<number>(0);

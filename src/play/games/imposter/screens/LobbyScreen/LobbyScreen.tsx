@@ -57,8 +57,8 @@ export const LobbyScreen = () => {
 
   const handleInfoPressed = () => {
     displayInfoModal(
-      "Del rom navnet med en venn. Legg til ord eller kategorier som skal brukes per runde.",
-      "Spillord!",
+      "Skriv inn ordene dere vil bruke i spillet. I hver runde skal spillerne si en assosiasjon til ordet som blir valgt.",
+      "Hva nå?",
     );
   };
 
@@ -73,7 +73,7 @@ export const LobbyScreen = () => {
       bottomButtonText="Start spill"
       featherIcon={"users"}
       iterations={iterations}
-      inputPlaceholder="Runde ord..."
+      inputPlaceholder="Tema for runden..."
     />
   );
 };

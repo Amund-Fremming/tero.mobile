@@ -3,6 +3,7 @@ import { CreateStaticGameRequest, GameCategory } from "@/src/core/constants/Type
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useToastProvider } from "@/src/core/context/ToastProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
@@ -16,7 +17,8 @@ export const CreateScreen = () => {
 
   const { pseudoId } = useAuthProvider();
   const { invokeFunction } = useHubConnectionProvider();
-  const { displayInfoModal, displayErrorModal, displaySuccessModal } = useModalProvider();
+  const { displayInfoModal, displayErrorModal } = useModalProvider();
+  const { displayToast } = useToastProvider();
   const { gameService } = useServiceProvider();
   const { setScreen, quizSession } = useQuizSessionProvider();
   const { sessionData: sessionData, gameType } = useGlobalSessionProvider();
@@ -50,10 +52,9 @@ export const CreateScreen = () => {
       return;
     }
 
-    displaySuccessModal("Takk for at du lagret spillet ditt!", "Suksess", () => {
-      setLoading(false);
-      resetToHomeScreen(navigation);
-    });
+    displayToast(2.5);
+    setLoading(false);
+    resetToHomeScreen(navigation);
   };
 
   return (
