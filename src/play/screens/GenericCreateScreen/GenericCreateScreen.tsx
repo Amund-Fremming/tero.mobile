@@ -1,31 +1,25 @@
 import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { moderateScale, verticalScale } from "@/src/core/utils/dimensions";
-import { Feather, FontAwesome6, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
+import { moderateScale } from "@/src/core/utils/dimensions";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import { useRef, useState } from "react";
 import { Keyboard, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Color from "../../../core/constants/Color";
-import { GameCategory } from "../../../core/constants/Types";
+import { GameCategory, GameType } from "../../../core/constants/Types";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import CategoryDropdown from "./components/CategoryDropdown/CategoryDropdown";
 import { styles } from "./genericCreateScreenStyles";
-
-const STATIC_STYLES = {
-  iconOpacity: { opacity: 0.4 },
-};
 
 interface GenericCreateScreenProps {
   themeColor: string;
   secondaryThemeColor: string;
   onBackPressed: () => void;
   onInfoPressed: () => void;
-  headerText: string;
   bottomButtonText: string;
   handleCreateGame: (name: string, category: GameCategory) => void;
-  featherIcon: string;
 }
 
 export const GenericCreateScreen = ({
@@ -33,19 +27,30 @@ export const GenericCreateScreen = ({
   secondaryThemeColor,
   onBackPressed,
   onInfoPressed,
-  headerText,
   bottomButtonText,
   handleCreateGame,
-  featherIcon,
 }: GenericCreateScreenProps) => {
   const navigation: any = useNavigation();
   const anchorRef = useRef<View>(null);
 
-  const { isHost } = useGlobalSessionProvider();
   const { displayInfoModal, displayActionModal } = useModalProvider();
+  const { isHost, gameType } = useGlobalSessionProvider();
 
   const [inputValue, setInputValue] = useState<string>("");
   const [category, setCategory] = useState<GameCategory | undefined>(undefined);
+
+  const subTextColor = () => {
+    switch (gameType) {
+      case GameType.Quiz:
+        return Color.LightBlue;
+      case GameType.Roulette:
+        return Color.LightGreen;
+      case GameType.Duel:
+        return Color.LightGreen;
+      default:
+        return Color.LightGray;
+    }
+  };
 
   const categoryData = [
     { label: "Jentene", value: GameCategory.Girls },
@@ -53,40 +58,6 @@ export const GenericCreateScreen = ({
     { label: "Mixed", value: GameCategory.Mixed },
     { label: "Indre krets", value: GameCategory.InnerCircle },
   ];
-
-  const getIcon = () => {
-    if (featherIcon === "sword-cross") {
-      return (
-        <MaterialCommunityIcons
-          name={featherIcon as any}
-          size={moderateScale(200)}
-          color="black"
-          style={STATIC_STYLES.iconOpacity}
-        />
-      );
-    }
-
-    if (featherIcon === "stack") {
-      return (
-        <Octicons name={featherIcon as any} size={moderateScale(200)} color="black" style={STATIC_STYLES.iconOpacity} />
-      );
-    }
-
-    if (featherIcon === "arrows-spin") {
-      return (
-        <FontAwesome6
-          name={featherIcon as any}
-          size={moderateScale(200)}
-          color="black"
-          style={STATIC_STYLES.iconOpacity}
-        />
-      );
-    }
-
-    return (
-      <Feather name={featherIcon as any} size={moderateScale(200)} color="black" style={STATIC_STYLES.iconOpacity} />
-    );
-  };
 
   const handleBack = () => {
     displayActionModal(
@@ -115,6 +86,7 @@ export const GenericCreateScreen = ({
   return (
     <KeyboardAvoidingWrapper backgroundColor={themeColor} anchorRef={anchorRef}>
       <View style={styles.container}>
+        <MaterialCommunityIcons name="trophy" style={styles.icon} size={moderateScale(420)} />
         <View style={styles.headerWrapper}>
           <TouchableOpacity
             onPress={() => {
@@ -125,7 +97,6 @@ export const GenericCreateScreen = ({
           >
             <Feather name="chevron-left" size={moderateScale(45)} />
           </TouchableOpacity>
-          <Text style={styles.header}>{headerText}</Text>
           <TouchableOpacity
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -137,8 +108,10 @@ export const GenericCreateScreen = ({
           </TouchableOpacity>
         </View>
         <View style={styles.midSection}>
-          <View style={{ paddingTop: verticalScale(100) }} />
-          {getIcon()}
+          <Text style={styles.finishedMainText}>Spillet er ferdig!</Text>
+          <Text style={{ ...styles.finishedSubText, color: subTextColor() }}>
+            Gi spillet ett navn, og kategori slik at du kan spille det igjen
+          </Text>
         </View>
         <View style={styles.bottomSection}>
           <TextInput

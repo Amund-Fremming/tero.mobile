@@ -70,13 +70,13 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "86%",
-    borderRadius: moderateScale(10),
+    borderRadius: moderateScale(15),
     height: verticalScale(69),
     backgroundColor: Color.Black,
   },
 
   nextButtonFinish: {
-    backgroundColor: Color.HomeRed,
+    backgroundColor: Color.Green,
   },
 
   buttonText: {

@@ -12,6 +12,15 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
 
+  icon: {
+    position: "absolute",
+    opacity: 0.15,
+    paddingTop: "90%",
+    left: "50%",
+    zIndex: -1,
+    transform: [{ translateX: -moderateScale(210) }, { translateY: -moderateScale(210) }],
+  },
+
   iconWrapper: {
     backgroundColor: Color.DarkerGray,
     justifyContent: "center",
@@ -19,6 +28,25 @@ export const styles = StyleSheet.create({
     height: verticalScale(50),
     width: horizontalScale(50),
     borderRadius: moderateScale(10),
+  },
+
+  finishedMainText: {
+    fontFamily: Font.PassionOneBold,
+    color: Color.LightGray,
+    fontSize: moderateScale(45),
+    textShadowColor: "rgba(0,0,0,0.5)",
+    textShadowOffset: { width: 1, height: 2 },
+    textShadowRadius: 4,
+    paddingBottom: verticalScale(5),
+  },
+
+  finishedSubText: {
+    fontFamily: Font.PassionOneRegular,
+    fontSize: moderateScale(25),
+    textAlign: "center",
+    textShadowColor: "rgba(0,0,0,0.4)",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
   },
 
   header: {
@@ -43,8 +71,11 @@ export const styles = StyleSheet.create({
   },
 
   midSection: {
+    zIndex: 100,
+    paddingTop: "30%",
     justifyContent: "center",
     alignItems: "center",
+    width: "80%",
   },
 
   bottomSection: {

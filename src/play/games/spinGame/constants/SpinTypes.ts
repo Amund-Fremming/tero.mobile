@@ -4,6 +4,7 @@ export const enum SpinSessionScreen {
   PassiveLobby = "PassiveLobby",
   Create = "Create",
   Game = "Game",
+  Finished = "Finished",
 }
 
 export enum SpinGameState {

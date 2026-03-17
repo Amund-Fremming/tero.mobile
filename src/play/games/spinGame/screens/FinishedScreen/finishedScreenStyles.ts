@@ -10,18 +10,16 @@ export const styles = StyleSheet.create({
     height: "100%",
   },
 
-  header: {
-    fontWeight: 800,
-    fontFamily: Font.PassionOneRegular,
-    fontSize: moderateScale(50),
+  text: {
+    width: "90%",
     color: Color.White,
+    paddingTop: "45%",
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(45),
     textAlign: "center",
-  },
-
-  subHeader: {
-    fontWeight: 800,
-    fontSize: moderateScale(22),
-    textAlign: "center",
+    textShadowColor: "rgba(0,0,0,0.5)",
+    textShadowOffset: { width: 1, height: 2 },
+    textShadowRadius: 4,
   },
 
   button: {
@@ -39,12 +37,6 @@ export const styles = StyleSheet.create({
     color: Color.White,
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(35),
-  },
-
-  textBox: {
-    paddingTop: "40%",
-    gap: verticalScale(15),
-    width: "90%",
   },
 });
 

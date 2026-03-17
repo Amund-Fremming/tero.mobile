@@ -195,7 +195,7 @@ export const RevealScreen = ({ onLeave }: Props) => {
               onPress={handleNext}
               style={[styles.nextButton, !hasMoreRounds && styles.nextButtonFinish]}
             >
-              <Text style={styles.buttonText}>{hasMoreRounds ? "Neste runde" : "Avslutt spillet"}</Text>
+              <Text style={styles.buttonText}>{hasMoreRounds ? "Neste runde" : "Fullfør"}</Text>
             </TouchableOpacity>
           )}
         </Animated.View>

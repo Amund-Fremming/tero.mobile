@@ -63,10 +63,8 @@ export const CreateScreen = () => {
       secondaryThemeColor={Color.DeepForest}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
-      headerText="Lagre"
       bottomButtonText="Publiser"
       handleCreateGame={handlePersistGame}
-      featherIcon="stack"
     />
   );
 };

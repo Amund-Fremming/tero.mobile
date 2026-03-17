@@ -6,21 +6,26 @@ import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvid
 import GenericTutorialScreen from "@/src/play/screens/GenericTutorialScreen/GenericTutorialScreen";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
+import { SpinSessionScreen } from "../../constants/SpinTypes";
+import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 
 interface TutorialScreenProps {
-  onGameCreated: (hubName: string, gameKey: string) => Promise<void>;
+  initializeHub: (hubName: string, gameKey: string) => Promise<void>;
 }
-export const TutorialScreen = ({ onGameCreated }: TutorialScreenProps) => {
+export const TutorialScreen = ({ initializeHub }: TutorialScreenProps) => {
   const navigation: any = useNavigation();
 
+  const { setScreen } = useSpinSessionProvider();
   const { pseudoId } = useAuthProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
   const { gameService } = useServiceProvider();
   const {
-    setSessionDataValues: setGameSessionValues,
+    isDraft,
+    setSessionDataValues,
+    sessionData,
+    gameEntryMode,
     setGameEntryMode,
     gameType,
-    isHost,
     setIsHost,
     setIsDraft,
   } = useGlobalSessionProvider();
@@ -34,6 +39,12 @@ export const TutorialScreen = ({ onGameCreated }: TutorialScreenProps) => {
   const onFinishedPressed = async () => {
     if (loading) return;
 
+    if (gameEntryMode !== GameEntryMode.Creator) {
+      await initializeHub(sessionData.hubName, sessionData.gameKey);
+      setScreen(isDraft ? SpinSessionScreen.ActiveLobby : SpinSessionScreen.PassiveLobby);
+      return;
+    }
+
     const result = await gameService().createSession(pseudoId, gameType);
     if (result.isError()) {
       console.error("Failed to create game session", result.error);
@@ -45,15 +56,15 @@ export const TutorialScreen = ({ onGameCreated }: TutorialScreenProps) => {
     }
 
     const data = result.value;
+    setScreen(SpinSessionScreen.ActiveLobby);
     setLoading(true);
     setIsDraft(result.value.is_draft);
-    setGameSessionValues(data.key, data.hub_name, data.game_id);
-    setGameEntryMode(GameEntryMode.Creator);
-    await onGameCreated(result.value.hub_name, result.value.key);
+    setSessionDataValues(data.key, data.hub_name, data.game_id);
+    await initializeHub(result.value.hub_name, result.value.key);
     setLoading(false);
   };
 
-  return <GenericTutorialScreen onFinishedPressed={onFinishedPressed} lastButtonText="Opprett spill" />;
+  return <GenericTutorialScreen onFinishedPressed={onFinishedPressed} />;
 };
 
 export default TutorialScreen;

@@ -49,8 +49,8 @@ export const ProfileScreen = () => {
 
     const result = await userService().getUser(accessToken);
     if (result.isError()) {
-      // TODO - syslog log
       displayErrorModal("Klarte ikke finne din bruker", async () => {
+        // TODO reset all user and auth values
         setUserData(null);
         setIsAdmin(false);
         setAvatar("");

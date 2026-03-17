@@ -10,7 +10,7 @@ import * as Haptics from "expo-haptics";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { SpinGameState, SpinSessionScreen } from "../../constants/SpinTypes";
+import { SpinGameState } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import styles from "./gameScreenStyles";
 
@@ -26,7 +26,7 @@ export const GameScreen = ({ onLeave }: Props) => {
 
   const disconnectTriggeredRef = useRef<boolean>(false);
 
-  const { isHost, clearGlobalSessionValues, sessionData, gameType, isDraft } = useGlobalSessionProvider();
+  const { isHost, clearGlobalSessionValues, sessionData, gameType } = useGlobalSessionProvider();
   const { clearSpinSessionValues, setScreen, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
   const { disconnect, invokeFunction, debugDisconnect } = useHubConnectionProvider();
@@ -41,7 +41,7 @@ export const GameScreen = ({ onLeave }: Props) => {
 
   useEffect(() => {
     if (gameState === SpinGameState.Finished) {
-      setBgColor(Color.Gray);
+      setBgColor(themeColor);
     } else if (gameState === SpinGameState.RoundStarted) {
       setBgColor(themeColor);
     }
@@ -73,12 +73,6 @@ export const GameScreen = ({ onLeave }: Props) => {
       });
       return;
     }
-
-    const state: SpinGameState = result.value;
-    if (state === SpinGameState.Finished) {
-      setBgColor(Color.Gray);
-      setGameState(state);
-    }
   };
 
   const handleStartRound = async () => {
@@ -103,40 +97,7 @@ export const GameScreen = ({ onLeave }: Props) => {
 
   const handleBackPressed = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    await onLeave();
-  };
-
-  const handleInfoPressed = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // TODO
-    // if (isHost) {
-    //   if (gameType === GameType.Duel) {
-    //     displayInfoModal(
-    //       "Les opp hva de 2 utvalgte må duellere om. Når alle er klare kan du starte spinnen, grønn betyr at du er valgt.",
-    //       "Hva nå?",
-    //     );
-    //   }
-    //   if (gameType === GameType.Roulette) {
-    //     displayInfoModal(
-    //       "Les opp hva taperen av ruletten må gjøre. Når alle er klare kan du starte spinnen, grønn betyr at du er valgt.",
-    //       "Hva nå?",
-    //     );
-    //   }
-    // } else {
-    //   if (gameType === GameType.Duel) {
-    //     displayInfoModal(
-    //       "Verten vil lese opp hva de 2 utvalgte må duellere om. De som får grønn farge er utvalgt!",
-    //       "Hva nå?",
-    //     );
-    //   }
-    //   if (gameType === GameType.Roulette) {
-    //     displayInfoModal(
-    //       "Verten vil lese opp hva taperen av ruletten må gjøre. Den som får grønn farge er utvalgt!",
-    //       "Hva nå?",
-    //     );
-    //   }
-    // }
-    debugDisconnect();
+    onLeave();
   };
 
   const tutorialHeader = () => {
@@ -169,7 +130,6 @@ export const GameScreen = ({ onLeave }: Props) => {
       {gameState === SpinGameState.RoundFinished && selectedBatch.includes(pseudoId) && (
         <Text style={{ ...styles.text }}>{roundText}</Text>
       )}
-      {gameState === SpinGameState.Finished && <Text style={{ ...styles.text }}>"Spillet er ferdig!</Text>}
 
       {gameState === SpinGameState.RoundStarted && isHost && (
         <TouchableOpacity onPress={handleStartRound} style={styles.button}>
@@ -180,18 +140,6 @@ export const GameScreen = ({ onLeave }: Props) => {
       {gameState === SpinGameState.RoundFinished && isHost && (
         <TouchableOpacity style={styles.button} onPress={handleNextRound}>
           <Text style={styles.buttonText}>Ny runde</Text>
-        </TouchableOpacity>
-      )}
-
-      {gameState === SpinGameState.Finished && isHost && isDraft && (
-        <TouchableOpacity style={styles.button} onPress={() => setScreen(SpinSessionScreen.Create)}>
-          <Text style={styles.buttonText}>Neste</Text>
-        </TouchableOpacity>
-      )}
-
-      {gameState === SpinGameState.Finished && (!isDraft || !isHost) && (
-        <TouchableOpacity style={styles.button} onPress={onLeave}>
-          <Text style={styles.buttonText}>Hjem</Text>
         </TouchableOpacity>
       )}
     </View>

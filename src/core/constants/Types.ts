@@ -182,7 +182,6 @@ export enum GameEntryMode {
   Creator,
   Host,
   Participant,
-  Member,
 }
 
 export interface PagedResponse<T> {

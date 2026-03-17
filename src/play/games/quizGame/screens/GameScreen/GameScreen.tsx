@@ -92,10 +92,10 @@ export const GameScreen = ({ onLeave }: Props) => {
         </TouchableOpacity>
         {(quiz?.current_iteration ?? 0) + 1 === (quiz?.rounds.length ?? 0) ? (
           <TouchableOpacity
-            style={{ ...styles.prevButton, backgroundColor: Color.HomeRed }}
+            style={{ ...styles.prevButton, backgroundColor: Color.Green }}
             onPress={handleFinishedPressed}
           >
-            <Text style={styles.prevText}>Avslutt</Text>
+            <Text style={styles.prevText}>Fullfør</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={{ ...styles.prevButton, backgroundColor: Color.Black }} onPress={handleNextPressed}>

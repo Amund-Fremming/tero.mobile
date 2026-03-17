@@ -96,7 +96,6 @@ export class UserService {
         headers: getHeaders(guest_id, null),
       });
       if (((await response).status! = 200)) {
-        // TODO AUDIT LOG
         console.error("Failed to update user activity");
       }
 

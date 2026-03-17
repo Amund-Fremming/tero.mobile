@@ -87,7 +87,6 @@ export const AddPlayersScreen = ({ onLeave }: Props) => {
     if (!result.value) {
       console.error("An error occurred on the server. Received false on AddPlayers");
       displayErrorModal("En uventet feil har skjedd, forsøk igjen senere");
-      // TODO - return to home?
       return;
     }
   };

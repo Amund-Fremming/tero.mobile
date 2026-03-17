@@ -25,7 +25,6 @@ interface IAuthContext {
   userData: BaseUser | null;
   setUserData: React.Dispatch<React.SetStateAction<BaseUser | null>>;
 
-  // TODO - remove
   logValues: () => void;
   resetPseudoId: () => void;
   invalidateAccessToken: () => void;
@@ -46,7 +45,6 @@ const defaultContextValue: IAuthContext = {
   userData: null,
   setUserData: () => {},
 
-  // TODO - remove
   logValues: () => {},
   resetPseudoId: () => {},
   invalidateAccessToken: () => {},
@@ -241,7 +239,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       return true;
     } catch (e) {
-      // TODO - just cleanup as a "logout" do not show errors, maybe log to backend
+      triggerLogout(false);
       console.error("Error during logout:", e);
       await SecureStore.deleteItemAsync("access_token");
       await SecureStore.deleteItemAsync("refresh_token");
@@ -323,7 +321,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     userData,
     setUserData,
 
-    // TODO - remove
     logValues,
     resetPseudoId,
     invalidateAccessToken,

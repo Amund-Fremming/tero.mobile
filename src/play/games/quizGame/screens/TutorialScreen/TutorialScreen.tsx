@@ -56,12 +56,7 @@ export const TutorialScreen = () => {
     setLoading(false);
   };
 
-  return (
-    <GenericTutorialScreen
-      onFinishedPressed={onFinishedPressed}
-      lastButtonText={gameEntryMode === GameEntryMode.Creator ? "Opprett spill" : "Start spill"}
-    />
-  );
+  return <GenericTutorialScreen onFinishedPressed={onFinishedPressed} />;
 };
 
 export default TutorialScreen;

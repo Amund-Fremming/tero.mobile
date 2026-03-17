@@ -84,27 +84,13 @@ export const GameListScreen = () => {
   const { gameType, setSessionDataValues: setGameSessionValues, setIsHost, setIsDraft } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
-  const getHeaderBg = () => {
-    switch (gameType) {
-      case GameType.Imposter:
-        return Color.BuzzifyLavender;
-      case GameType.Duel:
-        return Color.BeigeLight;
-      case GameType.Roulette:
-        return Color.SkyBlueLight;
-      case GameType.Quiz:
-        return Color.LighterGreen;
-      default:
-        return Color.LightGray;
-    }
-  };
-
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>({
     items: [],
     has_next: false,
     has_prev: false,
     page_num: 1,
   });
+
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<GameCategory | null>(null);
   const scrollRef = useRef<ScrollView>(null);
@@ -218,6 +204,7 @@ export const GameListScreen = () => {
         }
 
         const duel = dResult.value;
+        setIsDraft(duel.is_draft);
         setGameSessionValues(duel.key, duel.hub_name, duel.game_id);
         navigation.navigate(Screen.Spin);
         break;

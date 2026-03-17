@@ -1,4 +1,5 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
+import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import SimpleTutorial from "@/src/play/screens/GenericTutorialScreen/components/SimpleTutorial/SimpleTutorial";
@@ -28,7 +29,10 @@ export const RoundInstructionsScreen = () => {
 
   const items = useMemo(
     () => [
-      `${starterName} starter ved å si en assosiasjon til ordet han så/ikke så`,
+      <Text>
+        <Text style={{ fontWeight: 900, color: Color.Burgunde }}>{starterName}</Text> starter ved å si en assosiasjon
+        til ordet han så/ikke så
+      </Text>,
       "Fortsett en hel runde",
       "Stem på hvem dere tror er imposter",
       "Avslutt spillet ved å se hvem det var, eller fortsett til dere finner imposteren",

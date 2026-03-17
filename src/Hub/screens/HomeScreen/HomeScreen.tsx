@@ -98,7 +98,6 @@ export const HomeScreen = () => {
 
     const result = await userService().getGlobalPopup();
     if (result.isError()) {
-      // TODO - add audit
       console.error(result.error);
       return;
     }

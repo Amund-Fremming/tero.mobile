@@ -36,17 +36,10 @@ export const ImposterGame = () => {
   const isHandlingErrorRef = useRef(false);
 
   useEffect(() => {
-    const initScreen = getInitialScreen();
-    if ([GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)) {
+    if (gameEntryMode === GameEntryMode.Participant) {
       setIsHost(false);
     }
-    setScreen(initScreen);
-    if (
-      initScreen !== ImposterSessionScreen.Create &&
-      [GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)
-    ) {
-      initializeHub(sessionData.hubName, sessionData.gameKey, initScreen);
-    }
+    setScreen(ImposterSessionScreen.Tutorial);
 
     return () => {
       disconnect();
@@ -55,7 +48,7 @@ export const ImposterGame = () => {
     };
   }, []);
 
-  const initializeHub = async (hubName: string, key: string, targetScreen: ImposterSessionScreen) => {
+  const initializeHub = async (hubName: string, key: string) => {
     const result = await connect(hubName);
     if (result.isError()) {
       console.warn(hubName);
@@ -79,7 +72,6 @@ export const ImposterGame = () => {
     }
 
     console.debug("Hub conenction established");
-    setScreen(targetScreen);
   };
 
   const setupListeners = async () => {
@@ -134,27 +126,9 @@ export const ImposterGame = () => {
     );
   };
 
-  const getInitialScreen = (): ImposterSessionScreen => {
-    switch (gameEntryMode) {
-      case GameEntryMode.Creator:
-        return ImposterSessionScreen.Tutorial;
-      case GameEntryMode.Host:
-        return ImposterSessionScreen.AddPlayers;
-      case GameEntryMode.Participant:
-      case GameEntryMode.Member:
-        return ImposterSessionScreen.ActiveLobby;
-      default:
-        return ImposterSessionScreen.ActiveLobby;
-    }
-  };
-
   switch (screen) {
     case ImposterSessionScreen.Tutorial:
-      return (
-        <TutorialScreen
-          onGameCreated={(address, key) => initializeHub(address, key, ImposterSessionScreen.AddPlayers)}
-        />
-      );
+      return <TutorialScreen initiateHub={(address, key) => initializeHub(address, key)} />;
     case ImposterSessionScreen.AddPlayers:
       return <AddPlayersScreen onLeave={handleLeavePressed} />;
     case ImposterSessionScreen.ActiveLobby:
@@ -169,7 +143,7 @@ export const ImposterGame = () => {
       return <CreateScreen />;
     case ImposterSessionScreen.Started:
     default:
-      return <StartedScreen onLeave={handleLeavePressed} />;
+      return <StartedScreen />;
   }
 };
 

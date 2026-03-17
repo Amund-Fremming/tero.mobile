@@ -5,7 +5,7 @@ import { useNavigation } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
-import { GameType } from "../../../core/constants/Types";
+import { GameEntryMode, GameType } from "../../../core/constants/Types";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import MultiStepTutorial from "./components/MultiStepTutorial/MultiStepTutorial";
 import SimpleTutorial from "./components/SimpleTutorial/SimpleTutorial";
@@ -13,15 +13,25 @@ import styles from "./tutorialScreenStyles";
 
 interface GenericTutorialScreenRouteProps {
   onFinishedPressed: () => void;
-  lastButtonText: string;
 }
 
-export const GenericTutorialScreen = ({ onFinishedPressed, lastButtonText }: GenericTutorialScreenRouteProps) => {
+export const GenericTutorialScreen = ({ onFinishedPressed }: GenericTutorialScreenRouteProps) => {
   const navigation: any = useNavigation();
-  const { gameType } = useGlobalSessionProvider();
+  const { gameType, gameEntryMode } = useGlobalSessionProvider();
 
   const config = tutorialConfig[gameType] ?? tutorialConfig[GameType.Quiz];
   const theme = getGameTheme(gameType);
+
+  const getLastButtonText = (): string => {
+    switch (gameEntryMode) {
+      case GameEntryMode.Creator:
+        return "Opprett spill";
+      case GameEntryMode.Host:
+        return "Neste";
+      default:
+        return "Neste";
+    }
+  };
 
   if (config.mode === "multi") {
     return (
@@ -37,7 +47,7 @@ export const GenericTutorialScreen = ({ onFinishedPressed, lastButtonText }: Gen
           onFinish={onFinishedPressed}
           onBack={() => navigation.goBack()}
           accentColor={theme.secondaryColor}
-          lastButtonText={lastButtonText}
+          lastButtonText={getLastButtonText()}
         />
       </View>
     );
@@ -61,7 +71,7 @@ export const GenericTutorialScreen = ({ onFinishedPressed, lastButtonText }: Gen
         }}
         style={[styles.continueButton, { backgroundColor: theme.secondaryColor }]}
       >
-        <Text style={styles.continueText}>{lastButtonText}</Text>
+        <Text style={styles.continueText}>{getLastButtonText()}</Text>
       </TouchableOpacity>
     </View>
   );

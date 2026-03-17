@@ -12,6 +12,7 @@ import { SpinGameState, SpinSessionScreen } from "./constants/SpinTypes";
 import { useSpinSessionProvider } from "./context/SpinGameProvider";
 import ActiveLobbyScreen from "./screens/ActiveLobbyScreen/ActiveLobbyScreen";
 import CreateScreen from "./screens/CreateScreen/CreateScreen";
+import FinishedScreen from "./screens/FinishedScreen/FinishedScreen";
 import { GameScreen } from "./screens/GameScreen/GameScreen";
 import PassiveLobbyScreen from "./screens/PassiveLobbyScreen/PassiveLobbyScreen";
 import TutorialScreen from "./screens/TutorialScreen/TutorialScreen";
@@ -55,17 +56,12 @@ export const SpinGame = () => {
   useEffect(() => {
     setThemeColors(gameType);
 
-    if ([GameEntryMode.Member, GameEntryMode.Participant].includes(gameEntryMode)) {
+    if (gameEntryMode === GameEntryMode.Participant) {
       setIsHost(false);
     }
 
-    const initScreen = getInitialScreen();
-    setScreen(initScreen);
-    if (initScreen !== SpinSessionScreen.Create && initScreen !== SpinSessionScreen.Tutorial) {
-      initializeHub(sessionData.hubName, sessionData.gameKey, initScreen);
-    } else {
-      setHubReady(true);
-    }
+    setScreen(SpinSessionScreen.Tutorial);
+    setHubReady(true);
 
     return () => {
       disconnect();
@@ -74,7 +70,7 @@ export const SpinGame = () => {
     };
   }, []);
 
-  const initializeHub = async (hubName: string, key: string, targetScreen: SpinSessionScreen) => {
+  const initializeHub = async (hubName: string, key: string) => {
     const result = await connect(hubName);
     if (result.isError()) {
       console.error(result.error);
@@ -103,7 +99,6 @@ export const SpinGame = () => {
       return;
     }
     setHubReady(true);
-    setScreen(targetScreen);
   };
 
   const setupListeners = async () => {
@@ -116,10 +111,16 @@ export const SpinGame = () => {
     });
 
     setListener(HubChannel.State, async (state: SpinGameState) => {
-      if (state === SpinGameState.Finished && !isHost) {
-        await disconnect();
-      }
+      console.log("EntryMode=" + gameEntryMode + ", State=" + state);
       setGameState(state);
+      if (state === SpinGameState.Finished) {
+        if (gameEntryMode === GameEntryMode.Creator) {
+          setScreen(SpinSessionScreen.Create);
+        } else {
+          await disconnect();
+          setScreen(SpinSessionScreen.Finished);
+        }
+      }
     });
 
     setListener("selected", (batch: string[]) => {
@@ -160,31 +161,13 @@ export const SpinGame = () => {
     });
   };
 
-  const getInitialScreen = (): SpinSessionScreen => {
-    switch (gameEntryMode) {
-      case GameEntryMode.Creator:
-        return SpinSessionScreen.Tutorial;
-      case GameEntryMode.Host:
-        return SpinSessionScreen.PassiveLobby;
-      case GameEntryMode.Participant:
-      case GameEntryMode.Member:
-        if (isDraft) {
-          return SpinSessionScreen.ActiveLobby;
-        } else {
-          return SpinSessionScreen.PassiveLobby;
-        }
-      default:
-        return SpinSessionScreen.ActiveLobby;
-    }
-  };
-
   if (!hubReady && screen !== SpinSessionScreen.Create && screen !== SpinSessionScreen.Tutorial) {
     return <LoadingView />;
   }
 
   switch (screen) {
     case SpinSessionScreen.Tutorial:
-      return <TutorialScreen onGameCreated={(a, k) => initializeHub(a, k, SpinSessionScreen.ActiveLobby)} />;
+      return <TutorialScreen initializeHub={(a, k) => initializeHub(a, k)} />;
     case SpinSessionScreen.Create:
       return <CreateScreen />;
     case SpinSessionScreen.ActiveLobby:
@@ -192,7 +175,9 @@ export const SpinGame = () => {
     case SpinSessionScreen.PassiveLobby:
       return <PassiveLobbyScreen onLeave={handleLeavePressed} />;
     case SpinSessionScreen.Game:
-      <GameScreen onLeave={handleLeavePressed} />;
+      return <GameScreen onLeave={handleLeavePressed} />;
+    case SpinSessionScreen.Finished:
+      return <FinishedScreen onLeave={handleLeavePressed} />;
     default:
       return <GameScreen onLeave={handleLeavePressed} />;
   }
