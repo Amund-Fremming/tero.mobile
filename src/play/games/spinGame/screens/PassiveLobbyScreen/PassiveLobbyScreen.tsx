@@ -159,11 +159,11 @@ export const PassiveLobbyScreen = ({ onLeave }: Props) => {
 
   return (
     <View style={{ ...styles.container, backgroundColor: themeColor }}>
-      <FloatingCircle size={160} delay={0}   duration={3200} style={{ top: "4%",    left: "-8%"  }} />
-      <FloatingCircle size={90}  delay={500} duration={2800} style={{ top: "10%",   right: "-4%" }} />
-      <FloatingCircle size={70}  delay={200} duration={3600} style={{ top: "40%",   left: "4%"   }} />
-      <FloatingCircle size={120} delay={800} duration={3100} style={{ top: "45%",   right: "-5%" }} />
-      <FloatingCircle size={55}  delay={400} duration={2600} style={{ bottom: "30%", left: "20%"  }} />
+      <FloatingCircle size={160} delay={0} duration={3200} style={{ top: "4%", left: "-8%" }} />
+      <FloatingCircle size={90} delay={500} duration={2800} style={{ top: "10%", right: "-4%" }} />
+      <FloatingCircle size={70} delay={200} duration={3600} style={{ top: "40%", left: "4%" }} />
+      <FloatingCircle size={120} delay={800} duration={3100} style={{ top: "45%", right: "-5%" }} />
+      <FloatingCircle size={55} delay={400} duration={2600} style={{ bottom: "30%", left: "20%" }} />
       <FloatingCircle size={140} delay={100} duration={3400} style={{ bottom: "10%", right: "-6%" }} />
 
       <View style={styles.headerWrapper}>

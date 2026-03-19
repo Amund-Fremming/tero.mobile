@@ -59,10 +59,24 @@ export const GameTypeListScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.bgDecorations} pointerEvents="none">
-        <View style={[styles.bgDiamond, { width: 260, height: 260, top: -130, left: -130, backgroundColor: Color.BuzzifyLavender }]} />
-        <View style={[styles.bgDiamond, { width: 160, height: 160, top: 180, right: -100, backgroundColor: Color.HomeRed }]} />
-        <View style={[styles.bgDiamond, { width: 200, height: 200, top: 400, left: -80, backgroundColor: Color.Purple }]} />
-        <View style={[styles.bgDiamond, { width: 140, height: 140, bottom: 100, right: -60, backgroundColor: Color.BuzzifyLavender }]} />
+        <View
+          style={[
+            styles.bgDiamond,
+            { width: 260, height: 260, top: -130, left: -130, backgroundColor: Color.BuzzifyLavender },
+          ]}
+        />
+        <View
+          style={[styles.bgDiamond, { width: 160, height: 160, top: 180, right: -100, backgroundColor: Color.HomeRed }]}
+        />
+        <View
+          style={[styles.bgDiamond, { width: 200, height: 200, top: 400, left: -80, backgroundColor: Color.Purple }]}
+        />
+        <View
+          style={[
+            styles.bgDiamond,
+            { width: 140, height: 140, bottom: 100, right: -60, backgroundColor: Color.BuzzifyLavender },
+          ]}
+        />
       </View>
       <ScreenHeader
         title={gameEntryMode === GameEntryMode.Creator ? "Nytt spill" : "Klare spill"}
