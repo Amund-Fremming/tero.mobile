@@ -62,9 +62,7 @@ export const CreateScreen = () => {
       secondaryThemeColor={theme.secondaryColor}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
-      headerText="Lagre"
       bottomButtonText="Publiser"
-      featherIcon={"users"}
     />
   );
 };

@@ -31,6 +31,23 @@ export const styles = StyleSheet.create({
     gap: verticalScale(15),
     width: "90%",
   },
+
+  button: {
+    position: "absolute",
+    bottom: verticalScale(60),
+    justifyContent: "center",
+    alignItems: "center",
+    width: "86%",
+    borderRadius: moderateScale(15),
+    height: verticalScale(70),
+    backgroundColor: Color.Black,
+  },
+
+  buttonText: {
+    color: Color.White,
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(35),
+  },
 });
 
 export default styles;

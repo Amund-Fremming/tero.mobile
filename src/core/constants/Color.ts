@@ -37,6 +37,8 @@ export const Color = {
   SpinChosen: "#FF8C00",
   ImposterPrimary: "#A67B7B",
   ImposterSecondary: "#4A3B3B",
+  ToastGreen: "#b3df72",
+  ToastYellow: "",
 };
 
 export default Color;

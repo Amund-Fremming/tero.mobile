@@ -97,18 +97,14 @@ export const styles = StyleSheet.create({
   },
 
   input: {
-    width: "70%",
+    width: "86%",
+    minHeight: verticalScale(69),
     fontSize: moderateScale(35),
-    marginBottom: verticalScale(-10),
     fontFamily: Font.PassionOneRegular,
-    color: Color.C2,
-  },
-
-  inputBorder: {
-    backgroundColor: Color.Black,
-    opacity: 0.9,
-    width: "85%",
-    height: verticalScale(10),
+    color: Color.OffBlack,
+    backgroundColor: Color.LightGray,
     borderRadius: moderateScale(10),
+    paddingHorizontal: moderateScale(20),
+    paddingVertical: verticalScale(14),
   },
 });

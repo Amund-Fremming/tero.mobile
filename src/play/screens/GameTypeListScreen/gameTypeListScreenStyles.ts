@@ -11,6 +11,20 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
   },
 
+  bgDecorations: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    overflow: "hidden",
+  },
+
+  bgDiamond: {
+    position: "absolute",
+    opacity: 0.07,
+    transform: [{ rotate: "45deg" }],
+    borderRadius: moderateScale(8),
+  },
+
   card: {
     borderWidth: moderateScale(6.3),
     borderColor: Color.OffBlack,

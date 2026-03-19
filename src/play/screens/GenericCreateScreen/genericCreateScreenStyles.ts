@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
   icon: {
     position: "absolute",
     opacity: 0.15,
-    paddingTop: "90%",
+    paddingTop: "80%",
     left: "50%",
     zIndex: -1,
     transform: [{ translateX: -moderateScale(210) }, { translateY: -moderateScale(210) }],
@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
 
   midSection: {
     zIndex: 100,
-    paddingTop: "30%",
+    paddingTop: "20%",
     justifyContent: "center",
     alignItems: "center",
     width: "80%",
@@ -103,19 +103,15 @@ export const styles = StyleSheet.create({
   },
 
   input: {
-    width: "70%",
+    width: "86%",
+    minHeight: verticalScale(69),
     fontSize: moderateScale(35),
-    marginBottom: verticalScale(-10),
     fontFamily: Font.PassionOneRegular,
-    color: Color.C2,
-  },
-
-  inputBorder: {
-    backgroundColor: Color.Black,
-    opacity: 0.9,
-    width: "85%",
-    height: verticalScale(10),
+    color: Color.OffBlack,
+    backgroundColor: Color.LightGray,
     borderRadius: moderateScale(10),
+    paddingHorizontal: moderateScale(20),
+    paddingVertical: verticalScale(14),
   },
 });
 

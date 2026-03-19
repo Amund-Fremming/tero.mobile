@@ -82,6 +82,9 @@ export const JoinScreen = () => {
   return (
     <KeyboardAvoidingWrapper backgroundColor={Color.LightGray} anchorRef={anchorRef}>
       <View style={styles.container}>
+        <View style={styles.bgCircle1} />
+        <View style={styles.bgCircle2} />
+        <View style={styles.bgCircle3} />
         <ScreenHeader
           title="Bli med"
           onBackPressed={() => navigation.goBack()}

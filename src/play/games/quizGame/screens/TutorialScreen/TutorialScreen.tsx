@@ -32,8 +32,15 @@ export const TutorialScreen = () => {
   const onFinishedPressed = async () => {
     if (loading) return;
 
-    if (gameEntryMode !== GameEntryMode.Creator) {
+    if (gameEntryMode === GameEntryMode.Host) {
+      setIsHost(true);
       setScreen(QuizGameScreen.Game);
+      return;
+    }
+
+    if (gameEntryMode !== GameEntryMode.Creator) {
+      setIsHost(false);
+      setScreen(QuizGameScreen.Lobby);
       return;
     }
 

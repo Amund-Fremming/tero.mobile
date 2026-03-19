@@ -12,6 +12,17 @@ export const styles = StyleSheet.create({
     gap: 10,
   },
 
+  scroll: {
+    flex: 1,
+    width: "100%",
+  },
+
+  scrollContent: {
+    alignItems: "center",
+    paddingBottom: verticalScale(10),
+    gap: 10,
+  },
+
   players: {
     paddingTop: verticalScale(20),
     fontSize: moderateScale(32),
@@ -19,15 +30,41 @@ export const styles = StyleSheet.create({
     color: Color.White,
   },
 
+  userIcon: {
+    width: horizontalScale(70),
+    height: verticalScale(70),
+  },
+
+  userIconWrapper: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: moderateScale(10),
+    paddingTop: verticalScale(30),
+    paddingBottom: verticalScale(20),
+    width: "90%",
+  },
+
   button: {
-    position: "absolute",
-    bottom: verticalScale(40),
+    marginBottom: verticalScale(40),
     justifyContent: "center",
     alignItems: "center",
     width: "86%",
     borderRadius: moderateScale(10),
     height: verticalScale(69),
     backgroundColor: Color.Black,
+  },
+
+  stickyButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "86%",
+    borderRadius: moderateScale(10),
+    height: verticalScale(69),
+    backgroundColor: Color.Black,
+    marginBottom: verticalScale(40),
+    marginTop: verticalScale(10),
   },
 
   buttonText: {
@@ -77,11 +114,11 @@ export const styles = StyleSheet.create({
   },
 
   centerText: {
-    color: Color.White,
+    paddingBottom: verticalScale(60),
+    color: Color.SkyBlueLight,
     fontSize: moderateScale(35),
     fontFamily: Font.PassionOneRegular,
     textAlign: "center",
-    marginTop: verticalScale(200),
   },
 });
 

@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: verticalScale(14),
     paddingHorizontal: horizontalScale(18),
-    borderRadius: moderateScale(8),
-    backgroundColor: Color.Green,
+    borderRadius: moderateScale(15),
+    backgroundColor: Color.ToastGreen,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.25,
@@ -158,13 +158,13 @@ const styles = StyleSheet.create({
   toastHeader: {
     color: Color.White,
     fontFamily: Font.SintonyBold,
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(19),
     marginBottom: verticalScale(2),
   },
   toastText: {
     color: Color.White,
     fontFamily: Font.SintonyRegular,
-    fontSize: moderateScale(13),
+    fontSize: moderateScale(15),
   },
 });
 

@@ -42,11 +42,13 @@ export const GenericCreateScreen = ({
   const subTextColor = () => {
     switch (gameType) {
       case GameType.Quiz:
-        return Color.LightBlue;
+        return "#FFC09F";
       case GameType.Roulette:
-        return Color.LightGreen;
+        return "#FFD8B1";
       case GameType.Duel:
-        return Color.LightGreen;
+        return "#E0EADF";
+      case GameType.Imposter:
+        return "#B2D8D8";
       default:
         return Color.LightGray;
     }
@@ -110,7 +112,7 @@ export const GenericCreateScreen = ({
         <View style={styles.midSection}>
           <Text style={styles.finishedMainText}>Spillet er ferdig!</Text>
           <Text style={{ ...styles.finishedSubText, color: subTextColor() }}>
-            Gi spillet ett navn, og kategori slik at du kan spille det igjen
+            Gi spillet ett navn og kategori slik at du kan spille det igjen
           </Text>
         </View>
         <View style={styles.bottomSection}>
@@ -122,7 +124,6 @@ export const GenericCreateScreen = ({
             onSubmitEditing={Keyboard.dismiss}
             returnKeyType="done"
           />
-          <View style={styles.inputBorder} />
           <CategoryDropdown<GameCategory>
             data={categoryData}
             value={category}

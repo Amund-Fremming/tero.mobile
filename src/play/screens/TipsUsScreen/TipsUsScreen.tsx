@@ -1,17 +1,17 @@
-import { View, Text, TouchableOpacity, ScrollView, Keyboard } from "react-native";
-import * as Haptics from "expo-haptics";
-import { styles } from "./tipsUsScreenStyles";
-import { TextInput } from "react-native-gesture-handler";
-import { useNavigation } from "expo-router";
-import { useModalProvider } from "../../../core/context/ModalProvider";
 import { Feather } from "@expo/vector-icons";
-import Color from "../../../core/constants/Color";
-import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
-import { moderateScale } from "../../../core/utils/dimensions";
-import { useState, useRef } from "react";
-import { useServiceProvider } from "../../../core/context/ServiceProvider";
-import { CreateGameTipRequest } from "../../../core/constants/Types";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "expo-router";
+import { useRef, useState } from "react";
+import { Keyboard, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 import { KeyboardAvoidingWrapper } from "../../../core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
+import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
+import Color from "../../../core/constants/Color";
+import { CreateGameTipRequest } from "../../../core/constants/Types";
+import { useModalProvider } from "../../../core/context/ModalProvider";
+import { useServiceProvider } from "../../../core/context/ServiceProvider";
+import { moderateScale } from "../../../core/utils/dimensions";
+import { styles } from "./tipsUsScreenStyles";
 
 export const TipsUsScreen = () => {
   const navigation: any = useNavigation();
@@ -86,7 +86,11 @@ export const TipsUsScreen = () => {
   return (
     <KeyboardAvoidingWrapper backgroundColor={Color.LightGray} anchorRef={anchorRef}>
       <View style={styles.container}>
-        <ScreenHeader title="Tips oss" backgroundColor={Color.LightGray} onBackPressed={() => navigation.goBack()} />
+        <ScreenHeader
+          title="Tips oss"
+          backgroundColor={Color.BuzzifyLavender}
+          onBackPressed={() => navigation.goBack()}
+        />
 
         <ScrollView
           style={styles.scrollView}

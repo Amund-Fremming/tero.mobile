@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   text: {
     width: "90%",
     color: Color.White,
-    paddingTop: "45%",
+    paddingTop: "38%",
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(45),
     textAlign: "center",
@@ -22,12 +22,18 @@ export const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
 
-  button: {
+  buttonWrapper: {
     position: "absolute",
     bottom: verticalScale(60),
+    width: "86%",
+    borderRadius: moderateScale(15),
+    overflow: "hidden",
+  },
+
+  button: {
     justifyContent: "center",
     alignItems: "center",
-    width: "86%",
+    width: "100%",
     borderRadius: moderateScale(15),
     height: verticalScale(70),
     backgroundColor: Color.Black,

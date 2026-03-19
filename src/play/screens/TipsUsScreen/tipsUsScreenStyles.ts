@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Color } from "../../../core/constants/Color";
-import { horizontalScale, moderateScale, verticalScale } from "../../../core/utils/dimensions";
 import { Font } from "../../../core/constants/Font";
+import { moderateScale, verticalScale } from "../../../core/utils/dimensions";
 
 export const styles = StyleSheet.create({
   container: {
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     width: "90%",
     borderRadius: moderateScale(15),
     height: verticalScale(69),
-    backgroundColor: Color.BuzzifyLavender,
+    backgroundColor: Color.HomeRed,
   },
 
   buttonText: {

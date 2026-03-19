@@ -111,7 +111,6 @@ export const SpinGame = () => {
     });
 
     setListener(HubChannel.State, async (state: SpinGameState) => {
-      console.log("EntryMode=" + gameEntryMode + ", State=" + state);
       setGameState(state);
       if (state === SpinGameState.Finished) {
         if (gameEntryMode === GameEntryMode.Creator) {

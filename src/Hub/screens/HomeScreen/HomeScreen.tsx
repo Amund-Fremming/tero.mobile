@@ -21,12 +21,11 @@ import redFigure from "../../../core/assets/images/red-figure.png";
 
 const subHeaderList = [
   "klar for en runde?",
-  "la spillet begynne",
-  "ta en pause og bli med",
-  "vi kjører på",
+  "kom i gang med ett ferdig spill",
+  "opprett ett spill sammen",
   "få i gang kvelden",
   "kickstart stemingen",
-  "klart for neste?",
+  "klart for neste runde?",
 ];
 
 export const HomeScreen = () => {

@@ -4,7 +4,7 @@ import { horizontalScale, moderateScale, verticalScale } from "../../utils/dimen
 
 export const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(74, 40, 20, 0.6)",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -16,42 +16,62 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
     width: horizontalScale(350),
-    borderWidth: moderateScale(3),
-    borderRadius: moderateScale(35),
-    gap: verticalScale(15),
-    backgroundColor: "#EAF2FA",
-    borderColor: "#6F89A2",
+    borderWidth: moderateScale(2),
+    borderRadius: moderateScale(28),
+    gap: verticalScale(12),
+    backgroundColor: "#F2E9E4",
+    borderColor: "#212529",
     paddingHorizontal: horizontalScale(26),
-    paddingTop: verticalScale(30),
-    paddingBottom: verticalScale(30),
+    paddingTop: verticalScale(28),
+    paddingBottom: verticalScale(28),
+    overflow: "hidden",
+  },
+
+  watermark: {
+    position: "absolute",
+    width: horizontalScale(240),
+    height: horizontalScale(240),
+    right: horizontalScale(-40),
+    bottom: verticalScale(-40),
+    opacity: 0.05,
+  },
+
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: horizontalScale(8),
+  },
+
+  headerIcon: {
+    width: moderateScale(30),
+    height: moderateScale(30),
   },
 
   header: {
     textAlign: "left",
     fontFamily: Font.PassionOneBold,
-    fontSize: moderateScale(38),
-    color: "#3B6282",
-    opacity: 0.85,
+    fontSize: moderateScale(34),
+    color: "#212529",
   },
 
   message: {
     fontFamily: Font.SintonyBold,
-    fontSize: moderateScale(18),
+    fontSize: moderateScale(16),
+    lineHeight: moderateScale(22),
     textAlign: "left",
-    color: "#2B3036",
+    color: "#212529",
   },
 
   buttonsWrapper: {
     flexDirection: "row",
-    gap: horizontalScale(15),
-    marginTop: verticalScale(12),
-    alignSelf: "center",
-    width: "86%",
+    gap: horizontalScale(12),
+    marginTop: verticalScale(10),
+    alignSelf: "stretch",
   },
 
   button: {
     flex: 1,
-    backgroundColor: "#1F3D58",
+    backgroundColor: "#212529",
     borderRadius: moderateScale(10),
     justifyContent: "center",
     alignItems: "center",
@@ -59,28 +79,26 @@ export const styles = StyleSheet.create({
   },
 
   buttonText: {
-    fontFamily: Font.PassionOneRegular,
-    fontSize: moderateScale(30),
-    color: "#EDF6FF",
-    fontWeight: "600",
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(18),
+    color: "#FFFFFF",
+    letterSpacing: 0.5,
   },
 
-  buttonInverted: {
+  buttonSecondary: {
     flex: 1,
-    backgroundColor: "transparent",
+    backgroundColor: "#D9D9D9",
     borderRadius: moderateScale(10),
-    borderWidth: moderateScale(3),
-    borderColor: "#1F3D58",
     justifyContent: "center",
     alignItems: "center",
     height: verticalScale(50),
   },
 
-  buttonInvertedText: {
-    fontFamily: Font.PassionOneRegular,
-    fontSize: moderateScale(30),
-    color: "#1F3D58",
-    fontWeight: "600",
+  buttonSecondaryText: {
+    fontFamily: Font.PassionOneBold,
+    fontSize: moderateScale(18),
+    color: "#212529",
+    letterSpacing: 0.5,
   },
 });
 

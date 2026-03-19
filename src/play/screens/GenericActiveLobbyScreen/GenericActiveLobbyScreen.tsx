@@ -122,8 +122,8 @@ export const GenericActiveLobbyScreen = ({
             onChangeText={(input) => setInputValue(input)}
             onSubmitEditing={Keyboard.dismiss}
             returnKeyType="done"
+            multiline
           />
-          <View style={styles.inputBorder} />
           <TouchableOpacity
             ref={anchorRef}
             onPress={handleAddRound}

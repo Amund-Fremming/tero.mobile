@@ -1,6 +1,6 @@
 import axios from "axios";
+import { GameTip, LogCategoryCount, LogCeverity, PagedResponse, SystemHealth, SystemLog } from "../constants/Types";
 import { err, ok, Result } from "../utils/result";
-import { LogCeverity, LogCategoryCount, PagedResponse, SystemHealth, SystemLog, GameTip } from "../constants/Types";
 
 export class CommonService {
   urlBase: string;
@@ -69,6 +69,13 @@ export class CommonService {
       console.error("getLogs:", error);
       return err("Failed to get logs");
     }
+  }
+
+  getRandomUserIcons(count: number = 40): string[] {
+    return Array.from(
+      { length: count },
+      () => `https://api.dicebear.com/9.x/pixel-art/png?seed=${Math.random().toString(36).slice(2)}`,
+    );
   }
 
   async getGameTips(token: string, pageNum: number = 0): Promise<Result<PagedResponse<GameTip>>> {
