@@ -1,6 +1,6 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
-import { GameType } from "@/src/core/constants/Types";
+import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
@@ -10,7 +10,7 @@ import * as Haptics from "expo-haptics";
 import { useFocusEffect, useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { SpinGameState } from "../../constants/SpinTypes";
+import { SpinGameState, SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 import styles from "./gameScreenStyles";
 
@@ -26,7 +26,7 @@ export const GameScreen = ({ onLeave }: Props) => {
 
   const disconnectTriggeredRef = useRef<boolean>(false);
 
-  const { isHost, clearGlobalSessionValues, sessionData, gameType } = useGlobalSessionProvider();
+  const { isHost, clearGlobalSessionValues, sessionData, gameType, gameEntryMode } = useGlobalSessionProvider();
   const { clearSpinSessionValues, setScreen, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
   const { disconnect, invokeFunction, debugDisconnect } = useHubConnectionProvider();
@@ -72,6 +72,12 @@ export const GameScreen = ({ onLeave }: Props) => {
         resetToHomeScreen(outerNavigation);
       });
       return;
+    }
+
+    const state = result.value;
+    if (state === SpinGameState.Finished && gameEntryMode === GameEntryMode.Host) {
+      await disconnect();
+      setScreen(SpinSessionScreen.Finished);
     }
   };
 

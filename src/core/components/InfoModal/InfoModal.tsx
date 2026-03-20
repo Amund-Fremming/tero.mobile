@@ -23,7 +23,6 @@ export const InfoModal = ({ isError, isSuccess, header, message, onCloseFunc }: 
         <Image source={teroImage} style={styles.watermark} resizeMode="contain" />
         <View style={styles.headerRow}>
           <Text style={[styles.header, { color: headerColor }]}>{header}</Text>
-          <Image source={teroImage} style={styles.headerIcon} resizeMode="contain" />
         </View>
         <Text style={styles.message}>{message}</Text>
         <TouchableOpacity

@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
+import Color from "../../constants/Color";
 import { Font } from "../../constants/Font";
 import { horizontalScale, moderateScale, verticalScale } from "../../utils/dimensions";
 
 export const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: "rgba(74, 40, 20, 0.6)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -15,14 +16,14 @@ export const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "flex-start",
-    width: horizontalScale(350),
-    borderWidth: moderateScale(2),
+    width: "90%",
+    borderWidth: moderateScale(4),
     borderRadius: moderateScale(28),
-    gap: verticalScale(12),
+    gap: verticalScale(15),
     backgroundColor: "#F2E9E4",
-    borderColor: "#212529",
+    borderColor: Color.OffBlack,
     paddingHorizontal: horizontalScale(26),
-    paddingTop: verticalScale(28),
+    paddingTop: verticalScale(33),
     paddingBottom: verticalScale(28),
     overflow: "hidden",
   },

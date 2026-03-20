@@ -87,48 +87,6 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     resetToHomeGlobal();
   };
 
-  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  const attemptReconnectAfterDebugDisconnect = async () => {
-    if (!connectionRef.current) {
-      debugDisconnectInProgressRef.current = false;
-      return;
-    }
-
-    displayLoadingModal(() => giveUpAndGoHome());
-
-    const retryDelaysMs = [0, 1000, 2500];
-    for (const delayMs of retryDelaysMs) {
-      try {
-        if (delayMs > 0) {
-          await wait(delayMs);
-        }
-
-        if (connectionRef.current.state === signalR.HubConnectionState.Disconnected) {
-          await connectionRef.current.start();
-        }
-
-        reattachListeners();
-
-        const invokeResult = await invokeFunction("ConnectToGroup", gameKeyRef.current, pseudoId);
-        if (invokeResult.isError()) {
-          throw new Error(invokeResult.error);
-        }
-
-        debugDisconnectInProgressRef.current = false;
-        closeLoadingModal();
-        console.info("DEBUG: Manual reconnect succeeded after forced disconnect");
-        return;
-      } catch (error) {
-        console.warn("DEBUG: Manual reconnect attempt failed", error);
-      }
-    }
-
-    debugDisconnectInProgressRef.current = false;
-    console.error("DEBUG: Manual reconnect failed after forced disconnect");
-    giveUpAndGoHome();
-  };
-
   async function connect(hubName: string): Promise<Result<signalR.HubConnection>> {
     try {
       const normalizedHubName = hubName === "roulette" || hubName === "duel" ? "spin" : hubName;

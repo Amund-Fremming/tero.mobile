@@ -35,7 +35,6 @@ export const ActionModal = ({
         <Image source={teroImage} style={styles.watermark} resizeMode="contain" />
         <View style={styles.headerRow}>
           <Text style={styles.header}>HEY!</Text>
-          <Image source={teroImage} style={styles.headerIcon} resizeMode="contain" />
         </View>
         <Text style={styles.message}>{message}</Text>
         <View style={styles.buttonsWrapper}>

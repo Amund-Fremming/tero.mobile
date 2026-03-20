@@ -115,6 +115,8 @@ export const SpinGame = () => {
       if (state === SpinGameState.Finished) {
         if (gameEntryMode === GameEntryMode.Creator) {
           setScreen(SpinSessionScreen.Create);
+        } else if (gameEntryMode === GameEntryMode.Host) {
+          // Do nothing
         } else {
           await disconnect();
           setScreen(SpinSessionScreen.Finished);

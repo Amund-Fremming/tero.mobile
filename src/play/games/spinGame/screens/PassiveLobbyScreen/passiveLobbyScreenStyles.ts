@@ -115,7 +115,6 @@ export const styles = StyleSheet.create({
 
   centerText: {
     paddingBottom: verticalScale(60),
-    color: Color.SkyBlueLight,
     fontSize: moderateScale(35),
     fontFamily: Font.PassionOneRegular,
     textAlign: "center",
