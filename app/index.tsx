@@ -14,6 +14,7 @@ import * as ExpoSplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { Dimensions, StatusBar, View } from "react-native";
 import AuthProvider from "../src/core/context/AuthProvider";
+import SavedGamesProvider from "../src/core/context/SavedGamesProvider";
 import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
 
 ExpoSplashScreen.hide();
@@ -36,17 +37,19 @@ export default () => (
       <ToastProvider>
         <ModalProvider>
           <AuthProvider>
-            <GlobalGameProvider>
-              <HubConnectionProvider>
-                <QuizSessionProvider>
-                  <SpinSessionProvider>
-                    <ImposterSessionProvider>
-                      <Hub />
-                    </ImposterSessionProvider>
-                  </SpinSessionProvider>
-                </QuizSessionProvider>
-              </HubConnectionProvider>
-            </GlobalGameProvider>
+            <SavedGamesProvider>
+              <GlobalGameProvider>
+                <HubConnectionProvider>
+                  <QuizSessionProvider>
+                    <SpinSessionProvider>
+                      <ImposterSessionProvider>
+                        <Hub />
+                      </ImposterSessionProvider>
+                    </SpinSessionProvider>
+                  </QuizSessionProvider>
+                </HubConnectionProvider>
+              </GlobalGameProvider>
+            </SavedGamesProvider>
           </AuthProvider>
         </ModalProvider>
       </ToastProvider>

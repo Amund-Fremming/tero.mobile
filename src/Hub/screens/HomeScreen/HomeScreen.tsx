@@ -150,7 +150,7 @@ export const HomeScreen = () => {
         >
           <Image style={styles.image} source={redFigure} />
           <View style={styles.buttonTextWrapper}>
-            <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>NYTT</Text>
+            <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>OPPRETT</Text>
             <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>SPILL</Text>
           </View>
         </TouchableOpacity>
@@ -158,7 +158,7 @@ export const HomeScreen = () => {
           activeOpacity={0.8}
           style={{ ...styles.buttonBase, ...styles.topRight }}
           disabled={!isPseudoReady}
-          onPress={() => handlePress(GameEntryMode.Host, Screen.GameTypeList)}
+          onPress={() => handlePress(GameEntryMode.Host, Screen.GameList)}
         >
           <DiagonalSplit />
           <View style={styles.buttonTextWrapper}>

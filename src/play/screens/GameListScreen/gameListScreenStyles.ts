@@ -206,6 +206,46 @@ export const styles = StyleSheet.create({
     backgroundColor: Color.DarkerGray,
   },
 
+  tabBar: {
+    flexShrink: 0,
+  },
+
+  tabBarContent: {
+    paddingHorizontal: horizontalScale(15),
+    paddingVertical: verticalScale(10),
+    gap: horizontalScale(8),
+    alignItems: "center" as const,
+  },
+
+  tab: {
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
+    gap: horizontalScale(8),
+    paddingVertical: verticalScale(10),
+    paddingHorizontal: horizontalScale(18),
+    borderRadius: moderateScale(20),
+    backgroundColor: Color.LightGray,
+  },
+
+  tabSelected: {
+    backgroundColor: Color.HomeRed,
+  },
+
+  tabIcon: {
+    width: moderateScale(20),
+    height: moderateScale(20),
+  },
+
+  tabLabel: {
+    fontFamily: Font.PassionOneRegular,
+    fontSize: moderateScale(18),
+    color: Color.OffBlack,
+  },
+
+  tabLabelSelected: {
+    color: Color.White,
+  },
+
   pagination: {
     flexDirection: "column",
     justifyContent: "center",

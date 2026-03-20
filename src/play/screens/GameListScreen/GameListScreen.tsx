@@ -1,7 +1,7 @@
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { QuizSession } from "@/src/play/games/quizGame/constants/quizTypes";
 import { useQuizSessionProvider } from "@/src/play/games/quizGame/context/QuizGameProvider";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import React, { memo, useEffect, useRef, useState } from "react";
@@ -20,6 +20,7 @@ import {
 } from "../../../core/constants/Types";
 import { useAuthProvider } from "../../../core/context/AuthProvider";
 import { useModalProvider } from "../../../core/context/ModalProvider";
+import { useSavedGamesProvider } from "../../../core/context/SavedGamesProvider";
 import { useServiceProvider } from "../../../core/context/ServiceProvider";
 import { useToastProvider } from "../../../core/context/ToastProvider";
 import { moderateScale } from "../../../core/utils/dimensions";
@@ -58,6 +59,20 @@ const SkeletonCard = memo(() => {
   );
 });
 
+const GameTypeIcon = ({ type, size, color }: { type: GameType; size: number; color: string }) => {
+  switch (type) {
+    case GameType.Duel:
+      return <MaterialCommunityIcons name="sword-cross" size={size} color={color} />;
+    case GameType.Roulette:
+      return <FontAwesome6 name="arrows-spin" size={size} color={color} />;
+    case GameType.Imposter:
+      return <Feather name="users" size={size} color={color} />;
+    case GameType.Quiz:
+    default:
+      return <Feather name="layers" size={size} color={color} />;
+  }
+};
+
 const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.Girls]: "Jentene",
   [GameCategory.Boys]: "Gutta",
@@ -65,12 +80,15 @@ const CATEGORY_LABELS: Record<GameCategory, string> = {
   [GameCategory.InnerCircle]: "Indre krets",
 };
 
-const CATEGORY_ICONS: Record<GameCategory, any> = {
-  [GameCategory.Girls]: "flower",
-  [GameCategory.Boys]: "sword",
-  [GameCategory.Mixed]: "glass-cocktail",
-  [GameCategory.InnerCircle]: "account-group",
+const GAME_TYPE_LABELS: Record<GameType, string> = {
+  [GameType.Quiz]: "Quiz",
+  [GameType.Roulette]: "Rulett",
+  [GameType.Duel]: "Duel",
+  [GameType.Imposter]: "Imposter",
+  [GameType.Dice]: "Terning",
 };
+
+const GAME_TYPES = [GameType.Quiz, GameType.Roulette, GameType.Duel, GameType.Imposter];
 
 export const GameListScreen = () => {
   const navigation: any = useNavigation();
@@ -81,7 +99,14 @@ export const GameListScreen = () => {
   const { displayErrorModal, displayActionModal } = useModalProvider();
   const { displayToast } = useToastProvider();
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
-  const { gameType, setSessionDataValues: setGameSessionValues, setIsHost, setIsDraft } = useGlobalSessionProvider();
+  const { savedIdSet, saveGame: saveGameToSet } = useSavedGamesProvider();
+  const {
+    gameType,
+    setGameType,
+    setSessionDataValues: setGameSessionValues,
+    setIsHost,
+    setIsDraft,
+  } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>({
@@ -93,10 +118,11 @@ export const GameListScreen = () => {
 
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<GameCategory | null>(null);
+  const [selectedGameType, setSelectedGameType] = useState<GameType | null>(null);
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    getPage(0);
+    getPage(0, null);
   }, []);
 
   const handleNextPage = async () => {
@@ -105,7 +131,7 @@ export const GameListScreen = () => {
     }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    await getPage(pagedResponse.page_num + 1);
+    await getPage(pagedResponse.page_num + 1, selectedGameType);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
 
@@ -115,21 +141,34 @@ export const GameListScreen = () => {
     }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    await getPage(pagedResponse.page_num - 1);
+    await getPage(pagedResponse.page_num - 1, selectedGameType);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
   };
 
-  const createPageQuery = (pageNum: number): GamePagedRequest => {
+  const createPageQuery = (pageNum: number, gameTypeFilter: GameType | null): GamePagedRequest => {
     return {
       page_num: pageNum,
-      game_type: gameType,
+      game_type: gameTypeFilter,
       category: category,
     };
   };
 
-  const getPage = async (pageNum: number) => {
+  const handleTabPress = (type: GameType) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (selectedGameType === type) {
+      setSelectedGameType(null);
+      getPage(0, null);
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+      return;
+    }
+    setSelectedGameType(type);
+    getPage(0, type);
+    scrollRef.current?.scrollTo({ y: 0, animated: false });
+  };
+
+  const getPage = async (pageNum: number, gameTypeFilter: GameType | null) => {
     setLoading(true);
-    const request = createPageQuery(pageNum);
+    const request = createPageQuery(pageNum, gameTypeFilter);
     const result = await gameService().getGamePage<GameBase>(pseudoId, request);
     if (result.isError()) {
       displayErrorModal(result.error);
@@ -148,7 +187,6 @@ export const GameListScreen = () => {
         "Du må logge inn for å lagre spill",
         () => {
           navigation.navigate(Screen.Hub);
-          // Small delay to ensure navigation completes
           setTimeout(() => triggerLogin(), 200);
         },
         () => {},
@@ -156,17 +194,15 @@ export const GameListScreen = () => {
       return;
     }
 
-    const result = await gameService().saveGame(accessToken, gameId);
-    if (result.isError()) {
-      displayErrorModal("Noe gikk galt. Prøv igjen.");
-      return;
-    }
+    if (savedIdSet.has(gameId)) return;
 
+    await saveGameToSet(gameId);
     displayToast(2.2);
   };
 
   const handleGamePressed = async (gameId: string, gameType: GameType) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setGameType(gameType);
     switch (gameType) {
       case GameType.Quiz:
         setGameEntryMode(GameEntryMode.Host);
@@ -238,6 +274,29 @@ export const GameListScreen = () => {
         onInfoPress={handleInfoPressed}
         backgroundColor={Color.BuzzifyLavender}
       />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.tabBar}
+        contentContainerStyle={styles.tabBarContent}
+      >
+        {GAME_TYPES.map((type) => (
+          <TouchableOpacity
+            key={type}
+            style={[styles.tab, selectedGameType === type && styles.tabSelected]}
+            onPress={() => handleTabPress(type)}
+          >
+            <GameTypeIcon
+              type={type}
+              size={moderateScale(18)}
+              color={selectedGameType === type ? Color.White : Color.OffBlack}
+            />
+            <Text style={[styles.tabLabel, selectedGameType === type && styles.tabLabelSelected]}>
+              {GAME_TYPE_LABELS[type]}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
       <VerticalScroll scrollRef={scrollRef}>
         {!loading && pagedResponse.items.length === 0 && (
           <Text style={styles.noGames}>Det finnes ingen spill av denne typen enda</Text>
@@ -249,11 +308,7 @@ export const GameListScreen = () => {
               <React.Fragment key={game.id}>
                 <TouchableOpacity onPress={() => handleGamePressed(game.id, game.game_type)} style={styles.card}>
                   <View style={styles.innerCard}>
-                    <MaterialCommunityIcons
-                      name={CATEGORY_ICONS[game.category]}
-                      size={moderateScale(60)}
-                      color={Color.Gray}
-                    />
+                    <GameTypeIcon type={game.game_type} size={moderateScale(60)} color={Color.Gray} />
 
                     <View style={styles.textWrapper}>
                       <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
@@ -262,7 +317,11 @@ export const GameListScreen = () => {
                     </View>
                   </View>
                   <TouchableOpacity style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
-                    <Feather name="bookmark" size={26} color={Color.Gray} />
+                    <Ionicons
+                      name={savedIdSet.has(game.id) ? "bookmark" : "bookmark-outline"}
+                      size={26}
+                      color={savedIdSet.has(game.id) ? Color.OffBlack : Color.Gray}
+                    />
                   </TouchableOpacity>
                 </TouchableOpacity>
                 <View style={styles.separator} />

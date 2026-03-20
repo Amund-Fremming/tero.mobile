@@ -80,7 +80,7 @@ export const GameScreen = ({ onLeave }: Props) => {
       setScreen(SpinSessionScreen.Finished);
     }
   };
-
+  SpinGameState;
   const handleStartRound = async () => {
     const channel = gameStarted ? "NextRound" : "StartRound";
     setGameStarted(false);

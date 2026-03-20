@@ -5,15 +5,16 @@ import Screen from "@/src/core/constants/Screen";
 import { GameBase, GameCategory, GameEntryMode, GameType, PagedResponse } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useSavedGamesProvider } from "@/src/core/context/SavedGamesProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { QuizSession } from "@/src/play/games/quizGame/constants/quizTypes";
 import { useQuizSessionProvider } from "@/src/play/games/quizGame/context/QuizGameProvider";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./savedGameScreenStyles";
 
@@ -64,9 +65,17 @@ export const SavedGamesScreen = () => {
   const [selectedGameType, setSelectedGameType] = useState<GameType>(GameType.Quiz);
   const scrollRef = useRef<ScrollView>(null);
 
+  const { refreshIds } = useSavedGamesProvider();
+
   useEffect(() => {
     fetchSavedGames(0, GameType.Quiz);
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshIds();
+    }, [accessToken]),
+  );
 
   const handleGameTypePress = async (gameType: GameType) => {
     if (gameType != selectedGameType) {

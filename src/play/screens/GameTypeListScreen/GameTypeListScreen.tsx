@@ -53,7 +53,7 @@ export const GameTypeListScreen = () => {
   };
 
   const handleInfoPressed = () => {
-    displayInfoModal("For å opprette ett spill må du først velge hvilken type spill du vil lage.", "Hvordan?");
+    displayInfoModal("For å opprette ett spill må du først velge hvilken type spill du vil lage.", "Velg type");
   };
 
   return (
@@ -104,31 +104,25 @@ export const GameTypeListScreen = () => {
       >
         {data &&
           data.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={[styles.card, { borderColor: isCreating ? Color.Gray : Color.Purple }]}
-              onPress={() => handlePress(item.screen)}
-            >
+            <TouchableOpacity key={index} style={styles.card} onPress={() => handlePress(item.screen)}>
               <Image source={iconMap[item.icon]} style={styles.cardImage} />
-              <View style={[styles.modeBadge, { backgroundColor: isCreating ? Color.HomeRed : Color.Purple }]}>
-                <Text style={styles.modeBadgeText}>{isCreating ? "LAG" : "SPILL"}</Text>
+              <View style={styles.modeBadge}>
+                <Text style={styles.modeBadgeText}>LAG</Text>
               </View>
-              <Text style={{ ...styles.cardHeader, color: item.color }}>{item.name}</Text>
+              <Text style={styles.cardHeader}>{item.name}</Text>
             </TouchableOpacity>
           ))}
-        {gameEntryMode === GameEntryMode.Creator && (
-          <TouchableOpacity
-            key={100}
-            style={styles.card}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              navigation.navigate(Screen.TipsUs);
-            }}
-          >
-            <Image source={require("../../../core/assets/images/finger.jpg")} style={styles.cardImage} />
-            <Text style={{ ...styles.cardHeader, color: Color.White }}>Ditt spill?</Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          key={100}
+          style={styles.card}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            navigation.navigate(Screen.TipsUs);
+          }}
+        >
+          <Image source={require("../../../core/assets/images/finger.jpg")} style={styles.cardImage} />
+          <Text style={{ ...styles.cardHeader, color: Color.White }}>Ditt spill?</Text>
+        </TouchableOpacity>
         {needsSpacer && <View style={styles.cardSpacer} />}
         <View style={styles.footer}>
           <View style={styles.footerDivider} />
