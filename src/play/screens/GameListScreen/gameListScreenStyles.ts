@@ -211,7 +211,8 @@ export const styles = StyleSheet.create({
   },
 
   tabBarContent: {
-    paddingHorizontal: horizontalScale(15),
+    paddingLeft: horizontalScale(20),
+    paddingRight: horizontalScale(15),
     paddingVertical: verticalScale(10),
     gap: horizontalScale(8),
     alignItems: "center" as const,

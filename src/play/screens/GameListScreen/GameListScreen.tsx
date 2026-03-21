@@ -1,11 +1,12 @@
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { QuizSession } from "@/src/play/games/quizGame/constants/quizTypes";
 import { useQuizSessionProvider } from "@/src/play/games/quizGame/context/QuizGameProvider";
-import { Feather, FontAwesome6, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import React, { memo, useEffect, useRef, useState } from "react";
 import { Animated, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import GameCard from "../../../core/components/GameCard/GameCard";
+import { GameTypeIcon, GameTypeTabBar } from "../../../core/components/GameTypeTabBar/GameTypeTabBar";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
 import VerticalScroll from "../../../core/components/VerticalScroll/VerticalScroll";
 import Color from "../../../core/constants/Color";
@@ -59,35 +60,6 @@ const SkeletonCard = memo(() => {
   );
 });
 
-const GameTypeIcon = ({ type, size, color }: { type: GameType; size: number; color: string }) => {
-  switch (type) {
-    case GameType.Duel:
-      return <MaterialCommunityIcons name="sword-cross" size={size} color={color} />;
-    case GameType.Roulette:
-      return <FontAwesome6 name="arrows-spin" size={size} color={color} />;
-    case GameType.Imposter:
-      return <Feather name="users" size={size} color={color} />;
-    case GameType.Quiz:
-    default:
-      return <Feather name="layers" size={size} color={color} />;
-  }
-};
-
-const CATEGORY_LABELS: Record<GameCategory, string> = {
-  [GameCategory.Girls]: "Jentene",
-  [GameCategory.Boys]: "Gutta",
-  [GameCategory.Mixed]: "Mixed",
-  [GameCategory.InnerCircle]: "Indre krets",
-};
-
-const GAME_TYPE_LABELS: Record<GameType, string> = {
-  [GameType.Quiz]: "Quiz",
-  [GameType.Roulette]: "Rulett",
-  [GameType.Duel]: "Duel",
-  [GameType.Imposter]: "Imposter",
-  [GameType.Dice]: "Terning",
-};
-
 const GAME_TYPES = [GameType.Quiz, GameType.Roulette, GameType.Duel, GameType.Imposter];
 
 export const GameListScreen = () => {
@@ -100,13 +72,7 @@ export const GameListScreen = () => {
   const { displayToast } = useToastProvider();
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
   const { savedIdSet, saveGame: saveGameToSet } = useSavedGamesProvider();
-  const {
-    gameType,
-    setGameType,
-    setSessionDataValues: setGameSessionValues,
-    setIsHost,
-    setIsDraft,
-  } = useGlobalSessionProvider();
+  const { setGameType, setSessionDataValues: setGameSessionValues, setIsHost, setIsDraft } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
 
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>({
@@ -161,6 +127,7 @@ export const GameListScreen = () => {
       scrollRef.current?.scrollTo({ y: 0, animated: false });
       return;
     }
+
     setSelectedGameType(type);
     getPage(0, type);
     scrollRef.current?.scrollTo({ y: 0, animated: false });
@@ -274,29 +241,13 @@ export const GameListScreen = () => {
         onInfoPress={handleInfoPressed}
         backgroundColor={Color.BuzzifyLavender}
       />
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.tabBar}
-        contentContainerStyle={styles.tabBarContent}
-      >
-        {GAME_TYPES.map((type) => (
-          <TouchableOpacity
-            key={type}
-            style={[styles.tab, selectedGameType === type && styles.tabSelected]}
-            onPress={() => handleTabPress(type)}
-          >
-            <GameTypeIcon
-              type={type}
-              size={moderateScale(18)}
-              color={selectedGameType === type ? Color.White : Color.OffBlack}
-            />
-            <Text style={[styles.tabLabel, selectedGameType === type && styles.tabLabelSelected]}>
-              {GAME_TYPE_LABELS[type]}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <GameTypeTabBar
+        types={GAME_TYPES}
+        selectedType={selectedGameType}
+        onTabPress={handleTabPress}
+        showIcons
+        activeColor={Color.HomeRed}
+      />
       <VerticalScroll scrollRef={scrollRef}>
         {!loading && pagedResponse.items.length === 0 && (
           <Text style={styles.noGames}>Det finnes ingen spill av denne typen enda</Text>
@@ -305,27 +256,14 @@ export const GameListScreen = () => {
         {loading
           ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
           : pagedResponse.items.map((game) => (
-              <React.Fragment key={game.id}>
-                <TouchableOpacity onPress={() => handleGamePressed(game.id, game.game_type)} style={styles.card}>
-                  <View style={styles.innerCard}>
-                    <GameTypeIcon type={game.game_type} size={moderateScale(60)} color={Color.Gray} />
-
-                    <View style={styles.textWrapper}>
-                      <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
-                      <Text style={styles.cardHeader}>{game.name}</Text>
-                      <Text style={styles.cardDescription}>{game.iterations} runder</Text>
-                    </View>
-                  </View>
-                  <TouchableOpacity style={styles.saveIcon} onPress={() => handleSaveGame(game.id)}>
-                    <Ionicons
-                      name={savedIdSet.has(game.id) ? "bookmark" : "bookmark-outline"}
-                      size={26}
-                      color={savedIdSet.has(game.id) ? Color.OffBlack : Color.Gray}
-                    />
-                  </TouchableOpacity>
-                </TouchableOpacity>
-                <View style={styles.separator} />
-              </React.Fragment>
+              <GameCard
+                key={game.id}
+                game={game}
+                icon={<GameTypeIcon type={game.game_type} size={moderateScale(60)} color={Color.Gray} />}
+                saved={savedIdSet.has(game.id)}
+                onPress={() => handleGamePressed(game.id, game.game_type)}
+                onActionPress={() => handleSaveGame(game.id)}
+              />
             ))}
 
         {!loading && (

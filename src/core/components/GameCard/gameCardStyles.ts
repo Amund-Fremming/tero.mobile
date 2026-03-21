@@ -1,27 +1,68 @@
-import { moderateScale, verticalScale } from "@/src/core/utils/dimensions";
+import Color from "@/src/core/constants/Color";
+import Font from "@/src/core/constants/Font";
+import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   card: {
-    width: "95%",
-    height: verticalScale(100),
-    justifyContent: "center",
+    width: "90%",
+    alignSelf: "center",
+    paddingVertical: verticalScale(15),
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    gap: 10,
-    borderWidth: 2,
-    borderColor: "white",
   },
 
-  header: {
-    color: "white",
-    fontSize: moderateScale(20),
-    fontWeight: 600,
+  innerCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: moderateScale(15),
+    flex: 1,
   },
 
-  iterations: {
-    color: "white",
-    fontSize: moderateScale(18),
-    fontWeight: 500,
+  textWrapper: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    flex: 1,
+  },
+
+  cardCategory: {
+    fontFamily: Font.SintonyBold,
+    fontSize: moderateScale(12),
+    color: Color.Burgunde,
+    marginTop: verticalScale(4),
+    textTransform: "uppercase",
+    letterSpacing: 1.2,
+    marginBottom: -2,
+    fontWeight: "800",
+  },
+
+  cardHeader: {
+    fontFamily: Font.PassionOneRegular,
+    fontSize: moderateScale(28),
+    color: Color.OffBlack,
+  },
+
+  cardDescription: {
+    fontFamily: Font.SintonyRegular,
+    fontSize: moderateScale(14),
+    color: Color.Gray,
+  },
+
+  actionIcon: {
+    position: "absolute",
+    right: horizontalScale(15),
+    top: verticalScale(15),
+    padding: moderateScale(8),
+  },
+
+  separator: {
+    backgroundColor: Color.LightGray,
+    height: verticalScale(5),
+    width: "90%",
+    alignSelf: "center",
+    borderRadius: moderateScale(20),
   },
 });
 

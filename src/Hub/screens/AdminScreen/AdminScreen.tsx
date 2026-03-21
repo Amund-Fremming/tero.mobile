@@ -1,22 +1,31 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import * as Haptics from "expo-haptics";
-import styles from "./AdminScreenStyles";
-import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { useServiceProvider } from "@/src/core/context/ServiceProvider";
-import { useEffect, useState } from "react";
-import { useNavigation } from "expo-router";
-import { screenHeight, verticalScale, moderateScale } from "@/src/core/utils/dimensions";
-import Color from "@/src/core/constants/Color";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { ActivityStats, ClientPopup, LogCategoryCount, SystemHealth } from "@/src/core/constants/Types";
-import Screen from "@/src/core/constants/Screen";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import { TextInput } from "react-native-gesture-handler";
+import Color from "@/src/core/constants/Color";
+import Screen from "@/src/core/constants/Screen";
+import { ActivityStats, ClientPopup, LogCategoryCount, SystemHealth } from "@/src/core/constants/Types";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { moderateScale, screenHeight, verticalScale } from "@/src/core/utils/dimensions";
 import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "expo-router";
+import { useEffect, useState } from "react";
+import { Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
+import styles from "./AdminScreenStyles";
 
 export const AdminScreen = () => {
   const navigation: any = useNavigation();
-  const { redirectUri, accessToken } = useAuthProvider();
+  const {
+    redirectUri,
+    accessToken,
+    pseudoId,
+    resetPseudoId,
+    logValues,
+    rotateTokens,
+    invalidateAccessToken,
+    triggerLogout,
+  } = useAuthProvider();
   const { commonService, userService } = useServiceProvider();
   const { displayErrorModal } = useModalProvider();
 
@@ -135,42 +144,6 @@ export const AdminScreen = () => {
       <ScreenHeader title="Admin" onBackPressed={() => navigation.goBack()} backgroundColor={Color.LightGray} />
 
       <Text style={styles.uri}>Redirect uri: {redirectUri}</Text>
-
-      <View style={styles.separator} />
-
-      <TouchableOpacity onPress={handleErrorLogCardClick} style={styles.card}>
-        <Text style={styles.sectionTitle}>Logger</Text>
-        <View style={styles.healthWrapper}>
-          <Text style={styles.errorLogTextBold}>Info</Text>
-          <Text style={[styles.errorLogTextBold, { color: Color.Green }]}>{logCategoryCount.info}</Text>
-        </View>
-        <View style={styles.healthWrapper}>
-          <Text style={styles.errorLogTextBold}>Warning</Text>
-          <Text style={[styles.errorLogTextBold, { color: Color.BuzzifyOrange }]}>{logCategoryCount.warning}</Text>
-        </View>
-        <View style={styles.healthWrapper}>
-          <Text style={styles.errorLogTextBold}>Critical</Text>
-          <Text style={[styles.errorLogTextBold, { color: Color.Red }]}>{logCategoryCount.critical}</Text>
-        </View>
-      </TouchableOpacity>
-
-      <View style={styles.separator} />
-
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>System Helse</Text>
-        <View style={styles.healthWrapper}>
-          <Text style={styles.text}>Platform</Text>
-          <Text style={styles.text}>{systemHealth.platform ? "✅" : "❌"}</Text>
-        </View>
-        <View style={styles.healthWrapper}>
-          <Text style={styles.text}>Database</Text>
-          <Text style={styles.text}>{systemHealth.database ? "✅" : "❌"}</Text>
-        </View>
-        <View style={styles.healthWrapper}>
-          <Text style={styles.text}>Session</Text>
-          <Text style={styles.text}>{systemHealth.session ? "✅" : "❌"}</Text>
-        </View>
-      </View>
 
       <View style={styles.separator} />
 
@@ -354,6 +327,53 @@ export const AdminScreen = () => {
           </View>
         </View>
       )}
+
+      <View style={styles.separator} />
+
+      <TouchableOpacity onPress={handleErrorLogCardClick} style={styles.card}>
+        <Text style={styles.sectionTitle}>Logger</Text>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.errorLogTextBold}>Info</Text>
+          <Text style={[styles.errorLogTextBold, { color: Color.Green }]}>{logCategoryCount.info}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.errorLogTextBold}>Warning</Text>
+          <Text style={[styles.errorLogTextBold, { color: Color.BuzzifyOrange }]}>{logCategoryCount.warning}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.errorLogTextBold}>Critical</Text>
+          <Text style={[styles.errorLogTextBold, { color: Color.Red }]}>{logCategoryCount.critical}</Text>
+        </View>
+      </TouchableOpacity>
+
+      <View style={styles.separator} />
+
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>System Helse</Text>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Platform</Text>
+          <Text style={styles.text}>{systemHealth.platform ? "✅" : "❌"}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Database</Text>
+          <Text style={styles.text}>{systemHealth.database ? "✅" : "❌"}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Session</Text>
+          <Text style={styles.text}>{systemHealth.session ? "✅" : "❌"}</Text>
+        </View>
+      </View>
+
+      <View style={styles.separator} />
+
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Debug tools</Text>
+        <Text style={styles.text}>Pseudo id: {pseudoId}</Text>
+        <Button title="Invalidate AT" onPress={invalidateAccessToken} />
+        <Button title="reset pseudo id" onPress={resetPseudoId} />
+        <Button title="log values" onPress={logValues} />
+        <Button title="rotate tokens" onPress={rotateTokens} />
+      </View>
     </ScrollView>
   );
 };

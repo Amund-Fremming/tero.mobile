@@ -1,8 +1,10 @@
+import GameCard from "@/src/core/components/GameCard/GameCard";
+import { GameTypeIcon, GameTypeTabBar } from "@/src/core/components/GameTypeTabBar/GameTypeTabBar";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import VerticalScroll from "@/src/core/components/VerticalScroll/VerticalScroll";
 import Color from "@/src/core/constants/Color";
 import Screen from "@/src/core/constants/Screen";
-import { GameBase, GameCategory, GameEntryMode, GameType, PagedResponse } from "@/src/core/constants/Types";
+import { GameBase, GameEntryMode, GameType, PagedResponse } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useSavedGamesProvider } from "@/src/core/context/SavedGamesProvider";
@@ -11,34 +13,13 @@ import { moderateScale } from "@/src/core/utils/dimensions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { QuizSession } from "@/src/play/games/quizGame/constants/quizTypes";
 import { useQuizSessionProvider } from "@/src/play/games/quizGame/context/QuizGameProvider";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./savedGameScreenStyles";
 
-const CATEGORY_LABELS: Record<GameCategory, string> = {
-  [GameCategory.Girls]: "Jentene",
-  [GameCategory.Boys]: "Gutta",
-  [GameCategory.Mixed]: "Mixed",
-  [GameCategory.InnerCircle]: "Indre krets",
-};
-
-const CATEGORY_ICONS: Record<GameCategory, any> = {
-  [GameCategory.Girls]: "flower",
-  [GameCategory.Boys]: "sword",
-  [GameCategory.Mixed]: "glass-cocktail",
-  [GameCategory.InnerCircle]: "account-group",
-};
-
-const GAME_TYPE_LABELS: Record<GameType, string> = {
-  [GameType.Quiz]: "Quiz",
-  [GameType.Roulette]: "Roulette",
-  [GameType.Duel]: "Duel",
-  [GameType.Imposter]: "Imposter",
-  [GameType.Dice]: "Terning",
-};
+const GAME_TYPES = Object.values(GameType).filter((g) => g !== GameType.Dice);
 
 export const SavedGamesScreen = () => {
   const navigation: any = useNavigation();
@@ -62,14 +43,14 @@ export const SavedGamesScreen = () => {
   const [pageNum, setPageNum] = useState<number>(0);
   const [hasNext, setHasNext] = useState<boolean>(false);
   const [hasPrev, setHasPrev] = useState<boolean>(false);
-  const [selectedGameType, setSelectedGameType] = useState<GameType>(GameType.Quiz);
+  const [selectedGameType, setSelectedGameType] = useState<GameType | null>(null);
   const scrollRef = useRef<ScrollView>(null);
 
   const { refreshIds } = useSavedGamesProvider();
 
   useEffect(() => {
-    fetchSavedGames(0, GameType.Quiz);
-  }, []);
+    fetchSavedGames(0, null);
+  }, [accessToken]);
 
   useFocusEffect(
     useCallback(() => {
@@ -78,12 +59,11 @@ export const SavedGamesScreen = () => {
   );
 
   const handleGameTypePress = async (gameType: GameType) => {
-    if (gameType != selectedGameType) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setPageNum(0);
-      setSelectedGameType(gameType);
-      await fetchSavedGames(0, gameType);
-    }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const next = selectedGameType === gameType ? null : gameType;
+    setPageNum(0);
+    setSelectedGameType(next);
+    await fetchSavedGames(0, next);
   };
 
   const handleUnsavePressed = async (game: GameBase) => {
@@ -97,7 +77,7 @@ export const SavedGamesScreen = () => {
     await gameService().unsaveGame(accessToken, game.id);
   };
 
-  const fetchSavedGames = async (pageNum: number, gameType: GameType) => {
+  const fetchSavedGames = async (pageNum: number, gameType: GameType | null) => {
     if (!accessToken) {
       console.warn("No access token present");
       return;
@@ -182,65 +162,28 @@ export const SavedGamesScreen = () => {
     }
   };
 
-  const handleInfoPressed = () => {
-    //
-  };
-
   return (
     <View style={styles.container}>
+      <ScreenHeader title="Dine spill" onBackPressed={() => navigation.goBack()} backgroundColor={Color.White} />
+      <GameTypeTabBar
+        types={GAME_TYPES}
+        selectedType={selectedGameType}
+        onTabPress={handleGameTypePress}
+        showIcons
+        activeColor={Color.HomeRed}
+      />
       <VerticalScroll scrollRef={scrollRef}>
-        <ScreenHeader
-          title="Dine spill"
-          onBackPressed={() => navigation.goBack()}
-          onInfoPress={handleInfoPressed}
-          backgroundColor={Color.White}
-        />
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.gameTypeScroll}
-          contentContainerStyle={styles.gameTypeScrollContent}
-        >
-          {Object.values(GameType)
-            .filter((g) => g !== GameType.Dice)
-            .map((gameType) => (
-              <TouchableOpacity
-                key={gameType}
-                style={[styles.gameTypeButton, selectedGameType === gameType && styles.gameTypeButtonActive]}
-                onPress={() => handleGameTypePress(gameType)}
-              >
-                <Text style={[styles.gameTypeText, selectedGameType === gameType && styles.gameTypeTextActive]}>
-                  {GAME_TYPE_LABELS[gameType]}
-                </Text>
-              </TouchableOpacity>
-            ))}
-        </ScrollView>
-
         {pagedResponse.items.length === 0 && <Text style={styles.noGames}>Du har ingen lagrede spill</Text>}
 
         {pagedResponse.items.map((game) => (
-          <React.Fragment key={game.id}>
-            <TouchableOpacity onPress={() => handleGamePressed(game.id, game.game_type)} style={styles.card}>
-              <View style={styles.innerCard}>
-                <MaterialCommunityIcons
-                  name={CATEGORY_ICONS[game.category]}
-                  size={moderateScale(60)}
-                  color={Color.Gray}
-                />
-
-                <View style={styles.textWrapper}>
-                  <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
-                  <Text style={styles.cardHeader}>{game.name}</Text>
-                  <Text style={styles.cardDescription}>{game.iterations} runder</Text>
-                </View>
-              </View>
-              <TouchableOpacity style={styles.saveIcon} onPress={() => handleUnsavePressed(game)}>
-                <Feather name="x" size={30} color={Color.Gray} />
-              </TouchableOpacity>
-            </TouchableOpacity>
-            <View style={styles.separator} />
-          </React.Fragment>
+          <GameCard
+            key={game.id}
+            game={game}
+            icon={<GameTypeIcon type={game.game_type} size={moderateScale(60)} color={Color.Gray} />}
+            deletable
+            onPress={() => handleGamePressed(game.id, game.game_type)}
+            onActionPress={() => handleUnsavePressed(game)}
+          />
         ))}
 
         {pagedResponse.items.length > 0 && (

@@ -2,27 +2,15 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useNavigation } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { Button, Text, View } from "react-native";
+import { useEffect, useRef } from "react";
+import { View } from "react-native";
 import Screen from "../../../core/constants/Screen";
 import styles from "./hubScreenStyles";
 
 export const HubScreen = () => {
   const navigation: any = useNavigation();
 
-  const {
-    logValues,
-    rotateTokens,
-    pseudoId: guestId,
-    resetPseudoId: resetGuestId,
-    redirectUri,
-    triggerLogin,
-    triggerLogout,
-    accessToken,
-    invalidateAccessToken,
-  } = useAuthProvider();
-
-  const [displayDebugTools, setDisplayDebugTools] = useState<boolean>(true);
+  const { redirectUri, triggerLogin, accessToken } = useAuthProvider();
 
   const shouldNavigateAfterLogin = useRef(false);
 
@@ -55,20 +43,6 @@ export const HubScreen = () => {
         onInfoPress={handleProfilePressed}
         backgroundColor={Color.BuzzifyLavender}
       />
-
-      {displayDebugTools && (
-        <View style={styles.debugBox}>
-          <Text style={styles.debugHeader}>Debug tools</Text>
-          <Text>Peseudo id: {guestId}</Text>
-          <Text>Redirect uri: {redirectUri}</Text>
-
-          <Button title="Invalidate AT" onPress={invalidateAccessToken} />
-          <Button title="reset guest id" onPress={resetGuestId} />
-          <Button title="log values" onPress={logValues} />
-          <Button title="rotate tokens" onPress={rotateTokens} />
-          <Button title="logout" onPress={triggerLogout} />
-        </View>
-      )}
     </View>
   );
 };

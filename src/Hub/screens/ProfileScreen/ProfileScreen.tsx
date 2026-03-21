@@ -124,6 +124,32 @@ export const ProfileScreen = () => {
             <TouchableOpacity
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.navigate(Screen.SavedGames);
+              }}
+              style={styles.bigButton}
+            >
+              <View style={styles.iconGuard}>
+                <Feather name="play" size={30} color={Color.Black} />
+              </View>
+              <Text style={styles.buttonText}>Dine spill</Text>
+              <Feather name="chevron-right" size={35} color={Color.Black} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.navigate(Screen.TipsUs);
+              }}
+              style={styles.bigButton}
+            >
+              <View style={styles.iconGuard}>
+                <Feather name="sun" size={30} color={Color.Black} />
+              </View>
+              <Text style={styles.buttonText}>Tips oss</Text>
+              <Feather name="chevron-right" size={35} color={Color.Black} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 navigation.navigate(Screen.EditProfile);
               }}
               style={styles.bigButton}
@@ -145,32 +171,6 @@ export const ProfileScreen = () => {
                 <Feather name="lock" size={30} color={Color.Black} />
               </View>
               <Text style={styles.buttonText}>Bytt passord</Text>
-              <Feather name="chevron-right" size={35} color={Color.Black} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                navigation.navigate(Screen.TipsUs);
-              }}
-              style={styles.bigButton}
-            >
-              <View style={styles.iconGuard}>
-                <Feather name="sun" size={30} color={Color.Black} />
-              </View>
-              <Text style={styles.buttonText}>Tips oss</Text>
-              <Feather name="chevron-right" size={35} color={Color.Black} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                navigation.navigate(Screen.SavedGames);
-              }}
-              style={styles.bigButton}
-            >
-              <View style={styles.iconGuard}>
-                <Feather name="play" size={30} color={Color.Black} />
-              </View>
-              <Text style={styles.buttonText}>Dine spill</Text>
               <Feather name="chevron-right" size={35} color={Color.Black} />
             </TouchableOpacity>
             {isAdmin && (

@@ -1,6 +1,6 @@
 import Color from "@/src/core/constants/Color";
-import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { Font } from "@/src/core/constants/Font";
+import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -81,7 +81,7 @@ export const styles = StyleSheet.create({
   },
 
   genderButtonSelected: {
-    borderColor: Color.Purple,
+    borderColor: Color.BuzzifyLavender,
   },
 
   genderButtonText: {
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
 
   genderButtonTextSelected: {
     fontWeight: "700",
-    color: Color.Purple,
+    color: Color.BuzzifyLavender,
   },
 
   buttonWrapper: {
@@ -125,14 +125,14 @@ export const styles = StyleSheet.create({
   saveButton: {
     width: "90%",
     height: verticalScale(69),
-    backgroundColor: Color.BuzzifyLavender,
-    borderRadius: moderateScale(15),
+    backgroundColor: Color.HomeRed,
+    borderRadius: moderateScale(10),
     justifyContent: "center",
     alignItems: "center",
   },
 
   saveButtonText: {
-    fontSize: moderateScale(28),
+    fontSize: moderateScale(35),
     fontFamily: Font.PassionOneBold,
     color: Color.White,
   },

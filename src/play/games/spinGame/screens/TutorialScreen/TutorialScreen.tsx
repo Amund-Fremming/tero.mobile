@@ -2,6 +2,7 @@ import { GameEntryMode } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useToastProvider } from "@/src/core/context/ToastProvider";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import GenericTutorialScreen from "@/src/play/screens/GenericTutorialScreen/GenericTutorialScreen";
 import { useNavigation } from "expo-router";
@@ -30,10 +31,17 @@ export const TutorialScreen = ({ initializeHub }: TutorialScreenProps) => {
     setIsDraft,
   } = useGlobalSessionProvider();
 
+  const { displayClickableToast } = useToastProvider();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsHost(true);
+    const t = setTimeout(() => {
+      displayClickableToast("Generer et spill for deg", "Trykk her for å generere og åpne et spill direkte", () =>
+        console.log("[TutorialScreen] Generate game clicked"),
+      );
+    }, 1500);
+    return () => clearTimeout(t);
   }, []);
 
   const onFinishedPressed = async () => {
