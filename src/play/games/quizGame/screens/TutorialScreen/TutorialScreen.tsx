@@ -23,12 +23,13 @@ export const TutorialScreen = () => {
   } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
   const { setScreen, setQuizSession } = useQuizSessionProvider();
-  const { displayClickableToast } = useToastProvider();
+  const { displayClickableToast, closeClickableToast } = useToastProvider();
 
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsHost(true);
+    if (gameEntryMode !== GameEntryMode.Creator) return;
     const t = setTimeout(() => {
       displayClickableToast(
         "Generer et spill for deg",
@@ -36,7 +37,10 @@ export const TutorialScreen = () => {
         handleRandomGame,
       );
     }, 1500);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      closeClickableToast();
+    };
   }, []);
 
   const handleRandomGame = async () => {

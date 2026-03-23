@@ -95,8 +95,8 @@ export const PassiveLobbyScreen = ({ onLeave }: Props) => {
     onLeave();
   };
 
-  const fetchUserIcons = async () => {
-    const icons = await commonService().getRandomUserIcons();
+  const fetchUserIcons = () => {
+    const icons = commonService().getRandomUserIcons();
     userIconsRef.current = icons;
     setIconsLoaded(true);
   };

@@ -1,4 +1,4 @@
-import { GameEntryMode } from "@/src/core/constants/Types";
+import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
@@ -24,21 +24,48 @@ export const TutorialScreen = ({ initiateHub }: TutorialScreenProps) => {
   const { sessionData, setSessionDataValues, setGameEntryMode, gameType, setIsHost, gameEntryMode } =
     useGlobalSessionProvider();
 
-  const { displayClickableToast } = useToastProvider();
+  const { displayClickableToast, closeClickableToast } = useToastProvider();
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    if (gameEntryMode !== GameEntryMode.Creator) return;
     const t = setTimeout(() => {
-      displayClickableToast("Generer et spill for deg", "Trykk her for å generere og åpne et spill direkte", () =>
-        console.log("[TutorialScreen] Generate game clicked"),
+      displayClickableToast(
+        "Generer et spill for deg",
+        "Trykk her for å generere og åpne et spill direkte",
+        handleRandomGame,
       );
     }, 1500);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      closeClickableToast();
+    };
   }, []);
+
+  const handleRandomGame = async () => {
+    const result = await gameService().initiateRandomInteractiveGame(GameType.Imposter, pseudoId);
+    if (result.isError()) {
+      displayInfoModal("Ingen tilfeldige spill klare, forsøk igjen senere");
+      return;
+    }
+
+    let info = result.value;
+    setSessionDataValues(info.key, info.hub_name, info.game_id);
+
+    setIsHost(true);
+    setGameEntryMode(GameEntryMode.Creator);
+    setScreen(ImposterSessionScreen.AddPlayers);
+  };
 
   const onFinishedPressed = async () => {
     if (loading) return;
     setLoading(true);
+
+    if (gameEntryMode === GameEntryMode.Host) {
+      setIsHost(true);
+      setScreen(ImposterSessionScreen.AddPlayers);
+      return;
+    }
 
     if (gameEntryMode !== GameEntryMode.Creator) {
       setIsHost(false);

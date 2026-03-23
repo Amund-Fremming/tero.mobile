@@ -184,7 +184,7 @@ export class GameService {
     }
   }
 
-  async initiateRandomInteractiveGame<T>(game_type: string, pseudo_id: string): Promise<Result<T>> {
+  async initiateRandomInteractiveGame(game_type: string, pseudo_id: string): Promise<Result<InteractiveGameResponse>> {
     try {
       const response = await axios.post(
         `${this.urlBase}/games/session/${game_type}/initiate-random`,
@@ -193,7 +193,7 @@ export class GameService {
           headers: getHeaders(pseudo_id, null),
         },
       );
-      const data: T = response.data;
+      const data: InteractiveGameResponse = response.data;
       return ok(data);
     } catch (error) {
       console.error("initiateRandomGame", error);

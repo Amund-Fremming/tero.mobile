@@ -68,7 +68,7 @@ export const HomeScreen = () => {
     displayLoadingModal(() => {
       closeLoadingModal();
       navigation.navigate(Screen.Problem);
-    }, "Trying to reconnect.");
+    }, "Forsøker å koble til");
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const result = await ensurePseudoId();
