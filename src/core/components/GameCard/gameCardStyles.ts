@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
 
   actionIcon: {
     position: "absolute",
-    right: horizontalScale(15),
+    right: horizontalScale(0),
     top: verticalScale(15),
     padding: moderateScale(8),
   },

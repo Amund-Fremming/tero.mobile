@@ -28,7 +28,9 @@ export const GameCard = ({ game, icon, onPress, saved, deletable, onActionPress 
         <View style={styles.innerCard}>
           {icon}
           <View style={styles.textWrapper}>
-            <Text style={styles.cardCategory}>{CATEGORY_LABELS[game.category]}</Text>
+            <Text style={styles.cardCategory}>
+              {game.game_type} • {CATEGORY_LABELS[game.category]}
+            </Text>
             <Text style={styles.cardHeader}>{game.name}</Text>
             <Text style={styles.cardDescription}>{game.iterations} runder</Text>
           </View>

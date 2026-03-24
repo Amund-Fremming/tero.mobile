@@ -12,7 +12,6 @@ interface ScreenHeaderProps {
   infoIconOverride?: "?" | "user" | "log-out" | "x";
   showBorder?: boolean;
   backgroundColor?: string;
-  miniHeader?: string;
   children?: ReactNode;
 }
 
@@ -23,7 +22,6 @@ export const ScreenHeader = ({
   infoIconOverride = "?",
   showBorder = false,
   backgroundColor,
-  miniHeader,
   children,
 }: ScreenHeaderProps) => {
   return (

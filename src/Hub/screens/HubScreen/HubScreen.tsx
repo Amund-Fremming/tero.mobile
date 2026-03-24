@@ -1,6 +1,7 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import { useEffect, useRef } from "react";
 import { View } from "react-native";
@@ -25,6 +26,8 @@ export const HubScreen = () => {
   }, [accessToken, navigation]);
 
   const handleProfilePressed = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
     if (accessToken) {
       navigation.navigate(Screen.Profile);
       return;

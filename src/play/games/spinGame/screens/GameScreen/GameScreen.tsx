@@ -102,6 +102,7 @@ export const GameScreen = ({ onLeave }: Props) => {
   };
 
   const handleBackPressed = async () => {
+    disconnectTriggeredRef.current = true;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onLeave();
   };
