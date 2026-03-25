@@ -5,9 +5,10 @@ import ToastProvider from "@/src/core/context/ToastProvider";
 import { setupNotifications } from "@/src/core/services/notificationService";
 import Hub from "@/src/hub/Hub";
 import HubConnectionProvider from "@/src/play/context/HubConnectionProvider";
+import GuessSessionProvider from "@/src/play/games/guess/context/GuessGameProvider";
 import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
-import QuizSessionProvider from "@/src/play/games/quizGame/context/QuizGameProvider";
-import SpinSessionProvider from "@/src/play/games/spinGame/context/SpinGameProvider";
+import QuizSessionProvider from "@/src/play/games/quiz/context/QuizGameProvider";
+import SpinSessionProvider from "@/src/play/games/spin/context/SpinGameProvider";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import * as ExpoSplashScreen from "expo-splash-screen";
@@ -42,9 +43,11 @@ export default () => (
                 <HubConnectionProvider>
                   <QuizSessionProvider>
                     <SpinSessionProvider>
-                      <ImposterSessionProvider>
-                        <Hub />
-                      </ImposterSessionProvider>
+                      <GuessSessionProvider>
+                        <ImposterSessionProvider>
+                          <Hub />
+                        </ImposterSessionProvider>
+                      </GuessSessionProvider>
                     </SpinSessionProvider>
                   </QuizSessionProvider>
                 </HubConnectionProvider>

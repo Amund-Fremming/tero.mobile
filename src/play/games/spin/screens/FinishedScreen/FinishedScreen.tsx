@@ -1,6 +1,6 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { useSpinSessionProvider } from "@/src/play/games/spinGame/context/SpinGameProvider";
+import { useSpinSessionProvider } from "@/src/play/games/spin/context/SpinGameProvider";
 import { useEffect, useRef } from "react";
 import { Animated, Easing, Text, TouchableOpacity, View } from "react-native";
 import styles from "./finishedScreenStyles";

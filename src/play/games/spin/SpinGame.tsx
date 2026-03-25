@@ -19,15 +19,7 @@ import TutorialScreen from "./screens/TutorialScreen/TutorialScreen";
 
 export const SpinGame = () => {
   const outerNavigation: any = useNavigation();
-  const {
-    gameEntryMode,
-    sessionData: sessionData,
-    setIsHost,
-    clearGlobalSessionValues,
-    isDraft,
-    gameType,
-    isHost,
-  } = useGlobalSessionProvider();
+  const { gameEntryMode, setIsHost, clearGlobalSessionValues, gameType } = useGlobalSessionProvider();
   const {
     screen,
     setScreen,

@@ -32,6 +32,10 @@ export const gameThemeMap: Record<GameType, GameTheme> = {
     primaryColor: Color.LightGray,
     secondaryColor: Color.OffBlack,
   },
+  [GameType.Guess]: {
+    primaryColor: Color.OffBlack,
+    secondaryColor: Color.LightGray,
+  },
 };
 
 export const getGameTheme = (gameType: GameType): GameTheme => {

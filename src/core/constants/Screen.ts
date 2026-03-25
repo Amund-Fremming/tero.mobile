@@ -4,6 +4,7 @@ export enum Screen {
   Join = "Join",
   Games = "Games",
   Spin = "Spin",
+  Guess = "Guess",
   Quiz = "Quiz",
   Dice = "Dice",
   Imposter = "Imposter",

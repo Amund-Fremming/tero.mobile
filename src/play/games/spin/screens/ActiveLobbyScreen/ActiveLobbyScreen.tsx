@@ -31,7 +31,13 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    const result = await invokeFunction("AddRound", sessionData.gameKey, round);
+    if (round.length > 50) {
+      displayInfoModal("Du kan maksimalt bruke 50 tegn");
+      return;
+    }
+
+    const trimmedRound = round.trim().replaceAll("\n", " ");
+    const result = await invokeFunction("AddRound", sessionData.gameKey, trimmedRound);
 
     if (result.isError()) {
       console.error(result.error);

@@ -69,15 +69,26 @@ export const AddPlayersScreen = ({ onLeave }: Props) => {
     setImposterSession((prev) => {
       if (!prev) return prev;
 
+      const trimmedPlayers = players.map((p) => p.trim());
+
       return {
         ...prev,
-        players: new Set(players),
+        players: new Set(trimmedPlayers),
       };
     });
   };
 
+  const trimAndTrunc = (name: string): string => {
+    name = name.trim();
+    if (name.length > 7) {
+      name = name.substring(0, 7);
+    }
+    return name;
+  };
+
   const addPlayersToServer = async () => {
-    const result = await invokeFunction("AddPlayers", sessionData.gameKey, players);
+    const trimmedPlayers = players.map((p) => trimAndTrunc(p));
+    const result = await invokeFunction("AddPlayers", sessionData.gameKey, trimmedPlayers);
     if (result.isError()) {
       console.error("Failed to AddPlayers:", result.error);
       displayErrorModal("Klarte ikke legge til spillere");

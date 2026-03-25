@@ -24,6 +24,12 @@
     "color": "white"
   },
   {
+    "name": "Guess",
+    "icon": "",
+    "screen": "Guess",
+    "color": "white"
+  },
+  {
     "name": "Terning",
     "icon": "dice.webp",
     "screen": "Dice",

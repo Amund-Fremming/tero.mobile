@@ -11,7 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import React, { useCallback } from "react";
 
-const GAME_TYPES = [GameType.Quiz, GameType.Roulette, GameType.Duel, GameType.Imposter];
+const GAME_TYPES = Object.values(GameType).filter((g) => g !== GameType.Dice);
 
 export const GameListScreen = () => {
   const navigation: any = useNavigation();

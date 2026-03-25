@@ -12,6 +12,7 @@ export const GAME_TYPE_LABELS: Record<GameType, string> = {
   [GameType.Duel]: "Duel",
   [GameType.Imposter]: "Imposter",
   [GameType.Dice]: "Terning",
+  [GameType.Guess]: "Gjett",
 };
 
 export const GameTypeIcon = ({ type, size, color }: { type: GameType; size: number; color: string }) => {
@@ -23,6 +24,7 @@ export const GameTypeIcon = ({ type, size, color }: { type: GameType; size: numb
     case GameType.Imposter:
       return <FontAwesome6 name="users" size={size} color={color} solid />;
     case GameType.Quiz:
+      return <FontAwesome6 name="layer-group" size={size} color={color} solid />;
     default:
       return <FontAwesome6 name="layer-group" size={size} color={color} solid />;
   }
