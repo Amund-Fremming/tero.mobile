@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     paddingLeft: moderateScale(15),
+    paddingRight: moderateScale(10),
     paddingVertical: verticalScale(25),
     borderRadius: moderateScale(15),
     gap: moderateScale(8),
