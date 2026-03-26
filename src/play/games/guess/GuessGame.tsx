@@ -8,7 +8,14 @@ import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "../../context/HubConnectionProvider";
 import { GuessSessionScreen, GuessGameState as GuessSessionState } from "./constants/GuessTypes";
 import { useGuessSessionProvider } from "./context/GuessGameProvider";
+import ActiveLobbyScreen from "./screens/ActiveLobbyScreen/ActiveLobbyScreen";
+import CreateScreen from "./screens/CreateScreen/CreateScreen";
+import FinishedScreen from "./screens/FinishedScreen/FinishedScreen";
+import GuessScreen from "./screens/GuessScreen/GuessScreen";
+import PassiveLobbyScreen from "./screens/PassiveLobbyScreen/PassiveLobbyScreen";
+import ResultScreen from "./screens/ResultScreen/ResultScreen";
 import TutorialScreen from "./screens/TutorialScreen/TutorialScreen";
+import WaitingScreen from "./screens/WaitingScreen/WaitingScreen";
 
 export const GuessGame = () => {
   const outerNavigation: any = useNavigation();
@@ -106,13 +113,20 @@ export const GuessGame = () => {
   switch (screen) {
     case GuessSessionScreen.Tutorial:
       return <TutorialScreen initializeHub={(a, k) => initializeHub(a, k)} />;
-    case GuessSessionScreen.Finished:
     case GuessSessionScreen.ActiveLobby:
-    case GuessSessionScreen.Create:
-    case GuessSessionScreen.Guess:
+      return <ActiveLobbyScreen />;
     case GuessSessionScreen.PassiveLobby:
+      return <PassiveLobbyScreen onLeave={handleLeavePressed} />;
+    case GuessSessionScreen.Create:
+      return <CreateScreen />;
+    case GuessSessionScreen.Guess:
+      return <GuessScreen onLeave={handleLeavePressed} />;
     case GuessSessionScreen.Result:
+      return <ResultScreen onLeave={handleLeavePressed} />;
     case GuessSessionScreen.Waiting:
+      return <WaitingScreen onLeave={handleLeavePressed} />;
+    case GuessSessionScreen.Finished:
+      return <FinishedScreen onLeave={handleLeavePressed} />;
   }
 };
 

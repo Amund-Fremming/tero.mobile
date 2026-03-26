@@ -40,6 +40,8 @@ export const Color = {
   ImposterSecondary: "#4A3B3B",
   ToastGreen: "#b3df72",
   ToastYellow: "",
+  GuessPrimary: "#2C6B8A",
+  GuessSecondary: "#1A4459",
 };
 
 export default Color;

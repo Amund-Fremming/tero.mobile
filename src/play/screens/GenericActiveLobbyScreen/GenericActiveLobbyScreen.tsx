@@ -2,7 +2,7 @@ import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingW
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { Feather, FontAwesome6, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Keyboard, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
@@ -23,6 +23,7 @@ interface GenericActiveLobbyScreenProps {
   onAddRoundPressed: (round: string) => void;
   onBackPressed: () => void;
   onInfoPressed?: () => void;
+  customInput?: React.ReactNode;
 }
 
 export const GenericActiveLobbyScreen = ({
@@ -36,12 +37,14 @@ export const GenericActiveLobbyScreen = ({
   onAddRoundPressed,
   onBackPressed,
   onInfoPressed,
+  customInput,
 }: GenericActiveLobbyScreenProps) => {
   const anchorRef = useRef<View>(null);
 
   const { sessionData: sessionData, isHost } = useGlobalSessionProvider();
 
   const [inputValue, setInputValue] = useState<string>("");
+  const [inputError, setInputError] = useState<string>("");
 
   const getIcon = () => {
     if (featherIcon === "sword-cross") {
@@ -78,8 +81,13 @@ export const GenericActiveLobbyScreen = ({
   };
 
   const handleAddRound = () => {
+    if (inputValue.length > 50) {
+      setInputError("Maks 50 tegn per runde.");
+      return;
+    }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setInputValue("");
+    setInputError("");
     onAddRoundPressed(inputValue);
   };
 
@@ -115,22 +123,31 @@ export const GenericActiveLobbyScreen = ({
           {getIcon()}
         </View>
         <View style={styles.bottomSection}>
-          <TextInput
-            style={styles.input}
-            placeholder={inputPlaceholder}
-            value={inputValue}
-            onChangeText={(input) => setInputValue(input)}
-            onSubmitEditing={Keyboard.dismiss}
-            returnKeyType="done"
-            multiline
-          />
-          <TouchableOpacity
-            ref={anchorRef}
-            onPress={handleAddRound}
-            style={{ ...styles.categoryButton, backgroundColor: secondaryThemeColor }}
-          >
-            <Text style={styles.bottomText}>Legg til</Text>
-          </TouchableOpacity>
+          {customInput ?? (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder={inputPlaceholder}
+                value={inputValue}
+                onChangeText={(input) => {
+                  const sanitized = input.replace(/\n/g, "");
+                  setInputValue(sanitized);
+                  if (inputError) setInputError("");
+                }}
+                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="done"
+                multiline
+              />
+              {inputError ? <Text style={styles.inputError}>{inputError}</Text> : null}
+              <TouchableOpacity
+                ref={anchorRef}
+                onPress={handleAddRound}
+                style={{ ...styles.categoryButton, backgroundColor: secondaryThemeColor }}
+              >
+                <Text style={styles.bottomText}>Legg til</Text>
+              </TouchableOpacity>
+            </>
+          )}
           {isHost && (
             <TouchableOpacity
               onPress={() => {
