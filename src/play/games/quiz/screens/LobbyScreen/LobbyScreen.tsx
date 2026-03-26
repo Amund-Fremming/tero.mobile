@@ -4,6 +4,7 @@ import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import GenericActiveLobbyScreen from "@/src/play/screens/GenericActiveLobbyScreen/GenericActiveLobbyScreen";
+import LobbyTextInput from "@/src/play/screens/GenericActiveLobbyScreen/LobbyTextInput";
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef, useState } from "react";
 import { QuizGameScreen } from "../../constants/quizTypes";
@@ -16,6 +17,7 @@ type Props = {
 export const LobbyScreen = ({ onLeave }: Props) => {
   const [started, setStarted] = useState<boolean>(false);
   const [isAddingQuestion, setIsAddingRound] = useState<boolean>(false);
+  const [input, setInput] = useState<string>("");
 
   const { sessionData: sessionData } = useGlobalSessionProvider();
   const { disconnect, invokeFunction } = useHubConnectionProvider();
@@ -51,6 +53,7 @@ export const LobbyScreen = ({ onLeave }: Props) => {
       return;
     }
 
+    setInput("");
     setIsAddingRound(false);
   };
 
@@ -99,6 +102,15 @@ export const LobbyScreen = ({ onLeave }: Props) => {
       onAddRoundPressed={handleAddRound}
       onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
+      customInput={
+        <LobbyTextInput
+          value={input}
+          onChangeText={setInput}
+          onSubmit={() => handleAddRound(input)}
+          placeholder="Spørsmål..."
+          buttonColor={theme.secondaryColor}
+        />
+      }
     />
   );
 };

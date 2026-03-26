@@ -1,4 +1,3 @@
-import { moderateScale } from "@/src/core/utils/dimensions";
 import * as Haptics from "expo-haptics";
 import { useState } from "react";
 import { Keyboard, Text, TouchableOpacity } from "react-native";
@@ -46,10 +45,7 @@ export const LobbyTextInput = ({ value, onChangeText, onSubmit, placeholder, but
         multiline
       />
       {error ? <Text style={styles.inputError}>{error}</Text> : null}
-      <TouchableOpacity
-        onPress={handleSubmit}
-        style={{ ...styles.categoryButton, backgroundColor: buttonColor }}
-      >
+      <TouchableOpacity onPress={handleSubmit} style={{ ...styles.categoryButton, backgroundColor: buttonColor }}>
         <Text style={styles.bottomText}>Legg til</Text>
       </TouchableOpacity>
     </>
