@@ -1,7 +1,7 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import Screen from "@/src/core/constants/Screen";
-import { ActivityStats, ClientPopup, LogCategoryCount, SystemHealth } from "@/src/core/constants/Types";
+import { ActivityStats, ClientPopup, LogCategoryCount, SessionCacheInfo, SystemHealth } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
@@ -9,7 +9,7 @@ import { moderateScale, screenHeight, verticalScale } from "@/src/core/utils/dim
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import styles from "./AdminScreenStyles";
@@ -26,7 +26,7 @@ export const AdminScreen = () => {
     invalidateAccessToken,
     triggerLogout,
   } = useAuthProvider();
-  const { commonService, userService } = useServiceProvider();
+  const { commonService, userService, adminService } = useServiceProvider();
   const { displayErrorModal } = useModalProvider();
 
   const [systemHealth, setSystemHealth] = useState<SystemHealth>({
@@ -42,12 +42,23 @@ export const AdminScreen = () => {
   const [stats, setStats] = useState<ActivityStats | undefined>(undefined);
   const [popup, setPopup] = useState<ClientPopup | undefined>(undefined);
   const [popupEditing, setPopupEditing] = useState<boolean>(false);
+  const [sessionCacheInfo, setSessionCacheInfo] = useState<SessionCacheInfo | undefined>(undefined);
+  const cacheIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     getHealth();
     getUserActivityStats();
     getClientPopup();
     getLogCategoryCount();
+    getSessionCacheInfo();
+
+    cacheIntervalRef.current = setInterval(() => {
+      getSessionCacheInfo();
+    }, 30_000);
+
+    return () => {
+      if (cacheIntervalRef.current) clearInterval(cacheIntervalRef.current);
+    };
   }, []);
 
   const getLogCategoryCount = async () => {
@@ -88,6 +99,21 @@ export const AdminScreen = () => {
     }
 
     setStats(result.value);
+  };
+
+  const getSessionCacheInfo = async () => {
+    if (!accessToken) {
+      console.error("Access token was not present");
+      return;
+    }
+
+    const result = await adminService().getSessionCacheInfo(accessToken);
+    if (result.isError()) {
+      console.error("Failed to load session cache info");
+      return;
+    }
+
+    setSessionCacheInfo(result.value);
   };
 
   const getClientPopup = async () => {
@@ -361,6 +387,36 @@ export const AdminScreen = () => {
         <View style={styles.healthWrapper}>
           <Text style={styles.text}>Session</Text>
           <Text style={styles.text}>{systemHealth.session ? "✅" : "❌"}</Text>
+        </View>
+      </View>
+
+      <View style={styles.separator} />
+
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Session Cache</Text>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Spin Sessions</Text>
+          <Text style={styles.text}>{sessionCacheInfo?.spinSessionSize ?? "—"}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Spin Managers</Text>
+          <Text style={styles.text}>{sessionCacheInfo?.spinManagerSize ?? "—"}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Quiz Sessions</Text>
+          <Text style={styles.text}>{sessionCacheInfo?.quizSessionSize ?? "—"}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Quiz Managers</Text>
+          <Text style={styles.text}>{sessionCacheInfo?.quizManagerSize ?? "—"}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Imposter Sessions</Text>
+          <Text style={styles.text}>{sessionCacheInfo?.imposterSessionSize ?? "—"}</Text>
+        </View>
+        <View style={styles.healthWrapper}>
+          <Text style={styles.text}>Imposter Managers</Text>
+          <Text style={styles.text}>{sessionCacheInfo?.imposterManagerSize ?? "—"}</Text>
         </View>
       </View>
 

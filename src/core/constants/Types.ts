@@ -46,6 +46,15 @@ export interface LogCategoryCount {
   critical: number;
 }
 
+export interface SessionCacheInfo {
+  spinSessionSize: number;
+  spinManagerSize: number;
+  quizSessionSize: number;
+  quizManagerSize: number;
+  imposterSessionSize: number;
+  imposterManagerSize: number;
+}
+
 export enum LogCeverity {
   Info = "Info",
   Warning = "Warning",
