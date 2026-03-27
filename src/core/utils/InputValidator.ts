@@ -14,4 +14,16 @@ export const validUsername = (input: string): boolean => {
   return usernameRegex.test(input);
 };
 
-export default { validText, validNumber, validUsername };
+export const validMaxLength = (
+  input: string,
+  maxChars: number,
+  displayErrorModal: (message: string) => void,
+): boolean => {
+  if (input.length > maxChars) {
+    displayErrorModal(`Teksten kan ikke være lengre enn ${maxChars} tegn.`);
+    return false;
+  }
+  return true;
+};
+
+export default { validText, validNumber, validUsername, validMaxLength };

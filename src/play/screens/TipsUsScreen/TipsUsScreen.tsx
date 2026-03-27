@@ -2,15 +2,16 @@ import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import { useRef, useState } from "react";
-import { Keyboard, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Keyboard, ScrollView, Text, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { BigButton } from "../../../core/components/BigButton/BigButton";
 import { KeyboardAvoidingWrapper } from "../../../core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
 import Color from "../../../core/constants/Color";
 import { CreateGameTipRequest } from "../../../core/constants/Types";
 import { useModalProvider } from "../../../core/context/ModalProvider";
 import { useServiceProvider } from "../../../core/context/ServiceProvider";
-import { moderateScale } from "../../../core/utils/dimensions";
+import { moderateScale, verticalScale } from "../../../core/utils/dimensions";
 import { styles } from "./tipsUsScreenStyles";
 
 export const TipsUsScreen = () => {
@@ -175,9 +176,9 @@ export const TipsUsScreen = () => {
           </View>
         </ScrollView>
 
-        <TouchableOpacity ref={anchorRef} style={styles.button} onPress={handleCreateTip}>
-          <Text style={styles.buttonText}>Send</Text>
-        </TouchableOpacity>
+        <View style={{ width: "100%", alignItems: "center", position: "absolute", bottom: verticalScale(40) }}>
+          <BigButton label="Send" backgroundColor={Color.HomeRed} textColor={Color.White} onPress={handleCreateTip} />
+        </View>
       </View>
     </KeyboardAvoidingWrapper>
   );

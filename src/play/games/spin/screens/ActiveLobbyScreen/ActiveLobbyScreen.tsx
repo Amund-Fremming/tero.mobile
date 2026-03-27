@@ -1,5 +1,6 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { validMaxLength } from "@/src/core/utils/InputValidator";
 import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
@@ -31,10 +32,7 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    if (round.length > 50) {
-      displayInfoModal("Du kan maksimalt bruke 50 tegn");
-      return;
-    }
+    if (!validMaxLength(round, 40, displayErrorModal)) return;
 
     const trimmedRound = round.trim().replaceAll("\n", " ");
     const result = await invokeFunction("AddRound", sessionData.gameKey, trimmedRound);

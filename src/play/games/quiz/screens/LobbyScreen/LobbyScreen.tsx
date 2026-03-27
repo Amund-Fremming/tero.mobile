@@ -1,5 +1,6 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { validMaxLength } from "@/src/core/utils/InputValidator";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
@@ -42,6 +43,8 @@ export const LobbyScreen = ({ onLeave }: Props) => {
     if (questionToAdd.trim() === "") {
       return;
     }
+
+    if (!validMaxLength(questionToAdd, 40, displayErrorModal)) return;
 
     setIsAddingRound(true);
     const result = await invokeFunction("AddQuestion", sessionData.gameKey, questionToAdd);

@@ -113,6 +113,14 @@ export const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(20),
     paddingVertical: verticalScale(14),
   },
+
+  inputError: {
+    width: "86%",
+    fontSize: moderateScale(22),
+    fontFamily: Font.PassionOneRegular,
+    color: Color.Red,
+    marginTop: verticalScale(-10),
+  },
 });
 
 export default styles;

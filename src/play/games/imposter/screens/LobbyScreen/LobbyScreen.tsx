@@ -1,9 +1,11 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { validMaxLength } from "@/src/core/utils/InputValidator";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import GenericActiveLobbyScreen from "@/src/play/screens/GenericActiveLobbyScreen/GenericActiveLobbyScreen";
+import LobbyTextInput from "@/src/play/screens/GenericActiveLobbyScreen/LobbyTextInput";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
@@ -18,11 +20,14 @@ export const LobbyScreen = () => {
   const theme = getGameTheme(GameType.Imposter);
 
   const [started, setStarted] = useState<boolean>(false);
+  const [input, setInput] = useState<string>("");
 
   const handleAddRound = async (round: string) => {
-    if (round === "") {
+    if (round.trim() === "") {
       return;
     }
+
+    if (!validMaxLength(round, 40, displayErrorModal)) return;
 
     const result = await invokeFunction("AddRound", sessionData.gameKey, round);
     if (result.isError()) {
@@ -30,6 +35,8 @@ export const LobbyScreen = () => {
       displayErrorModal("Kunne ikke legge til runde.");
       return;
     }
+
+    setInput("");
   };
 
   const handleStartGame = async () => {
@@ -74,6 +81,15 @@ export const LobbyScreen = () => {
       featherIcon={"users"}
       iterations={iterations}
       inputPlaceholder="Tema for runden..."
+      customInput={
+        <LobbyTextInput
+          value={input}
+          onChangeText={setInput}
+          onSubmit={() => handleAddRound(input)}
+          placeholder="Tema for runden..."
+          buttonColor={theme.secondaryColor}
+        />
+      }
     />
   );
 };

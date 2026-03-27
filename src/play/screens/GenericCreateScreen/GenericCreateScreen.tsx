@@ -37,6 +37,7 @@ export const GenericCreateScreen = ({
   const { isHost, gameType } = useGlobalSessionProvider();
 
   const [inputValue, setInputValue] = useState<string>("");
+  const [inputError, setInputError] = useState<string>("");
   const [category, setCategory] = useState<GameCategory | undefined>(undefined);
 
   const subTextColor = () => {
@@ -81,6 +82,10 @@ export const GenericCreateScreen = ({
       displayInfoModal("Du må velge en kategori!");
       return;
     }
+    if (inputValue.length > 50) {
+      setInputError("Maks 50 tegn i spillnavn.");
+      return;
+    }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     handleCreateGame(inputValue, category);
   };
@@ -120,10 +125,15 @@ export const GenericCreateScreen = ({
             style={styles.input}
             placeholder={"Spillnavn..."}
             value={inputValue}
-            onChangeText={(input) => setInputValue(input)}
+            onChangeText={(input) => {
+              const sanitized = input.replace(/\n/g, "");
+              setInputValue(sanitized);
+              if (inputError) setInputError("");
+            }}
             onSubmitEditing={Keyboard.dismiss}
             returnKeyType="done"
           />
+          {inputError ? <Text style={styles.inputError}>{inputError}</Text> : null}
           <CategoryDropdown<GameCategory>
             data={categoryData}
             value={category}
