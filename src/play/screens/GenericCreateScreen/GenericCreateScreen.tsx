@@ -1,5 +1,7 @@
+import { BigButton } from "@/src/core/components/BigButton/BigButton";
 import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { validMaxLength } from "@/src/core/utils/InputValidator";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
@@ -82,11 +84,7 @@ export const GenericCreateScreen = ({
       displayInfoModal("Du må velge en kategori!");
       return;
     }
-    if (inputValue.length > 50) {
-      setInputError("Maks 50 tegn i spillnavn.");
-      return;
-    }
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!validMaxLength(inputValue, 15, (msg) => setInputError(msg))) return;
     handleCreateGame(inputValue, category);
   };
 
@@ -144,9 +142,12 @@ export const GenericCreateScreen = ({
             onOpen={() => Keyboard.dismiss()}
           />
           {isHost && (
-            <TouchableOpacity onPress={handleSavePressed} style={styles.createButton}>
-              <Text style={styles.bottomText}>{bottomButtonText}</Text>
-            </TouchableOpacity>
+            <BigButton
+              label={bottomButtonText}
+              backgroundColor={Color.Black}
+              textColor={Color.White}
+              onPress={handleSavePressed}
+            />
           )}
         </View>
       </View>

@@ -1,4 +1,6 @@
+import { BigButton } from "@/src/core/components/BigButton/BigButton";
 import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
+import Color from "@/src/core/constants/Color";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { Feather, FontAwesome6, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
@@ -85,7 +87,6 @@ export const GenericActiveLobbyScreen = ({
       setInputError("Maks 50 tegn per runde.");
       return;
     }
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setInputValue("");
     setInputError("");
     onAddRoundPressed(inputValue);
@@ -139,25 +140,21 @@ export const GenericActiveLobbyScreen = ({
                 multiline
               />
               {inputError ? <Text style={styles.inputError}>{inputError}</Text> : null}
-              <TouchableOpacity
-                ref={anchorRef}
+              <BigButton
+                label="Legg til"
+                backgroundColor={secondaryThemeColor}
+                textColor={Color.White}
                 onPress={handleAddRound}
-                style={{ ...styles.categoryButton, backgroundColor: secondaryThemeColor }}
-              >
-                <Text style={styles.bottomText}>Legg til</Text>
-              </TouchableOpacity>
+              />
             </>
           )}
           {isHost && (
-            <TouchableOpacity
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                void onStartPressed();
-              }}
-              style={styles.createButton}
-            >
-              <Text style={styles.bottomText}>{bottomButtonText}</Text>
-            </TouchableOpacity>
+            <BigButton
+              label={bottomButtonText}
+              backgroundColor={Color.Black}
+              textColor={Color.White}
+              onPress={() => void onStartPressed()}
+            />
           )}
         </View>
       </View>

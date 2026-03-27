@@ -2,7 +2,7 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { Text, View } from "react-native";
-import styles from "./resultScreenStyles";
+import styles from "../GuessScreen/guessScreenStyles";
 
 type Props = { onLeave: () => void };
 

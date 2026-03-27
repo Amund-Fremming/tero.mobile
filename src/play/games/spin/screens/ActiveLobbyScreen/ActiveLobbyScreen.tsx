@@ -1,10 +1,10 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
-import { validMaxLength } from "@/src/core/utils/InputValidator";
 import { resetToHomeGlobal } from "@/src/core/utils/navigationRef";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import GenericActiveLobbyScreen from "@/src/play/screens/GenericActiveLobbyScreen/GenericActiveLobbyScreen";
+import LobbyTextInput from "@/src/play/screens/GenericActiveLobbyScreen/LobbyTextInput";
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef, useState } from "react";
 import { SpinSessionScreen } from "../../constants/SpinTypes";
@@ -18,6 +18,7 @@ export const ActiveLobbyScreen = () => {
     useSpinSessionProvider();
 
   const [startGameTriggered, setStartGameTriggered] = useState<boolean>(false);
+  const [input, setInput] = useState<string>("");
   const prevIterationsRef = useRef(iterations);
 
   useEffect(() => {
@@ -32,9 +33,7 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    if (!validMaxLength(round, 40, displayErrorModal)) return;
-
-    const trimmedRound = round.trim().replaceAll("\n", " ");
+    const trimmedRound = round.trim();
     const result = await invokeFunction("AddRound", sessionData.gameKey, trimmedRound);
 
     if (result.isError()) {
@@ -42,6 +41,8 @@ export const ActiveLobbyScreen = () => {
       displayErrorModal("Kunne ikke legge til runde.");
       return;
     }
+
+    setInput("");
   };
 
   const handleStartGame = async () => {
@@ -129,6 +130,15 @@ export const ActiveLobbyScreen = () => {
       onAddRoundPressed={handleAddRound}
       onBackPressed={handleBackPressed}
       onInfoPressed={handleInfoPressed}
+      customInput={
+        <LobbyTextInput
+          value={input}
+          onChangeText={setInput}
+          onSubmit={() => handleAddRound(input)}
+          placeholder="Taperen må..."
+          buttonColor={secondaryThemeColor}
+        />
+      }
     />
   );
 };

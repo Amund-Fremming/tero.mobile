@@ -1,7 +1,8 @@
-import * as Haptics from "expo-haptics";
 import { useState } from "react";
-import { Keyboard, Text, TouchableOpacity } from "react-native";
+import { Keyboard, Text } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { BigButton } from "../../../core/components/BigButton/BigButton";
+import Color from "../../../core/constants/Color";
 import { styles } from "./genericActiveLobbyScreenStyles";
 
 const MAX_LENGTH = 50;
@@ -28,7 +29,6 @@ export const LobbyTextInput = ({ value, onChangeText, onSubmit, placeholder, but
       setError(`Maks ${MAX_LENGTH} tegn per runde.`);
       return;
     }
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setError("");
     onSubmit();
   };
@@ -45,9 +45,7 @@ export const LobbyTextInput = ({ value, onChangeText, onSubmit, placeholder, but
         multiline
       />
       {error ? <Text style={styles.inputError}>{error}</Text> : null}
-      <TouchableOpacity onPress={handleSubmit} style={{ ...styles.categoryButton, backgroundColor: buttonColor }}>
-        <Text style={styles.bottomText}>Legg til</Text>
-      </TouchableOpacity>
+      <BigButton label="Legg til" backgroundColor={buttonColor} textColor={Color.White} onPress={handleSubmit} />
     </>
   );
 };
