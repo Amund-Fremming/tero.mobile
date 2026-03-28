@@ -4,8 +4,8 @@ import Color from "../core/constants/Color";
 
 import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErrorBoundary";
 import Screen from "../core/constants/Screen";
-import DiceGame from "../play/games/dice/DiceGame";
 import DefuserGame from "../play/games/defuser/DefuserGame";
+import DiceGame from "../play/games/dice/DiceGame";
 import GuessGame from "../play/games/guess/GuessGame";
 import ImposterGame from "../play/games/imposter/ImposterGame";
 import QuizGame from "../play/games/quiz/QuizGame";
