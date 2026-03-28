@@ -34,6 +34,11 @@
     "icon": "dice.webp",
     "screen": "Dice",
     "color": "white"
+  },
+  {
+    "name": "Defuser",
+    "icon": "",
+    "screen": "Defuser",
+    "color": "white"
   }
-  // Defuser intentionally not listed for exclusion
 ]
