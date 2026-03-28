@@ -7,6 +7,7 @@ export enum Screen {
   Guess = "Guess",
   Quiz = "Quiz",
   Dice = "Dice",
+  Defuser = "Defuser",
   Imposter = "Imposter",
   GameTypeList = "GameTypeList",
   GameList = "GameList",

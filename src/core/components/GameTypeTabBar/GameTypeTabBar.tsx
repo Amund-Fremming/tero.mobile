@@ -13,6 +13,7 @@ export const GAME_TYPE_LABELS: Record<GameType, string> = {
   [GameType.Imposter]: "Imposter",
   [GameType.Dice]: "Terning",
   [GameType.Guess]: "Gjett",
+  [GameType.Defuser]: "Defuser",
 };
 
 export const GameTypeIcon = ({ type, size, color }: { type: GameType; size: number; color: string }) => {

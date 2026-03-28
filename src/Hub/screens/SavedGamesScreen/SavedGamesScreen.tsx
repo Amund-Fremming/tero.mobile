@@ -8,7 +8,7 @@ import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import * as Haptics from "expo-haptics";
 import React, { useCallback } from "react";
 
-const GAME_TYPES = Object.values(GameType).filter((g) => g !== GameType.Dice);
+const GAME_TYPES = Object.values(GameType).filter((g) => g !== GameType.Dice && g !== GameType.Defuser);
 
 export const SavedGamesScreen = () => {
   const { gameService } = useServiceProvider();

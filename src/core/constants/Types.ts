@@ -140,6 +140,7 @@ export enum GameType {
   Imposter = "Imposter",
   Dice = "Dice",
   Guess = "Guess",
+  Defuser = "Defuser",
 }
 
 export interface CreateGameTipRequest {

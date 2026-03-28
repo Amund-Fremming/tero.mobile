@@ -5,6 +5,7 @@ import Color from "../core/constants/Color";
 import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErrorBoundary";
 import Screen from "../core/constants/Screen";
 import DiceGame from "../play/games/dice/DiceGame";
+import DefuserGame from "../play/games/defuser/DefuserGame";
 import GuessGame from "../play/games/guess/GuessGame";
 import ImposterGame from "../play/games/imposter/ImposterGame";
 import QuizGame from "../play/games/quiz/QuizGame";
@@ -34,6 +35,7 @@ const SafeSpinGame = withErrorBoundary(SpinGame);
 const SafeQuizGame = withErrorBoundary(QuizGame);
 const SafeDiceGame = withErrorBoundary(DiceGame);
 const SafeImposterGame = withErrorBoundary(ImposterGame);
+const SafeDefuserGame = withErrorBoundary(DefuserGame);
 
 const Stack = createStackNavigator();
 
@@ -55,6 +57,7 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Spin} component={SafeSpinGame} />
       <Stack.Screen name={Screen.Quiz} component={SafeQuizGame} />
       <Stack.Screen name={Screen.Dice} component={SafeDiceGame} />
+      <Stack.Screen name={Screen.Defuser} component={SafeDefuserGame} />
       <Stack.Screen name={Screen.Imposter} component={SafeImposterGame} />
       <Stack.Screen name={Screen.GameList} component={GameListScreen} />
       <Stack.Screen name={Screen.GameTypeList} component={GameTypeListScreen} />
