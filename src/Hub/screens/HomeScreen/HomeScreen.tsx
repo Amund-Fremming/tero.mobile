@@ -14,8 +14,10 @@ import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionPro
 import { ProblemScreen } from "../ProblemScreen/ProblemScreen";
 import styles from "./homeScreenStyles";
 
-import { useToastProvider } from "@/src/core/context/ToastProvider";
+import Color from "@/src/core/constants/Color";
+import { moderateScale } from "@/src/core/utils/dimensions";
 import { setStackNavigator } from "@/src/core/utils/navigationRef";
+import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 import redFigure from "../../../core/assets/images/red-figure.png";
 
@@ -30,11 +32,10 @@ const subHeaderList = [
 
 export const HomeScreen = () => {
   const navigation: any = useNavigation();
-  const { pseudoId, setPseudoId, ensurePseudoId } = useAuthProvider();
+  const { pseudoId, setPseudoId, ensurePseudoId, accessToken, triggerLogin } = useAuthProvider();
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { commonService, userService } = useServiceProvider();
   const { displayInfoModal, displayLoadingModal, closeLoadingModal } = useModalProvider();
-  const { displayToast } = useToastProvider();
 
   const [subHeader, setSubheader] = useState<string>("");
   const [popupCloseCount, setPopupCloseCount] = useState<number>(0);
@@ -68,7 +69,7 @@ export const HomeScreen = () => {
     displayLoadingModal(() => {
       closeLoadingModal();
       navigation.navigate(Screen.Problem);
-    }, "Trying to reconnect.");
+    }, "Forsøker å koble til");
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const result = await ensurePseudoId();
@@ -135,8 +136,22 @@ export const HomeScreen = () => {
     return <ProblemScreen onHealthRestored={() => setIsSystemDown(false)} />;
   }
 
+  const handleProfilePressed = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    if (accessToken) {
+      navigation.navigate(Screen.Profile);
+      return;
+    }
+
+    triggerLogin();
+  };
+
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={handleProfilePressed} style={styles.iconWrapper}>
+        <Feather size={moderateScale(35)} name="user" color={Color.Black} />
+      </TouchableOpacity>
       <View style={styles.leadContainer}>
         <Text style={styles.header}>tero</Text>
         <Text style={styles.subHeader}>{subHeader}</Text>
@@ -150,7 +165,7 @@ export const HomeScreen = () => {
         >
           <Image style={styles.image} source={redFigure} />
           <View style={styles.buttonTextWrapper}>
-            <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>NYTT</Text>
+            <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>OPPRETT</Text>
             <Text style={{ ...styles.textBase, ...styles.textTopLeft }}>SPILL</Text>
           </View>
         </TouchableOpacity>
@@ -158,7 +173,7 @@ export const HomeScreen = () => {
           activeOpacity={0.8}
           style={{ ...styles.buttonBase, ...styles.topRight }}
           disabled={!isPseudoReady}
-          onPress={() => handlePress(GameEntryMode.Host, Screen.GameTypeList)}
+          onPress={() => handlePress(GameEntryMode.Host, Screen.GameList)}
         >
           <DiagonalSplit />
           <View style={styles.buttonTextWrapper}>

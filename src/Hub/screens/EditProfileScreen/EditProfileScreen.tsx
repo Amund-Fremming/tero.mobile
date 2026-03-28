@@ -1,17 +1,17 @@
-import { ScrollView, Text, View, TouchableOpacity } from "react-native";
-import * as Haptics from "expo-haptics";
-import { styles } from "./editProfileScreenStyles";
-import { useAuthProvider } from "@/src/core/context/AuthProvider";
-import { useEffect, useState } from "react";
-import { BaseUser, Gender, PatchUserRequest } from "@/src/core/constants/Types";
-import { useServiceProvider } from "@/src/core/context/ServiceProvider";
-import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
-import Color from "@/src/core/constants/Color";
-import { TextInput } from "react-native-gesture-handler";
-import { useModalProvider } from "@/src/core/context/ModalProvider";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
+import Color from "@/src/core/constants/Color";
+import { Gender, PatchUserRequest } from "@/src/core/constants/Types";
+import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
+import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import * as Haptics from "expo-haptics";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
+import { styles } from "./editProfileScreenStyles";
 
 export const EditProfileScreen = () => {
   const navigation: any = useNavigation();
@@ -28,18 +28,18 @@ export const EditProfileScreen = () => {
     const limited = cleaned.slice(0, 8);
 
     let formatted = limited;
-    if (limited.length >= 5) {
-      formatted = limited.slice(0, 4) + "-" + limited.slice(4);
+    if (limited.length >= 3) {
+      formatted = limited.slice(0, 2) + "-" + limited.slice(2);
     }
-    if (limited.length >= 7) {
-      formatted = limited.slice(0, 4) + "-" + limited.slice(4, 6) + "-" + limited.slice(6);
+    if (limited.length >= 5) {
+      formatted = limited.slice(0, 2) + "-" + limited.slice(2, 4) + "-" + limited.slice(4);
     }
 
     setBirthDateDisplay(formatted);
     if (limited.length === 8) {
-      const year = parseInt(limited.slice(0, 4), 10);
-      const month = parseInt(limited.slice(4, 6), 10);
-      const day = parseInt(limited.slice(6, 8), 10);
+      const day = parseInt(limited.slice(0, 2), 10);
+      const month = parseInt(limited.slice(2, 4), 10);
+      const year = parseInt(limited.slice(4, 8), 10);
 
       if (year >= 1900 && year <= new Date().getFullYear() && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
         const date = new Date(year, month - 1, day);
@@ -75,7 +75,8 @@ export const EditProfileScreen = () => {
     });
 
     if (userData?.birth_date) {
-      setBirthDateDisplay(userData.birth_date);
+      const [y, m, d] = userData.birth_date.split("-");
+      setBirthDateDisplay(`${d}-${m}-${y}`);
     }
   }, [userData]);
 
@@ -194,7 +195,7 @@ export const EditProfileScreen = () => {
               style={styles.input}
               value={birthDateDisplay}
               onChangeText={handleBirthDateChangeIso}
-              placeholder="YYYY-MM-DD"
+              placeholder="DD-MM-YYYY"
               placeholderTextColor={Color.DarkerGray}
               keyboardType="numeric"
               maxLength={10}

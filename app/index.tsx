@@ -5,15 +5,17 @@ import ToastProvider from "@/src/core/context/ToastProvider";
 import { setupNotifications } from "@/src/core/services/notificationService";
 import Hub from "@/src/hub/Hub";
 import HubConnectionProvider from "@/src/play/context/HubConnectionProvider";
+import GuessSessionProvider from "@/src/play/games/guess/context/GuessGameProvider";
 import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
-import QuizSessionProvider from "@/src/play/games/quizGame/context/QuizGameProvider";
-import SpinSessionProvider from "@/src/play/games/spinGame/context/SpinGameProvider";
+import QuizSessionProvider from "@/src/play/games/quiz/context/QuizGameProvider";
+import SpinSessionProvider from "@/src/play/games/spin/context/SpinGameProvider";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import * as ExpoSplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { Dimensions, StatusBar, View } from "react-native";
 import AuthProvider from "../src/core/context/AuthProvider";
+import SavedGamesProvider from "../src/core/context/SavedGamesProvider";
 import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
 
 ExpoSplashScreen.hide();
@@ -36,17 +38,21 @@ export default () => (
       <ToastProvider>
         <ModalProvider>
           <AuthProvider>
-            <GlobalGameProvider>
-              <HubConnectionProvider>
-                <QuizSessionProvider>
-                  <SpinSessionProvider>
-                    <ImposterSessionProvider>
-                      <Hub />
-                    </ImposterSessionProvider>
-                  </SpinSessionProvider>
-                </QuizSessionProvider>
-              </HubConnectionProvider>
-            </GlobalGameProvider>
+            <SavedGamesProvider>
+              <GlobalGameProvider>
+                <HubConnectionProvider>
+                  <QuizSessionProvider>
+                    <SpinSessionProvider>
+                      <GuessSessionProvider>
+                        <ImposterSessionProvider>
+                          <Hub />
+                        </ImposterSessionProvider>
+                      </GuessSessionProvider>
+                    </SpinSessionProvider>
+                  </QuizSessionProvider>
+                </HubConnectionProvider>
+              </GlobalGameProvider>
+            </SavedGamesProvider>
           </AuthProvider>
         </ModalProvider>
       </ToastProvider>

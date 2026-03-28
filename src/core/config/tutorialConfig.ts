@@ -1,8 +1,4 @@
 import { GameType } from "@/src/core/constants/Types";
-import ImposterPage1 from "@/src/play/screens/GenericTutorialScreen/pages/imposter/ImposterPage1";
-import ImposterPage2 from "@/src/play/screens/GenericTutorialScreen/pages/imposter/ImposterPage2";
-import ImposterPage3 from "@/src/play/screens/GenericTutorialScreen/pages/imposter/ImposterPage3";
-import React from "react";
 
 export type SimpleTutorialDef = {
   mode: "simple";
@@ -22,7 +18,7 @@ export const tutorialConfig: Record<GameType, TutorialDef> = {
     mode: "simple",
     title: "Slik spiller du Quiz",
     items: [
-      "Opprett spill, og den rom navnet med venner",
+      "Opprett spill, og del rom navnet med venner",
       "Venner blir med ved å trykke bli med på hjem skjermen og så bruke rom navnet for å bli med",
       "Legg til så mange spørsmål dere ønsker og start spillet",
       "Spill det som dere ønsker. Spill det som 100 spørsmål med noe som kastes rundt, eller send mobilen på rundtur og svar deretter",
@@ -47,9 +43,22 @@ export const tutorialConfig: Record<GameType, TutorialDef> = {
       "Den som fullfører utfordringen best, vinner runden",
     ],
   },
+  // Multi-step example:
+  // [GameType.Imposter]: {
+  //   mode: "multi",
+  //   pages: [ImposterPage1, ImposterPage2, ImposterPage3],
+  // },
   [GameType.Imposter]: {
-    mode: "multi",
-    pages: [ImposterPage1, ImposterPage2, ImposterPage3],
+    mode: "simple",
+    title: "Slik spiller du Imposter",
+    items: [
+      "Alle spillere får det samme hemmelige ordet – unntatt imposteren",
+      "Imposteren vet ikke hva ordet er, bare temaet",
+      "Alle svarer på spørsmål knyttet til det hemmelige ordet",
+      "Vær konkret nok til å virke troverdig – men ikke avsløre ordet",
+      "Stem på hvem du tror er imposteren",
+      "Gjetter imposteren riktig, vinner de likevel!",
+    ],
   },
   [GameType.Dice]: {
     mode: "simple",

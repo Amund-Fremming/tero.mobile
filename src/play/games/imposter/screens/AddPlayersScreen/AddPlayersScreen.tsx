@@ -2,6 +2,7 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { validMaxLength } from "@/src/core/utils/InputValidator";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
@@ -69,9 +70,11 @@ export const AddPlayersScreen = ({ onLeave }: Props) => {
     setImposterSession((prev) => {
       if (!prev) return prev;
 
+      const trimmedPlayers = players.map((p) => p.trim());
+
       return {
         ...prev,
-        players: new Set(players),
+        players: new Set(trimmedPlayers),
       };
     });
   };
@@ -100,6 +103,8 @@ export const AddPlayersScreen = ({ onLeave }: Props) => {
         displayErrorModal("Alle spillere må ha et navn");
         return false;
       }
+
+      if (!validMaxLength(name, 20, displayErrorModal)) return false;
 
       if (seen.has(trimmedName)) {
         displayErrorModal("Kan ikke ha duplikat navn");

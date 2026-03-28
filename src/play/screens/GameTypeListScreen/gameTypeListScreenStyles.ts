@@ -26,8 +26,8 @@ export const styles = StyleSheet.create({
   },
 
   card: {
+    borderColor: Color.Gray,
     borderWidth: moderateScale(6.3),
-    borderColor: Color.OffBlack,
     height: verticalScale(210),
     width: "45%",
     borderRadius: moderateScale(20),
@@ -60,6 +60,7 @@ export const styles = StyleSheet.create({
   },
 
   cardHeader: {
+    color: Color.White,
     position: "absolute",
     fontWeight: 800,
     fontSize: moderateScale(30),
@@ -73,6 +74,7 @@ export const styles = StyleSheet.create({
   },
 
   modeBadge: {
+    backgroundColor: Color.HomeRed,
     position: "absolute",
     top: moderateScale(8),
     right: moderateScale(8),

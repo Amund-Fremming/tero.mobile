@@ -34,11 +34,14 @@ export const Color = {
   LightGreen: "#D3F0D2",
   DeepForest: "#566b5f",
   DarkBrown: "#4d3423",
-  SpinChosen: "#FF8C00",
+  SpinChosen: "#eb3d36",
+  //SpinChosen: "#FF8C00",
   ImposterPrimary: "#A67B7B",
   ImposterSecondary: "#4A3B3B",
   ToastGreen: "#b3df72",
   ToastYellow: "",
+  GuessPrimary: "#2C6B8A",
+  GuessSecondary: "#1A4459",
 };
 
 export default Color;

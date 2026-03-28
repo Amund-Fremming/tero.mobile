@@ -1,8 +1,10 @@
+import { BigButton } from "@/src/core/components/BigButton/BigButton";
 import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
+import Color from "@/src/core/constants/Color";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { Feather, FontAwesome6, MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Keyboard, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
@@ -23,6 +25,7 @@ interface GenericActiveLobbyScreenProps {
   onAddRoundPressed: (round: string) => void;
   onBackPressed: () => void;
   onInfoPressed?: () => void;
+  customInput?: React.ReactNode;
 }
 
 export const GenericActiveLobbyScreen = ({
@@ -36,12 +39,14 @@ export const GenericActiveLobbyScreen = ({
   onAddRoundPressed,
   onBackPressed,
   onInfoPressed,
+  customInput,
 }: GenericActiveLobbyScreenProps) => {
   const anchorRef = useRef<View>(null);
 
   const { sessionData: sessionData, isHost } = useGlobalSessionProvider();
 
   const [inputValue, setInputValue] = useState<string>("");
+  const [inputError, setInputError] = useState<string>("");
 
   const getIcon = () => {
     if (featherIcon === "sword-cross") {
@@ -78,8 +83,12 @@ export const GenericActiveLobbyScreen = ({
   };
 
   const handleAddRound = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (inputValue.length > 50) {
+      setInputError("Maks 50 tegn per runde.");
+      return;
+    }
     setInputValue("");
+    setInputError("");
     onAddRoundPressed(inputValue);
   };
 
@@ -115,32 +124,37 @@ export const GenericActiveLobbyScreen = ({
           {getIcon()}
         </View>
         <View style={styles.bottomSection}>
-          <TextInput
-            style={styles.input}
-            placeholder={inputPlaceholder}
-            value={inputValue}
-            onChangeText={(input) => setInputValue(input)}
-            onSubmitEditing={Keyboard.dismiss}
-            returnKeyType="done"
-            multiline
-          />
-          <TouchableOpacity
-            ref={anchorRef}
-            onPress={handleAddRound}
-            style={{ ...styles.categoryButton, backgroundColor: secondaryThemeColor }}
-          >
-            <Text style={styles.bottomText}>Legg til</Text>
-          </TouchableOpacity>
+          {customInput ?? (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder={inputPlaceholder}
+                value={inputValue}
+                onChangeText={(input) => {
+                  const sanitized = input.replace(/\n/g, "");
+                  setInputValue(sanitized);
+                  if (inputError) setInputError("");
+                }}
+                onSubmitEditing={Keyboard.dismiss}
+                returnKeyType="done"
+                multiline
+              />
+              {inputError ? <Text style={styles.inputError}>{inputError}</Text> : null}
+              <BigButton
+                label="Legg til"
+                backgroundColor={secondaryThemeColor}
+                textColor={Color.White}
+                onPress={handleAddRound}
+              />
+            </>
+          )}
           {isHost && (
-            <TouchableOpacity
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                void onStartPressed();
-              }}
-              style={styles.createButton}
-            >
-              <Text style={styles.bottomText}>{bottomButtonText}</Text>
-            </TouchableOpacity>
+            <BigButton
+              label={bottomButtonText}
+              backgroundColor={Color.Black}
+              textColor={Color.White}
+              onPress={() => void onStartPressed()}
+            />
           )}
         </View>
       </View>

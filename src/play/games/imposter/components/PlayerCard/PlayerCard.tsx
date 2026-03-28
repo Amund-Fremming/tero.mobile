@@ -95,6 +95,9 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
       <Animated.View style={[styles.playerCardFill, { width: fillAnim }]} />
       <Feather name="user" size={28} color={Color.White} />
       <Text
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.6}
         style={[
           styles.playerNameText,
           revealed && (isImposter ? { color: Color.HomeRed } : { color: Color.DarkGreen }),

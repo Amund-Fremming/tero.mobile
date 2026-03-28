@@ -4,10 +4,12 @@ import Color from "../core/constants/Color";
 
 import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErrorBoundary";
 import Screen from "../core/constants/Screen";
-import DiceGame from "../play/games/diceGame/DiceGame";
+import DiceGame from "../play/games/dice/DiceGame";
+import DefuserGame from "../play/games/defuser/DefuserGame";
+import GuessGame from "../play/games/guess/GuessGame";
 import ImposterGame from "../play/games/imposter/ImposterGame";
-import QuizGame from "../play/games/quizGame/QuizGame";
-import SpinGame from "../play/games/spinGame/SpinGame";
+import QuizGame from "../play/games/quiz/QuizGame";
+import SpinGame from "../play/games/spin/SpinGame";
 import GameListScreen from "../play/screens/GameListScreen/GameListScreen";
 import GameTypeListScreen from "../play/screens/GameTypeListScreen/GameTypeListScreen";
 import { TipsUsScreen } from "../play/screens/TipsUsScreen/TipsUsScreen";
@@ -33,6 +35,7 @@ const SafeSpinGame = withErrorBoundary(SpinGame);
 const SafeQuizGame = withErrorBoundary(QuizGame);
 const SafeDiceGame = withErrorBoundary(DiceGame);
 const SafeImposterGame = withErrorBoundary(ImposterGame);
+const SafeDefuserGame = withErrorBoundary(DefuserGame);
 
 const Stack = createStackNavigator();
 
@@ -54,6 +57,7 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Spin} component={SafeSpinGame} />
       <Stack.Screen name={Screen.Quiz} component={SafeQuizGame} />
       <Stack.Screen name={Screen.Dice} component={SafeDiceGame} />
+      <Stack.Screen name={Screen.Defuser} component={SafeDefuserGame} />
       <Stack.Screen name={Screen.Imposter} component={SafeImposterGame} />
       <Stack.Screen name={Screen.GameList} component={GameListScreen} />
       <Stack.Screen name={Screen.GameTypeList} component={GameTypeListScreen} />
@@ -64,6 +68,7 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
       <Stack.Screen name={Screen.TipsList} component={TipsListScreen} />
+      <Stack.Screen name={Screen.Guess} component={GuessGame} />
     </Stack.Navigator>
   );
 };

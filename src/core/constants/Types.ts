@@ -46,6 +46,15 @@ export interface LogCategoryCount {
   critical: number;
 }
 
+export interface SessionCacheInfo {
+  spinSessionSize: number;
+  spinManagerSize: number;
+  quizSessionSize: number;
+  quizManagerSize: number;
+  imposterSessionSize: number;
+  imposterManagerSize: number;
+}
+
 export enum LogCeverity {
   Info = "Info",
   Warning = "Warning",
@@ -130,6 +139,8 @@ export enum GameType {
   Duel = "Duel",
   Imposter = "Imposter",
   Dice = "Dice",
+  Guess = "Guess",
+  Defuser = "Defuser",
 }
 
 export interface CreateGameTipRequest {

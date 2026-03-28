@@ -171,6 +171,36 @@ export class GameService {
     }
   }
 
+  async initiateRandomStaticGame<T>(game_type: string, pseudo_id: string): Promise<Result<T>> {
+    try {
+      const response = await axios.get(`${this.urlBase}/games/static/${game_type}/initiate-random`, {
+        headers: getHeaders(pseudo_id, null),
+      });
+      const data: T = response.data;
+      return ok(data);
+    } catch (error) {
+      console.error("initiateRandomStaticGame", error);
+      return err("Failed to initiate random static game");
+    }
+  }
+
+  async initiateRandomInteractiveGame(game_type: string, pseudo_id: string): Promise<Result<InteractiveGameResponse>> {
+    try {
+      const response = await axios.post(
+        `${this.urlBase}/games/session/${game_type}/initiate-random`,
+        {},
+        {
+          headers: getHeaders(pseudo_id, null),
+        },
+      );
+      const data: InteractiveGameResponse = response.data;
+      return ok(data);
+    } catch (error) {
+      console.error("initiateRandomGame", error);
+      return err("Failed to initiate random game");
+    }
+  }
+
   async initiateStaticGame<T>(game_type: string, game_id: string, pseudo_id: string): Promise<Result<T>> {
     try {
       const response = await axios.get(`${this.urlBase}/games/static/${game_type}/initiate/${game_id}`, {

@@ -17,12 +17,12 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingHorizontal: moderateScale(15),
+    paddingLeft: moderateScale(15),
+    paddingRight: moderateScale(10),
     paddingVertical: verticalScale(25),
     borderRadius: moderateScale(15),
-    gap: moderateScale(12),
+    gap: moderateScale(8),
     height: verticalScale(95),
-    overflow: "hidden",
   },
 
   playerNameText: {

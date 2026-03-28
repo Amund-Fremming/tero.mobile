@@ -24,9 +24,16 @@
     "color": "white"
   },
   {
+    "name": "Guess",
+    "icon": "",
+    "screen": "Guess",
+    "color": "white"
+  },
+  {
     "name": "Terning",
     "icon": "dice.webp",
     "screen": "Dice",
     "color": "white"
   }
+  // Defuser intentionally not listed for exclusion
 ]

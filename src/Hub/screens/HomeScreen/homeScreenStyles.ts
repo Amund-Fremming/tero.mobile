@@ -17,6 +17,18 @@ export const styles = StyleSheet.create({
     shadowRadius: 2,
   },
 
+  iconWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Color.BuzzifyLavenderLight,
+    height: verticalScale(50),
+    width: horizontalScale(50),
+    borderRadius: moderateScale(10),
+    position: "absolute",
+    top: verticalScale(70),
+    right: horizontalScale(20),
+  },
+
   image: {
     width: "95%",
     height: "95%",
