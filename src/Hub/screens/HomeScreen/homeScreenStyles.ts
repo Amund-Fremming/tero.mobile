@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import Colors, { Color } from "../../../core/constants/Color";
 import { Font } from "../../../core/constants/Font";
 
-export const styles = StyleSheet.create({
+export const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
@@ -151,4 +151,4 @@ export const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+export default createStyles;

@@ -5,17 +5,18 @@ import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import * as Haptics from "expo-haptics";
 import * as SecureStore from "expo-secure-store";
 import { useEffect, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import ArcWithCircles from "../../../core/components/Shapes/ArcWithCircles";
 import DiagonalSplit from "../../../core/components/Shapes/DiagonalSplit";
 import ScatteredCircles from "../../../core/components/Shapes/ScatteredCircles";
 import Screen from "../../../core/constants/Screen";
 import { useGlobalSessionProvider } from "../../../play/context/GlobalSessionProvider";
 import { ProblemScreen } from "../ProblemScreen/ProblemScreen";
-import styles from "./homeScreenStyles";
+import { createStyles } from "./homeScreenStyles";
 
 import Color from "@/src/core/constants/Color";
-import { moderateScale } from "@/src/core/utils/dimensions";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
+import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { setStackNavigator } from "@/src/core/utils/navigationRef";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
@@ -36,6 +37,8 @@ export const HomeScreen = () => {
   const { setGameEntryMode } = useGlobalSessionProvider();
   const { commonService, userService } = useServiceProvider();
   const { displayInfoModal, displayLoadingModal, closeLoadingModal } = useModalProvider();
+  const { darkMode, setDarkMode } = useThemeProvider();
+  const styles = createStyles(darkMode);
 
   const [subHeader, setSubheader] = useState<string>("");
   const [popupCloseCount, setPopupCloseCount] = useState<number>(0);
@@ -147,8 +150,19 @@ export const HomeScreen = () => {
     triggerLogin();
   };
 
+  const handleToggleDarkmode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
     <View style={styles.container}>
+      <Pressable onPress={handleToggleDarkmode}>
+        <Feather
+          name={darkMode ? "toggle-left" : "toggle-right"}
+          style={{ position: "absolute", left: horizontalScale(60), top: verticalScale(60) }}
+          size={moderateScale(45)}
+        />
+      </Pressable>
       <TouchableOpacity onPress={handleProfilePressed} style={styles.iconWrapper}>
         <Feather size={moderateScale(35)} name="user" color={Color.Black} />
       </TouchableOpacity>

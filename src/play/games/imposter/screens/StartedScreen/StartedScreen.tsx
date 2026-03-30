@@ -1,9 +1,9 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { useNavigation } from "expo-router";
@@ -74,6 +74,7 @@ export const StartedScreen = () => {
     disconnect();
   };
 
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
 
   return (

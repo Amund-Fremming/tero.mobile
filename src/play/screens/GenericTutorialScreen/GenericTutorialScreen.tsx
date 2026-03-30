@@ -1,5 +1,5 @@
 import { tutorialConfig } from "@/src/core/config/tutorialConfig";
-import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import React from "react";
@@ -18,6 +18,7 @@ interface GenericTutorialScreenRouteProps {
 export const GenericTutorialScreen = ({ onFinishedPressed }: GenericTutorialScreenRouteProps) => {
   const navigation: any = useNavigation();
   const { gameType, gameEntryMode } = useGlobalSessionProvider();
+  const { getGameTheme } = useThemeProvider();
 
   const config = tutorialConfig[gameType] ?? tutorialConfig[GameType.Quiz];
   const theme = getGameTheme(gameType);

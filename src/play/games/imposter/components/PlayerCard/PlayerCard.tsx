@@ -1,6 +1,6 @@
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
-import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useRef, useState } from "react";
@@ -27,6 +27,7 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
   const isCompleted = useRef(false);
   const currentAnimation = useRef<Animated.CompositeAnimation | null>(null);
 
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
 
   const handlePressIn = () => {

@@ -1,8 +1,8 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { Feather } from "@expo/vector-icons";
@@ -78,6 +78,7 @@ export const PassiveLobbyScreen = ({ onLeave }: Props) => {
   const [startGameTriggered, setStartGameTriggered] = useState(false);
   const prevPlayersRef = useRef(players);
 
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(gameType);
 
   useEffect(() => {

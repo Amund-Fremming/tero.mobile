@@ -2,9 +2,9 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { validMaxLength } from "@/src/core/utils/InputValidator";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
@@ -25,6 +25,7 @@ export const AddPlayersScreen = ({ onLeave }: Props) => {
   const { sessionData: sessionData, gameEntryMode } = useGlobalSessionProvider();
   const { setScreen, players, setPlayers, setImposterSession } = useImposterSessionProvider();
 
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
 
   const [editMode, setEditMode] = React.useState(false);

@@ -1,6 +1,7 @@
 import { GenericGameList } from "@/src/core/components/GenericGameList/GenericGameList";
 import Color from "@/src/core/constants/Color";
 import { GameBase, GameType, PagedResponse } from "@/src/core/constants/Types";
+import { useAppDataProvider } from "@/src/core/context/AppDataProvider";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useSavedGamesProvider } from "@/src/core/context/SavedGamesProvider";
@@ -15,6 +16,7 @@ export const SavedGamesScreen = () => {
   const { accessToken, pseudoId } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
   const { refreshIds } = useSavedGamesProvider();
+  const { prefetchedSavedGamesPage } = useAppDataProvider();
 
   const fetchPage = useCallback(
     async (pageNum: number, gameType: GameType | null): Promise<PagedResponse<GameBase> | null> => {
@@ -59,6 +61,7 @@ export const SavedGamesScreen = () => {
       fetchPage={fetchPage}
       renderCardAction={renderCardAction}
       showSkeleton={false}
+      initialPage={prefetchedSavedGamesPage ?? undefined}
       refreshOnFocus={handleRefreshOnFocus}
     />
   );

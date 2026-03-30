@@ -1,7 +1,7 @@
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { validMaxLength } from "@/src/core/utils/InputValidator";
-import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvider";
 import GenericActiveLobbyScreen from "@/src/play/screens/GenericActiveLobbyScreen/GenericActiveLobbyScreen";
@@ -17,6 +17,7 @@ export const LobbyScreen = () => {
   const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
   const { sessionData: sessionData, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { setScreen, iterations, clearImposterSessionValues } = useImposterSessionProvider();
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
 
   const [started, setStarted] = useState<boolean>(false);

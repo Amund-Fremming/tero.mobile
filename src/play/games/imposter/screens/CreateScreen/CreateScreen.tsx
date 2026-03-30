@@ -2,9 +2,9 @@ import { CreateStaticGameRequest, GameCategory, GameType } from "@/src/core/cons
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { useToastProvider } from "@/src/core/context/ToastProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
-import { getGameTheme } from "@/src/play/config/gameTheme";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import GenericCreateScreen from "@/src/play/screens/GenericCreateScreen/GenericCreateScreen";
 import { useNavigation } from "expo-router";
@@ -15,6 +15,7 @@ export const CreateScreen = () => {
   const navigation: any = useNavigation();
 
   const { pseudoId } = useAuthProvider();
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
   const { displayInfoModal, displayErrorModal } = useModalProvider();
   const { displayToast } = useToastProvider();

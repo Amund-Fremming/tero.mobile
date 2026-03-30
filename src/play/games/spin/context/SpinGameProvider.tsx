@@ -1,9 +1,9 @@
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { registerCrashResetCallback } from "@/src/core/utils/navigationRef";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { getGameTheme } from "@/src/play/config/gameTheme";
 import { SpinGameState, SpinSessionScreen } from "../constants/SpinTypes";
 import { useSpinScreenStore } from "./spinScreenStore";
 
@@ -57,6 +57,7 @@ interface SpinSessionProviderProps {
 
 export const SpinSessionProvider = ({ children }: SpinSessionProviderProps) => {
   const { gameType } = useGlobalSessionProvider();
+  const { getGameTheme } = useThemeProvider();
   const screen = useSpinScreenStore((state) => state.screen) || SpinSessionScreen.Create;
   const setScreen = (value: SpinSessionScreen | ((prev: SpinSessionScreen) => SpinSessionScreen)) => {
     const next = typeof value === "function" ? value(screen) : value;

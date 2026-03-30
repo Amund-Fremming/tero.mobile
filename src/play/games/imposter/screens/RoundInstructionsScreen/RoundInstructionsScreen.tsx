@@ -1,7 +1,7 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { GameType } from "@/src/core/constants/Types";
-import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import SimpleTutorial from "@/src/play/screens/GenericTutorialScreen/components/SimpleTutorial/SimpleTutorial";
 import * as Haptics from "expo-haptics";
 import { useMemo } from "react";
@@ -12,6 +12,7 @@ import styles from "./roundInstructionsScreenStyles";
 
 export const RoundInstructionsScreen = () => {
   const { imposterSession, players, setScreen } = useImposterSessionProvider();
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
 
   const playerNames = useMemo(() => {

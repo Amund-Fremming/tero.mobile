@@ -1,8 +1,8 @@
 import ScreenHeaderChildren from "@/src/core/components/ScreenHeader/ScreenHeaderChildren";
 import { GameType } from "@/src/core/constants/Types";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
-import { getGameTheme } from "@/src/play/config/gameTheme";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef, useState } from "react";
@@ -19,7 +19,7 @@ type Props = {
 export const RolesScreen = ({ onLeave }: Props) => {
   const { players, imposterName, newRound, roundWord, setScreen } = useImposterSessionProvider();
   const { displayInfoModal } = useModalProvider();
-
+  const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
 
   const [lockedPlayers, setLockedPlayers] = useState<Set<number>>(new Set());

@@ -2,6 +2,7 @@ import { GenericGameList } from "@/src/core/components/GenericGameList/GenericGa
 import Color from "@/src/core/constants/Color";
 import Screen from "@/src/core/constants/Screen";
 import { GameBase, GamePagedRequest, GameType, PagedResponse } from "@/src/core/constants/Types";
+import { useAppDataProvider } from "@/src/core/context/AppDataProvider";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useSavedGamesProvider } from "@/src/core/context/SavedGamesProvider";
@@ -20,6 +21,7 @@ export const GameListScreen = () => {
   const { displayActionModal } = useModalProvider();
   const { displayToast } = useToastProvider();
   const { savedIdSet, saveGame: saveGameToSet } = useSavedGamesProvider();
+  const { prefetchedGamePage } = useAppDataProvider();
 
   const fetchPage = useCallback(
     async (pageNum: number, gameType: GameType | null): Promise<PagedResponse<GameBase> | null> => {
@@ -70,6 +72,7 @@ export const GameListScreen = () => {
       fetchPage={fetchPage}
       renderCardAction={renderCardAction}
       showSkeleton
+      initialPage={prefetchedGamePage ?? undefined}
       onInfoPress={() => console.log("Info pressed")}
     />
   );

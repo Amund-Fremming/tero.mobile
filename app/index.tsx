@@ -14,6 +14,7 @@ import * as Font from "expo-font";
 import * as ExpoSplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { Dimensions, StatusBar, View } from "react-native";
+import AppDataProvider from "../src/core/context/AppDataProvider";
 import AuthProvider from "../src/core/context/AuthProvider";
 import SavedGamesProvider from "../src/core/context/SavedGamesProvider";
 import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
@@ -38,21 +39,23 @@ export default () => (
       <ToastProvider>
         <ModalProvider>
           <AuthProvider>
-            <SavedGamesProvider>
-              <GlobalGameProvider>
-                <HubConnectionProvider>
-                  <QuizSessionProvider>
-                    <SpinSessionProvider>
-                      <GuessSessionProvider>
-                        <ImposterSessionProvider>
-                          <Hub />
-                        </ImposterSessionProvider>
-                      </GuessSessionProvider>
-                    </SpinSessionProvider>
-                  </QuizSessionProvider>
-                </HubConnectionProvider>
-              </GlobalGameProvider>
-            </SavedGamesProvider>
+            <AppDataProvider>
+              <SavedGamesProvider>
+                <GlobalGameProvider>
+                  <HubConnectionProvider>
+                    <QuizSessionProvider>
+                      <SpinSessionProvider>
+                        <GuessSessionProvider>
+                          <ImposterSessionProvider>
+                            <Hub />
+                          </ImposterSessionProvider>
+                        </GuessSessionProvider>
+                      </SpinSessionProvider>
+                    </QuizSessionProvider>
+                  </HubConnectionProvider>
+                </GlobalGameProvider>
+              </SavedGamesProvider>
+            </AppDataProvider>
           </AuthProvider>
         </ModalProvider>
       </ToastProvider>

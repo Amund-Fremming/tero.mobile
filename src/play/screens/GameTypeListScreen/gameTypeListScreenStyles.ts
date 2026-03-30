@@ -6,7 +6,6 @@ import { horizontalScale, moderateScale, verticalScale } from "../../../core/uti
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.White,
     width: "100%",
     flexDirection: "column",
   },
@@ -26,7 +25,6 @@ export const styles = StyleSheet.create({
   },
 
   card: {
-    borderColor: Color.Gray,
     borderWidth: moderateScale(6.3),
     height: verticalScale(210),
     width: "45%",

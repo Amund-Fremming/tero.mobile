@@ -1,6 +1,7 @@
 {
   "expo": {
-    "name": "",
+    "name": "tero",
+    "icon": "./app/appstore.png",
     "slug": "tero",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,12 +15,7 @@
         "UIViewControllerBasedStatusBarAppearance": false,
         "UIStatusBarHidden": false
       },
-      "bundleIdentifier": "com.anonymous.tero"
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./app/tero.png"
+      "bundleIdentifier": "com.tero.app"
     },
     "plugins": [
       "expo-router",
@@ -30,7 +26,9 @@
           "color": "#ffffff",
           "sounds": []
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

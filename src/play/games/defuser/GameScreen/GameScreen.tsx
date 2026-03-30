@@ -2,7 +2,7 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import Font from "@/src/core/constants/Font";
 import { GameType } from "@/src/core/constants/Types";
-import { getGameTheme } from "@/src/play/config/gameTheme";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -34,6 +34,8 @@ function pad(n: number) {
 }
 
 export function GameScreen() {
+  const { getGameTheme } = useThemeProvider();
+
   const navigation: any = useNavigation();
   const theme = getGameTheme(GameType.Defuser);
 

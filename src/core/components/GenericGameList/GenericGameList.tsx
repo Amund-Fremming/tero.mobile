@@ -36,6 +36,7 @@ interface GenericGameListProps {
   showSkeleton?: boolean;
   onInfoPress?: () => void;
   refreshOnFocus?: () => void;
+  initialPage?: PagedResponse<GameBase>;
 }
 
 const SkeletonCard = memo(() => {
@@ -79,6 +80,7 @@ export const GenericGameList = ({
   showSkeleton = true,
   onInfoPress,
   refreshOnFocus,
+  initialPage,
 }: GenericGameListProps) => {
   const navigation: any = useNavigation();
   const { gameService } = useServiceProvider();
@@ -94,18 +96,15 @@ export const GenericGameList = ({
   const { setQuizSession } = useQuizSessionProvider();
   const { setImposterSession } = useImposterSessionProvider();
 
-  const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>({
-    items: [],
-    has_next: false,
-    has_prev: false,
-    page_num: 0,
-  });
-  const [loading, setLoading] = useState(showSkeleton);
+  const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>(
+    initialPage ?? { items: [], has_next: false, has_prev: false, page_num: 0 },
+  );
+  const [loading, setLoading] = useState(showSkeleton && !initialPage);
   const [selectedGameType, setSelectedGameType] = useState<GameType | null>(null);
   const scrollRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    loadPage(0, null);
+    if (!initialPage) loadPage(0, null);
   }, []);
 
   useFocusEffect(
