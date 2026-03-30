@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [pseudoId, setPseudoId] = useState<string>("");
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [userData, setUserData] = useState<BaseUser | null>(null);
+  const [forceLoginPrompt, setForceLoginPrompt] = useState<boolean>(false);
 
   const ensureInProgress = useRef<Promise<Result<string>> | null>(null);
 
@@ -135,6 +136,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       extraParams: {
         audience: Auth0Config.audience,
         pseudo_id: pseudoId || "unknown",
+        ...(forceLoginPrompt && { prompt: "login" }),
       },
     },
     Auth0Config.discovery,
@@ -161,6 +163,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             console.error("Klarte ikke hente tokens fra auth0");
             return;
           }
+
+          const userResult = await userService().getUser(tokenResponse.accessToken);
+          if (userResult.isError()) {
+            console.warn("Auth0 login succeeded but user not found in backend");
+            setAccessToken(null);
+            await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+            setForceLoginPrompt(true);
+            displayErrorModal("Bruker ikke funnet. Kontakt support eller prøv en annen konto.");
+            return;
+          }
+          setForceLoginPrompt(false);
 
           setAccessToken(tokenResponse.accessToken);
           await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokenResponse.refreshToken);
