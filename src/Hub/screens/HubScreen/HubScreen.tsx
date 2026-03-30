@@ -1,6 +1,7 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
+import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
@@ -13,6 +14,7 @@ export const HubScreen = () => {
   const navigation: any = useNavigation();
 
   const { redirectUri, triggerLogin, accessToken } = useAuthProvider();
+  const { displayActionModal } = useModalProvider();
 
   const shouldNavigateAfterLogin = useRef(false);
 
@@ -40,12 +42,25 @@ export const HubScreen = () => {
 
   const handleSavedGamesPressed = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    console.log("Navigate to SavedGames");
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (!accessToken) {
+      displayActionModal(
+        "Du må logge inn for å se dine spill",
+        () => {
+          navigation.navigate(Screen.Hub);
+          setTimeout(() => triggerLogin(), 200);
+        },
+        () => {},
+      );
+      return;
+    }
+    navigation.navigate(Screen.SavedGames);
   };
 
   const handleTipsPressed = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    console.log("Navigate to TipsList");
+    navigation.navigate(Screen.TipsUs);
   };
 
   return (
@@ -69,7 +84,7 @@ export const HubScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.bentoBoxTips} onPress={handleTipsPressed} activeOpacity={0.8}>
             <Feather name="star" size={44} color={Color.BuzzifyDarkBg} />
-            <Text style={styles.bentoBoxLabel}>Top Tips</Text>
+            <Text style={styles.bentoBoxLabel}>Tips oss</Text>
           </TouchableOpacity>
         </View>
 
@@ -103,5 +118,3 @@ export const HubScreen = () => {
 };
 
 export default HubScreen;
-// a319f637-58d0-45e7-bc89-8c2b3a668a42
-// a319f637-58d0-45e7-bc89-8c2b3a668a42
