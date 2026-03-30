@@ -1,24 +1,26 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import VerticalScroll from "@/src/core/components/VerticalScroll/VerticalScroll";
-import Color from "@/src/core/constants/Color";
 import Screen from "@/src/core/constants/Screen";
 import { UserRole } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { resetToHomeScreen } from "@/src/core/utils/utilFunctions";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { styles } from "./profileScreenStyles";
+import { createStyles } from "./profileScreenStyles";
 
 export const ProfileScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId, triggerLogout, accessToken, setPseudoId, userData, setUserData } = useAuthProvider();
   const { userService } = useServiceProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const { theme, darkMode } = useThemeProvider();
+  const styles = createStyles(theme, darkMode);
   const fallbackAvatar = "https://api.dicebear.com/9.x/pixel-art/png?seed=tero";
 
   const isLoggedIn = accessToken != null;
@@ -97,7 +99,7 @@ export const ProfileScreen = () => {
       return;
     }
 
-    displayInfoModal("Reset-lenke sendt.", "E-post");
+    displayInfoModal("Reset-passord lenke sendt til din email", "Lenke sendt");
   };
 
   return (
@@ -108,6 +110,7 @@ export const ProfileScreen = () => {
           onBackPressed={() => navigation.goBack()}
           onInfoPress={handleLogout}
           infoIconOverride="log-out"
+          backgroundColor={theme.secondary}
         />
 
         <View style={styles.loggedIn}>
@@ -129,10 +132,10 @@ export const ProfileScreen = () => {
               style={styles.bigButton}
             >
               <View style={styles.iconGuard}>
-                <Feather name="play" size={30} color={Color.Black} />
+                <Feather name="play" size={30} color={styles.contentColor} />
               </View>
               <Text style={styles.buttonText}>Dine spill</Text>
-              <Feather name="chevron-right" size={35} color={Color.Black} />
+              <Feather name="chevron-right" size={35} color={styles.contentColor} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -142,10 +145,10 @@ export const ProfileScreen = () => {
               style={styles.bigButton}
             >
               <View style={styles.iconGuard}>
-                <Feather name="sun" size={30} color={Color.Black} />
+                <Feather name="sun" size={30} color={styles.contentColor} />
               </View>
               <Text style={styles.buttonText}>Tips oss</Text>
-              <Feather name="chevron-right" size={35} color={Color.Black} />
+              <Feather name="chevron-right" size={35} color={styles.contentColor} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -155,10 +158,10 @@ export const ProfileScreen = () => {
               style={styles.bigButton}
             >
               <View style={styles.iconGuard}>
-                <Feather name="edit" size={30} color={Color.Black} />
+                <Feather name="edit" size={30} color={styles.contentColor} />
               </View>
               <Text style={styles.buttonText}>Rediger profil</Text>
-              <Feather name="chevron-right" size={35} color={Color.Black} />
+              <Feather name="chevron-right" size={35} color={styles.contentColor} />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -168,10 +171,10 @@ export const ProfileScreen = () => {
               style={styles.bigButton}
             >
               <View style={styles.iconGuard}>
-                <Feather name="lock" size={30} color={Color.Black} />
+                <Feather name="lock" size={30} color={styles.contentColor} />
               </View>
               <Text style={styles.buttonText}>Bytt passord</Text>
-              <Feather name="chevron-right" size={35} color={Color.Black} />
+              <Feather name="chevron-right" size={35} color={styles.contentColor} />
             </TouchableOpacity>
             {isAdmin && (
               <TouchableOpacity
@@ -182,10 +185,10 @@ export const ProfileScreen = () => {
                 style={styles.bigButton}
               >
                 <View style={styles.iconGuard}>
-                  <Feather name="shield" size={30} color={Color.Black} />
+                  <Feather name="shield" size={30} color={styles.contentColor} />
                 </View>
                 <Text style={styles.buttonText}>Admin</Text>
-                <Feather name="chevron-right" size={35} color={Color.Black} />
+                <Feather name="chevron-right" size={35} color={styles.contentColor} />
               </TouchableOpacity>
             )}
           </View>

@@ -1,5 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useThemeProvider } from "../../context/ThemeProvider";
 import { styles } from "./actionModalStyles";
 
 const teroImage = require("../../assets/images/tero.webp");
@@ -19,6 +20,10 @@ export const ActionModal = ({
   onLeftClick,
   onRightClick,
 }: ActionModalProps) => {
+  const { darkMode, theme } = useThemeProvider();
+  const bgOverride = darkMode ? { backgroundColor: theme.secondary } : {};
+  const textOverride = darkMode ? { color: "#ffffff" } : {};
+
   const handleLeftPressed = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     onLeftClick();
@@ -31,12 +36,12 @@ export const ActionModal = ({
 
   return (
     <View style={styles.overlay}>
-      <View style={styles.container}>
+      <View style={[styles.container, bgOverride]}>
         <Image source={teroImage} style={styles.watermark} resizeMode="contain" />
         <View style={styles.headerRow}>
           <Text style={styles.header}>HEY!</Text>
         </View>
-        <Text style={styles.message}>{message}</Text>
+        <Text style={[styles.message, textOverride]}>{message}</Text>
         <View style={styles.buttonsWrapper}>
           <TouchableOpacity onPress={handleLeftPressed} style={styles.button}>
             <Text style={styles.buttonText}>{leftLabel}</Text>

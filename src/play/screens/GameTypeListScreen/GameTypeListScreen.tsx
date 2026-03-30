@@ -2,7 +2,7 @@ import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import ScreenHeader from "../../../core/components/ScreenHeader/ScreenHeader";
 import Color from "../../../core/constants/Color";
@@ -12,11 +12,6 @@ import { verticalScale } from "../../../core/utils/dimensions";
 import { useGlobalSessionProvider } from "../../context/GlobalSessionProvider";
 import data from "./data.json";
 import styles from "./gameTypeListScreenStyles";
-
-interface Theme {
-  bg: String;
-  cardBorder: String;
-}
 
 const iconMap: { [key: string]: any } = {
   "quiz.webp": require("../../../core/assets/images/quiz.webp"),
@@ -31,26 +26,12 @@ const iconMap: { [key: string]: any } = {
 export const GameTypeListScreen = () => {
   const navigation: any = useNavigation();
 
-  const { darkMode } = useThemeProvider();
+  const { darkMode, theme } = useThemeProvider();
   const { setGameType, gameEntryMode, setIsDraft } = useGlobalSessionProvider();
   const { displayInfoModal } = useModalProvider();
   const isCreating = gameEntryMode === GameEntryMode.Creator;
   const totalCards = data.length + (isCreating ? 1 : 0);
   const needsSpacer = totalCards % 2 !== 0;
-
-  const [theme, _] = useState(() => {
-    if (darkMode) {
-      return {
-        bg: Color.Black,
-        cardBorder: Color.OffBlack,
-      };
-    }
-
-    return {
-      bg: Color.White,
-      cardBorder: Color.Gray,
-    };
-  });
 
   const handlePress = (screen: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -81,7 +62,7 @@ export const GameTypeListScreen = () => {
   };
 
   return (
-    <View style={{ ...styles.container, backgroundColor: theme.bg }}>
+    <View style={{ ...styles.container, backgroundColor: theme.primary }}>
       <View style={styles.bgDecorations} pointerEvents="none">
         <View
           style={[
@@ -130,7 +111,7 @@ export const GameTypeListScreen = () => {
           data.map((item, index) => (
             <TouchableOpacity
               key={index}
-              style={{ ...styles.card, borderColor: theme.cardBorder }}
+              style={{ ...styles.card, borderColor: theme.secondary }}
               onPress={() => handlePress(item.screen)}
             >
               <Image source={iconMap[item.icon]} style={styles.cardImage} />
@@ -142,7 +123,7 @@ export const GameTypeListScreen = () => {
           ))}
         <TouchableOpacity
           key={100}
-          style={styles.card}
+          style={{ ...styles.card, borderColor: theme.secondary }}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             navigation.navigate(Screen.TipsUs);

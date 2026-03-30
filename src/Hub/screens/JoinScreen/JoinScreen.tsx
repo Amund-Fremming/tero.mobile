@@ -6,6 +6,7 @@ import { GameEntryMode, GameType } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
@@ -28,7 +29,9 @@ export const JoinScreen = () => {
     setIsDraft,
   } = useGlobalSessionProvider();
   const { gameService } = useServiceProvider();
+  const { theme, darkMode } = useThemeProvider();
   const anchorRef = useRef<View>(null);
+  const textColor = darkMode ? Color.White : Color.OffBlack;
 
   const [userInput, setUserInput] = useState<string>("");
   const [errorText, setErrorText] = useState<string>("");
@@ -80,7 +83,7 @@ export const JoinScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingWrapper backgroundColor={Color.LightGray} anchorRef={anchorRef}>
+    <KeyboardAvoidingWrapper backgroundColor={theme.primary} anchorRef={anchorRef}>
       <View style={styles.container}>
         <View style={styles.bgCircle1} />
         <View style={styles.bgCircle2} />
@@ -93,18 +96,18 @@ export const JoinScreen = () => {
         />
         <View style={styles.cardWrapper}>
           <Image source={require("@/src/core/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
-          <View style={styles.card}>
-            <View style={styles.inputContainer}>
+          <View style={[styles.card, { backgroundColor: theme.secondary }]}>
+            <View style={[styles.inputContainer, { backgroundColor: theme.primary }]}>
               <Feather
                 style={{ paddingLeft: moderateScale(20), paddingRight: moderateScale(10) }}
                 name="key"
                 size={45}
-                color={Color.OffBlack}
+                color={textColor}
               />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: textColor }]}
                 placeholder="Rom navn"
-                placeholderTextColor={Color.DarkerGray}
+                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
                 value={userInput}
                 onChangeText={(input) => {
                   setUserInput(input?.toUpperCase());

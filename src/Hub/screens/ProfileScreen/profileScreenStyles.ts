@@ -1,15 +1,20 @@
-import Color from "@/src/core/constants/Color";
+import { AppTheme } from "@/src/core/context/ThemeProvider";
 import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
+import Color from "@/src/core/constants/Color";
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: AppTheme, darkMode: boolean) => {
+  const contentColor = darkMode ? Color.White : Color.OffBlack;
+  return {
+    contentColor,
+    ...StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
     width: "100%",
     minHeight: "100%",
-    backgroundColor: Color.White,
+    backgroundColor: theme.primary,
     borderRadius: moderateScale(10),
   },
 
@@ -46,17 +51,19 @@ export const styles = StyleSheet.create({
     paddingTop: verticalScale(15),
     fontSize: moderateScale(25),
     fontWeight: 600,
+    color: contentColor,
   },
 
   username: {
     paddingTop: verticalScale(5),
     fontSize: moderateScale(18),
+    color: contentColor,
   },
 
   layover: {
     width: "100%",
     flex: 1,
-    backgroundColor: Color.LightGray,
+    backgroundColor: theme.secondary,
     borderTopLeftRadius: moderateScale(50),
     borderTopRightRadius: moderateScale(50),
     marginTop: verticalScale(20),
@@ -80,7 +87,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: moderateScale(10),
-    backgroundColor: Color.White,
+    backgroundColor: theme.primary,
     width: horizontalScale(55),
     height: verticalScale(55),
   },
@@ -89,6 +96,9 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: horizontalScale(15),
     fontSize: moderateScale(18),
-    textAlign: "left",
+    textAlign: "left" as const,
+    color: contentColor,
   },
-});
+    }),
+  };
+};

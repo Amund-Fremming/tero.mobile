@@ -1,11 +1,11 @@
 import { GenericGameList } from "@/src/core/components/GenericGameList/GenericGameList";
-import Color from "@/src/core/constants/Color";
 import { GameBase, GameType, PagedResponse } from "@/src/core/constants/Types";
 import { useAppDataProvider } from "@/src/core/context/AppDataProvider";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useSavedGamesProvider } from "@/src/core/context/SavedGamesProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import * as Haptics from "expo-haptics";
 import React, { useCallback } from "react";
 
@@ -17,6 +17,7 @@ export const SavedGamesScreen = () => {
   const { displayErrorModal } = useModalProvider();
   const { refreshIds } = useSavedGamesProvider();
   const { prefetchedSavedGamesPage } = useAppDataProvider();
+  const { theme } = useThemeProvider();
 
   const fetchPage = useCallback(
     async (pageNum: number, gameType: GameType | null): Promise<PagedResponse<GameBase> | null> => {
@@ -55,7 +56,7 @@ export const SavedGamesScreen = () => {
   return (
     <GenericGameList
       title="Dine spill"
-      headerBackgroundColor={Color.White}
+      headerBackgroundColor={theme.primary}
       emptyMessage="Du har ingen lagrede spill"
       gameTypes={GAME_TYPES}
       fetchPage={fetchPage}

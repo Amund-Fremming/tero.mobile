@@ -47,6 +47,24 @@ const defaultGameTheme: GameTheme = {
   secondaryColor: Color.DeepForest,
 };
 
+export interface AppTheme {
+  primary: string;
+  secondary: string;
+  cardBorder: string;
+}
+
+const lightTheme: AppTheme = {
+  primary: Color.White,
+  secondary: Color.LightGray,
+  cardBorder: Color.DarkerGray,
+};
+
+const darkTheme: AppTheme = {
+  primary: Color.Black,
+  secondary: Color.OffBlack,
+  cardBorder: Color.OffBlack,
+};
+
 interface ThemeStore {
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
@@ -69,12 +87,14 @@ interface IThemeContext {
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
   getGameTheme: (game: GameType) => GameTheme;
+  theme: AppTheme;
 }
 
 const defaultContextValue: IThemeContext = {
   darkMode: true,
   setDarkMode: (value: boolean) => false,
   getGameTheme: (game: GameType) => gameThemeMap[game] ?? defaultGameTheme,
+  theme: darkTheme,
 };
 
 const ThemeContext = createContext<IThemeContext>(defaultContextValue);
@@ -92,10 +112,13 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     return gameThemeMap[game] ?? defaultGameTheme;
   };
 
+  const theme = darkMode ? darkTheme : lightTheme;
+
   const value: IThemeContext = {
     setDarkMode,
     darkMode,
     getGameTheme,
+    theme,
   };
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
