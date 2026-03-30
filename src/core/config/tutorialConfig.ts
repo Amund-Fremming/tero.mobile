@@ -69,4 +69,24 @@ export const tutorialConfig: Record<GameType, TutorialDef> = {
       "Flaks og mot avgjør hvem som vinner runden",
     ],
   },
+  [GameType.Defuser]: {
+    mode: "simple",
+    title: "Slik spiller du Defuser",
+    items: [
+      "En bombe tikker ned– én ledning utløser den, resten er trygg",
+      "Kutt ledningene én etter én for å finne den riktige",
+      "Kutt feil ledning, og det smeller!",
+      "Klarer du å deaktivere bomben før tiden renner ut?",
+    ],
+  },
+  [GameType.Guess]: {
+    mode: "simple",
+    title: "Slik spiller du Defuser",
+    items: [
+      "En bombe tikker ned– én ledning utløser den, resten er trygg",
+      "Kutt ledningene én etter én for å finne den riktige",
+      "Kutt feil ledning, og det smeller!",
+      "Klarer du å deaktivere bomben før tiden renner ut?",
+    ],
+  },
 };

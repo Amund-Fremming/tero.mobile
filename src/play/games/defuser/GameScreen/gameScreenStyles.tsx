@@ -251,3 +251,5 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+export default styles;

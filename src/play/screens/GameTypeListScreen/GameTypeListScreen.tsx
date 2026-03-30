@@ -18,6 +18,8 @@ const iconMap: { [key: string]: any } = {
   "duel.webp": require("../../../core/assets/images/duel.webp"),
   "imposter.webp": require("../../../core/assets/images/imposter.webp"),
   "dice.webp": require("../../../core/assets/images/dice.webp"),
+  "guess.webp": require("../../../core/assets/images/guess.webp"),
+  "defuser.webp": require("../../../core/assets/images/defuser.webp"),
 };
 
 export const GameTypeListScreen = () => {
