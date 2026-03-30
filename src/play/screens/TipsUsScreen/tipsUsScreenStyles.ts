@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { Color } from "../../../core/constants/Color";
-import { AppTheme } from "../../../core/context/ThemeProvider";
 import { Font } from "../../../core/constants/Font";
+import { AppTheme } from "../../../core/context/ThemeProvider";
 import { moderateScale, verticalScale } from "../../../core/utils/dimensions";
 
 export const createStyles = (theme: AppTheme, darkMode: boolean) => {

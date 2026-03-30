@@ -1,6 +1,6 @@
-import { AppTheme } from "@/src/core/context/ThemeProvider";
 import Color from "@/src/core/constants/Color";
 import { Font } from "@/src/core/constants/Font";
+import { AppTheme } from "@/src/core/context/ThemeProvider";
 import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
 
