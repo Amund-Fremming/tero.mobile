@@ -1,4 +1,5 @@
 import SplashScreen from "@/src/core/components/SplashScreen/SplashScreen";
+import ApiConfigProvider from "@/src/core/context/ApiConfigProvider";
 import ModalProvider from "@/src/core/context/ModalProvider";
 import ServiceProvider from "@/src/core/context/ServiceProvider";
 import ToastProvider from "@/src/core/context/ToastProvider";
@@ -35,7 +36,8 @@ const { width, height } = Dimensions.get("window");
 export default () => (
   <FontLoader>
     <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-    <ServiceProvider>
+    <ApiConfigProvider>
+      <ServiceProvider>
       <ToastProvider>
         <ModalProvider>
           <AuthProvider>
@@ -60,6 +62,7 @@ export default () => (
         </ModalProvider>
       </ToastProvider>
     </ServiceProvider>
+    </ApiConfigProvider>
   </FontLoader>
 );
 
