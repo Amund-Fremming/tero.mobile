@@ -5,7 +5,7 @@ import * as WebBrowser from "expo-web-browser";
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { Auth0Config } from "../config/auth";
 import Screen from "../constants/Screen";
-import { BaseUser } from "../constants/Types";
+import { BaseUser, LogAction, LogCeverity, SubjectType } from "../constants/Types";
 import { err, ok, Result } from "../utils/result";
 import { useModalProvider } from "./ModalProvider";
 import { useServiceProvider } from "./ServiceProvider";
@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const navigation: any = useNavigation();
   const { displayErrorModal } = useModalProvider();
-  const { userService } = useServiceProvider();
+  const { userService, auditLogService } = useServiceProvider();
 
   useEffect(() => {
     if (pseudoId && pseudoId !== "") {
@@ -177,6 +177,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
           setAccessToken(tokenResponse.accessToken);
           await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokenResponse.refreshToken);
+          await auditLogService().postLog(
+            { Authorization: `Bearer ${tokenResponse.accessToken}` },
+            {
+              subject_id: userResult.value.user.id,
+              subject_type: SubjectType.RegisteredUser,
+              action: LogAction.Other,
+              ceverity: LogCeverity.Info,
+              file_name: "AuthProvider.tsx",
+              description: "User logged in successfully",
+            },
+          );
           console.info("User logged inn successfully");
         } catch (error) {
           console.error("Token exchange failed:", error);
@@ -242,6 +253,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         revocationEndpoint: `https://${Auth0Config.domain}/oauth/revoke`,
       };
       await AuthSession.revokeAsync(revokeConfig, revokeDiscovery);
+
+      if (accessToken) {
+        await auditLogService().postLog(
+          { Authorization: `Bearer ${accessToken}` },
+          {
+            subject_id: userData?.id ?? "unknown",
+            subject_type: SubjectType.RegisteredUser,
+            action: LogAction.Other,
+            ceverity: LogCeverity.Info,
+            file_name: "AuthProvider.tsx",
+            description: "User logged out",
+          },
+        );
+      }
 
       await SecureStore.deleteItemAsync("access_token");
       await SecureStore.deleteItemAsync("refresh_token");

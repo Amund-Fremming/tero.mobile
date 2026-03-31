@@ -89,6 +89,16 @@ export interface SystemLog {
   created_at: string;
 }
 
+export interface CreateSystemLogRequest {
+  subject_id: string;
+  subject_type: SubjectType;
+  action: LogAction;
+  ceverity: LogCeverity;
+  file_name: string;
+  description: string;
+  metadata?: string;
+}
+
 export interface BaseUser {
   id: string;
   username: string;

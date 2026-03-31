@@ -7,16 +7,22 @@ import {
   GameType,
   InteractiveGameResponse,
   JoinGameResponse,
+  LogAction,
+  LogCeverity,
   PagedResponse,
+  SubjectType,
 } from "../../core/constants/Types";
 import { err, ok, Result } from "../../core/utils/result";
 import { getHeaders } from "../../core/utils/utilFunctions";
+import { AuditLogService } from "../../core/services/auditLogService";
 
 export class GameService {
   urlBase: string;
+  private auditLog: AuditLogService;
 
   constructor(urlBase: string) {
     this.urlBase = urlBase;
+    this.auditLog = new AuditLogService(urlBase);
   }
 
   async createGameTip(request: CreateGameTipRequest): Promise<Result> {
@@ -66,7 +72,15 @@ export class GameService {
       return ok(undefined);
     } catch (error) {
       console.error("freeGameKey:", error);
-      // TODO - AUDIT LOG?!?!
+      await this.auditLog.postLog(getHeaders(guest_id, token), {
+        subject_id: guest_id,
+        subject_type: token ? SubjectType.RegisteredUser : SubjectType.GuestUser,
+        action: LogAction.Update,
+        ceverity: LogCeverity.Warning,
+        file_name: "gameService.ts",
+        description: "Failed to free game key",
+        metadata: `game_type: ${game_type}, key_word: ${key_word}`,
+      });
       return ok(undefined);
     }
   }

@@ -5,17 +5,23 @@ import {
   ActivityStats,
   BaseUser,
   ClientPopup,
+  LogAction,
+  LogCeverity,
   PatchUserRequest,
   ResetPasswordRequest,
+  SubjectType,
   UserWithRole,
 } from "../constants/Types";
 import { getHeaders } from "../utils/utilFunctions";
+import { AuditLogService } from "./auditLogService";
 
 export class UserService {
   baseUrl: string;
+  private auditLog: AuditLogService;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
+    this.auditLog = new AuditLogService(baseUrl);
   }
 
   async resetPassword(token: string, email: string): Promise<Result> {
@@ -118,9 +124,32 @@ export class UserService {
         return err("Klarte ikke slette bruker");
       }
 
+      await this.auditLog.postLog(
+        { Authorization: `Bearer ${token}` },
+        {
+          subject_id: user_id,
+          subject_type: SubjectType.RegisteredUser,
+          action: LogAction.Delete,
+          ceverity: LogCeverity.Critical,
+          file_name: "userService.ts",
+          description: "User account deleted",
+        },
+      );
       return ok();
     } catch (error) {
       console.error("deleteUser:", error);
+      await this.auditLog.postLog(
+        { Authorization: `Bearer ${token}` },
+        {
+          subject_id: user_id,
+          subject_type: SubjectType.RegisteredUser,
+          action: LogAction.Delete,
+          ceverity: LogCeverity.Critical,
+          file_name: "userService.ts",
+          description: "Failed to delete user account",
+          metadata: String(error),
+        },
+      );
       return err("Klarte ikke slette bruker");
     }
   }
@@ -229,9 +258,32 @@ export class UserService {
         return err("Klarte ikke endre passord");
       }
 
+      await this.auditLog.postLog(
+        { Authorization: `Bearer ${token}` },
+        {
+          subject_id: "self",
+          subject_type: SubjectType.RegisteredUser,
+          action: LogAction.Update,
+          ceverity: LogCeverity.Info,
+          file_name: "userService.ts",
+          description: "Password changed successfully",
+        },
+      );
       return ok();
     } catch (error) {
       console.error("changePassword:", error);
+      await this.auditLog.postLog(
+        { Authorization: `Bearer ${token}` },
+        {
+          subject_id: "self",
+          subject_type: SubjectType.RegisteredUser,
+          action: LogAction.Update,
+          ceverity: LogCeverity.Warning,
+          file_name: "userService.ts",
+          description: "Failed to change password",
+          metadata: String(error),
+        },
+      );
       return err("Klarte ikke endre passord");
     }
   }
