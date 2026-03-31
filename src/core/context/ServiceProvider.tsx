@@ -1,9 +1,10 @@
-import React, { createContext, ReactNode, useContext, useRef } from "react";
+import React, { createContext, ReactNode, useContext, useMemo } from "react";
 import { GameService } from "../../play/services/gameService";
-import { PLATFORM_URL_BASE, SESSION_URL_BASE } from "../config/api";
+import { DEV_URL_CONFIG } from "../config/api";
 import { AdminService } from "../services/adminService";
 import { UserService } from "../services/userService";
 import { CommonService } from "../services/coreService";
+import { useUrlConfig } from "./UrlConfigProvider";
 
 interface IServiceProviderContext {
   gameService: () => GameService;
@@ -13,10 +14,10 @@ interface IServiceProviderContext {
 }
 
 const ServiceProviderContext = createContext<IServiceProviderContext>({
-  gameService: () => new GameService(PLATFORM_URL_BASE),
-  userService: () => new UserService(PLATFORM_URL_BASE),
-  commonService: () => new CommonService(PLATFORM_URL_BASE),
-  adminService: () => new AdminService(SESSION_URL_BASE),
+  gameService: () => new GameService(DEV_URL_CONFIG.platformUrlBase),
+  userService: () => new UserService(DEV_URL_CONFIG.platformUrlBase),
+  commonService: () => new CommonService(DEV_URL_CONFIG.platformUrlBase),
+  adminService: () => new AdminService(DEV_URL_CONFIG.sessionUrlBase),
 });
 
 export const useServiceProvider = () => useContext(ServiceProviderContext);
@@ -26,15 +27,17 @@ interface ServiceProviderProps {
 }
 
 export const ServiceProvider = ({ children }: ServiceProviderProps) => {
-  const gameServiceRef = useRef(new GameService(PLATFORM_URL_BASE));
-  const userServiceRef = useRef(new UserService(PLATFORM_URL_BASE));
-  const commonServiceRef = useRef(new CommonService(PLATFORM_URL_BASE));
-  const adminServiceRef = useRef(new AdminService(SESSION_URL_BASE));
+  const { platformUrlBase, sessionUrlBase } = useUrlConfig();
 
-  const gameService = () => gameServiceRef.current;
-  const userService = () => userServiceRef.current;
-  const commonService = () => commonServiceRef.current;
-  const adminService = () => adminServiceRef.current;
+  const gameServiceInstance = useMemo(() => new GameService(platformUrlBase), [platformUrlBase]);
+  const userServiceInstance = useMemo(() => new UserService(platformUrlBase), [platformUrlBase]);
+  const commonServiceInstance = useMemo(() => new CommonService(platformUrlBase), [platformUrlBase]);
+  const adminServiceInstance = useMemo(() => new AdminService(sessionUrlBase), [sessionUrlBase]);
+
+  const gameService = () => gameServiceInstance;
+  const userService = () => userServiceInstance;
+  const commonService = () => commonServiceInstance;
+  const adminService = () => adminServiceInstance;
 
   const value = {
     gameService,

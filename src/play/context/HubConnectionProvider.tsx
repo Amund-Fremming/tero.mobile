@@ -1,9 +1,9 @@
 import * as signalR from "@microsoft/signalr";
 import React, { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 import { AppState } from "react-native";
-import { HUB_URL_BASE } from "../../core/config/api";
 import { useAuthProvider } from "../../core/context/AuthProvider";
 import { useModalProvider } from "../../core/context/ModalProvider";
+import { useUrlConfig } from "../../core/context/UrlConfigProvider";
 import { registerCrashResetCallback, resetToHomeGlobal } from "../../core/utils/navigationRef";
 import { err, ok, Result } from "../../core/utils/result";
 import { useGlobalSessionProvider } from "./GlobalSessionProvider";
@@ -43,6 +43,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
   const { sessionData: sessionData, clearGlobalSessionValues } = useGlobalSessionProvider();
   const { displayLoadingModal, closeLoadingModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
+  const { hubUrlBase } = useUrlConfig();
 
   useEffect(() => {
     gameKeyRef.current = sessionData.gameKey;
@@ -91,7 +92,7 @@ export const HubConnectionProvider = ({ children }: HubConnectionProviderProps) 
     try {
       const normalizedHubName = hubName === "roulette" || hubName === "duel" ? "spin" : hubName;
       hubNameRef.current = normalizedHubName;
-      const hubAddress = `${HUB_URL_BASE}/${normalizedHubName}`;
+      const hubAddress = `${hubUrlBase}/${normalizedHubName}`;
 
       if (connectionRef.current) {
         const curHubName = (connectionRef.current as any)._hubName;
