@@ -2,6 +2,7 @@ import * as AuthSession from "expo-auth-session";
 import { useNavigation } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import * as WebBrowser from "expo-web-browser";
+import axios from "axios";
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { Auth0Config } from "../config/auth";
 import Screen from "../constants/Screen";
@@ -21,7 +22,7 @@ interface IAuthContext {
   callUpdateUserActivity: () => Promise<void>;
   triggerLogin: () => void;
   triggerLogout: (useBrowserConfirmation?: boolean) => Promise<boolean>;
-  rotateTokens: () => Promise<void>;
+  rotateTokens: () => Promise<string | null>;
   userData: BaseUser | null;
   setUserData: React.Dispatch<React.SetStateAction<BaseUser | null>>;
 
@@ -41,7 +42,7 @@ const defaultContextValue: IAuthContext = {
   triggerLogout: async () => {
     return false;
   },
-  rotateTokens: async () => {},
+  rotateTokens: async () => null,
   userData: null,
   setUserData: () => {},
 
@@ -66,6 +67,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [forceLoginPrompt, setForceLoginPrompt] = useState<boolean>(false);
 
   const ensureInProgress = useRef<Promise<Result<string>> | null>(null);
+  const rotateTokensRef = useRef<() => Promise<string | null>>(async () => null);
 
   const navigation: any = useNavigation();
   const { displayErrorModal } = useModalProvider();
@@ -262,12 +264,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const rotateTokens = async () => {
+  const rotateTokens = async (): Promise<string | null> => {
     try {
       const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
       if (!refreshToken) {
         setAccessToken(null);
-        return;
+        return null;
       }
 
       const refreshResponse = await fetch(`https://${Auth0Config.domain}/oauth/token`, {
@@ -290,17 +292,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         await SecureStore.deleteItemAsync("refresh_token");
         await SecureStore.deleteItemAsync("id_token");
         setAccessToken(null);
-        return;
+        return null;
       }
 
       await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokens.refresh_token);
       setAccessToken(tokens.access_token);
       console.debug("Tokens refreshed successfully");
+      return tokens.access_token;
     } catch (error) {
       displayErrorModal("Uventet feil. Logger ut.");
       setAccessToken(null);
       await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
       console.error(error);
+      return null;
     }
   };
 
@@ -320,6 +324,38 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAahERJawntho0my942XheVLmGwLMBkQ",
     );
   };
+
+  // Keep the ref pointing to the latest rotateTokens so the interceptor always calls the current version
+  useEffect(() => {
+    rotateTokensRef.current = rotateTokens;
+  });
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+        if (
+          error.response?.status === 401 &&
+          !originalRequest._retry &&
+          typeof originalRequest.headers?.Authorization === "string" &&
+          originalRequest.headers.Authorization.startsWith("Bearer ")
+        ) {
+          originalRequest._retry = true;
+          const newToken = await rotateTokensRef.current();
+          if (newToken) {
+            originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+            return axios(originalRequest);
+          }
+        }
+        return Promise.reject(error);
+      },
+    );
+
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
 
   const value = {
     callUpdateUserActivity,
