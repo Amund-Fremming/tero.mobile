@@ -4,7 +4,6 @@ import { PLATFORM_URL_BASE, SESSION_URL_BASE } from "../config/api";
 import { AdminService } from "../services/adminService";
 import { UserService } from "../services/userService";
 import { CommonService } from "../services/coreService";
-import { useApiConfig } from "./ApiConfigProvider";
 
 interface IServiceProviderContext {
   gameService: () => GameService;
@@ -27,12 +26,10 @@ interface ServiceProviderProps {
 }
 
 export const ServiceProvider = ({ children }: ServiceProviderProps) => {
-  const { urlConfig } = useApiConfig();
-
-  const gameServiceRef = useRef(new GameService(urlConfig.platformUrlBase));
-  const userServiceRef = useRef(new UserService(urlConfig.platformUrlBase));
-  const commonServiceRef = useRef(new CommonService(urlConfig.platformUrlBase));
-  const adminServiceRef = useRef(new AdminService(urlConfig.sessionUrlBase));
+  const gameServiceRef = useRef(new GameService(PLATFORM_URL_BASE));
+  const userServiceRef = useRef(new UserService(PLATFORM_URL_BASE));
+  const commonServiceRef = useRef(new CommonService(PLATFORM_URL_BASE));
+  const adminServiceRef = useRef(new AdminService(SESSION_URL_BASE));
 
   const gameService = () => gameServiceRef.current;
   const userService = () => userServiceRef.current;
