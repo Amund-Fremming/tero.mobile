@@ -80,8 +80,12 @@ export const TipsUsScreen = () => {
     displayInfoModal("Takk for tipset!", "Takk", () => navigation.goBack());
   };
 
-  const handleInfoPressed = () => {
-    console.log("Info pressed");
+  const handleNameInput = (input: string) => {
+    if (input.length > 14) {
+      displayInfoModal("Navn kan ikke være lengre enn 14 tegn.");
+      return;
+    }
+    setCreateRequest((prev) => ({ ...prev, header: input }));
   };
 
   return (
@@ -111,13 +115,7 @@ export const TipsUsScreen = () => {
                 value={createRequest.header}
                 returnKeyType="done"
                 onSubmitEditing={Keyboard.dismiss}
-                onChangeText={(input) => {
-                  if (input.length > 14) {
-                    displayInfoModal("Navn kan ikke være lengre enn 14 tegn.");
-                    return;
-                  }
-                  setCreateRequest((prev) => ({ ...prev, header: input }));
-                }}
+                onChangeText={(input) => handleNameInput(input)}
                 placeholderTextColor={Color.DarkerGray}
               />
             </View>
