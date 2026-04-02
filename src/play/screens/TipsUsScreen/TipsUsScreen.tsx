@@ -43,14 +43,15 @@ export const TipsUsScreen = () => {
       return;
     }
 
-    // Validate phone number (1-20 chars)
-    if (!createRequest.mobile_phone || createRequest.mobile_phone.trim().length === 0) {
+    // Validate phone number
+    const phoneDigits = createRequest.mobile_phone.trim();
+    if (!phoneDigits) {
       displayErrorModal("Fyll inn mobilnummer.");
       return;
     }
 
-    if (createRequest.mobile_phone.length > 20) {
-      displayErrorModal("Mobilnummer er for langt.");
+    if (!/^\+?\d{7,20}$/.test(phoneDigits)) {
+      displayErrorModal("Ugyldig mobilnummer.");
       return;
     }
 
