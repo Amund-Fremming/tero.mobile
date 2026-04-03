@@ -121,7 +121,6 @@ export const TipsUsScreen = () => {
                 returnKeyType="done"
                 onSubmitEditing={Keyboard.dismiss}
                 onChangeText={(input) => handleNameInput(input)}
-                placeholderTextColor={Color.DarkerGray}
               />
             </View>
           </View>
