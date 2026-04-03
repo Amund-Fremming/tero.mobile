@@ -48,12 +48,12 @@ export class UserService {
   async ensurePseudoId(pseudo_id: string | null): Promise<Result<string>> {
     try {
       const url = pseudo_id ? `${this.baseUrl}/pseudo-users?pseudo_id=${pseudo_id}` : `${this.baseUrl}/pseudo-users`;
-
+      console.log(url);
       const response = await axios.post<string>(url);
       return ok(response.data);
     } catch (error) {
       console.warn("ensurePseudoId:", error);
-      return err("Klarte ikke å hente gjeste id");
+      return err("Klarte ikke hente å pseudo id");
     }
   }
 

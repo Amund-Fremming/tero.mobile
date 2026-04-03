@@ -73,10 +73,9 @@ export const tutorialConfig: Record<GameType, TutorialDef> = {
     mode: "simple",
     title: "Slik spiller du Defuser",
     items: [
-      "En bombe tikker ned– én ledning utløser den, resten er trygg",
-      "Kutt ledningene én etter én for å finne den riktige",
-      "Kutt feil ledning, og det smeller!",
-      "Klarer du å deaktivere bomben før tiden renner ut?",
+      "Kutt ledningene til bomben for å dearmere den",
+      "Kutter du feil ledning sprenger bomben og du taper",
+      "Tapere får taper premien",
     ],
   },
   [GameType.Guess]: {
