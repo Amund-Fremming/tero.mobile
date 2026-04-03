@@ -70,7 +70,9 @@ export const MultiStepTutorial = ({
           <Text style={[styles.buttonText, { color: darkMode ? theme.secondary : Color.White }]}>Tilbake</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleNext} style={[styles.nextButton, { backgroundColor: accentColor }]}>
-          <Text style={[styles.buttonText, { color: darkMode ? theme.secondary : Color.White }]}>{isLast ? lastButtonText : "Neste"}</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? theme.secondary : Color.White }]}>
+            {isLast ? lastButtonText : "Neste"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
