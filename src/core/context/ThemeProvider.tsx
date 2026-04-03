@@ -56,7 +56,7 @@ export interface AppTheme {
 const lightTheme: AppTheme = {
   primary: Color.White,
   secondary: Color.LightGray,
-  cardBorder: Color.DarkerGray,
+  cardBorder: Color.Gray,
 };
 
 const darkTheme: AppTheme = {

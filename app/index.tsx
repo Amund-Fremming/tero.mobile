@@ -35,9 +35,8 @@ const { width, height } = Dimensions.get("window");
 
 export default () => (
   <FontLoader>
-    <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />{" "}
+    <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
     <ThemeProvider>
-      {" "}
       <ServiceProvider>
         <ToastProvider>
           <ModalProvider>

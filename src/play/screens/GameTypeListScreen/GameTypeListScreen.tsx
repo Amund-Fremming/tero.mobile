@@ -111,7 +111,7 @@ export const GameTypeListScreen = () => {
           data.map((item, index) => (
             <TouchableOpacity
               key={index}
-              style={{ ...styles.card, borderColor: theme.secondary }}
+              style={{ ...styles.card, borderColor: theme.cardBorder }}
               onPress={() => handlePress(item.screen)}
             >
               <Image source={iconMap[item.icon]} style={styles.cardImage} />
@@ -123,7 +123,7 @@ export const GameTypeListScreen = () => {
           ))}
         <TouchableOpacity
           key={100}
-          style={{ ...styles.card, borderColor: theme.secondary }}
+          style={{ ...styles.card, borderColor: theme.cardBorder }}
           onPress={() => {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
             navigation.navigate(Screen.TipsUs);
