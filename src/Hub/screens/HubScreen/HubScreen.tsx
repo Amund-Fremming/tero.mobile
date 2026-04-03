@@ -2,6 +2,7 @@ import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
@@ -13,6 +14,7 @@ import styles from "./hubScreenStyles";
 export const HubScreen = () => {
   const navigation: any = useNavigation();
 
+  const { theme } = useThemeProvider();
   const { redirectUri, triggerLogin, accessToken } = useAuthProvider();
   const { displayActionModal } = useModalProvider();
 
@@ -64,7 +66,7 @@ export const HubScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.primary }]}>
       <ScreenHeader
         title="Hub"
         onBackPressed={() => navigation.goBack()}

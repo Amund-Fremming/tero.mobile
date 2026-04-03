@@ -1,5 +1,6 @@
 import Color from "@/src/core/constants/Color";
 import Font from "@/src/core/constants/Font";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
@@ -40,6 +41,8 @@ interface ClickableToastState {
 }
 
 export const ToastProvider = ({ children }: ToastProviderProps) => {
+  const { darkMode } = useThemeProvider();
+  const textColor = darkMode ? Color.Black : Color.White;
   const [isVisible, setIsVisible] = useState(false);
   const [clickableToast, setClickableToast] = useState<ClickableToastState | null>(null);
 
@@ -180,11 +183,11 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
         <View pointerEvents="none" style={styles.overlay}>
           <Animated.View style={[styles.toast, { transform: [{ translateY }], opacity }]}>
             <View style={styles.iconWrapper}>
-              <Feather name="check" size={moderateScale(38)} color={Color.White} />
+              <Feather name="check" size={moderateScale(38)} color={textColor} />
             </View>
             <View style={styles.textWrapper}>
-              <Text style={styles.toastHeader}>Suksess!</Text>
-              <Text style={styles.toastText}>{TOAST_MESSAGE}</Text>
+              <Text style={[styles.toastHeader, { color: textColor }]}>Suksess!</Text>
+              <Text style={[styles.toastText, { color: textColor }]}>{TOAST_MESSAGE}</Text>
             </View>
           </Animated.View>
         </View>
@@ -201,11 +204,11 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
               }}
             >
               <View style={styles.iconWrapper}>
-                <Ionicons name="bulb-outline" size={moderateScale(34)} color={Color.White} />
+                <Ionicons name="bulb-outline" size={moderateScale(34)} color={textColor} />
               </View>
               <View style={styles.textWrapper}>
-                <Text style={styles.toastHeader}>{clickableToast.header}</Text>
-                <Text style={styles.toastText}>{clickableToast.subHeader}</Text>
+                <Text style={[styles.toastHeader, { color: textColor }]}>{clickableToast.header}</Text>
+                <Text style={[styles.toastText, { color: textColor }]}>{clickableToast.subHeader}</Text>
               </View>
             </TouchableOpacity>
           </Animated.View>

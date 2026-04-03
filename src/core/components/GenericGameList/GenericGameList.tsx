@@ -8,6 +8,7 @@ import { GameBase, GameEntryMode, GameType, PagedResponse } from "@/src/core/con
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { useGlobalSessionProvider } from "@/src/play/context/GlobalSessionProvider";
 import { ImposterSession } from "@/src/play/games/imposter/constants/imposterTypes";
@@ -95,6 +96,7 @@ export const GenericGameList = ({
   } = useGlobalSessionProvider();
   const { setQuizSession } = useQuizSessionProvider();
   const { setImposterSession } = useImposterSessionProvider();
+  const { theme } = useThemeProvider();
 
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>(
     initialPage ?? { items: [], has_next: false, has_prev: false, page_num: 0 },
@@ -208,7 +210,7 @@ export const GenericGameList = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.primary }]}>
       <ScreenHeader
         title={title}
         onBackPressed={() => navigation.goBack()}

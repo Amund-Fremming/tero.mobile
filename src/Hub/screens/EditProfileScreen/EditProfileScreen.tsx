@@ -4,6 +4,7 @@ import { Gender, PatchUserRequest } from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -11,7 +12,7 @@ import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { styles } from "./editProfileScreenStyles";
+import { createStyles } from "./editProfileScreenStyles";
 
 export const EditProfileScreen = () => {
   const navigation: any = useNavigation();
@@ -19,6 +20,8 @@ export const EditProfileScreen = () => {
   const { accessToken, userData, setUserData } = useAuthProvider();
   const { userService } = useServiceProvider();
   const { displayErrorModal } = useModalProvider();
+  const { theme, darkMode } = useThemeProvider();
+  const styles = createStyles(theme, darkMode);
 
   const [patchRequest, setPatchRequest] = useState<PatchUserRequest>({});
   const [birthDateDisplay, setBirthDateDisplay] = useState<string>("");
@@ -120,7 +123,7 @@ export const EditProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScreenHeader title="Rediger" backgroundColor={Color.LightGray} onBackPressed={() => navigation.goBack()} />
+      <ScreenHeader title="Rediger" backgroundColor={theme.secondary} onBackPressed={() => navigation.goBack()} />
 
       <ScrollView
         style={styles.scrollView}
@@ -135,7 +138,7 @@ export const EditProfileScreen = () => {
               style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
               name="user"
               size={24}
-              color={Color.OffBlack}
+              color={styles.contentColor}
             />
             <TextInput
               onChangeText={(input) => setPatchRequest((prev) => ({ ...prev, given_name: input }))}
@@ -153,7 +156,7 @@ export const EditProfileScreen = () => {
               style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
               name="user"
               size={24}
-              color={Color.OffBlack}
+              color={styles.contentColor}
             />
             <TextInput
               onChangeText={(input) => setPatchRequest((prev) => ({ ...prev, family_name: input }))}
@@ -171,7 +174,7 @@ export const EditProfileScreen = () => {
               style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
               name="at-sign"
               size={24}
-              color={Color.OffBlack}
+              color={styles.contentColor}
             />
             <TextInput
               onChangeText={(input) => setPatchRequest((prev) => ({ ...prev, username: input }))}
@@ -189,7 +192,7 @@ export const EditProfileScreen = () => {
               style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
               name="calendar"
               size={24}
-              color={Color.OffBlack}
+              color={styles.contentColor}
             />
             <TextInput
               style={styles.input}

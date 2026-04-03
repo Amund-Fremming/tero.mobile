@@ -17,6 +17,7 @@ import { Dimensions, StatusBar, View } from "react-native";
 import AppDataProvider from "../src/core/context/AppDataProvider";
 import AuthProvider from "../src/core/context/AuthProvider";
 import SavedGamesProvider from "../src/core/context/SavedGamesProvider";
+import ThemeProvider from "../src/core/context/ThemeProvider";
 import GlobalGameProvider from "../src/play/context/GlobalSessionProvider";
 
 ExpoSplashScreen.hide();
@@ -34,32 +35,35 @@ const { width, height } = Dimensions.get("window");
 
 export default () => (
   <FontLoader>
-    <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-    <ServiceProvider>
-      <ToastProvider>
-        <ModalProvider>
-          <AuthProvider>
-            <AppDataProvider>
-              <SavedGamesProvider>
-                <GlobalGameProvider>
-                  <HubConnectionProvider>
-                    <QuizSessionProvider>
-                      <SpinSessionProvider>
-                        <GuessSessionProvider>
-                          <ImposterSessionProvider>
-                            <Hub />
-                          </ImposterSessionProvider>
-                        </GuessSessionProvider>
-                      </SpinSessionProvider>
-                    </QuizSessionProvider>
-                  </HubConnectionProvider>
-                </GlobalGameProvider>
-              </SavedGamesProvider>
-            </AppDataProvider>
-          </AuthProvider>
-        </ModalProvider>
-      </ToastProvider>
-    </ServiceProvider>
+    <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />{" "}
+    <ThemeProvider>
+      {" "}
+      <ServiceProvider>
+        <ToastProvider>
+          <ModalProvider>
+            <AuthProvider>
+              <AppDataProvider>
+                <SavedGamesProvider>
+                  <GlobalGameProvider>
+                    <HubConnectionProvider>
+                      <QuizSessionProvider>
+                        <SpinSessionProvider>
+                          <GuessSessionProvider>
+                            <ImposterSessionProvider>
+                              <Hub />
+                            </ImposterSessionProvider>
+                          </GuessSessionProvider>
+                        </SpinSessionProvider>
+                      </QuizSessionProvider>
+                    </HubConnectionProvider>
+                  </GlobalGameProvider>
+                </SavedGamesProvider>
+              </AppDataProvider>
+            </AuthProvider>
+          </ModalProvider>
+        </ToastProvider>
+      </ServiceProvider>
+    </ThemeProvider>
   </FontLoader>
 );
 

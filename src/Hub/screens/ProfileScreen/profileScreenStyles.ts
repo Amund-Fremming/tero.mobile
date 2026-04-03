@@ -1,94 +1,104 @@
 import Color from "@/src/core/constants/Color";
+import { AppTheme } from "@/src/core/context/ThemeProvider";
 import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    width: "100%",
-    minHeight: "100%",
-    backgroundColor: Color.White,
-    borderRadius: moderateScale(10),
-  },
+export const createStyles = (theme: AppTheme, darkMode: boolean) => {
+  const contentColor = darkMode ? Color.White : Color.OffBlack;
+  return {
+    contentColor,
+    ...StyleSheet.create({
+      container: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "center",
+        width: "100%",
+        minHeight: "100%",
+        backgroundColor: theme.secondary,
+        borderRadius: moderateScale(10),
+      },
 
-  loggedIn: {
-    flexGrow: 1,
-    width: "100%",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    minHeight: "100%",
-  },
+      loggedIn: {
+        flexGrow: 1,
+        width: "100%",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        minHeight: "100%",
+      },
 
-  imageCard: {
-    marginTop: verticalScale(30),
-    justifyContent: "flex-end",
-    alignItems: "center",
-    width: horizontalScale(140),
-    height: verticalScale(140),
-    borderRadius: moderateScale(28),
-    backgroundColor: Color.Blue,
-  },
+      imageCard: {
+        marginTop: verticalScale(30),
+        justifyContent: "flex-end",
+        alignItems: "center",
+        width: horizontalScale(140),
+        height: verticalScale(140),
+        borderRadius: moderateScale(28),
+        backgroundColor: Color.Blue,
+      },
 
-  image: {
-    width: horizontalScale(120),
-    height: verticalScale(120),
-  },
+      image: {
+        width: horizontalScale(120),
+        height: verticalScale(120),
+      },
 
-  crown: {
-    height: verticalScale(70),
-    width: horizontalScale(70),
-    resizeMode: "cover",
-  },
+      crown: {
+        height: verticalScale(70),
+        width: horizontalScale(70),
+        resizeMode: "cover",
+      },
 
-  name: {
-    paddingTop: verticalScale(15),
-    fontSize: moderateScale(25),
-    fontWeight: 600,
-  },
+      name: {
+        paddingTop: verticalScale(15),
+        fontSize: moderateScale(25),
+        fontWeight: 600,
+        color: contentColor,
+      },
 
-  username: {
-    paddingTop: verticalScale(5),
-    fontSize: moderateScale(18),
-  },
+      username: {
+        paddingTop: verticalScale(5),
+        fontSize: moderateScale(18),
+        color: contentColor,
+      },
 
-  layover: {
-    width: "100%",
-    flex: 1,
-    backgroundColor: Color.LightGray,
-    borderTopLeftRadius: moderateScale(50),
-    borderTopRightRadius: moderateScale(50),
-    marginTop: verticalScale(20),
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingBottom: verticalScale(40),
-  },
+      layover: {
+        width: "100%",
+        flex: 1,
+        backgroundColor: theme.primary,
+        borderTopLeftRadius: moderateScale(50),
+        borderTopRightRadius: moderateScale(50),
+        marginTop: verticalScale(20),
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingBottom: verticalScale(40),
+      },
 
-  bigButton: {
-    marginTop: verticalScale(30),
-    width: "86%",
-    height: verticalScale(60),
-    borderRadius: moderateScale(15),
-    alignItems: "center",
-    justifyContent: "flex-start",
-    display: "flex",
-    flexDirection: "row",
-  },
+      bigButton: {
+        marginTop: verticalScale(30),
+        width: "86%",
+        height: verticalScale(60),
+        borderRadius: moderateScale(15),
+        alignItems: "center",
+        justifyContent: "flex-start",
+        display: "flex",
+        flexDirection: "row",
+      },
 
-  iconGuard: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: moderateScale(10),
-    backgroundColor: Color.White,
-    width: horizontalScale(55),
-    height: verticalScale(55),
-  },
+      iconGuard: {
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: moderateScale(10),
+        backgroundColor: theme.primary,
+        width: horizontalScale(55),
+        height: verticalScale(55),
+      },
 
-  buttonText: {
-    flex: 1,
-    paddingLeft: horizontalScale(15),
-    fontSize: moderateScale(18),
-    textAlign: "left",
-  },
-});
+      buttonText: {
+        flex: 1,
+        paddingLeft: horizontalScale(15),
+        fontSize: moderateScale(18),
+        textAlign: "left" as const,
+        color: contentColor,
+      },
+    }),
+  };
+};

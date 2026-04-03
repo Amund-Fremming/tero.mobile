@@ -11,13 +11,16 @@ import Color from "../../../core/constants/Color";
 import { CreateGameTipRequest } from "../../../core/constants/Types";
 import { useModalProvider } from "../../../core/context/ModalProvider";
 import { useServiceProvider } from "../../../core/context/ServiceProvider";
+import { useThemeProvider } from "../../../core/context/ThemeProvider";
 import { moderateScale, verticalScale } from "../../../core/utils/dimensions";
-import { styles } from "./tipsUsScreenStyles";
+import { createStyles } from "./tipsUsScreenStyles";
 
 export const TipsUsScreen = () => {
   const navigation: any = useNavigation();
   const { displayInfoModal, displayErrorModal } = useModalProvider();
   const { gameService } = useServiceProvider();
+  const { theme, darkMode } = useThemeProvider();
+  const styles = createStyles(theme, darkMode);
 
   const [createRequest, setCreateRequest] = useState<CreateGameTipRequest>({
     header: "",
@@ -90,9 +93,9 @@ export const TipsUsScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingWrapper backgroundColor={Color.LightGray} anchorRef={anchorRef}>
+    <KeyboardAvoidingWrapper backgroundColor={theme.secondary} anchorRef={anchorRef}>
       <View style={styles.container}>
-        <ScreenHeader title="Tips oss" onBackPressed={() => navigation.goBack()} />
+        <ScreenHeader title="Tips oss" onBackPressed={() => navigation.goBack()} backgroundColor={Color.Black} />
 
         <ScrollView
           style={styles.scrollView}
@@ -107,12 +110,13 @@ export const TipsUsScreen = () => {
                 style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
                 name="user"
                 size={24}
-                color={Color.OffBlack}
+                color={styles.contentColor}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Navn"
                 maxLength={14}
+                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
                 value={createRequest.header}
                 returnKeyType="done"
                 onSubmitEditing={Keyboard.dismiss}
@@ -128,12 +132,12 @@ export const TipsUsScreen = () => {
                 style={{ paddingLeft: moderateScale(15), paddingRight: moderateScale(10) }}
                 name="phone"
                 size={24}
-                color={Color.OffBlack}
+                color={styles.contentColor}
               />
               <TextInput
                 style={styles.input}
                 placeholder="Mobil"
-                placeholderTextColor={Color.DarkerGray}
+                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
                 keyboardType="phone-pad"
                 maxLength={20}
                 value={createRequest.mobile_phone}
@@ -152,12 +156,12 @@ export const TipsUsScreen = () => {
                 }}
                 name="edit"
                 size={24}
-                color={Color.OffBlack}
+                color={styles.contentColor}
               />
               <TextInput
                 style={styles.multiline}
                 placeholder="Din ide..."
-                placeholderTextColor={Color.DarkerGray}
+                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
                 multiline={true}
                 textAlignVertical="top"
                 scrollEnabled={true}

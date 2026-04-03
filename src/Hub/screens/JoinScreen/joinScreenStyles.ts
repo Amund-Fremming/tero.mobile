@@ -61,14 +61,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     fontSize: moderateScale(35),
     fontFamily: Font.PassionOneRegular,
-    color: Color.OffBlack,
     paddingRight: moderateScale(20),
   },
 
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Color.LightGray,
     borderRadius: moderateScale(15),
     width: "85%",
     paddingVertical: verticalScale(10),
@@ -81,7 +79,6 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: moderateScale(20),
-    backgroundColor: Color.White,
     gap: verticalScale(25),
     paddingBottom: verticalScale(40),
   },
@@ -96,7 +93,6 @@ export const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: Color.White,
     fontFamily: Font.PassionOneBold,
     fontSize: moderateScale(35),
   },
