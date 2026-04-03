@@ -31,6 +31,10 @@ const subHeaderList = [
   "klart for neste runde?",
 ];
 
+interface Theme {
+  bg: String;
+}
+
 export const HomeScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId, setPseudoId, ensurePseudoId, accessToken, triggerLogin } = useAuthProvider();
@@ -151,17 +155,17 @@ export const HomeScreen = () => {
   };
 
   const handleToggleDarkmode = () => {
+    console.log("Darkmode: ", darkMode);
     setDarkMode(!darkMode);
   };
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={handleToggleDarkmode}>
-        <Feather
-          name={darkMode ? "toggle-left" : "toggle-right"}
-          style={{ position: "absolute", left: horizontalScale(60), top: verticalScale(60) }}
-          size={moderateScale(45)}
-        />
+      <Pressable
+        onPress={handleToggleDarkmode}
+        style={{ zIndex: 1001, position: "absolute", left: horizontalScale(60), top: verticalScale(60) }}
+      >
+        <Feather name={darkMode ? "toggle-left" : "toggle-right"} size={moderateScale(45)} />
       </Pressable>
       <TouchableOpacity onPress={handleProfilePressed} style={styles.iconWrapper}>
         <Feather size={moderateScale(35)} name="user" color={Color.Black} />
