@@ -11,7 +11,7 @@ interface LoadingModalProps {
 
 export const LoadingModal = ({ onCloseFunc, message }: LoadingModalProps) => {
   const { darkMode, theme } = useThemeProvider();
-  const bgOverride = darkMode ? { backgroundColor: theme.secondary } : {};
+  const bgOverride = darkMode ? { backgroundColor: theme.secondary, borderColor: Color.Black } : {};
   const textOverride = darkMode ? { color: "#ffffff" } : {};
   return (
     <View style={styles.overlay}>

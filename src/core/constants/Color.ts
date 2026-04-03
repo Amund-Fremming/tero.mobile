@@ -42,6 +42,8 @@ export const Color = {
   ToastYellow: "",
   GuessPrimary: "#2C6B8A",
   GuessSecondary: "#1A4459",
+  DefuserPrimary: "#87BFBF",
+  DefuserSecondary: "#5B8A8A",
 };
 
 export default Color;

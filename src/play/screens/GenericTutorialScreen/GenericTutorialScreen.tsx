@@ -18,10 +18,9 @@ interface GenericTutorialScreenRouteProps {
 export const GenericTutorialScreen = ({ onFinishedPressed }: GenericTutorialScreenRouteProps) => {
   const navigation: any = useNavigation();
   const { gameType, gameEntryMode } = useGlobalSessionProvider();
-  const { getGameTheme } = useThemeProvider();
+  const { getGameTheme, darkMode, theme } = useThemeProvider();
 
   const config = tutorialConfig[gameType] ?? tutorialConfig[GameType.Quiz];
-  const theme = getGameTheme(gameType);
 
   const getLastButtonText = (): string => {
     switch (gameEntryMode) {
@@ -72,7 +71,9 @@ export const GenericTutorialScreen = ({ onFinishedPressed }: GenericTutorialScre
         }}
         style={[styles.continueButton, { backgroundColor: theme.secondaryColor }]}
       >
-        <Text style={styles.continueText}>{getLastButtonText()}</Text>
+        <Text style={[styles.continueText, { color: darkMode ? theme.secondary : undefined }]}>
+          {getLastButtonText()}
+        </Text>
       </TouchableOpacity>
     </View>
   );

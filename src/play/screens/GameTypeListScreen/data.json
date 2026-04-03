@@ -35,11 +35,5 @@
     "icon": "dice.webp",
     "screen": "Dice",
     "color": "white"
-  },
-  {
-    "name": "Guess",
-    "icon": "guess.webp",
-    "screen": "Guess",
-    "color": "white"
   }
 ]

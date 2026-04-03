@@ -30,14 +30,13 @@ export const LobbyScreen = () => {
 
     if (!validMaxLength(round, 40, displayErrorModal)) return;
 
+    setInput("");
     const result = await invokeFunction("AddRound", sessionData.gameKey, round);
     if (result.isError()) {
       console.error(result.error);
       displayErrorModal("Kunne ikke legge til runde.");
       return;
     }
-
-    setInput("");
   };
 
   const handleStartGame = async () => {

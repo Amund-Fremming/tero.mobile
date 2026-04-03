@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(15),
     gap: moderateScale(8),
     height: verticalScale(95),
+    overflow: "hidden",
   },
 
   playerNameText: {

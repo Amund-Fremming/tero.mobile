@@ -93,9 +93,9 @@ export const TipsUsScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingWrapper backgroundColor={theme.secondary} anchorRef={anchorRef}>
+    <KeyboardAvoidingWrapper backgroundColor={theme.primary} anchorRef={anchorRef}>
       <View style={styles.container}>
-        <ScreenHeader title="Tips oss" onBackPressed={() => navigation.goBack()} backgroundColor={Color.Black} />
+        <ScreenHeader title="Tips oss" onBackPressed={() => navigation.goBack()} backgroundColor={theme.primary} />
 
         <ScrollView
           style={styles.scrollView}

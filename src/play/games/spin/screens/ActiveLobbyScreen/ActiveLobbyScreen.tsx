@@ -34,6 +34,7 @@ export const ActiveLobbyScreen = () => {
     }
 
     const trimmedRound = round.trim();
+    setInput("");
     const result = await invokeFunction("AddRound", sessionData.gameKey, trimmedRound);
 
     if (result.isError()) {
@@ -41,8 +42,6 @@ export const ActiveLobbyScreen = () => {
       displayErrorModal("Kunne ikke legge til runde.");
       return;
     }
-
-    setInput("");
   };
 
   const handleStartGame = async () => {

@@ -139,7 +139,6 @@ export enum GameType {
   Duel = "Duel",
   Imposter = "Imposter",
   Dice = "Dice",
-  Guess = "Guess",
   Defuser = "Defuser",
 }
 

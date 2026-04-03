@@ -12,7 +12,6 @@ export const GAME_TYPE_LABELS: Record<GameType, string> = {
   [GameType.Duel]: "Duel",
   [GameType.Imposter]: "Imposter",
   [GameType.Dice]: "Terning",
-  [GameType.Guess]: "Gjett",
   [GameType.Defuser]: "Defuser",
 };
 

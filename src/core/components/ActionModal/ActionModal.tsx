@@ -1,5 +1,6 @@
 import * as Haptics from "expo-haptics";
 import { Image, Text, TouchableOpacity, View } from "react-native";
+import Color from "../../constants/Color";
 import { useThemeProvider } from "../../context/ThemeProvider";
 import { styles } from "./actionModalStyles";
 
@@ -21,7 +22,7 @@ export const ActionModal = ({
   onRightClick,
 }: ActionModalProps) => {
   const { darkMode, theme } = useThemeProvider();
-  const bgOverride = darkMode ? { backgroundColor: theme.secondary } : {};
+  const bgOverride = darkMode ? { backgroundColor: theme.secondary, borderColor: Color.Black } : {};
   const textOverride = darkMode ? { color: "#ffffff" } : {};
 
   const handleLeftPressed = () => {

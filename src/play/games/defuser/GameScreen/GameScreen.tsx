@@ -1,5 +1,4 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
-import Color from "@/src/core/constants/Color";
 import Font from "@/src/core/constants/Font";
 import { GameType } from "@/src/core/constants/Types";
 import { useThemeProvider } from "@/src/core/context/ThemeProvider";
@@ -147,7 +146,7 @@ export function GameScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.primaryColor }]}>
-      <ScreenHeader title="Defuser" onBackPressed={() => navigation.goBack()} backgroundColor={Color.Red} />
+      <ScreenHeader title="Defuser" onBackPressed={() => navigation.goBack()} backgroundColor={theme.secondaryColor} />
 
       {/* Bomb panel */}
       <View style={styles.bombPanel}>

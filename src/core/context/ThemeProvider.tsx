@@ -31,14 +31,9 @@ export const gameThemeMap: Record<GameType, GameTheme> = {
     primaryColor: Color.LightGray,
     secondaryColor: Color.OffBlack,
   },
-  [GameType.Guess]: {
-    primaryColor: Color.GuessPrimary,
-    secondaryColor: Color.GuessSecondary,
-  },
   [GameType.Defuser]: {
-    primaryColor: Color.Black, // bomb body
-    secondaryColor: Color.Red, // danger/explosion
-    // Optionally, add accent: Color.Yellow or Color.Blue for wires
+    primaryColor: Color.DefuserPrimary,
+    secondaryColor: Color.DefuserSecondary,
   },
 };
 

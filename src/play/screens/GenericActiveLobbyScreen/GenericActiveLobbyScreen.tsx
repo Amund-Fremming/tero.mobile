@@ -82,6 +82,12 @@ export const GenericActiveLobbyScreen = ({
     );
   };
 
+  const handleInputChange = (input: string) => {
+    const sanitized = input.replace(/\n/g, "");
+    setInputValue(sanitized);
+    if (inputError) setInputError("");
+  };
+
   const handleAddRound = () => {
     if (inputValue.length > 50) {
       setInputError("Maks 50 tegn per runde.");
@@ -89,7 +95,6 @@ export const GenericActiveLobbyScreen = ({
     }
     setInputValue("");
     setInputError("");
-    onAddRoundPressed(inputValue);
   };
 
   return (
@@ -130,11 +135,7 @@ export const GenericActiveLobbyScreen = ({
                 style={styles.input}
                 placeholder={inputPlaceholder}
                 value={inputValue}
-                onChangeText={(input) => {
-                  const sanitized = input.replace(/\n/g, "");
-                  setInputValue(sanitized);
-                  if (inputError) setInputError("");
-                }}
+                onChangeText={handleInputChange}
                 onSubmitEditing={Keyboard.dismiss}
                 returnKeyType="done"
                 multiline

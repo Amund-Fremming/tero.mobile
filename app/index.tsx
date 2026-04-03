@@ -5,7 +5,6 @@ import ToastProvider from "@/src/core/context/ToastProvider";
 import { setupNotifications } from "@/src/core/services/notificationService";
 import Hub from "@/src/hub/Hub";
 import HubConnectionProvider from "@/src/play/context/HubConnectionProvider";
-import GuessSessionProvider from "@/src/play/games/guess/context/GuessGameProvider";
 import ImposterSessionProvider from "@/src/play/games/imposter/context/ImposterSessionProvider";
 import QuizSessionProvider from "@/src/play/games/quiz/context/QuizGameProvider";
 import SpinSessionProvider from "@/src/play/games/spin/context/SpinGameProvider";
@@ -47,11 +46,9 @@ export default () => (
                     <HubConnectionProvider>
                       <QuizSessionProvider>
                         <SpinSessionProvider>
-                          <GuessSessionProvider>
-                            <ImposterSessionProvider>
-                              <Hub />
-                            </ImposterSessionProvider>
-                          </GuessSessionProvider>
+                          <ImposterSessionProvider>
+                            <Hub />
+                          </ImposterSessionProvider>
                         </SpinSessionProvider>
                       </QuizSessionProvider>
                     </HubConnectionProvider>

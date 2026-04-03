@@ -23,7 +23,7 @@ export const LobbyScreen = ({ onLeave }: Props) => {
   const { sessionData: sessionData } = useGlobalSessionProvider();
   const { disconnect, invokeFunction } = useHubConnectionProvider();
   const { displayErrorModal, displayInfoModal } = useModalProvider();
-  const { iterations, clearQuizGameValues, setScreen } = useQuizSessionProvider();
+  const { iterations, setScreen } = useQuizSessionProvider();
   const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Quiz);
 
@@ -48,6 +48,7 @@ export const LobbyScreen = ({ onLeave }: Props) => {
     if (!validMaxLength(questionToAdd, 40, displayErrorModal)) return;
 
     setIsAddingRound(true);
+    setInput("");
     const result = await invokeFunction("AddQuestion", sessionData.gameKey, questionToAdd);
 
     if (result.isError()) {
@@ -57,7 +58,6 @@ export const LobbyScreen = ({ onLeave }: Props) => {
       return;
     }
 
-    setInput("");
     setIsAddingRound(false);
   };
 

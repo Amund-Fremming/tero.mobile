@@ -1,4 +1,5 @@
 import Color from "@/src/core/constants/Color";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { moderateScale } from "@/src/core/utils/dimensions";
 import * as Haptics from "expo-haptics";
 import React, { useState } from "react";
@@ -22,6 +23,7 @@ export const MultiStepTutorial = ({
   accentColor = Color.BuzzifyLavender,
   lastButtonText = "Fortsett",
 }: MultiStepTutorialProps) => {
+  const { darkMode, theme } = useThemeProvider();
   const [currentIndex, setCurrentIndex] = useState(0);
   const isLast = currentIndex === pages.length - 1;
   const CurrentPage = pages[currentIndex];
@@ -65,10 +67,10 @@ export const MultiStepTutorial = ({
 
       <View style={styles.buttonRow}>
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Text style={styles.buttonText}>Tilbake</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? theme.secondary : Color.White }]}>Tilbake</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleNext} style={[styles.nextButton, { backgroundColor: accentColor }]}>
-          <Text style={styles.buttonText}>{isLast ? lastButtonText : "Neste"}</Text>
+          <Text style={[styles.buttonText, { color: darkMode ? theme.secondary : Color.White }]}>{isLast ? lastButtonText : "Neste"}</Text>
         </TouchableOpacity>
       </View>
     </View>

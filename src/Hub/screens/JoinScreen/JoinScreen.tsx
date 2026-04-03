@@ -131,7 +131,7 @@ export const JoinScreen = () => {
               </Text>
             )}
             <TouchableOpacity ref={anchorRef} style={styles.button} onPress={handleJoinGame}>
-              <Text style={styles.buttonText}>Bli med</Text>
+              <Text style={[styles.buttonText, { color: Color.White }]}>Bli med</Text>
             </TouchableOpacity>
           </View>
         </View>
