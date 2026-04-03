@@ -46,14 +46,15 @@ export const TipsUsScreen = () => {
       return;
     }
 
-    // Validate phone number (1-20 chars)
-    if (!createRequest.mobile_phone || createRequest.mobile_phone.trim().length === 0) {
+    // Validate phone number
+    const phoneDigits = createRequest.mobile_phone.trim();
+    if (!phoneDigits) {
       displayErrorModal("Fyll inn mobilnummer.");
       return;
     }
 
-    if (createRequest.mobile_phone.length > 20) {
-      displayErrorModal("Mobilnummer er for langt.");
+    if (!/^\+?\d{7,20}$/.test(phoneDigits)) {
+      displayErrorModal("Ugyldig mobilnummer.");
       return;
     }
 
@@ -83,8 +84,12 @@ export const TipsUsScreen = () => {
     displayInfoModal("Takk for tipset!", "Takk", () => navigation.goBack());
   };
 
-  const handleInfoPressed = () => {
-    console.log("Info pressed");
+  const handleNameInput = (input: string) => {
+    if (input.length > 14) {
+      displayInfoModal("Navn kan ikke være lengre enn 14 tegn.");
+      return;
+    }
+    setCreateRequest((prev) => ({ ...prev, header: input }));
   };
 
   return (
@@ -115,13 +120,8 @@ export const TipsUsScreen = () => {
                 value={createRequest.header}
                 returnKeyType="done"
                 onSubmitEditing={Keyboard.dismiss}
-                onChangeText={(input) => {
-                  if (input.length > 14) {
-                    displayInfoModal("Navn kan ikke være lengre enn 14 tegn.");
-                    return;
-                  }
-                  setCreateRequest((prev) => ({ ...prev, header: input }));
-                }}
+                onChangeText={(input) => handleNameInput(input)}
+                placeholderTextColor={Color.DarkerGray}
               />
             </View>
           </View>
