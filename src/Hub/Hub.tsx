@@ -6,7 +6,6 @@ import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErro
 import Screen from "../core/constants/Screen";
 import DefuserGame from "../play/games/defuser/DefuserGame";
 import DiceGame from "../play/games/dice/DiceGame";
-import GuessGame from "../play/games/guess/GuessGame";
 import ImposterGame from "../play/games/imposter/ImposterGame";
 import QuizGame from "../play/games/quiz/QuizGame";
 import SpinGame from "../play/games/spin/SpinGame";
@@ -68,7 +67,6 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
       <Stack.Screen name={Screen.TipsList} component={TipsListScreen} />
-      <Stack.Screen name={Screen.Guess} component={GuessGame} />
     </Stack.Navigator>
   );
 };
