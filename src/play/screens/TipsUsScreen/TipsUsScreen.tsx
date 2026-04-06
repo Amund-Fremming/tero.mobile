@@ -116,7 +116,7 @@ export const TipsUsScreen = () => {
                 style={styles.input}
                 placeholder="Navn"
                 maxLength={14}
-                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
+                placeholderTextColor={Color.Gray}
                 value={createRequest.header}
                 returnKeyType="done"
                 onSubmitEditing={Keyboard.dismiss}
@@ -136,7 +136,7 @@ export const TipsUsScreen = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Mobil"
-                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
+                placeholderTextColor={Color.Gray}
                 keyboardType="phone-pad"
                 maxLength={20}
                 value={createRequest.mobile_phone}
@@ -160,7 +160,7 @@ export const TipsUsScreen = () => {
               <TextInput
                 style={styles.multiline}
                 placeholder="Din ide..."
-                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
+                placeholderTextColor={Color.Gray}
                 multiline={true}
                 textAlignVertical="top"
                 scrollEnabled={true}

@@ -308,7 +308,7 @@ export const AdminScreen = () => {
                 value={popup.heading}
                 onChangeText={(text) => setPopup((prev) => (prev ? { ...prev, heading: text } : prev))}
                 placeholder="Tittel"
-                placeholderTextColor={Color.DarkerGray}
+                placeholderTextColor={Color.Gray}
               />
             </View>
           </View>
@@ -326,7 +326,7 @@ export const AdminScreen = () => {
                 value={popup.paragraph}
                 onChangeText={(text) => setPopup((prev) => (prev ? { ...prev, paragraph: text } : prev))}
                 placeholder="Beskrivelse"
-                placeholderTextColor={Color.DarkerGray}
+                placeholderTextColor={Color.Gray}
                 multiline
               />
             </View>

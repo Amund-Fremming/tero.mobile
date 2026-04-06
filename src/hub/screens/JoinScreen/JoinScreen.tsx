@@ -107,7 +107,7 @@ export const JoinScreen = () => {
               <TextInput
                 style={[styles.input, { color: textColor }]}
                 placeholder="Rom navn"
-                placeholderTextColor={darkMode ? Color.LightGray : Color.DarkerGray}
+                placeholderTextColor={Color.Gray}
                 value={userInput}
                 onChangeText={(input) => {
                   setUserInput(input?.toUpperCase());

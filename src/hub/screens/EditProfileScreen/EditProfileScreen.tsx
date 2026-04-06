@@ -145,7 +145,7 @@ export const EditProfileScreen = () => {
               style={styles.input}
               value={patchRequest.given_name}
               placeholder="Fornavn"
-              placeholderTextColor={Color.DarkerGray}
+              placeholderTextColor={Color.Gray}
             />
           </View>
         </View>
@@ -163,7 +163,7 @@ export const EditProfileScreen = () => {
               style={styles.input}
               value={patchRequest.family_name}
               placeholder="Etternavn"
-              placeholderTextColor={Color.DarkerGray}
+              placeholderTextColor={Color.Gray}
             />
           </View>
         </View>
@@ -181,7 +181,7 @@ export const EditProfileScreen = () => {
               style={styles.input}
               value={patchRequest.username}
               placeholder="Brukernavn"
-              placeholderTextColor={Color.DarkerGray}
+              placeholderTextColor={Color.Gray}
             />
           </View>
         </View>
@@ -199,7 +199,7 @@ export const EditProfileScreen = () => {
               value={birthDateDisplay}
               onChangeText={handleBirthDateChangeIso}
               placeholder="DD-MM-YYYY"
-              placeholderTextColor={Color.DarkerGray}
+              placeholderTextColor={Color.Gray}
               keyboardType="numeric"
               maxLength={10}
             />
