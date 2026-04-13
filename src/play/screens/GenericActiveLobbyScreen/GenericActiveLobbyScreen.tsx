@@ -139,6 +139,7 @@ export const GenericActiveLobbyScreen = ({
                 onSubmitEditing={Keyboard.dismiss}
                 returnKeyType="done"
                 multiline
+                blurOnSubmit={true}
               />
               {inputError ? <Text style={styles.inputError}>{inputError}</Text> : null}
               <BigButton

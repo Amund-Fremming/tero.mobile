@@ -1,6 +1,6 @@
 type Environment = "dev" | "prd";
 
-const ENVIRONMENT: Environment = "prd";
+const ENVIRONMENT: Environment = "dev";
 
 const URL_CONFIG: Record<Environment, { hubUrlBase: string; platformUrlBase: string; sessionUrlBase: string }> = {
   dev: {

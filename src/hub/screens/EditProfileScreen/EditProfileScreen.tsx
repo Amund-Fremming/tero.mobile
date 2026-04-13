@@ -10,7 +10,7 @@ import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Keyboard, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { createStyles } from "./editProfileScreenStyles";
 
@@ -146,6 +146,8 @@ export const EditProfileScreen = () => {
               value={patchRequest.given_name}
               placeholder="Fornavn"
               placeholderTextColor={Color.Gray}
+              returnKeyType="done"
+              onSubmitEditing={Keyboard.dismiss}
             />
           </View>
         </View>
@@ -164,6 +166,8 @@ export const EditProfileScreen = () => {
               value={patchRequest.family_name}
               placeholder="Etternavn"
               placeholderTextColor={Color.Gray}
+              returnKeyType="done"
+              onSubmitEditing={Keyboard.dismiss}
             />
           </View>
         </View>
@@ -182,6 +186,8 @@ export const EditProfileScreen = () => {
               value={patchRequest.username}
               placeholder="Brukernavn"
               placeholderTextColor={Color.Gray}
+              returnKeyType="done"
+              onSubmitEditing={Keyboard.dismiss}
             />
           </View>
         </View>
@@ -202,6 +208,8 @@ export const EditProfileScreen = () => {
               placeholderTextColor={Color.Gray}
               keyboardType="numeric"
               maxLength={10}
+              returnKeyType="done"
+              onSubmitEditing={Keyboard.dismiss}
             />
           </View>
         </View>

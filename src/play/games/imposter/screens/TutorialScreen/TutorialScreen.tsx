@@ -30,11 +30,7 @@ export const TutorialScreen = ({ initiateHub }: TutorialScreenProps) => {
   useEffect(() => {
     if (gameEntryMode !== GameEntryMode.Creator) return;
     const t = setTimeout(() => {
-      displayClickableToast(
-        "Generer et spill for deg",
-        "Trykk her for å generere og åpne et spill direkte",
-        handleRandomGame,
-      );
+      displayClickableToast("Lag for meg", "Klikk her for å fylle spillet med tilfeldige runder", handleRandomGame);
     }, 1500);
     return () => {
       clearTimeout(t);

@@ -1,7 +1,13 @@
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import Screen from "@/src/core/constants/Screen";
-import { ActivityStats, ClientPopup, LogCategoryCount, SessionCacheInfo, SystemHealth } from "@/src/core/constants/Types";
+import {
+  ActivityStats,
+  ClientPopup,
+  LogCategoryCount,
+  SessionCacheInfo,
+  SystemHealth,
+} from "@/src/core/constants/Types";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
@@ -10,7 +16,7 @@ import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Button, Keyboard, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import styles from "./AdminScreenStyles";
 
@@ -309,6 +315,8 @@ export const AdminScreen = () => {
                 onChangeText={(text) => setPopup((prev) => (prev ? { ...prev, heading: text } : prev))}
                 placeholder="Tittel"
                 placeholderTextColor={Color.Gray}
+                returnKeyType="done"
+                onSubmitEditing={Keyboard.dismiss}
               />
             </View>
           </View>
@@ -328,6 +336,7 @@ export const AdminScreen = () => {
                 placeholder="Beskrivelse"
                 placeholderTextColor={Color.Gray}
                 multiline
+                blurOnSubmit={true}
               />
             </View>
           </View>

@@ -10,7 +10,7 @@ import { useHubConnectionProvider } from "@/src/play/context/HubConnectionProvid
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import React from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Keyboard, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ImposterSessionScreen } from "../../constants/imposterTypes";
 import { useImposterSessionProvider } from "../../context/ImposterSessionProvider";
 import styles from "./addPlayersScreenStyles";
@@ -170,6 +170,8 @@ export const AddPlayersScreen = ({ onLeave }: Props) => {
                 placeholder={`Spiller ${index + 1}`}
                 placeholderTextColor={Color.White + "80"}
                 selectTextOnFocus={true}
+                returnKeyType="done"
+                onSubmitEditing={Keyboard.dismiss}
               />
             </View>
           ))}

@@ -195,8 +195,8 @@ export const HomeScreen = () => {
         >
           <DiagonalSplit />
           <View style={styles.buttonTextWrapper}>
-            <Text style={{ ...styles.textBase, ...styles.textTopRight }}>KLARE</Text>
             <Text style={{ ...styles.textBase, ...styles.textTopRight }}>SPILL</Text>
+            <Text style={{ ...styles.textBase, ...styles.textTopRight }}>ARKIV</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity

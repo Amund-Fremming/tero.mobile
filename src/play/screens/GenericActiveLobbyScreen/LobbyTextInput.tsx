@@ -43,6 +43,7 @@ export const LobbyTextInput = ({ value, onChangeText, onSubmit, placeholder, but
         onSubmitEditing={Keyboard.dismiss}
         returnKeyType="done"
         multiline
+        blurOnSubmit={true}
       />
       {error ? <Text style={styles.inputError}>{error}</Text> : null}
       <BigButton label="Legg til" backgroundColor={buttonColor} textColor={Color.White} onPress={handleSubmit} />

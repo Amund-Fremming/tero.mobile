@@ -84,7 +84,7 @@ export const GameTypeListScreen = () => {
         />
       </View>
       <ScreenHeader
-        title={gameEntryMode === GameEntryMode.Creator ? "Nytt spill" : "Klare spill"}
+        title="Opprett"
         onBackPressed={() => navigation.goBack()}
         onInfoPress={handleInfoPressed}
         showBorder={true}

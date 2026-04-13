@@ -140,6 +140,8 @@ export const TipsUsScreen = () => {
                 keyboardType="phone-pad"
                 maxLength={20}
                 value={createRequest.mobile_phone}
+                returnKeyType="done"
+                onSubmitEditing={Keyboard.dismiss}
                 onChangeText={(input) => setCreateRequest((prev) => ({ ...prev, mobile_phone: input }))}
               />
             </View>
