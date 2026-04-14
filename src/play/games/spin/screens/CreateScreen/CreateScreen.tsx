@@ -30,7 +30,7 @@ export const CreateScreen = () => {
     setLoading(true);
 
     const result = await invokeFunction("PersistGame", sessionData.gameKey, gameType, name, category);
-    if (result.isError()) {
+    if (result.isError() || !result.value) {
       console.error("Failed to persist game:", result.error);
       displayErrorModal("Klarte ikke lagre spill, forsøk igjen senere", () => {
         setLoading(false);
@@ -52,10 +52,8 @@ export const CreateScreen = () => {
       secondaryThemeColor={secondaryThemeColor}
       onBackPressed={() => navigation.goBack()}
       onInfoPressed={handleInfoPressed}
-      headerText="Lagre"
       bottomButtonText="Publiser"
       handleCreateGame={handlePersistGame}
-      featherIcon={featherIcon}
     />
   );
 };
