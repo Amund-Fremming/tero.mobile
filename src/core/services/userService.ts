@@ -10,12 +10,15 @@ import {
   UserWithRole,
 } from "../constants/Types";
 import { getHeaders } from "../utils/utilFunctions";
+import { AuditService } from "./auditService";
 
 export class UserService {
   baseUrl: string;
+  private audit: AuditService;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, audit: AuditService) {
     this.baseUrl = baseUrl;
+    this.audit = audit;
   }
 
   async resetPassword(token: string, email: string): Promise<Result> {
@@ -69,6 +72,7 @@ export class UserService {
       return ok(response.data);
     } catch (error) {
       console.error("getUserData:", error);
+      this.audit.critical("unknown", token, "UserService.getUser", "Failed to fetch user after auth - possible sync issue", { error: String(error) });
       return err("Klarte ikke hente brukerdata");
     }
   }
@@ -121,6 +125,7 @@ export class UserService {
       return ok();
     } catch (error) {
       console.error("deleteUser:", error);
+      this.audit.critical("unknown", token, "UserService.deleteUser", "Failed to delete user account", { user_id, error: String(error) });
       return err("Klarte ikke slette bruker");
     }
   }
@@ -232,6 +237,7 @@ export class UserService {
       return ok();
     } catch (error) {
       console.error("changePassword:", error);
+      this.audit.warning("unknown", token, "UserService.changePassword", "Failed to change password", { error: String(error) });
       return err("Klarte ikke endre passord");
     }
   }

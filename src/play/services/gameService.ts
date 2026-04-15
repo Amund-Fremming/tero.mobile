@@ -9,14 +9,17 @@ import {
   JoinGameResponse,
   PagedResponse,
 } from "../../core/constants/Types";
+import { AuditService } from "../../core/services/auditService";
 import { err, ok, Result } from "../../core/utils/result";
 import { getHeaders } from "../../core/utils/utilFunctions";
 
 export class GameService {
   urlBase: string;
+  private audit: AuditService;
 
-  constructor(urlBase: string) {
+  constructor(urlBase: string, audit: AuditService) {
     this.urlBase = urlBase;
+    this.audit = audit;
   }
 
   async createGameTip(request: CreateGameTipRequest): Promise<Result> {
@@ -44,6 +47,7 @@ export class GameService {
       return ok(result);
     } catch (error) {
       console.error("createSession:", error);
+      this.audit.critical(pseudoId, null, "GameService.createSession", "Failed to create game session", { gameType: type, error: String(error) });
       return err("Klarte ikke opprette spill");
     }
   }
@@ -66,7 +70,7 @@ export class GameService {
       return ok(undefined);
     } catch (error) {
       console.error("freeGameKey:", error);
-      // TODO - AUDIT LOG?!?!
+      this.audit.warning(guest_id, token, "GameService.freeGameKey", "Failed to free game key", { game_type, key_word, error: String(error) });
       return ok(undefined);
     }
   }
@@ -84,6 +88,7 @@ export class GameService {
       return ok(undefined);
     } catch (error) {
       console.error("persistStaticGame:", error);
+      this.audit.critical(pseudoId, null, "GameService.persistStaticGame", "Failed to persist static game", { gameType, error: String(error) });
       return err("Klarte ikke lagre spill");
     }
   }
@@ -180,6 +185,7 @@ export class GameService {
       return ok(data);
     } catch (error) {
       console.error("initiateRandomStaticGame", error);
+      this.audit.critical(pseudo_id, null, "GameService.initiateRandomStaticGame", "Failed to initiate random static game", { game_type, error: String(error) });
       return err("Failed to initiate random static game");
     }
   }
@@ -197,6 +203,7 @@ export class GameService {
       return ok(data);
     } catch (error) {
       console.error("initiateRandomGame", error);
+      this.audit.critical(pseudo_id, null, "GameService.initiateRandomInteractiveGame", "Failed to initiate random interactive game", { game_type, error: String(error) });
       return err("Failed to initiate random game");
     }
   }
@@ -210,6 +217,7 @@ export class GameService {
       return ok(data);
     } catch (error) {
       console.error("initiateStandaloneGame", error);
+      this.audit.critical(pseudo_id, null, "GameService.initiateStaticGame", "Failed to initiate static game", { game_type, game_id, error: String(error) });
       return err("Failed to initiate standalone game");
     }
   }
@@ -233,6 +241,7 @@ export class GameService {
       return ok(result);
     } catch (error) {
       console.error("initiateInteractiveGame:", error);
+      this.audit.critical(pseudo_id, null, "GameService.initiateSessionGame", "Failed to initiate session game", { game_type, game_id, error: String(error) });
       return err("Klarte ikke starte spill");
     }
   }
@@ -260,6 +269,7 @@ export class GameService {
       return ok(result);
     } catch (error) {
       console.error("joinInteractiveGame:", error);
+      this.audit.critical(pseudo_id, null, "GameService.joinInteractiveGame", "Failed to join game - network/unexpected error", { game_key, error: String(error) });
       return err("Failed to join game");
     }
   }
