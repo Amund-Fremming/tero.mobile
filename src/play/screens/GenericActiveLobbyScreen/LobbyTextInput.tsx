@@ -38,6 +38,7 @@ export const LobbyTextInput = ({ value, onChangeText, onSubmit, placeholder, but
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        placeholderTextColor={Color.Gray}
         value={value}
         onChangeText={handleChangeText}
         onSubmitEditing={Keyboard.dismiss}

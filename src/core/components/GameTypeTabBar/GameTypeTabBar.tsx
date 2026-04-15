@@ -3,6 +3,7 @@ import React from "react";
 import { ScrollView, Text, TouchableOpacity } from "react-native";
 import Color from "../../constants/Color";
 import { GameType } from "../../constants/Types";
+import { useThemeProvider } from "../../context/ThemeProvider";
 import { moderateScale } from "../../utils/dimensions";
 import createStyles from "./gameTypeTabBarStyles";
 
@@ -47,7 +48,10 @@ export const GameTypeTabBar = ({
   activeColor = Color.HomeRed,
   outlined = false,
 }: GameTypeTabBarProps) => {
-  const styles = createStyles(activeColor, outlined);
+  const { darkMode } = useThemeProvider();
+  const styles = createStyles(activeColor, outlined, darkMode);
+
+  const defaultIconColor = darkMode ? Color.White : Color.OffBlack;
 
   return (
     <ScrollView
@@ -65,7 +69,7 @@ export const GameTypeTabBar = ({
             onPress={() => onTabPress(type)}
           >
             {showIcons && (
-              <GameTypeIcon type={type} size={moderateScale(18)} color={isSelected ? Color.White : Color.OffBlack} />
+              <GameTypeIcon type={type} size={moderateScale(18)} color={isSelected ? Color.White : defaultIconColor} />
             )}
             <Text style={[styles.tabLabel, isSelected && styles.tabLabelSelected]}>{GAME_TYPE_LABELS[type]}</Text>
           </TouchableOpacity>

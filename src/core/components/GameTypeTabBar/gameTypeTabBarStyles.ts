@@ -3,7 +3,7 @@ import Font from "@/src/core/constants/Font";
 import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
 import { StyleSheet } from "react-native";
 
-export const createStyles = (activeColor: string, outlined: boolean) =>
+export const createStyles = (activeColor: string, outlined: boolean, darkMode: boolean = false) =>
   StyleSheet.create({
     tabBar: {
       flexShrink: 0,
@@ -24,9 +24,15 @@ export const createStyles = (activeColor: string, outlined: boolean) =>
       paddingVertical: verticalScale(10),
       paddingHorizontal: horizontalScale(18),
       borderRadius: moderateScale(20),
-      backgroundColor: outlined ? Color.White : Color.LightGray,
+      backgroundColor: outlined
+        ? darkMode
+          ? Color.OffBlack
+          : Color.White
+        : darkMode
+          ? Color.OffBlack
+          : Color.LightGray,
       borderWidth: outlined ? 2 : 0,
-      borderColor: outlined ? Color.Gray : "transparent",
+      borderColor: outlined ? (darkMode ? Color.Gray : Color.Gray) : "transparent",
     },
 
     tabSelected: {
@@ -37,7 +43,7 @@ export const createStyles = (activeColor: string, outlined: boolean) =>
     tabLabel: {
       fontFamily: Font.PassionOneRegular,
       fontSize: moderateScale(18),
-      color: outlined ? Color.Gray : Color.OffBlack,
+      color: outlined ? (darkMode ? Color.White : Color.Gray) : darkMode ? Color.White : Color.OffBlack,
     },
 
     tabLabelSelected: {

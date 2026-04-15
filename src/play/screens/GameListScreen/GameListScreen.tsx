@@ -18,7 +18,7 @@ export const GameListScreen = () => {
   const navigation: any = useNavigation();
   const { gameService } = useServiceProvider();
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
-  const { displayActionModal } = useModalProvider();
+  const { displayActionModal, displayInfoModal } = useModalProvider();
   const { displayToast } = useToastProvider();
   const { savedIdSet, saveGame: saveGameToSet } = useSavedGamesProvider();
   const { prefetchedGamePage } = useAppDataProvider();
@@ -63,6 +63,10 @@ export const GameListScreen = () => {
     [savedIdSet, handleSaveGame],
   );
 
+  const handleInfoPressed = () => {
+    displayInfoModal("Bla gjennom spill andre har laget, og spill dem selv", "Hva nå?");
+  };
+
   return (
     <GenericGameList
       title="Spill arkiv"
@@ -73,7 +77,7 @@ export const GameListScreen = () => {
       renderCardAction={renderCardAction}
       showSkeleton
       initialPage={prefetchedGamePage ?? undefined}
-      onInfoPress={() => console.log("Info pressed")}
+      onInfoPress={handleInfoPressed}
     />
   );
 };

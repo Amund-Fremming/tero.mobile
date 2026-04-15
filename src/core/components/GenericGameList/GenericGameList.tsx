@@ -41,6 +41,7 @@ interface GenericGameListProps {
 }
 
 const SkeletonCard = memo(() => {
+  const { theme } = useThemeProvider();
   const opacity = useRef(new Animated.Value(0.4)).current;
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const SkeletonCard = memo(() => {
           </View>
         </View>
       </View>
-      <View style={styles.separator} />
+      <View style={[styles.separator, { backgroundColor: theme.secondary }]} />
     </Animated.View>
   );
 });
@@ -96,7 +97,7 @@ export const GenericGameList = ({
   } = useGlobalSessionProvider();
   const { setQuizSession } = useQuizSessionProvider();
   const { setImposterSession } = useImposterSessionProvider();
-  const { theme } = useThemeProvider();
+  const { theme, darkMode } = useThemeProvider();
 
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<GameBase>>(
     initialPage ?? { items: [], has_next: false, has_prev: false, page_num: 0 },
@@ -235,7 +236,13 @@ export const GenericGameList = ({
                 <GameCard
                   key={game.id}
                   game={game}
-                  icon={<GameTypeIcon type={game.game_type} size={moderateScale(60)} color={Color.Gray} />}
+                  icon={
+                    <GameTypeIcon
+                      type={game.game_type}
+                      size={moderateScale(60)}
+                      color={darkMode ? "#B0B0B0" : Color.Gray}
+                    />
+                  }
                   saved={action.saved}
                   deletable={action.deletable}
                   onPress={() => handleGamePressed(game.id, game.game_type)}

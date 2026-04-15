@@ -101,7 +101,7 @@ export const JoinScreen = () => {
               <Feather
                 style={{ paddingLeft: moderateScale(20), paddingRight: moderateScale(10) }}
                 name="key"
-                size={45}
+                size={moderateScale(40)}
                 color={textColor}
               />
               <TextInput
@@ -131,7 +131,7 @@ export const JoinScreen = () => {
               </Text>
             )}
             <TouchableOpacity ref={anchorRef} style={styles.button} onPress={handleJoinGame}>
-              <Text style={[styles.buttonText, { color: Color.White }]}>Bli med</Text>
+              <Text style={[styles.buttonText, { color: theme.primary }]}>Bli med</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -29,6 +29,8 @@ export const Auth0Config: IAuth0Config = {
   domain: DOMAIN,
   clientId: CLIENT_ID,
   audience: AUDIENCE,
-  redirectUri: __DEV__ ? AuthSession.makeRedirectUri({ scheme: SCHEME }) : `${SCHEME}://callback`,
+  redirectUri: __DEV__
+    ? AuthSession.makeRedirectUri({ preferLocalhost: true, scheme: SCHEME })
+    : `${SCHEME}://callback`,
   discovery,
 };

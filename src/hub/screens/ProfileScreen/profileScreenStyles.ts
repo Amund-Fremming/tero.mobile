@@ -14,7 +14,7 @@ export const createStyles = (theme: AppTheme, darkMode: boolean) => {
         alignItems: "center",
         width: "100%",
         minHeight: "100%",
-        backgroundColor: theme.secondary,
+        backgroundColor: theme.primary,
         borderRadius: moderateScale(10),
       },
 
@@ -63,7 +63,7 @@ export const createStyles = (theme: AppTheme, darkMode: boolean) => {
       layover: {
         width: "100%",
         flex: 1,
-        backgroundColor: theme.primary,
+        backgroundColor: theme.secondary,
         borderTopLeftRadius: moderateScale(50),
         borderTopRightRadius: moderateScale(50),
         marginTop: verticalScale(20),
@@ -81,6 +81,7 @@ export const createStyles = (theme: AppTheme, darkMode: boolean) => {
         justifyContent: "flex-start",
         display: "flex",
         flexDirection: "row",
+        backgroundColor: theme.secondary,
       },
 
       iconGuard: {

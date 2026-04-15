@@ -122,6 +122,7 @@ export const GenericCreateScreen = ({
           <TextInput
             style={styles.input}
             placeholder={"Spillnavn..."}
+            placeholderTextColor={Color.Gray}
             value={inputValue}
             onChangeText={(input) => {
               const sanitized = input.replace(/\n/g, "");

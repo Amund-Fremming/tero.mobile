@@ -134,6 +134,7 @@ export const GenericActiveLobbyScreen = ({
               <TextInput
                 style={styles.input}
                 placeholder={inputPlaceholder}
+                placeholderTextColor={Color.Gray}
                 value={inputValue}
                 onChangeText={handleInputChange}
                 onSubmitEditing={Keyboard.dismiss}

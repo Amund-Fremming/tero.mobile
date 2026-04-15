@@ -110,7 +110,7 @@ export const ProfileScreen = () => {
           onBackPressed={() => navigation.goBack()}
           onInfoPress={handleLogout}
           infoIconOverride="log-out"
-          backgroundColor={theme.secondary}
+          backgroundColor={theme.primary}
         />
 
         <View style={styles.loggedIn}>

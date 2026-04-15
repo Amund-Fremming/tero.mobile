@@ -1,5 +1,6 @@
 import Color from "@/src/core/constants/Color";
 import { GameBase, GameCategory } from "@/src/core/constants/Types";
+import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
@@ -22,16 +23,21 @@ interface GameCardProps {
 }
 
 export const GameCard = ({ game, icon, onPress, saved, deletable, onActionPress }: GameCardProps) => {
+  const { theme, darkMode } = useThemeProvider();
+  const categoryColor = darkMode ? Color.HomeRed : Color.Burgunde;
+  const headerColor = darkMode ? Color.White : Color.OffBlack;
+  const bookmarkActiveColor = darkMode ? Color.White : Color.OffBlack;
+
   return (
     <>
       <TouchableOpacity onPress={onPress} style={styles.card}>
         <View style={styles.innerCard}>
           {icon}
           <View style={styles.textWrapper}>
-            <Text style={styles.cardCategory}>
+            <Text style={[styles.cardCategory, { color: categoryColor }]}>
               {game.game_type} • {CATEGORY_LABELS[game.category]}
             </Text>
-            <Text style={styles.cardHeader}>{game.name}</Text>
+            <Text style={[styles.cardHeader, { color: headerColor }]}>{game.name}</Text>
             <Text style={styles.cardDescription}>{game.iterations} runder</Text>
           </View>
         </View>
@@ -45,12 +51,12 @@ export const GameCard = ({ game, icon, onPress, saved, deletable, onActionPress 
             <Ionicons
               name={saved ? "bookmark" : "bookmark-outline"}
               size={26}
-              color={saved ? Color.OffBlack : Color.Gray}
+              color={saved ? bookmarkActiveColor : Color.Gray}
             />
           </TouchableOpacity>
         )}
       </TouchableOpacity>
-      <View style={styles.separator} />
+      <View style={[styles.separator, { backgroundColor: theme.secondary }]} />
     </>
   );
 };
