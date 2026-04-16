@@ -1,7 +1,7 @@
+import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { ReactNode } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import * as Haptics from "expo-haptics";
-import { Feather } from "@expo/vector-icons";
 import { moderateScale } from "../../utils/dimensions";
 import styles from "./screenHeaderStyles";
 

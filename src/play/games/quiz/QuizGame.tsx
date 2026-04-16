@@ -32,7 +32,9 @@ export const QuizGame = () => {
 
   useEffect(() => {
     if (!sessionData.gameKey) {
-      resetToHomeScreen(outerNavigation);
+      if (gameEntryMode !== GameEntryMode.Creator) {
+        resetToHomeScreen(outerNavigation);
+      }
       return;
     }
 

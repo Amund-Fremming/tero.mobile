@@ -7,17 +7,18 @@ import { useSavedGamesProvider } from "@/src/core/context/SavedGamesProvider";
 import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import { useThemeProvider } from "@/src/core/context/ThemeProvider";
 import * as Haptics from "expo-haptics";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 const GAME_TYPES = Object.values(GameType).filter((g) => g !== GameType.Dice && g !== GameType.Defuser);
 
 export const SavedGamesScreen = () => {
   const { gameService } = useServiceProvider();
-  const { accessToken, pseudoId } = useAuthProvider();
+  const { accessToken } = useAuthProvider();
   const { displayErrorModal } = useModalProvider();
-  const { refreshIds } = useSavedGamesProvider();
+  const { refreshIds, unsaveGame } = useSavedGamesProvider();
   const { prefetchedSavedGamesPage } = useAppDataProvider();
   const { theme } = useThemeProvider();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const fetchPage = useCallback(
     async (pageNum: number, gameType: GameType | null): Promise<PagedResponse<GameBase> | null> => {
@@ -36,9 +37,10 @@ export const SavedGamesScreen = () => {
     async (game: GameBase) => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       if (!accessToken) return;
-      await gameService().unsaveGame(accessToken, game.id);
+      await unsaveGame(game.id);
+      setRefreshTrigger((t) => t + 1);
     },
-    [accessToken],
+    [accessToken, unsaveGame],
   );
 
   const renderCardAction = useCallback(
@@ -64,6 +66,7 @@ export const SavedGamesScreen = () => {
       showSkeleton={false}
       initialPage={prefetchedSavedGamesPage ?? undefined}
       refreshOnFocus={handleRefreshOnFocus}
+      refreshTrigger={refreshTrigger}
     />
   );
 };

@@ -29,6 +29,18 @@ export const createStyles = (isDarkMode: boolean) => StyleSheet.create({
     right: horizontalScale(20),
   },
 
+  darkModeWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Color.BuzzifyLavenderLight,
+    height: verticalScale(50),
+    width: horizontalScale(50),
+    borderRadius: moderateScale(10),
+    position: "absolute",
+    top: verticalScale(70),
+    left: horizontalScale(20),
+  },
+
   image: {
     width: "95%",
     height: "95%",

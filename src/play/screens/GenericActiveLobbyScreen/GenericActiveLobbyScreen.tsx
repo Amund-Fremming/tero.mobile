@@ -128,7 +128,7 @@ export const GenericActiveLobbyScreen = ({
           <Text style={styles.iterations}>{iterations === "?" ? "" : iterations}</Text>
           {getIcon()}
         </View>
-        <View style={styles.bottomSection}>
+        <View style={styles.bottomSection} ref={anchorRef}>
           {customInput ?? (
             <>
               <TextInput

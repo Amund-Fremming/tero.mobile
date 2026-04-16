@@ -5,7 +5,7 @@ import { useServiceProvider } from "@/src/core/context/ServiceProvider";
 import * as Haptics from "expo-haptics";
 import * as SecureStore from "expo-secure-store";
 import { useEffect, useState } from "react";
-import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import ArcWithCircles from "../../../core/components/Shapes/ArcWithCircles";
 import DiagonalSplit from "../../../core/components/Shapes/DiagonalSplit";
 import ScatteredCircles from "../../../core/components/Shapes/ScatteredCircles";
@@ -16,7 +16,7 @@ import { createStyles } from "./homeScreenStyles";
 
 import Color from "@/src/core/constants/Color";
 import { useThemeProvider } from "@/src/core/context/ThemeProvider";
-import { horizontalScale, moderateScale, verticalScale } from "@/src/core/utils/dimensions";
+import { moderateScale } from "@/src/core/utils/dimensions";
 import { setStackNavigator } from "@/src/core/utils/navigationRef";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
@@ -161,12 +161,9 @@ export const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Pressable
-        onPress={handleToggleDarkmode}
-        style={{ zIndex: 1001, position: "absolute", left: horizontalScale(60), top: verticalScale(60) }}
-      >
-        <Feather name={darkMode ? "toggle-left" : "toggle-right"} size={moderateScale(45)} />
-      </Pressable>
+      <TouchableOpacity onPress={handleToggleDarkmode} style={styles.darkModeWrapper}>
+        <Feather size={moderateScale(24)} name={darkMode ? "moon" : "sun"} color={Color.Black} />
+      </TouchableOpacity>
       <TouchableOpacity onPress={handleProfilePressed} style={styles.iconWrapper}>
         <Feather size={moderateScale(35)} name="user" color={Color.Black} />
       </TouchableOpacity>

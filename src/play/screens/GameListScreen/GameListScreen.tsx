@@ -20,7 +20,7 @@ export const GameListScreen = () => {
   const { pseudoId, accessToken, triggerLogin } = useAuthProvider();
   const { displayActionModal, displayInfoModal } = useModalProvider();
   const { displayToast } = useToastProvider();
-  const { savedIdSet, saveGame: saveGameToSet } = useSavedGamesProvider();
+  const { savedIdSet, saveGame: saveGameToSet, unsaveGame: unsaveGameFromSet } = useSavedGamesProvider();
   const { prefetchedGamePage } = useAppDataProvider();
 
   const fetchPage = useCallback(
@@ -48,9 +48,12 @@ export const GameListScreen = () => {
         return;
       }
 
-      if (savedIdSet.has(gameId)) return;
-      await saveGameToSet(gameId);
-      displayToast(2.2);
+      if (savedIdSet.has(gameId)) {
+        await unsaveGameFromSet(gameId);
+      } else {
+        await saveGameToSet(gameId);
+        displayToast(2.2);
+      }
     },
     [accessToken, savedIdSet],
   );

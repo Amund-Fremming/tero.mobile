@@ -38,6 +38,7 @@ interface GenericGameListProps {
   onInfoPress?: () => void;
   refreshOnFocus?: () => void;
   initialPage?: PagedResponse<GameBase>;
+  refreshTrigger?: number;
 }
 
 const SkeletonCard = memo(() => {
@@ -82,8 +83,7 @@ export const GenericGameList = ({
   showSkeleton = true,
   onInfoPress,
   refreshOnFocus,
-  initialPage,
-}: GenericGameListProps) => {
+  initialPage,  refreshTrigger,}: GenericGameListProps) => {
   const navigation: any = useNavigation();
   const { gameService } = useServiceProvider();
   const { pseudoId } = useAuthProvider();
@@ -109,6 +109,10 @@ export const GenericGameList = ({
   useEffect(() => {
     if (!initialPage) loadPage(0, null);
   }, []);
+
+  useEffect(() => {
+    if (refreshTrigger) loadPage(0, selectedGameType);
+  }, [refreshTrigger]);
 
   useFocusEffect(
     useCallback(() => {
