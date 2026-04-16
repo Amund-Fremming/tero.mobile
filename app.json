@@ -3,7 +3,7 @@
     "name": "tero",
     "icon": "./app/appstore.png",
     "slug": "tero",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "platforms": ["ios"],
     "scheme": "com.tero",
