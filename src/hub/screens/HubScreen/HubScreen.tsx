@@ -66,6 +66,11 @@ export const HubScreen = () => {
     navigation.navigate(Screen.TipsUs);
   };
 
+  const handleBeerTrackerPressed = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    navigation.navigate(Screen.BeerTracker);
+  };
+
   return (
     <View style={styles.container}>
       <ScreenHeader
@@ -91,30 +96,43 @@ export const HubScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.bentoBeerBox} activeOpacity={0.8}>
-          <MaterialCommunityIcons name="beer" size={48} color={getBeerIconColor(darkMode)} style={styles.beerIcon} />
-          <View style={styles.beerContent}>
-            <Text style={styles.beerHeader}>Cheap Beer in Oslo</Text>
-            <View style={styles.beerList}>
-              <View style={styles.beerRow}>
-                <Text style={styles.beerPlace}>Olympen</Text>
-                <Text style={styles.beerPrice}>49 kr</Text>
-              </View>
-              <View style={styles.beerRow}>
-                <Text style={styles.beerPlace}>Crow Bar</Text>
-                <Text style={styles.beerPrice}>55 kr</Text>
-              </View>
-              <View style={styles.beerRow}>
-                <Text style={styles.beerPlace}>Internasjonalen</Text>
-                <Text style={styles.beerPrice}>59 kr</Text>
-              </View>
-              <View style={styles.beerRow}>
-                <Text style={styles.beerPlace}>Tilt</Text>
-                <Text style={styles.beerPrice}>62 kr</Text>
-              </View>
-            </View>
+        <TouchableOpacity style={styles.bentoTrackerBox} onPress={handleBeerTrackerPressed} activeOpacity={0.8}>
+          <MaterialCommunityIcons name="beer-outline" size={44} color={styles.bentoTrackerIcon.color} />
+          <View style={styles.bentoTrackerContent}>
+            <Text style={styles.bentoTrackerTitle}>Beer Tracker</Text>
+            <Text style={styles.bentoTrackerSubtitle}>Track what you drink tonight</Text>
           </View>
         </TouchableOpacity>
+
+        <View style={styles.bentoBeerWrapper}>
+          <TouchableOpacity style={styles.bentoBeerBox} activeOpacity={0.8}>
+            <MaterialCommunityIcons name="beer" size={48} color={getBeerIconColor(darkMode)} style={styles.beerIcon} />
+            <View style={styles.beerContent}>
+              <Text style={styles.beerHeader}>Cheap Beer in Oslo</Text>
+              <View style={styles.beerList}>
+                <View style={styles.beerRow}>
+                  <Text style={styles.beerPlace}>Olympen</Text>
+                  <Text style={styles.beerPrice}>49 kr</Text>
+                </View>
+                <View style={styles.beerRow}>
+                  <Text style={styles.beerPlace}>Crow Bar</Text>
+                  <Text style={styles.beerPrice}>55 kr</Text>
+                </View>
+                <View style={styles.beerRow}>
+                  <Text style={styles.beerPlace}>Internasjonalen</Text>
+                  <Text style={styles.beerPrice}>59 kr</Text>
+                </View>
+                <View style={styles.beerRow}>
+                  <Text style={styles.beerPlace}>Tilt</Text>
+                  <Text style={styles.beerPrice}>62 kr</Text>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.beerRibbon} pointerEvents="none">
+            <Text style={styles.beerRibbonText}>Kommer snart</Text>
+          </View>
+        </View>
       </ScrollView>
     </View>
   );

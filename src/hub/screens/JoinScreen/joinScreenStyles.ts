@@ -81,6 +81,11 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(20),
     gap: verticalScale(25),
     paddingBottom: verticalScale(40),
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 4,
   },
 
   button: {

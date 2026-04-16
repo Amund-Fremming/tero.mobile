@@ -96,7 +96,7 @@ export const JoinScreen = () => {
         />
         <View style={styles.cardWrapper}>
           <Image source={require("@/src/core/assets/images/tero.webp")} style={styles.mascot} resizeMode="contain" />
-          <View style={[styles.card, { backgroundColor: theme.secondary }]}>
+          <View style={[styles.card, { backgroundColor: darkMode ? theme.secondary : Color.LightGray }]}>
             <View style={[styles.inputContainer, { backgroundColor: theme.primary }]}>
               <Feather
                 style={{ paddingLeft: moderateScale(20), paddingRight: moderateScale(10) }}
