@@ -9,14 +9,15 @@ import { useNavigation } from "expo-router";
 import { useEffect, useRef } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Screen from "../../../core/constants/Screen";
-import styles from "./hubScreenStyles";
+import createStyles, { getBeerIconColor, getIconColor } from "./hubScreenStyles";
 
 export const HubScreen = () => {
   const navigation: any = useNavigation();
 
-  const { theme } = useThemeProvider();
+  const { theme, darkMode } = useThemeProvider();
   const { redirectUri, triggerLogin, accessToken } = useAuthProvider();
   const { displayActionModal } = useModalProvider();
+  const styles = createStyles(darkMode);
 
   const shouldNavigateAfterLogin = useRef(false);
 
@@ -66,7 +67,7 @@ export const HubScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.primary }]}>
+    <View style={styles.container}>
       <ScreenHeader
         title="Hub"
         onBackPressed={() => navigation.goBack()}
@@ -81,17 +82,17 @@ export const HubScreen = () => {
       >
         <View style={styles.bentoRow}>
           <TouchableOpacity style={styles.bentoBoxSavedGames} onPress={handleSavedGamesPressed} activeOpacity={0.8}>
-            <Feather name="bookmark" size={44} color={Color.BuzzifyDarkBg} />
+            <Feather name="bookmark" size={44} color={getIconColor(darkMode)} />
             <Text style={styles.bentoBoxLabel}>Saved Games</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.bentoBoxTips} onPress={handleTipsPressed} activeOpacity={0.8}>
-            <Feather name="star" size={44} color={Color.BuzzifyDarkBg} />
+            <Feather name="star" size={44} color={getIconColor(darkMode)} />
             <Text style={styles.bentoBoxLabel}>Tips oss</Text>
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.bentoBeerBox} activeOpacity={0.8}>
-          <MaterialCommunityIcons name="beer" size={48} color={"#4d3423"} style={styles.beerIcon} />
+          <MaterialCommunityIcons name="beer" size={48} color={getBeerIconColor(darkMode)} style={styles.beerIcon} />
           <View style={styles.beerContent}>
             <Text style={styles.beerHeader}>Cheap Beer in Oslo</Text>
             <View style={styles.beerList}>

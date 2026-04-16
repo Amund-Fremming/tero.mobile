@@ -5,98 +5,124 @@ import { Color } from "../../../core/constants/Color";
 const BENTO_GAP = moderateScale(12);
 const BENTO_PADDING = moderateScale(16);
 
-export const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Color.White,
-    width: "100%",
-    height: "100%",
-  },
+export const createStyles = (isDarkMode: boolean) => {
+  const tile = isDarkMode ? "#313840" : "#FFFFFF";
+  const tileAccent = isDarkMode ? "#2E2A3D" : "#F5F0FF";
+  const bg = isDarkMode ? Color.Black : "#F2F2F7";
+  const labelColor = isDarkMode ? "#FFFFFF" : Color.Black;
+  const iconColor = isDarkMode ? Color.BuzzifyLavender : Color.BuzzifyLavender;
+  const beerTile = isDarkMode ? "#2E2820" : "#FFFBF0";
+  const beerBorder = isDarkMode ? "rgba(255,200,100,0.15)" : "rgba(180,130,50,0.18)";
+  const beerText = isDarkMode ? "#E8C97A" : Color.DarkBrown;
+  const beerSubText = isDarkMode ? "rgba(232,201,122,0.75)" : Color.DarkBrown;
 
-  scrollView: {
-    flex: 1,
-  },
+  return StyleSheet.create({
+    container: {
+      backgroundColor: bg,
+      width: "100%",
+      height: "100%",
+    },
 
-  bentoGrid: {
-    padding: BENTO_PADDING,
-    gap: BENTO_GAP,
-  },
+    scrollView: {
+      flex: 1,
+    },
 
-  bentoRow: {
-    flexDirection: "row",
-    gap: BENTO_GAP,
-  },
+    bentoGrid: {
+      padding: BENTO_PADDING,
+      gap: BENTO_GAP,
+    },
 
-  bentoBoxSavedGames: {
-    flex: 1,
-    backgroundColor: Color.BuzzifyLavender,
-    borderRadius: moderateScale(20),
-    paddingVertical: verticalScale(28),
-    alignItems: "center",
-    gap: verticalScale(12),
-  },
+    bentoRow: {
+      flexDirection: "row",
+      gap: BENTO_GAP,
+    },
 
-  bentoBoxTips: {
-    flex: 1,
-    backgroundColor: Color.BuzzifyYellow,
-    borderRadius: moderateScale(20),
-    paddingVertical: verticalScale(28),
-    alignItems: "center",
-    gap: verticalScale(12),
-  },
+    bentoBoxSavedGames: {
+      flex: 1,
+      backgroundColor: tile,
+      borderRadius: moderateScale(20),
+      paddingVertical: verticalScale(28),
+      alignItems: "center",
+      gap: verticalScale(12),
+      borderWidth: isDarkMode ? 0 : 1,
+      borderColor: "rgba(169,164,235,0.25)",
+    },
 
-  bentoBoxLabel: {
-    fontSize: moderateScale(14),
-    fontWeight: "700",
-    color: Color.BuzzifyDarkBg,
-    letterSpacing: 0.3,
-  },
+    bentoBoxTips: {
+      flex: 1,
+      backgroundColor: tileAccent,
+      borderRadius: moderateScale(20),
+      paddingVertical: verticalScale(28),
+      alignItems: "center",
+      gap: verticalScale(12),
+      borderWidth: isDarkMode ? 0 : 1,
+      borderColor: "rgba(169,164,235,0.25)",
+    },
 
-  bentoBeerBox: {
-    backgroundColor: Color.C2,
-    borderRadius: moderateScale(20),
-    padding: moderateScale(20),
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: horizontalScale(16),
-  },
+    bentoBoxLabel: {
+      fontSize: moderateScale(14),
+      fontWeight: "700",
+      color: labelColor,
+      letterSpacing: 0.3,
+    },
 
-  beerIcon: {
-    marginTop: verticalScale(2),
-  },
+    iconColor: {
+      // resolved inline in JSX via iconColor variable
+    },
 
-  beerContent: {
-    flex: 1,
-    gap: verticalScale(10),
-  },
+    bentoBeerBox: {
+      backgroundColor: beerTile,
+      borderRadius: moderateScale(20),
+      padding: moderateScale(20),
+      flexDirection: "row",
+      alignItems: "flex-start",
+      gap: horizontalScale(16),
+      borderWidth: 1,
+      borderColor: beerBorder,
+    },
 
-  beerHeader: {
-    fontSize: moderateScale(16),
-    fontWeight: "800",
-    color: Color.DarkBrown,
-    letterSpacing: 0.2,
-  },
+    beerIcon: {
+      marginTop: verticalScale(2),
+    },
 
-  beerList: {
-    gap: verticalScale(6),
-  },
+    beerContent: {
+      flex: 1,
+      gap: verticalScale(10),
+    },
 
-  beerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
+    beerHeader: {
+      fontSize: moderateScale(16),
+      fontWeight: "800",
+      color: beerText,
+      letterSpacing: 0.2,
+    },
 
-  beerPlace: {
-    fontSize: moderateScale(13),
-    color: Color.DarkBrown,
-    fontWeight: "500",
-  },
+    beerList: {
+      gap: verticalScale(6),
+    },
 
-  beerPrice: {
-    fontSize: moderateScale(13),
-    color: Color.DarkBrown,
-    fontWeight: "700",
-  },
-});
+    beerRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
 
-export default styles;
+    beerPlace: {
+      fontSize: moderateScale(13),
+      color: beerSubText,
+      fontWeight: "500",
+    },
+
+    beerPrice: {
+      fontSize: moderateScale(13),
+      color: beerText,
+      fontWeight: "700",
+    },
+  });
+};
+
+export const getIconColor = (isDarkMode: boolean) => Color.BuzzifyLavender;
+export const getBeerIconColor = (isDarkMode: boolean) =>
+  isDarkMode ? "#E8C97A" : Color.DarkBrown;
+
+export default createStyles;

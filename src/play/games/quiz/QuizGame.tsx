@@ -32,7 +32,7 @@ export const QuizGame = () => {
 
   useEffect(() => {
     if (!sessionData.gameKey) {
-      // TODO - return to home?
+      resetToHomeScreen(outerNavigation);
       return;
     }
 

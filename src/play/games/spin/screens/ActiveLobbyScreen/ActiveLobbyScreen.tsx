@@ -70,8 +70,7 @@ export const ActiveLobbyScreen = () => {
       return;
     }
 
-    if (iterations < 1) {
-      // TODO set to 10!
+    if (iterations < 10) {
       displayInfoModal("Minst 10 runder.");
       setStartGameTriggered(false);
       return;

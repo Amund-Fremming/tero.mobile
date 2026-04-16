@@ -218,9 +218,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
 
       if (!refreshToken) {
-        // TODO - HANDLE
-        console.error("THIS SHOULD NEVER HAPPEN");
-        return false;
+        await SecureStore.deleteItemAsync("access_token");
+        await SecureStore.deleteItemAsync("refresh_token");
+        await SecureStore.deleteItemAsync("id_token");
+        setAccessToken(null);
+        return true;
       }
 
       if (useBrowserConfirmation) {

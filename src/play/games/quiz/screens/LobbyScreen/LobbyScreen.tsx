@@ -67,8 +67,7 @@ export const LobbyScreen = ({ onLeave }: Props) => {
       return;
     }
 
-    if (iterations < 1) {
-      // TODO set to 10!
+    if (iterations < 10) {
       displayInfoModal("Minst 10 spørsmål.");
       return;
     }
