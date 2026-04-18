@@ -342,9 +342,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     userData,
     setUserData,
 
-    logValues,
-    resetPseudoId,
-    invalidateAccessToken,
+    logValues: __DEV__ ? logValues : () => {},
+    resetPseudoId: __DEV__ ? resetPseudoId : async () => {},
+    invalidateAccessToken: __DEV__ ? invalidateAccessToken : () => {},
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

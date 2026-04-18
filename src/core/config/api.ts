@@ -1,3 +1,15 @@
+import axios from "axios";
+
+axios.defaults.timeout = 30000;
+
+axios.interceptors.response.use(undefined, async (error) => {
+  const config = error.config;
+  if (!config || config._retryCount >= 1) return Promise.reject(error);
+  config._retryCount = (config._retryCount || 0) + 1;
+  await new Promise((r) => setTimeout(r, 1000));
+  return axios(config);
+});
+
 type Environment = "dev" | "prd";
 
 const ENVIRONMENT: Environment = "prd";

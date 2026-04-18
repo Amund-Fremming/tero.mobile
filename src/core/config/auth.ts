@@ -1,7 +1,8 @@
 import * as AuthSession from "expo-auth-session";
+import Constants from "expo-constants";
 
-const CLIENT_ID = "vcrgS1imJrANviUILgZ7xlq6YZFbPnQD";
-const DOMAIN = "dev-tero.eu.auth0.com";
+const CLIENT_ID = Constants.expoConfig?.extra?.auth0ClientId ?? "";
+const DOMAIN = Constants.expoConfig?.extra?.auth0Domain ?? "";
 const SCHEME = "com.tero";
 const AUDIENCE = "https://api.tero.com";
 

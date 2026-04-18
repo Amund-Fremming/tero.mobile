@@ -39,7 +39,7 @@ export const Color = {
   ImposterPrimary: "#A67B7B",
   ImposterSecondary: "#4A3B3B",
   ToastGreen: "#b3df72",
-  ToastYellow: "",
+  ToastYellow: "#F5C842",
   GuessPrimary: "#2C6B8A",
   GuessSecondary: "#1A4459",
   DefuserPrimary: "#87BFBF",

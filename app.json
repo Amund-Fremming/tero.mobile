@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "tero",
+    "description": "Tero – party games with friends. Create, join and play interactive games together.",
     "icon": "./app/appstore.png",
     "slug": "tero",
     "version": "1.0.4",
@@ -39,6 +40,7 @@
       "eas": {
         "projectId": "c76387d5-efdb-4f11-a38d-24ba7bebb528"
       }
-    }
+    },
+    "privacyUrl": "https://www.termsfeed.com/live/e04992a6-6402-4335-8191-e832a7e06696"
   }
 }

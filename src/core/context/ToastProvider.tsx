@@ -1,6 +1,7 @@
 import Color from "@/src/core/constants/Color";
 import Font from "@/src/core/constants/Font";
 import { useThemeProvider } from "@/src/core/context/ThemeProvider";
+import NetInfo from "@react-native-community/netinfo";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
@@ -12,6 +13,7 @@ interface IToastContext {
   closeToast: () => void;
   displayClickableToast: (header: string, subHeader: string, onClick: () => void) => void;
   closeClickableToast: () => void;
+  displayWarningToast: (message: string, durationSeconds?: number) => void;
 }
 
 const defaultContextValue: IToastContext = {
@@ -19,6 +21,7 @@ const defaultContextValue: IToastContext = {
   closeToast: () => {},
   displayClickableToast: () => {},
   closeClickableToast: () => {},
+  displayWarningToast: () => {},
 };
 
 const ToastContext = createContext<IToastContext>(defaultContextValue);
@@ -45,6 +48,11 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
   const textColor = darkMode ? Color.Black : Color.White;
   const [isVisible, setIsVisible] = useState(false);
   const [clickableToast, setClickableToast] = useState<ClickableToastState | null>(null);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
+
+  const translateY3 = useRef(new Animated.Value(DROP_FROM_Y)).current;
+  const opacity3 = useRef(new Animated.Value(0)).current;
+  const warningHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const translateY = useRef(new Animated.Value(DROP_FROM_Y)).current;
   const opacity = useRef(new Animated.Value(0)).current;
@@ -163,9 +171,69 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
     }, ms);
   };
 
+  const closeWarningToast = () => {
+    if (warningHideTimerRef.current) {
+      clearTimeout(warningHideTimerRef.current);
+      warningHideTimerRef.current = null;
+    }
+    Animated.parallel([
+      Animated.timing(translateY3, {
+        toValue: DROP_FROM_Y,
+        duration: 220,
+        easing: Easing.in(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity3, {
+        toValue: 0,
+        duration: 180,
+        easing: Easing.in(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]).start(({ finished }) => {
+      if (finished) setWarningMessage(null);
+    });
+  };
+
+  const displayWarningToast = (message: string, durationSeconds: number = 3) => {
+    setWarningMessage(message);
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+
+    translateY3.setValue(DROP_FROM_Y);
+    opacity3.setValue(0);
+
+    Animated.parallel([
+      Animated.timing(translateY3, {
+        toValue: SHOWN_Y,
+        duration: 260,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacity3, {
+        toValue: 1,
+        duration: 220,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    const ms = Math.max(0.8, durationSeconds) * 1000;
+    warningHideTimerRef.current = setTimeout(() => {
+      closeWarningToast();
+    }, ms);
+  };
+
   useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (state.isConnected === false) {
+        displayWarningToast("Ingen internettforbindelse", 4);
+      } else if (state.isInternetReachable === false) {
+        displayWarningToast("Dårlig forbindelse", 3);
+      }
+    });
     return () => {
+      unsubscribe();
       clearHideTimer();
+      if (warningHideTimerRef.current) clearTimeout(warningHideTimerRef.current);
     };
   }, []);
 
@@ -174,6 +242,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
     closeToast,
     displayClickableToast,
     closeClickableToast,
+    displayWarningToast,
   };
 
   return (
@@ -188,6 +257,19 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
             <View style={styles.textWrapper}>
               <Text style={[styles.toastHeader, { color: textColor }]}>Suksess!</Text>
               <Text style={[styles.toastText, { color: textColor }]}>{TOAST_MESSAGE}</Text>
+            </View>
+          </Animated.View>
+        </View>
+      )}
+      {warningMessage && (
+        <View pointerEvents="none" style={styles.overlay}>
+          <Animated.View style={[styles.warningToast, { transform: [{ translateY: translateY3 }], opacity: opacity3 }]}>
+            <View style={styles.iconWrapper}>
+              <Ionicons name="warning-outline" size={moderateScale(34)} color={textColor} />
+            </View>
+            <View style={styles.textWrapper}>
+              <Text style={[styles.toastHeader, { color: textColor }]}>Advarsel</Text>
+              <Text style={[styles.toastText, { color: textColor }]}>{warningMessage}</Text>
             </View>
           </Animated.View>
         </View>
@@ -259,6 +341,20 @@ const styles = StyleSheet.create({
     color: Color.White,
     fontFamily: Font.SintonyRegular,
     fontSize: moderateScale(15),
+  },
+  warningToast: {
+    width: "92%",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: verticalScale(14),
+    paddingHorizontal: horizontalScale(18),
+    borderRadius: moderateScale(15),
+    backgroundColor: Color.ToastYellow,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 8,
   },
   clickableToast: {
     width: "100%",

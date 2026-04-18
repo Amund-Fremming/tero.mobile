@@ -96,10 +96,10 @@ export class UserService {
   async patchUserActivity(guest_id: string): Promise<Result<void>> {
     try {
       const url = `${this.baseUrl}/users/activity`;
-      const response = axios.patch(url, {
+      const response = await axios.patch(url, {}, {
         headers: getHeaders(guest_id, null),
       });
-      if (((await response).status! = 200)) {
+      if (response.status !== 200) {
         console.error("Failed to update user activity");
       }
 

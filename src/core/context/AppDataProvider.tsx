@@ -33,7 +33,8 @@ export const AppDataProvider = ({ children }: AppDataProviderProps) => {
       .getGamePage<GameBase>(pseudoId, request)
       .then((result) => {
         if (!result.isError()) setPrefetchedGamePage(result.value);
-      });
+      })
+      .catch((error) => console.error("prefetchGamePage:", error));
   }, [pseudoId]);
 
   useEffect(() => {
@@ -42,7 +43,8 @@ export const AppDataProvider = ({ children }: AppDataProviderProps) => {
       .getSavedGames(accessToken, 0, null)
       .then((result) => {
         if (!result.isError()) setPrefetchedSavedGamesPage(result.value);
-      });
+      })
+      .catch((error) => console.error("prefetchSavedGames:", error));
   }, [accessToken]);
 
   return (
