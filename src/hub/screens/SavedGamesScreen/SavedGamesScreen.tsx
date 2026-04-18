@@ -59,7 +59,7 @@ export const SavedGamesScreen = () => {
     <GenericGameList
       title="Dine spill"
       headerBackgroundColor={theme.primary}
-      emptyMessage="Du har ingen lagrede spill"
+      emptyMessage="Du har ingen lagret spill"
       gameTypes={GAME_TYPES}
       fetchPage={fetchPage}
       renderCardAction={renderCardAction}

@@ -12,6 +12,7 @@ interface ScreenHeaderProps {
   infoIconOverride?: "?" | "user" | "log-out" | "x";
   showBorder?: boolean;
   backgroundColor?: string;
+  titleFontSize?: number;
   children?: ReactNode;
 }
 
@@ -22,6 +23,7 @@ export const ScreenHeader = ({
   infoIconOverride = "?",
   showBorder = false,
   backgroundColor,
+  titleFontSize,
   children,
 }: ScreenHeaderProps) => {
   return (
@@ -38,7 +40,9 @@ export const ScreenHeader = ({
         </TouchableOpacity>
 
         <View style={styles.borderAndHeader}>
-          {children ?? <Text style={styles.header}>{title}</Text>}
+          {children ?? (
+            <Text style={[styles.header, titleFontSize !== undefined && { fontSize: titleFontSize }]}>{title}</Text>
+          )}
           {showBorder && (
             <View style={styles.borderWrapper}>
               <View style={styles.borderLeft} />

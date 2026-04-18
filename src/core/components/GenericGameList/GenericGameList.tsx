@@ -105,9 +105,18 @@ export const GenericGameList = ({
   const [loading, setLoading] = useState(showSkeleton && !initialPage);
   const [selectedGameType, setSelectedGameType] = useState<GameType | null>(null);
   const scrollRef = useRef<ScrollView>(null);
+  const selectedGameTypeRef = useRef<GameType | null>(null);
+  selectedGameTypeRef.current = selectedGameType;
+  const isMountedFocusRef = useRef(false);
 
   useEffect(() => {
-    if (!initialPage) loadPage(0, null);
+    if (!initialPage) {
+      loadPage(0, null);
+    } else {
+      fetchPage(0, null).then((result) => {
+        if (result) setPagedResponse(result);
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -117,7 +126,14 @@ export const GenericGameList = ({
   useFocusEffect(
     useCallback(() => {
       refreshOnFocus?.();
-    }, [refreshOnFocus]),
+      if (isMountedFocusRef.current) {
+        fetchPage(0, selectedGameTypeRef.current).then((result) => {
+          if (result) setPagedResponse(result);
+        });
+      } else {
+        isMountedFocusRef.current = true;
+      }
+    }, [refreshOnFocus, fetchPage]),
   );
 
   const loadPage = async (pageNum: number, gameType: GameType | null) => {

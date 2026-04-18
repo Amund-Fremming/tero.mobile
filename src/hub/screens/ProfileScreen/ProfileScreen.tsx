@@ -133,7 +133,7 @@ export const ProfileScreen = () => {
               <View style={styles.iconGuard}>
                 <Feather name="play" size={30} color={styles.contentColor} />
               </View>
-              <Text style={styles.buttonText}>Dine spill</Text>
+              <Text style={styles.buttonText}>Lagrede spill</Text>
               <Feather name="chevron-right" size={35} color={styles.contentColor} />
             </TouchableOpacity>
             <TouchableOpacity

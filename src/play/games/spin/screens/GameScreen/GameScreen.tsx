@@ -30,7 +30,7 @@ export const GameScreen = ({ onLeave }: Props) => {
   const { clearSpinSessionValues, setScreen, themeColor, roundText, selectedBatch, gameState, setGameState } =
     useSpinSessionProvider();
   const { disconnect, invokeFunction, debugDisconnect } = useHubConnectionProvider();
-  const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
   const { pseudoId } = useAuthProvider();
 
   useFocusEffect(
@@ -101,10 +101,16 @@ export const GameScreen = ({ onLeave }: Props) => {
     }
   };
 
-  const handleBackPressed = async () => {
-    disconnectTriggeredRef.current = true;
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    onLeave();
+  const handleBackPressed = () => {
+    displayActionModal(
+      "Er du sikker på at du vil forlate spillet?",
+      async () => {
+        disconnectTriggeredRef.current = true;
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onLeave();
+      },
+      () => {},
+    );
   };
 
   const tutorialHeader = () => {

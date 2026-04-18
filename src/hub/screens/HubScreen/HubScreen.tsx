@@ -49,7 +49,7 @@ export const HubScreen = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!accessToken) {
       displayActionModal(
-        "Du må logge inn for å se dine spill",
+        "Du må logge inn for å se lagret spill",
         () => {
           navigation.navigate(Screen.Hub);
           setTimeout(() => triggerLogin(), 200);
@@ -64,11 +64,6 @@ export const HubScreen = () => {
   const handleTipsPressed = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     navigation.navigate(Screen.TipsUs);
-  };
-
-  const handleBeerTrackerPressed = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    navigation.navigate(Screen.BeerTracker);
   };
 
   return (
@@ -88,7 +83,7 @@ export const HubScreen = () => {
         <View style={styles.bentoRow}>
           <TouchableOpacity style={styles.bentoBoxSavedGames} onPress={handleSavedGamesPressed} activeOpacity={0.8}>
             <Feather name="bookmark" size={44} color={getIconColor(darkMode)} />
-            <Text style={styles.bentoBoxLabel}>Saved Games</Text>
+            <Text style={styles.bentoBoxLabel}>Lagret spill</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.bentoBoxTips} onPress={handleTipsPressed} activeOpacity={0.8}>
             <Feather name="star" size={44} color={getIconColor(darkMode)} />
@@ -96,19 +91,24 @@ export const HubScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.bentoTrackerBox} onPress={handleBeerTrackerPressed} activeOpacity={0.8}>
-          <MaterialCommunityIcons name="beer-outline" size={44} color={styles.bentoTrackerIcon.color} />
-          <View style={styles.bentoTrackerContent}>
-            <Text style={styles.bentoTrackerTitle}>Beer Tracker</Text>
-            <Text style={styles.bentoTrackerSubtitle}>Track what you drink tonight</Text>
+        <View style={styles.bentoBeerWrapper}>
+          <TouchableOpacity style={styles.bentoTrackerBox} activeOpacity={0.8}>
+            <MaterialCommunityIcons name="beer-outline" size={44} color={styles.bentoTrackerIcon.color} />
+            <View style={styles.bentoTrackerContent}>
+              <Text style={styles.bentoTrackerTitle}>Øl Tracker</Text>
+              <Text style={styles.bentoTrackerSubtitle}>Hvem drikker mest? Sett et mål og følg med</Text>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.beerRibbon} pointerEvents="none">
+            <Text style={styles.beerRibbonText}>Kommer snart</Text>
           </View>
-        </TouchableOpacity>
+        </View>
 
         <View style={styles.bentoBeerWrapper}>
           <TouchableOpacity style={styles.bentoBeerBox} activeOpacity={0.8}>
             <MaterialCommunityIcons name="beer" size={48} color={getBeerIconColor(darkMode)} style={styles.beerIcon} />
             <View style={styles.beerContent}>
-              <Text style={styles.beerHeader}>Cheap Beer in Oslo</Text>
+              <Text style={styles.beerHeader}>Billig øl i Oslo</Text>
               <View style={styles.beerList}>
                 <View style={styles.beerRow}>
                   <Text style={styles.beerPlace}>Olympen</Text>

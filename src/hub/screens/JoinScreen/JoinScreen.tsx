@@ -109,6 +109,7 @@ export const JoinScreen = () => {
                 placeholder="Rom navn"
                 placeholderTextColor={Color.Gray}
                 value={userInput}
+                autoCapitalize="characters"
                 onChangeText={(input) => {
                   setUserInput(input?.toUpperCase());
                   setErrorText("");

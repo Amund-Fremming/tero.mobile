@@ -45,7 +45,7 @@ export const LobbyScreen = ({ onLeave }: Props) => {
       return;
     }
 
-    if (!validMaxLength(questionToAdd, 40, displayErrorModal)) return;
+    if (!validMaxLength(questionToAdd, 80, displayErrorModal)) return;
 
     setIsAddingRound(true);
     setInput("");

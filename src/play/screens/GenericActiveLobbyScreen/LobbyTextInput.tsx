@@ -5,7 +5,7 @@ import { BigButton } from "../../../core/components/BigButton/BigButton";
 import Color from "../../../core/constants/Color";
 import { styles } from "./genericActiveLobbyScreenStyles";
 
-const MAX_LENGTH = 50;
+const MAX_LENGTH = 80;
 
 interface LobbyTextInputProps {
   value: string;

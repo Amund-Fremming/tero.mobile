@@ -70,7 +70,7 @@ export const PassiveLobbyScreen = ({ onLeave }: Props) => {
   const { sessionData: sessionData, isHost, gameType } = useGlobalSessionProvider();
   const { themeColor, clearSpinSessionValues, players, iterations, setScreen } = useSpinSessionProvider();
   const { disconnect, invokeFunction } = useHubConnectionProvider();
-  const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
   const { commonService } = useServiceProvider();
 
   const userIconsRef = useRef<string[]>([]);
@@ -92,8 +92,12 @@ export const PassiveLobbyScreen = ({ onLeave }: Props) => {
     prevPlayersRef.current = players;
   }, [players]);
 
-  const handleBackPressed = async () => {
-    onLeave();
+  const handleBackPressed = () => {
+    displayActionModal(
+      "Er du sikker på at du vil forlate spillet?",
+      () => onLeave(),
+      () => {},
+    );
   };
 
   const fetchUserIcons = () => {

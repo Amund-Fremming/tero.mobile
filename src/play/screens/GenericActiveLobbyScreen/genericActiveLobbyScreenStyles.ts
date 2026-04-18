@@ -106,6 +106,7 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
     paddingHorizontal: moderateScale(20),
     paddingVertical: verticalScale(14),
+    textAlignVertical: "center",
   },
 
   inputError: {
