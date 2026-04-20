@@ -21,7 +21,6 @@ export enum Screen {
   Problem = "Problem",
   Info = "Info",
   TipsList = "TipsList",
-  BeerTracker = "BeerTracker",
 }
 
 export default Screen;

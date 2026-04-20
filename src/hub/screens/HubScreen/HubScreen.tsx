@@ -92,23 +92,6 @@ export const HubScreen = () => {
         </View>
 
         <View style={styles.bentoBeerWrapper}>
-          <TouchableOpacity
-            style={styles.bentoTrackerBox}
-            activeOpacity={0.8}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              navigation.navigate(Screen.BeerTracker);
-            }}
-          >
-            <MaterialCommunityIcons name="beer-outline" size={44} color={styles.bentoTrackerIcon.color} />
-            <View style={styles.bentoTrackerContent}>
-              <Text style={styles.bentoTrackerTitle}>Øl Tracker</Text>
-              <Text style={styles.bentoTrackerSubtitle}>Hvem drikker mest? Sett et mål og følg med</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.bentoBeerWrapper}>
           <TouchableOpacity style={styles.bentoBeerBox} activeOpacity={0.8}>
             <MaterialCommunityIcons name="beer" size={48} color={getBeerIconColor(darkMode)} style={styles.beerIcon} />
             <View style={styles.beerContent}>

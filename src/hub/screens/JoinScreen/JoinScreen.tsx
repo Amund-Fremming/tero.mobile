@@ -1,5 +1,3 @@
-import { useBeerTrackerScreenStore } from "@/src/apps/beerTracker/context/beerTrackerScreenStore";
-import { BeerTrackerScreen } from "@/src/apps/beerTracker/constants/beerTrackerTypes";
 import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
@@ -63,14 +61,6 @@ export const JoinScreen = () => {
     }
 
     const response = result.value;
-
-    if (response.hub_name === "non-hub:beertracker") {
-      const store = useBeerTrackerScreenStore.getState();
-      store.setGameId(response.game_key);
-      store.setScreen(BeerTrackerScreen.Join);
-      navigation.navigate(Screen.BeerTracker);
-      return;
-    }
 
     setGameEntryMode(GameEntryMode.Participant);
 

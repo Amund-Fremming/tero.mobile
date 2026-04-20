@@ -2,7 +2,6 @@ import { createStackNavigator, TransitionPresets } from "@react-navigation/stack
 import React from "react";
 import Color from "../core/constants/Color";
 
-import BeerTracker from "../apps/beerTracker/BeerTracker";
 import { GameErrorBoundary } from "../core/components/GameErrorBoundary/GameErrorBoundary";
 import Screen from "../core/constants/Screen";
 import DefuserGame from "../play/games/defuser/DefuserGame";
@@ -68,7 +67,6 @@ export const Hub = () => {
       <Stack.Screen name={Screen.Error} component={ErrorScreen} />
       <Stack.Screen name={Screen.Problem} component={ProblemScreen} />
       <Stack.Screen name={Screen.TipsList} component={TipsListScreen} />
-      <Stack.Screen name={Screen.BeerTracker} component={BeerTracker} />
     </Stack.Navigator>
   );
 };
