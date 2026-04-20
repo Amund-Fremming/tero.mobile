@@ -5,7 +5,7 @@ import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
-import { BeerTrackerGame, BeerTrackerScreen } from "../../constants/beerTrackerTypes";
+import { BeerTrackerGame } from "../../constants/beerTrackerTypes";
 import { useBeerTrackerProvider } from "../../context/BeerTrackerProvider";
 import { finishGame, getGame, incrementBeer, leaveGame } from "../../services/beerTrackerService";
 

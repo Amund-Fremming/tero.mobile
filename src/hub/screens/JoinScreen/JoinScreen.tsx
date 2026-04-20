@@ -1,5 +1,5 @@
-import { useBeerTrackerScreenStore } from "@/src/apps/beerTracker/context/beerTrackerScreenStore";
 import { BeerTrackerScreen } from "@/src/apps/beerTracker/constants/beerTrackerTypes";
+import { useBeerTrackerScreenStore } from "@/src/apps/beerTracker/context/beerTrackerScreenStore";
 import { KeyboardAvoidingWrapper } from "@/src/core/components/KeyboardAvoidingWrapper/KeyboardAvoidingWrapper";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";

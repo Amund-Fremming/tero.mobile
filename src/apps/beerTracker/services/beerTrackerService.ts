@@ -1,7 +1,7 @@
-import axios from "axios";
 import { PLATFORM_URL_BASE } from "@/src/core/config/api";
-import { BeerTrackerGame } from "../constants/beerTrackerTypes";
 import { err, ok, Result } from "@/src/core/utils/result";
+import axios from "axios";
+import { BeerTrackerGame } from "../constants/beerTrackerTypes";
 
 const BASE = `${PLATFORM_URL_BASE}/beer-tracker`;
 
