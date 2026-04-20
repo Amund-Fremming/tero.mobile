@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { BeerTrackerScreen } from "../../constants/beerTrackerTypes";
 import { useBeerTrackerProvider } from "../../context/BeerTrackerProvider";
-import { createGame, joinGame } from "../../services/beerTrackerService";
+import { createGame } from "../../services/beerTrackerService";
 
 const CAN_SIZES = [0.33, 0.5];
 
@@ -17,10 +17,15 @@ export const HomeScreen = () => {
   const [canSize, setCanSize] = useState(0.5);
   const [goal, setGoal] = useState("");
   const [name, setName] = useState("");
+  const [roomName, setRoomName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleCreate = async () => {
+    if (!roomName.trim()) {
+      setError("Skriv inn et romnavn");
+      return;
+    }
     if (!name.trim()) {
       setError("Skriv inn navnet ditt");
       return;
@@ -29,22 +34,15 @@ export const HomeScreen = () => {
     setError("");
 
     const goalNum = goal.trim() ? parseInt(goal, 10) : null;
-    const result = await createGame(canSize, goalNum);
+    const gameId = roomName.trim();
+    const result = await createGame(gameId, name.trim(), canSize, goalNum);
     if (result.isError()) {
       setError(result.error);
       setLoading(false);
       return;
     }
 
-    const game = result.value;
-    const joinResult = await joinGame(game.id, name.trim());
-    if (joinResult.isError()) {
-      setError(joinResult.error);
-      setLoading(false);
-      return;
-    }
-
-    setGameId(game.id);
+    setGameId(gameId);
     setPlayerName(name.trim());
     setScreen(BeerTrackerScreen.Game);
     setLoading(false);
@@ -68,12 +66,37 @@ export const HomeScreen = () => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontSize: moderateScale(18), fontWeight: "600", color: canSize === size ? Color.White : Color.OffBlack }}>
+              <Text
+                style={{
+                  fontSize: moderateScale(18),
+                  fontWeight: "600",
+                  color: canSize === size ? Color.White : Color.OffBlack,
+                }}
+              >
                 {size}L
               </Text>
             </TouchableOpacity>
           ))}
         </View>
+
+        <Text style={{ fontSize: moderateScale(18), fontWeight: "600" }}>Romnavn</Text>
+        <TextInput
+          style={{
+            backgroundColor: Color.LightGray,
+            borderRadius: moderateScale(12),
+            padding: moderateScale(14),
+            fontSize: moderateScale(16),
+          }}
+          placeholder="F.eks. Fredagsfest"
+          placeholderTextColor={Color.Gray}
+          value={roomName}
+          onChangeText={(t) => {
+            setRoomName(t);
+            setError("");
+          }}
+          autoCapitalize="words"
+          maxLength={20}
+        />
 
         <Text style={{ fontSize: moderateScale(18), fontWeight: "600" }}>Mål (valgfritt)</Text>
         <TextInput
@@ -108,7 +131,9 @@ export const HomeScreen = () => {
           autoCapitalize="words"
         />
 
-        {error !== "" && <Text style={{ color: Color.Red, textAlign: "center", fontSize: moderateScale(14) }}>{error}</Text>}
+        {error !== "" && (
+          <Text style={{ color: Color.Red, textAlign: "center", fontSize: moderateScale(14) }}>{error}</Text>
+        )}
 
         <TouchableOpacity
           onPress={handleCreate}

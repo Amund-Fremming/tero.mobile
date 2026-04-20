@@ -5,9 +5,14 @@ import { BeerTrackerGame } from "../constants/beerTrackerTypes";
 
 const BASE = `${PLATFORM_URL_BASE}/beer-tracker`;
 
-export async function createGame(canSize: number, goal: number | null): Promise<Result<BeerTrackerGame>> {
+export async function createGame(
+  gameId: string,
+  name: string,
+  canSize: number,
+  goal: number | null,
+): Promise<Result<BeerTrackerGame>> {
   try {
-    const res = await axios.post<BeerTrackerGame>(BASE, { can_size: canSize, goal });
+    const res = await axios.post<BeerTrackerGame>(BASE, { game_id: gameId, name, can_size: canSize, goal });
     return ok(res.data);
   } catch (e) {
     console.error("createGame:", e);
