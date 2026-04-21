@@ -26,7 +26,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       UIViewControllerBasedStatusBarAppearance: false,
       UIStatusBarHidden: false,
       ITSAppUsesNonExemptEncryption: false,
+      NSUserNotificationsUsageDescription: "Tero sender deg påminnelser om spillkvelder med venner.",
     },
+    usesAppleSignIn: true,
     bundleIdentifier: "com.tero.app",
   },
   plugins: [
@@ -41,6 +43,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     "expo-secure-store",
     "expo-web-browser",
+    "expo-apple-authentication",
   ],
   experiments: {
     typedRoutes: true,

@@ -18,7 +18,7 @@ export const ProfileScreen = () => {
   const navigation: any = useNavigation();
   const { pseudoId, triggerLogout, accessToken, setPseudoId, userData, setUserData } = useAuthProvider();
   const { userService } = useServiceProvider();
-  const { displayErrorModal, displayInfoModal } = useModalProvider();
+  const { displayErrorModal, displayInfoModal, displayActionModal } = useModalProvider();
   const { theme, darkMode } = useThemeProvider();
   const styles = createStyles(theme, darkMode);
   const fallbackAvatar = "https://api.dicebear.com/9.x/pixel-art/png?seed=tero";
@@ -99,6 +99,32 @@ export const ProfileScreen = () => {
     }
 
     displayInfoModal("Reset-passord lenke sendt til din email", "Lenke sendt");
+  };
+
+  const handleDeleteAccount = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    displayActionModal(
+      "Er du sikker på at du vil slette kontoen din? Dette kan ikke angres.",
+      () => {},
+      async () => {
+        if (!accessToken || !userData?.id) {
+          displayErrorModal("Kunne ikke slette konto. Prøv igjen.");
+          return;
+        }
+
+        const result = await userService().deleteUser(accessToken, userData.id);
+        if (result.isError()) {
+          displayErrorModal("Klarte ikke slette kontoen. Prøv igjen.");
+          return;
+        }
+
+        setUserData(null);
+        setIsAdmin(false);
+        setAvatar("");
+        await triggerLogout(false);
+        resetToHomeScreen(navigation);
+      },
+    );
   };
 
   return (
@@ -190,6 +216,16 @@ export const ProfileScreen = () => {
                 <Feather name="chevron-right" size={35} color={styles.contentColor} />
               </TouchableOpacity>
             )}
+            <TouchableOpacity
+              onPress={handleDeleteAccount}
+              style={styles.bigButton}
+            >
+              <View style={styles.iconGuard}>
+                <Feather name="trash-2" size={30} color={styles.contentColor} />
+              </View>
+              <Text style={styles.buttonText}>Slett konto</Text>
+              <Feather name="chevron-right" size={35} color={styles.contentColor} />
+            </TouchableOpacity>
           </View>
         </View>
       </VerticalScroll>
