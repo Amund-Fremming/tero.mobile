@@ -1,4 +1,3 @@
-import BeerTrackerProvider from "@/src/apps/beerTracker/context/BeerTrackerProvider";
 import SplashScreen from "@/src/core/components/SplashScreen/SplashScreen";
 import ModalProvider from "@/src/core/context/ModalProvider";
 import ServiceProvider from "@/src/core/context/ServiceProvider";
@@ -48,9 +47,7 @@ export default () => (
                       <QuizSessionProvider>
                         <SpinSessionProvider>
                           <ImposterSessionProvider>
-                            <BeerTrackerProvider>
-                              <Hub />
-                            </BeerTrackerProvider>
+                            <Hub />
                           </ImposterSessionProvider>
                         </SpinSessionProvider>
                       </QuizSessionProvider>
