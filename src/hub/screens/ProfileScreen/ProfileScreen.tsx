@@ -105,7 +105,6 @@ export const ProfileScreen = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     displayActionModal(
       "Er du sikker på at du vil slette kontoen din? Dette kan ikke angres.",
-      () => {},
       async () => {
         if (!accessToken || !userData?.id) {
           displayErrorModal("Kunne ikke slette konto. Prøv igjen.");
@@ -124,6 +123,7 @@ export const ProfileScreen = () => {
         await triggerLogout(false);
         resetToHomeScreen(navigation);
       },
+      () => {},
     );
   };
 
