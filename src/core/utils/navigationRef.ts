@@ -1,10 +1,15 @@
-import { NavigationProp, CommonActions } from "@react-navigation/native";
+import { CommonActions, NavigationProp } from "@react-navigation/native";
 import Screen from "../constants/Screen";
 
 let stackNavigator: NavigationProp<any> | null = null;
 
 export function setStackNavigator(nav: NavigationProp<any>) {
   stackNavigator = nav;
+}
+
+export function navigateGlobal(screen: Screen) {
+  if (!stackNavigator) return;
+  stackNavigator.dispatch(CommonActions.navigate({ name: screen }));
 }
 
 export function resetToHomeGlobal() {

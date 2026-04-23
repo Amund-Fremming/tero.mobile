@@ -6,6 +6,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useRef, useStat
 import { Auth0Config } from "../config/auth";
 import Screen from "../constants/Screen";
 import { BaseUser } from "../constants/Types";
+import { navigateGlobal } from "../utils/navigationRef";
 import { err, ok, Result } from "../utils/result";
 import { useModalProvider } from "./ModalProvider";
 import { useServiceProvider } from "./ServiceProvider";
@@ -100,7 +101,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (result.isError()) {
         ensureInProgress.current = null;
         console.error(result.error);
-        audit.critical(storedPseudoId ?? "unknown", null, "AuthProvider.ensurePseudoId", "Failed to ensure pseudo user", { storedPseudoId });
+        audit.critical(
+          storedPseudoId ?? "unknown",
+          null,
+          "AuthProvider.ensurePseudoId",
+          "Failed to ensure pseudo user",
+          { storedPseudoId },
+        );
         return err("Failed to get pseudo id");
       }
 
@@ -169,7 +176,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           const userResult = await userService().getUser(tokenResponse.accessToken);
           if (userResult.isError()) {
             console.warn("Auth0 login succeeded but user not found in backend");
-            audit.critical(pseudoId || "unknown", tokenResponse.accessToken, "AuthProvider.getTokens", "Auth0 login succeeded but user not found in backend - possible sync issue");
+            audit.critical(
+              pseudoId || "unknown",
+              tokenResponse.accessToken,
+              "AuthProvider.getTokens",
+              "Auth0 login succeeded but user not found in backend - possible sync issue",
+            );
             setAccessToken(null);
             await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
             setForceLoginPrompt(true);
@@ -181,9 +193,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           setAccessToken(tokenResponse.accessToken);
           await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, tokenResponse.refreshToken);
           console.info("User logged inn successfully");
+          navigateGlobal(Screen.Profile);
         } catch (error) {
           console.error("Token exchange failed:", error);
-          audit.critical(pseudoId || "unknown", null, "AuthProvider.getTokens", "Token exchange failed", { error: String(error) });
+          audit.critical(pseudoId || "unknown", null, "AuthProvider.getTokens", "Token exchange failed", {
+            error: String(error),
+          });
           displayErrorModal("Innlogging feilet.");
         }
       } else if (response?.type === "error") {
@@ -292,7 +307,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       if (!refreshResponse.ok) {
         console.warn("Refresh token response was an error, logging user out");
-        audit.warning(pseudoId || "unknown", null, "AuthProvider.rotateTokens", "Refresh token rejected by Auth0 - forced logout", { status: refreshResponse.status });
+        audit.warning(
+          pseudoId || "unknown",
+          null,
+          "AuthProvider.rotateTokens",
+          "Refresh token rejected by Auth0 - forced logout",
+          { status: refreshResponse.status },
+        );
         await SecureStore.deleteItemAsync("access_token");
         await SecureStore.deleteItemAsync("refresh_token");
         await SecureStore.deleteItemAsync("id_token");
@@ -304,7 +325,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setAccessToken(tokens.access_token);
       console.debug("Tokens refreshed successfully");
     } catch (error) {
-      audit.critical(pseudoId || "unknown", null, "AuthProvider.rotateTokens", "Token rotation crashed", { error: String(error) });
+      audit.critical(pseudoId || "unknown", null, "AuthProvider.rotateTokens", "Token rotation crashed", {
+        error: String(error),
+      });
       displayErrorModal("Uventet feil. Logger ut.");
       setAccessToken(null);
       await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);

@@ -36,7 +36,11 @@ export const ProfileScreen = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigation.goBack();
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      } else {
+        navigation.navigate(Screen.Home);
+      }
       return;
     }
 
@@ -216,10 +220,7 @@ export const ProfileScreen = () => {
                 <Feather name="chevron-right" size={35} color={styles.contentColor} />
               </TouchableOpacity>
             )}
-            <TouchableOpacity
-              onPress={handleDeleteAccount}
-              style={styles.bigButton}
-            >
+            <TouchableOpacity onPress={handleDeleteAccount} style={styles.bigButton}>
               <View style={styles.iconGuard}>
                 <Feather name="trash-2" size={30} color={styles.contentColor} />
               </View>
