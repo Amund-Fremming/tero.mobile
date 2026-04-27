@@ -62,7 +62,7 @@ export const SpinGame = () => {
     };
   }, []);
 
-  const initializeHub = async (hubName: string, key: string) => {
+  const initializeHub = async (hubName: string, key: string): Promise<boolean> => {
     const result = await connect(hubName);
     if (result.isError()) {
       console.error(result.error);
@@ -72,7 +72,7 @@ export const SpinGame = () => {
         disconnect();
         resetToHomeScreen(outerNavigation);
       });
-      return;
+      return false;
     }
 
     setupListeners();
@@ -81,16 +81,17 @@ export const SpinGame = () => {
     if (groupResult.isError()) {
       console.error(groupResult.error);
       displayErrorModal("Kunne ikke koble til.");
-      return;
+      return false;
     }
 
     let gameHasStarted = groupResult.value;
     if (gameHasStarted) {
       setHubReady(true);
       setScreen(SpinSessionScreen.Game);
-      return;
+      return true;
     }
     setHubReady(true);
+    return false;
   };
 
   const setupListeners = async () => {

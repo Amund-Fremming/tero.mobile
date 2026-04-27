@@ -11,7 +11,7 @@ import { SpinSessionScreen } from "../../constants/SpinTypes";
 import { useSpinSessionProvider } from "../../context/SpinGameProvider";
 
 interface TutorialScreenProps {
-  initializeHub: (hubName: string, gameKey: string) => Promise<void>;
+  initializeHub: (hubName: string, gameKey: string) => Promise<boolean>;
 }
 export const TutorialScreen = ({ initializeHub }: TutorialScreenProps) => {
   const navigation: any = useNavigation();
@@ -68,8 +68,10 @@ export const TutorialScreen = ({ initializeHub }: TutorialScreenProps) => {
 
     if (gameEntryMode !== GameEntryMode.Creator) {
       setIsHost(true);
-      await initializeHub(sessionData.hubName, sessionData.gameKey);
-      setScreen(isDraft ? SpinSessionScreen.ActiveLobby : SpinSessionScreen.PassiveLobby);
+      const gameHasStarted = await initializeHub(sessionData.hubName, sessionData.gameKey);
+      if (!gameHasStarted) {
+        setScreen(isDraft ? SpinSessionScreen.ActiveLobby : SpinSessionScreen.PassiveLobby);
+      }
       return;
     }
 

@@ -131,7 +131,7 @@ export const createStyles = (theme: AppTheme, darkMode: boolean) => {
         width: "90%",
         height: verticalScale(69),
         backgroundColor: Color.HomeRed,
-        borderRadius: moderateScale(10),
+        borderRadius: moderateScale(15),
         justifyContent: "center" as const,
         alignItems: "center" as const,
       },

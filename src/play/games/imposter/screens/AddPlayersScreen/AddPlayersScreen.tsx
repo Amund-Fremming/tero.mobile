@@ -1,3 +1,4 @@
+import { BigButton } from "@/src/core/components/BigButton/BigButton";
 import ScreenHeader from "@/src/core/components/ScreenHeader/ScreenHeader";
 import Color from "@/src/core/constants/Color";
 import { GameEntryMode, GameType } from "@/src/core/constants/Types";
@@ -183,15 +184,13 @@ export const AddPlayersScreen = ({ onLeave }: Props) => {
         </View>
 
         <View style={styles.buttonsWrapper}>
-          <TouchableOpacity
+          <BigButton
+            label="Ny spiller"
+            backgroundColor={theme.secondaryColor}
+            textColor={Color.White}
             onPress={handleAddPlayer}
-            style={{ ...styles.addButton, backgroundColor: theme.secondaryColor }}
-          >
-            <Text style={styles.buttonText}>Ny spiller</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleNextPressed} style={styles.nextButton}>
-            <Text style={styles.buttonText}>Neste</Text>
-          </TouchableOpacity>
+          />
+          <BigButton label="Neste" backgroundColor={Color.Black} textColor={Color.White} onPress={handleNextPressed} />
         </View>
       </ScrollView>
     </View>

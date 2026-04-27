@@ -44,12 +44,17 @@ export const LobbyScreen = () => {
       return;
     }
 
+    if (iterations < 10) {
+      displayInfoModal("Du må legge til minst 10 runder før du kan starte spillet.", "Ikke nok runder");
+      return;
+    }
+
     setStarted(true);
     const result = await invokeFunction("StartGame", sessionData.gameKey);
 
     if (result.isError()) {
       console.error(result.error);
-      displayErrorModal("Kunne ikke starte spillet.");
+      displayInfoModal("Du må legge til minst 10 runder før du kan starte spillet.", "Ikke nok runder");
       setStarted(false);
       return;
     }

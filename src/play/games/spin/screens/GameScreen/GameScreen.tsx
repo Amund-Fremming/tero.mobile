@@ -140,9 +140,7 @@ export const GameScreen = ({ onLeave }: Props) => {
         </View>
       )}
 
-      {gameState === SpinGameState.RoundFinished && selectedBatch.includes(pseudoId) && (
-        <Text style={{ ...styles.text }}>{roundText}</Text>
-      )}
+      {gameState === SpinGameState.RoundFinished && <Text style={{ ...styles.text }}>{roundText}</Text>}
 
       {gameState === SpinGameState.RoundStarted && isHost && (
         <TouchableOpacity onPress={handleStartRound} style={styles.button}>
