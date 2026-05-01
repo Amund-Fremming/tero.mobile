@@ -14,7 +14,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: "#ffffff",
   },
   slug: "tero",
-  version: "1.1.1",
+  version: "1.2.0",
   orientation: "portrait",
   platforms: ["ios"],
   scheme: "com.tero",
