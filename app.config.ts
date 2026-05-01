@@ -6,7 +6,7 @@ const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN ?? "";
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "tero",
-  description: "Tero – party games with friends. Create, join and play interactive games together.",
+  description: "tero - games with friends. Create, join and play interactive games together.",
   icon: "./app/appstore.png",
   splash: {
     image: "./app/appstore.png",
@@ -14,19 +14,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: "#ffffff",
   },
   slug: "tero",
-  version: "1.1.0",
+  version: "1.1.1",
   orientation: "portrait",
   platforms: ["ios"],
   scheme: "com.tero",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   ios: {
-    supportsTablet: true,
+    supportsTablet: false,
     infoPlist: {
       UIViewControllerBasedStatusBarAppearance: false,
       UIStatusBarHidden: false,
       ITSAppUsesNonExemptEncryption: false,
-      NSUserNotificationsUsageDescription: "Tero sender deg påminnelser om spillkvelder med venner.",
+      NSUserNotificationsUsageDescription: "tero sender deg påminnelser om spillkvelder med venner.",
     },
     usesAppleSignIn: true,
     bundleIdentifier: "com.tero.app",

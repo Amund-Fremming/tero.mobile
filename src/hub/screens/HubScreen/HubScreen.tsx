@@ -3,13 +3,13 @@ import Color from "@/src/core/constants/Color";
 import { useAuthProvider } from "@/src/core/context/AuthProvider";
 import { useModalProvider } from "@/src/core/context/ModalProvider";
 import { useThemeProvider } from "@/src/core/context/ThemeProvider";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "expo-router";
 import { useEffect, useRef } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Screen from "../../../core/constants/Screen";
-import createStyles, { getBeerIconColor, getIconColor } from "./hubScreenStyles";
+import createStyles, { getIconColor } from "./hubScreenStyles";
 
 export const HubScreen = () => {
   const navigation: any = useNavigation();
@@ -90,36 +90,7 @@ export const HubScreen = () => {
             <Text style={styles.bentoBoxLabel}>Tips oss</Text>
           </TouchableOpacity>
         </View>
-
-        <View style={styles.bentoBeerWrapper}>
-          <TouchableOpacity style={styles.bentoBeerBox} activeOpacity={0.8}>
-            <MaterialCommunityIcons name="beer" size={48} color={getBeerIconColor(darkMode)} style={styles.beerIcon} />
-            <View style={styles.beerContent}>
-              <Text style={styles.beerHeader}>Billig øl i Oslo</Text>
-              <View style={styles.beerList}>
-                <View style={styles.beerRow}>
-                  <Text style={styles.beerPlace}>Olympen</Text>
-                  <Text style={styles.beerPrice}>49 kr</Text>
-                </View>
-                <View style={styles.beerRow}>
-                  <Text style={styles.beerPlace}>Crow Bar</Text>
-                  <Text style={styles.beerPrice}>55 kr</Text>
-                </View>
-                <View style={styles.beerRow}>
-                  <Text style={styles.beerPlace}>Internasjonalen</Text>
-                  <Text style={styles.beerPrice}>59 kr</Text>
-                </View>
-                <View style={styles.beerRow}>
-                  <Text style={styles.beerPlace}>Tilt</Text>
-                  <Text style={styles.beerPrice}>62 kr</Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <View style={styles.beerRibbon} pointerEvents="none">
-            <Text style={styles.beerRibbonText}>Kommer snart</Text>
-          </View>
-        </View>
+        <Text style={styles.comingSoonText}>mer er på vei!</Text>
       </ScrollView>
     </View>
   );

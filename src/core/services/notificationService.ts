@@ -21,32 +21,32 @@ const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min
 
 const notifications: Array<Notification> = [
   {
-    title: "Kickstart vorset🍻",
-    body: "Kickstart kvelden med drikkeleker i tero appen!",
+    title: "Kickstart kvelden🎉",
+    body: "Kickstart kvelden med spill i Tero appen!",
   },
   {
-    title: "Drikkelek?🍻",
-    body: "Få fart på drikkingen i tero appen!",
+    title: "Klar for spill?🎮",
+    body: "Samle gjengen og spill i Tero appen!",
   },
   {
-    title: "Kjedelig vors?🍻",
-    body: "Trapp opp spenningen med tero appen!",
+    title: "Kjedelig kveld?🎲",
+    body: "Trapp opp spenningen med Tero appen!",
   },
   {
-    title: "Kvelden er ung🍻",
+    title: "Kvelden er ung🎉",
     body: "Ta en runde med Tero og sett fyr på festen!",
   },
   {
-    title: "Klar for fest?🍻",
-    body: "Samle gjengen og start en drikkelek i Tero!",
+    title: "Klar for fest?🎉",
+    body: "Samle gjengen og start et spill i Tero!",
   },
   {
-    title: "Det er helg!🍻",
-    body: "Feir helgen med drikkeleker i Tero appen!",
+    title: "Det er helg!🎉",
+    body: "Feir helgen med spill i Tero appen!",
   },
   {
-    title: "Cheers!🍻",
-    body: "Løft glasset og spill Tero med vennegjengen!",
+    title: "Game time!🎮",
+    body: "Spill Tero med vennegjengen!",
   },
 ];
 

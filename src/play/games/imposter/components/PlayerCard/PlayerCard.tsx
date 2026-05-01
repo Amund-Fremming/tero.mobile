@@ -25,13 +25,14 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
   const [locked, setLocked] = useState(false);
   const [cardWidth, setCardWidth] = useState(0);
   const isCompleted = useRef(false);
+  const isDraining = useRef(false);
   const currentAnimation = useRef<Animated.CompositeAnimation | null>(null);
 
   const { getGameTheme } = useThemeProvider();
   const theme = getGameTheme(GameType.Imposter);
 
   const handlePressIn = () => {
-    if (locked || cardWidth === 0) return;
+    if (locked || isDraining.current || cardWidth === 0) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     isCompleted.current = false;
 
@@ -50,6 +51,7 @@ export const PlayerCard = ({ name, word, isImposter, onLocked }: PlayerCardProps
   };
 
   const startDrain = () => {
+    isDraining.current = true;
     setTimeout(() => {
       setRevealed(false);
 

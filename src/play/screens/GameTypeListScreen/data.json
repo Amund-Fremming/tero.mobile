@@ -29,11 +29,5 @@
     "icon": "defuser.webp",
     "screen": "Defuser",
     "color": "white"
-  },
-  {
-    "name": "Terning",
-    "icon": "dice.webp",
-    "screen": "Dice",
-    "color": "white"
   }
 ]
